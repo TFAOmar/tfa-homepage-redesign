@@ -22,6 +22,7 @@ import AdvisorOnboarding from "./pages/AdvisorOnboarding";
 import AdminDashboard from "./pages/AdminDashboard";
 import CompoundGrowthCalculator from "./pages/CompoundGrowthCalculator";
 import RetirementIncomeCalculator from "./pages/RetirementIncomeCalculator";
+import TaxImpactCalculator from "./pages/TaxImpactCalculator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/tools/compound-growth-calculator" element={<CompoundGrowthCalculator />} />
               <Route path="/tools/retirement-income-calculator" element={<RetirementIncomeCalculator />} />
+              <Route path="/tools/tax-impact-calculator" element={<TaxImpactCalculator />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
