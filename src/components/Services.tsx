@@ -46,9 +46,9 @@ const services = [
 
 const Services = () => {
   return (
-    <section className="py-24 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+    <section className="py-16 md:py-24 lg:py-32 bg-background">
+      <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1280px]">
+        <div className="text-center max-w-[700px] mx-auto mb-12 md:mb-16 lg:mb-20">
           <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">
             Comprehensive Financial Planning Services
           </h2>
@@ -57,13 +57,13 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10 md:mb-12 lg:mb-16">
           {services.map((service, index) => (
             <Card
               key={index}
-              className="glass border-0 hover:shadow-xl transition-all duration-300 group cursor-pointer"
+              className="glass border-0 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer"
             >
-              <CardContent className="p-8">
+              <CardContent className="p-6 md:p-8">
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-accent/10 text-accent mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-colors duration-300">
                   <service.icon className="h-7 w-7" strokeWidth={1.5} />
                 </div>
