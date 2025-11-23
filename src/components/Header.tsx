@@ -41,9 +41,11 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="flex items-center gap-4">
-            <Button className="hidden sm:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
-              Book Consultation
-            </Button>
+            <Link to="/contact">
+              <Button className="hidden sm:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
+                Book Consultation
+              </Button>
+            </Link>
             
             {/* Mobile Menu Button */}
             <Button variant="ghost" size="icon" className="md:hidden">
