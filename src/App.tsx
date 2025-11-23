@@ -14,6 +14,7 @@ import Shop from "./pages/Shop";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Advisors from "./pages/Advisors";
+import Partners from "./pages/Partners";
 import AdvisorOnboarding from "./pages/AdvisorOnboarding";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/process" element={<Process />} />
           <Route path="/events" element={<Events />} />
           <Route path="/locations" element={<Locations />} />
+          <Route path="/partners" element={<Partners />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/blog" element={<Blog />} />
