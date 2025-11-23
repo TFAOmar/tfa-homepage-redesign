@@ -31,8 +31,11 @@ const carriers = [
 ];
 
 const CarrierPartners = () => {
+  // Duplicate carriers array for seamless infinite loop
+  const duplicatedCarriers = [...carriers, ...carriers];
+
   return (
-    <section className="py-16 bg-gradient-to-b from-background to-secondary/20 border-y border-border/40">
+    <section className="py-16 bg-gradient-to-b from-background to-secondary/20 border-y border-border/40 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -43,25 +46,71 @@ const CarrierPartners = () => {
           </p>
         </div>
 
-        <div className="glass p-8 rounded-2xl">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center justify-items-center">
-            {carriers.map((carrier, index) => (
-              <div
-                key={carrier.name}
-                className="group relative w-full h-20 flex items-center justify-center transition-all duration-300 hover:scale-105"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <img
-                  src={carrier.logo}
-                  alt={`${carrier.name} logo`}
-                  className="max-h-16 w-auto object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 ease-out"
-                  title={carrier.name}
-                />
+        <div className="glass p-8 rounded-2xl overflow-hidden">
+          <div className="relative">
+            {/* Gradient overlays for fade effect */}
+            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-secondary/50 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-secondary/50 to-transparent z-10 pointer-events-none" />
+            
+            {/* Scrolling container */}
+            <div className="carousel-scroll group/carousel">
+              <div className="carousel-track flex gap-12 items-center">
+                {duplicatedCarriers.map((carrier, index) => (
+                  <div
+                    key={`${carrier.name}-${index}`}
+                    className="group relative flex-shrink-0 w-40 h-20 flex items-center justify-center transition-all duration-300 hover:scale-105"
+                  >
+                    <img
+                      src={carrier.logo}
+                      alt={`${carrier.name} logo`}
+                      className="max-h-16 w-auto object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 ease-out"
+                      title={carrier.name}
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        .carousel-scroll {
+          overflow: hidden;
+          width: 100%;
+        }
+
+        .carousel-track {
+          animation: scroll 60s linear infinite;
+          width: fit-content;
+        }
+
+        .carousel-scroll:hover .carousel-track {
+          animation-play-state: paused;
+        }
+
+        @media (max-width: 768px) {
+          .carousel-track {
+            animation-duration: 40s;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .carousel-track {
+            animation-duration: 30s;
+          }
+        }
+      `}</style>
     </section>
   );
 };
