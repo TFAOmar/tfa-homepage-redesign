@@ -70,13 +70,13 @@ const TrustStrip = () => {
   return (
     <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-background to-secondary/20 overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1280px]">
-        {/* Section Header */}
-        <div className="text-center max-w-4xl mx-auto mb-12 md:mb-16 lg:mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">
-            Trusted By Leading Insurance & Financial Institutions
+        {/* Section Header - Simplified for clarity */}
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
+            Trusted by America's Leading Carriers
           </h2>
-          <p className="text-lg text-muted-foreground">
-            We partner with industry-leading life insurance and annuity carriers to build strategies tailored to your financial future.
+          <p className="text-base text-muted-foreground">
+            Partnering with top-rated institutions to secure your family's future
           </p>
         </div>
 
@@ -98,32 +98,26 @@ const TrustStrip = () => {
           </div>
         </div>
 
-        {/* Professional Affiliations */}
-        <div className="text-center mb-10 md:mb-12 lg:mb-16">
-          <h3 className="text-2xl md:text-3xl font-bold text-navy mb-3">
-            Professional Affiliations & Credentials
+        {/* Professional Affiliations - Simplified to 4 key credentials */}
+        <div className="text-center mb-8 md:mb-10">
+          <h3 className="text-xl md:text-2xl font-bold text-navy mb-2">
+            Licensed & Accredited Nationwide
           </h3>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Our advisors maintain the highest standards of professional excellence and regulatory compliance.
-          </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8">
-          {affiliations.map((affiliation, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto">
+          {affiliations.slice(0, 4).map((affiliation, index) => (
             <div
               key={index}
-              className="group flex flex-col items-center text-center p-6 rounded-xl glass hover:shadow-xl transition-all duration-300 animate-fade-in"
+              className="group flex flex-col items-center text-center p-6 rounded-xl glass hover:shadow-lg transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 text-accent mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-colors duration-300">
-                <affiliation.icon className="h-7 w-7" strokeWidth={1.5} />
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-accent/10 text-accent mb-3 group-hover:bg-accent group-hover:text-accent-foreground transition-colors duration-300">
+                <affiliation.icon className="h-6 w-6" strokeWidth={1.5} />
               </div>
-              <h4 className="font-semibold text-navy text-sm mb-2">
+              <h4 className="font-semibold text-navy text-sm">
                 {affiliation.name}
               </h4>
-              <p className="text-xs text-muted-foreground">
-                {affiliation.description}
-              </p>
             </div>
           ))}
         </div>

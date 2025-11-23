@@ -70,7 +70,7 @@ const AdvisorPreview = () => {
                       variant="outline"
                       className="w-full border-accent/20 hover:border-accent hover:bg-accent/10"
                     >
-                      Meet {advisor.name.split(" ")[0]}
+                      Connect with {advisor.name.split(" ")[0]}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>

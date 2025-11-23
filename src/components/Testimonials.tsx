@@ -4,13 +4,18 @@ import { Quote, Star } from "lucide-react";
 const testimonials = [
   {
     name: "Robert & Linda M.",
-    role: "Client",
+    role: "Retired Couple, Ohio",
     text: "We finally have clarity on our retirement path. The peace of mind knowing our future is secure is worth everything.",
   },
   {
     name: "James A.",
-    role: "Client",
+    role: "Business Owner, Texas",
     text: "The estate planning guidance was invaluable. Our advisor helped us structure our assets to ensure our children's financial security.",
+  },
+  {
+    name: "Patricia & Michael R.",
+    role: "Family, California",
+    text: "Our advisor took the time to understand our goals and created a plan that actually works for our family. We couldn't be happier.",
   },
 ];
 
@@ -27,7 +32,7 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}

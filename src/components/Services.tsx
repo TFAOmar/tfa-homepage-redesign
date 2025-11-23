@@ -15,32 +15,32 @@ const services = [
   {
     icon: TrendingUp,
     title: "Income Planning",
-    description: "Create steady, reliable income streams for your retirement years.",
+    description: "Never worry about running out of money in retirement — enjoy steady, reliable income for life.",
   },
   {
     icon: PiggyBank,
     title: "Investment Management",
-    description: "Personalized portfolio strategies aligned with your financial goals.",
+    description: "Grow your wealth with confidence using strategies designed around your family's goals.",
   },
   {
     icon: FileText,
     title: "Estate & Legacy Planning",
-    description: "Preserve and transfer wealth to future generations efficiently.",
+    description: "Protect what you've built and pass your wealth to the next generation tax-efficiently.",
   },
   {
     icon: Calculator,
     title: "Tax Planning",
-    description: "Minimize tax burden and maximize wealth retention strategies.",
+    description: "Keep more of what you earn with smart strategies that reduce your tax burden.",
   },
   {
     icon: Shield,
     title: "Life Insurance",
-    description: "Comprehensive protection for what matters most to your family.",
+    description: "Secure your family's financial future if the unexpected happens.",
   },
   {
     icon: RefreshCw,
     title: "401(k) Rollovers & Retirement Plans",
-    description: "Seamlessly transition and manage retirement accounts with guidance.",
+    description: "Transition your retirement accounts smoothly and maximize your nest egg.",
   },
 ];
 

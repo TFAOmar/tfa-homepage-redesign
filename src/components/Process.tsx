@@ -3,18 +3,18 @@ import { MessageCircle, ClipboardCheck, LineChart, Target } from "lucide-react";
 const steps = [
   {
     icon: MessageCircle,
-    title: "Discovery",
-    description: "Understand your goals, values, and financial aspirations in a comfortable environment.",
+    title: "Discover Your Goals",
+    description: "We listen to your dreams, concerns, and financial aspirations in a no-pressure conversation.",
   },
   {
     icon: ClipboardCheck,
-    title: "Strategy",
-    description: "Build a custom financial plan aligned with your unique objectives and life vision.",
+    title: "Build Your Plan",
+    description: "Together, we create a personalized roadmap designed to achieve your family's unique goals.",
   },
   {
     icon: Target,
-    title: "Guidance",
-    description: "Lifetime support with regular reviews and updates as your needs evolve.",
+    title: "Stay on Track",
+    description: "You'll never be alone — we provide ongoing guidance and adjust your plan as life changes.",
   },
 ];
 

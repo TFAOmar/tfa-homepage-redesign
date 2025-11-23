@@ -6,6 +6,7 @@ import Process from "@/components/Process";
 import AdvisorPreview from "@/components/AdvisorPreview";
 import Testimonials from "@/components/Testimonials";
 import FinalCTA from "@/components/FinalCTA";
+import FloatingCTA from "@/components/FloatingCTA";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <AdvisorPreview />
       <Testimonials />
       <FinalCTA />
+      <FloatingCTA />
     </div>
   );
 };
