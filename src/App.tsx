@@ -20,6 +20,7 @@ import Advisors from "./pages/Advisors";
 import Partners from "./pages/Partners";
 import AdvisorOnboarding from "./pages/AdvisorOnboarding";
 import AdminDashboard from "./pages/AdminDashboard";
+import CompoundGrowthCalculator from "./pages/CompoundGrowthCalculator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/advisors" element={<Advisors />} />
               <Route path="/advisors/onboard" element={<AdvisorOnboarding />} />
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/tools/compound-growth-calculator" element={<CompoundGrowthCalculator />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
