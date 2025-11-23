@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import CarrierPartners from "@/components/CarrierPartners";
 import CredibilityBadges from "@/components/CredibilityBadges";
@@ -10,12 +9,10 @@ import Testimonials from "@/components/Testimonials";
 import Education from "@/components/Education";
 import Locations from "@/components/Locations";
 import FinalCTA from "@/components/FinalCTA";
-import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <Header />
       <Hero />
       <CarrierPartners />
       <CredibilityBadges />
@@ -27,7 +24,6 @@ const Index = () => {
       <Education />
       <Locations />
       <FinalCTA />
-      <Footer />
     </div>
   );
 };
