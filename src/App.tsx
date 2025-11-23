@@ -3,6 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import FloatingCTA from "./components/FloatingCTA";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -27,24 +30,31 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/process" element={<Process />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/locations" element={<Locations />} />
-          <Route path="/partners" element={<Partners />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/advisors" element={<Advisors />} />
-          <Route path="/advisors/onboard" element={<AdvisorOnboarding />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/process" element={<Process />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/locations" element={<Locations />} />
+              <Route path="/partners" element={<Partners />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/advisors" element={<Advisors />} />
+              <Route path="/advisors/onboard" element={<AdvisorOnboarding />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          <Footer />
+          <FloatingCTA showOnTablet={false} hideOnPages={["/contact"]} />
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
