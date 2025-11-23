@@ -1,55 +1,54 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import heroImage from "@/assets/hero-financial.jpg";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden py-40 md:py-44 lg:py-52">
+    <section className="relative min-h-[100vh] flex items-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
           src={heroImage}
-          alt="Financial planning consultation"
-          className="w-full h-full object-cover"
+          alt="Family financial planning"
+          className="w-full h-full object-cover animate-fade-in"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-navy/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-navy/80 via-navy/75 to-navy/85" />
       </div>
 
-      {/* Content */}
-      <div className="container mx-auto px-6 md:px-12 lg:px-20 relative z-10">
-        <div className="max-w-[720px] mx-auto animate-fade-in-up">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-primary-foreground mb-4 leading-tight">
-            Building Financial
-            <span className="block text-gold"> Legacies Together</span>
+      {/* Content - Mobile First */}
+      <div className="container mx-auto px-6 md:px-12 lg:px-20 relative z-10 py-24 md:py-32">
+        <div className="max-w-[90%] md:max-w-[700px] mx-auto text-center animate-fade-in-up">
+          {/* Headline */}
+          <h1 className="text-[28px] leading-[1.2] md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-4 tracking-tight">
+            Financial Guidance
+            <span className="block text-gold mt-1">Built for Families.</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-6 leading-relaxed">
-            Guiding families toward financial clarity, security, and lasting prosperity through personalized wealth planning strategies.
+          {/* Subheadline */}
+          <p className="text-base md:text-xl lg:text-2xl text-white/90 mb-5 md:mb-6 leading-relaxed font-light">
+            Trusted advisors helping you protect, grow, and secure your financial future.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          {/* Primary CTA */}
+          <div className="flex flex-col items-center gap-3 mb-4 md:mb-5">
             <Button 
               size="lg" 
-              className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6 neuro-button group"
+              className="w-full sm:w-auto bg-gold hover:bg-gold/90 text-navy text-base md:text-lg font-semibold px-10 py-6 md:py-7 rounded-lg shadow-lg hover:shadow-gold/30 transition-all duration-300"
             >
               Book Consultation
-              <Calendar className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <Calendar className="ml-2 h-5 w-5" />
             </Button>
             
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-navy text-lg px-8 py-6 backdrop-blur-sm bg-white/10"
-            >
-              Learn Our Process
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            {/* Supporting credibility text */}
+            <p className="text-sm md:text-base text-white/70 font-light">
+              29 locations • 280+ licensed advisors nationwide
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-10" />
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 md:h-32 bg-gradient-to-t from-background to-transparent z-10" />
     </section>
   );
 };
