@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import retirementImage from "@/assets/blog/retirement-planning.jpg";
 import estateImage from "@/assets/blog/estate-planning.jpg";
 import taxImage from "@/assets/blog/tax-strategy.jpg";
@@ -102,13 +103,15 @@ const BlogGrid = () => {
               </CardContent>
 
               <CardFooter>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-2 border-navy text-navy hover:bg-navy hover:text-primary-foreground group"
-                >
-                  Read More
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <Link to={`/blog/${post.slug}`} className="w-full">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-2 border-navy text-navy hover:bg-navy hover:text-primary-foreground group"
+                  >
+                    Read More
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
               </CardFooter>
             </Card>
           ))}
