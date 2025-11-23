@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { TrendingUp, DollarSign, PiggyBank } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { TrendingUp, DollarSign, PiggyBank, GitCompare } from "lucide-react";
 
 interface CalculatorInputs {
   initialInvestment: number;
@@ -24,7 +25,16 @@ interface CalculationResults {
   yearlyData: { year: number; balance: number }[];
 }
 
+interface ComparisonResults {
+  scenarioA: CalculationResults;
+  scenarioB: CalculationResults;
+  difference: number;
+}
+
 const TFACompoundGrowthCalculator = () => {
+  const [compareMode, setCompareMode] = useState(false);
+  const [scenarioBMode, setScenarioBMode] = useState<"none" | "no-interest" | "custom">("none");
+  
   const [inputs, setInputs] = useState<CalculatorInputs>({
     initialInvestment: 10000,
     monthlyContribution: 250,
@@ -34,7 +44,17 @@ const TFACompoundGrowthCalculator = () => {
     contributionTiming: "end",
   });
 
+  const [scenarioBInputs, setScenarioBInputs] = useState<CalculatorInputs>({
+    initialInvestment: 0,
+    monthlyContribution: 250,
+    years: 20,
+    annualRate: 0,
+    compoundingFrequency: 12,
+    contributionTiming: "end",
+  });
+
   const [results, setResults] = useState<CalculationResults | null>(null);
+  const [comparisonResults, setComparisonResults] = useState<ComparisonResults | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateInputs = () => {
@@ -57,14 +77,12 @@ const TFACompoundGrowthCalculator = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const calculateCompoundGrowth = () => {
-    if (!validateInputs()) return;
-
-    const P = inputs.initialInvestment;
-    const PMT = inputs.monthlyContribution;
-    const r = inputs.annualRate / 100;
-    const n = inputs.compoundingFrequency;
-    const t = inputs.years;
+  const calculateScenario = (scenarioInputs: CalculatorInputs): CalculationResults => {
+    const P = scenarioInputs.initialInvestment;
+    const PMT = scenarioInputs.monthlyContribution;
+    const r = scenarioInputs.annualRate / 100;
+    const n = scenarioInputs.compoundingFrequency;
+    const t = scenarioInputs.years;
 
     // Calculate yearly balances for chart
     const yearlyData: { year: number; balance: number }[] = [];
@@ -81,7 +99,7 @@ const TFACompoundGrowthCalculator = () => {
         contributionsGrowth = adjustedPMT * ((Math.pow(1 + r / n, periods) - 1) / (r / n));
         
         // If contributing at the beginning, multiply by (1 + r/n)
-        if (inputs.contributionTiming === "beginning") {
+        if (scenarioInputs.contributionTiming === "beginning") {
           contributionsGrowth *= (1 + r / n);
         }
       }
@@ -94,12 +112,33 @@ const TFACompoundGrowthCalculator = () => {
     const totalContributions = P + (PMT * 12 * t);
     const totalGrowth = finalBalance - totalContributions;
 
-    setResults({
+    return {
       finalBalance,
       totalContributions,
       totalGrowth,
       yearlyData,
-    });
+    };
+  };
+
+  const calculateCompoundGrowth = () => {
+    if (!validateInputs()) return;
+
+    if (compareMode) {
+      const scenarioA = calculateScenario(inputs);
+      const scenarioB = calculateScenario(scenarioBInputs);
+      const difference = scenarioA.finalBalance - scenarioB.finalBalance;
+
+      setComparisonResults({
+        scenarioA,
+        scenarioB,
+        difference,
+      });
+      setResults(null);
+    } else {
+      const result = calculateScenario(inputs);
+      setResults(result);
+      setComparisonResults(null);
+    }
   };
 
   const handleReset = () => {
@@ -111,8 +150,43 @@ const TFACompoundGrowthCalculator = () => {
       compoundingFrequency: 12,
       contributionTiming: "end",
     });
+    setScenarioBInputs({
+      initialInvestment: 0,
+      monthlyContribution: 250,
+      years: 20,
+      annualRate: 0,
+      compoundingFrequency: 12,
+      contributionTiming: "end",
+    });
     setResults(null);
+    setComparisonResults(null);
     setErrors({});
+    setCompareMode(false);
+    setScenarioBMode("none");
+  };
+
+  const handleScenarioBModeChange = (mode: "none" | "no-interest" | "custom") => {
+    setScenarioBMode(mode);
+    
+    if (mode === "none") {
+      setScenarioBInputs({
+        initialInvestment: 0,
+        monthlyContribution: 0,
+        years: inputs.years,
+        annualRate: 0,
+        compoundingFrequency: 12,
+        contributionTiming: "end",
+      });
+    } else if (mode === "no-interest") {
+      setScenarioBInputs({
+        initialInvestment: 0,
+        monthlyContribution: 250,
+        years: inputs.years,
+        annualRate: 0,
+        compoundingFrequency: 12,
+        contributionTiming: "end",
+      });
+    }
   };
 
   const formatCurrency = (value: number) => {
@@ -126,9 +200,43 @@ const TFACompoundGrowthCalculator = () => {
 
   return (
     <div className="w-full">
+      {/* Comparison Toggle */}
+      <Card className="p-6 mb-8 bg-background/40 backdrop-blur-sm border-border/50">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3 flex-1">
+            <GitCompare className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+            <div>
+              <Label htmlFor="compare-toggle" className="text-base font-semibold mb-1 block cursor-pointer">
+                Compare Two Scenarios
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                See how your investment growth compares to a baseline scenario.
+              </p>
+            </div>
+          </div>
+          <Switch
+            id="compare-toggle"
+            checked={compareMode}
+            onCheckedChange={setCompareMode}
+            className="data-[state=checked]:bg-gold"
+          />
+        </div>
+      </Card>
+
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-        {/* Inputs Section */}
-        <Card className="p-6 lg:p-8 bg-background/40 backdrop-blur-sm border-border/50">
+        {/* Scenario A Inputs Section */}
+        <div className="space-y-6">
+          <Card className="p-6 lg:p-8 bg-background/40 backdrop-blur-sm border-border/50">
+            {compareMode && (
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  Scenario A — Your Investment Plan
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Configure your full investment strategy
+                </p>
+              </div>
+            )}
           <div className="space-y-6">
             <div>
               <Label htmlFor="initial" className="text-sm font-medium mb-2 block">
@@ -267,11 +375,245 @@ const TFACompoundGrowthCalculator = () => {
               </Button>
             </div>
           </div>
-        </Card>
+          </Card>
+
+          {/* Scenario B Inputs Section */}
+          {compareMode && (
+            <Card className="p-6 lg:p-8 bg-background/40 backdrop-blur-sm border-border/50 border-gold/20">
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  Scenario B — Baseline Comparison
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Compare your plan against a different approach
+                </p>
+                
+                <Select value={scenarioBMode} onValueChange={handleScenarioBModeChange}>
+                  <SelectTrigger className="h-12">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No Investing (No growth)</SelectItem>
+                    <SelectItem value="no-interest">Contribute Without Investing</SelectItem>
+                    <SelectItem value="custom">Customize This Scenario</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {scenarioBMode === "custom" && (
+                <div className="space-y-6">
+                  <div>
+                    <Label htmlFor="scenarioB-initial" className="text-sm font-medium mb-2 block">
+                      Initial Investment Amount ($)
+                    </Label>
+                    <Input
+                      id="scenarioB-initial"
+                      type="number"
+                      min="0"
+                      value={scenarioBInputs.initialInvestment}
+                      onChange={(e) =>
+                        setScenarioBInputs({ ...scenarioBInputs, initialInvestment: Number(e.target.value) })
+                      }
+                      className="h-12"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="scenarioB-monthly" className="text-sm font-medium mb-2 block">
+                      Monthly Contribution ($)
+                    </Label>
+                    <Input
+                      id="scenarioB-monthly"
+                      type="number"
+                      min="0"
+                      value={scenarioBInputs.monthlyContribution}
+                      onChange={(e) =>
+                        setScenarioBInputs({ ...scenarioBInputs, monthlyContribution: Number(e.target.value) })
+                      }
+                      className="h-12"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="scenarioB-rate" className="text-sm font-medium mb-2 block">
+                      Estimated Annual Rate of Return (%)
+                    </Label>
+                    <Input
+                      id="scenarioB-rate"
+                      type="number"
+                      min="0"
+                      max="20"
+                      step="0.1"
+                      value={scenarioBInputs.annualRate}
+                      onChange={(e) =>
+                        setScenarioBInputs({ ...scenarioBInputs, annualRate: Number(e.target.value) })
+                      }
+                      className="h-12"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {scenarioBMode === "no-interest" && (
+                <div className="space-y-6">
+                  <div>
+                    <Label htmlFor="scenarioB-monthly-nointerest" className="text-sm font-medium mb-2 block">
+                      Monthly Contribution ($)
+                    </Label>
+                    <Input
+                      id="scenarioB-monthly-nointerest"
+                      type="number"
+                      min="0"
+                      value={scenarioBInputs.monthlyContribution}
+                      onChange={(e) =>
+                        setScenarioBInputs({ ...scenarioBInputs, monthlyContribution: Number(e.target.value) })
+                      }
+                      className="h-12"
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    This scenario shows total savings with no interest earned.
+                  </p>
+                </div>
+              )}
+
+              {scenarioBMode === "none" && (
+                <p className="text-sm text-muted-foreground">
+                  This scenario shows what happens if you don't invest at all.
+                </p>
+              )}
+            </Card>
+          )}
+        </div>
 
         {/* Results Section */}
         <div className="space-y-6">
-          {results ? (
+          {comparisonResults ? (
+            <div className="animate-fade-in space-y-6">
+              {/* Comparison Summary Cards */}
+              <div className="grid sm:grid-cols-2 gap-4">
+                <Card className="p-6 bg-gradient-to-br from-gold/10 to-gold/5 backdrop-blur-sm border-gold/30">
+                  <p className="text-xs font-medium text-gold mb-1">Scenario A</p>
+                  <p className="text-sm text-muted-foreground mb-2">Your Investment Plan</p>
+                  <p className="text-3xl font-bold text-foreground mb-4">
+                    {formatCurrency(comparisonResults.scenarioA.finalBalance)}
+                  </p>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Contributions:</span>
+                      <span className="font-medium">{formatCurrency(comparisonResults.scenarioA.totalContributions)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Growth:</span>
+                      <span className="font-medium text-gold">{formatCurrency(comparisonResults.scenarioA.totalGrowth)}</span>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-6 bg-background/40 backdrop-blur-sm border-border/50">
+                  <p className="text-xs font-medium text-muted-foreground mb-1">Scenario B</p>
+                  <p className="text-sm text-muted-foreground mb-2">Baseline</p>
+                  <p className="text-3xl font-bold text-foreground mb-4">
+                    {formatCurrency(comparisonResults.scenarioB.finalBalance)}
+                  </p>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Contributions:</span>
+                      <span className="font-medium">{formatCurrency(comparisonResults.scenarioB.totalContributions)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Growth:</span>
+                      <span className="font-medium">{formatCurrency(comparisonResults.scenarioB.totalGrowth)}</span>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              {/* Impact Statement */}
+              <Card className="p-8 bg-gradient-to-br from-gold/20 via-gold/10 to-gold/5 backdrop-blur-sm border-gold/30 text-center">
+                <p className="text-sm font-medium text-muted-foreground mb-2">Difference Over Time</p>
+                <p className="text-4xl lg:text-5xl font-bold text-gold mb-4">
+                  {formatCurrency(Math.abs(comparisonResults.difference))}
+                </p>
+                <p className="text-base text-foreground/90 max-w-md mx-auto">
+                  {comparisonResults.difference > 0 
+                    ? "You would have this much more by investing instead of waiting."
+                    : "Alternative scenario would yield more."}
+                </p>
+                <p className="text-sm text-muted-foreground mt-4 italic">
+                  Small, consistent decisions today can dramatically change your financial future.
+                </p>
+              </Card>
+
+              {/* Dual-Line Comparison Chart */}
+              <Card className="p-6 bg-background/40 backdrop-blur-sm border-border/50">
+                <h3 className="text-lg font-semibold mb-4">Growth Comparison Over Time</h3>
+                <div className="h-[320px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis
+                        dataKey="year"
+                        stroke="hsl(var(--muted-foreground))"
+                        label={{ value: "Years", position: "insideBottom", offset: -5 }}
+                        type="number"
+                        domain={[0, inputs.years]}
+                      />
+                      <YAxis
+                        stroke="hsl(var(--muted-foreground))"
+                        tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--background))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "8px",
+                        }}
+                        formatter={(value: number) => formatCurrency(value)}
+                      />
+                      <Legend 
+                        wrapperStyle={{ paddingTop: "20px" }}
+                        iconType="line"
+                      />
+                      <Line
+                        data={comparisonResults.scenarioA.yearlyData}
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="hsl(var(--gold))"
+                        strokeWidth={3}
+                        dot={false}
+                        name="Your Investment Plan"
+                      />
+                      <Line
+                        data={comparisonResults.scenarioB.yearlyData}
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="hsl(var(--muted-foreground))"
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={false}
+                        name="Baseline Scenario"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+
+              {/* Advisory CTA */}
+              <Card className="p-8 bg-background/40 backdrop-blur-sm border-border/50 text-center">
+                <h3 className="text-xl font-semibold mb-2">See What This Could Look Like for You</h3>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Talk to a TFA Advisor • Free Consultation
+                </p>
+                <Button
+                  className="h-12 px-8 bg-gold hover:bg-gold/90 text-navy font-semibold shadow-lg hover:shadow-gold/20"
+                  onClick={() => (window.location.href = "/contact")}
+                >
+                  Schedule Your Free Consultation
+                </Button>
+              </Card>
+            </div>
+          ) : results ? (
             <div className="animate-fade-in space-y-6">
               {/* Summary Cards */}
               <div className="grid gap-4">
@@ -395,7 +737,9 @@ const TFACompoundGrowthCalculator = () => {
           ) : (
             <Card className="p-12 bg-background/40 backdrop-blur-sm border-border/50 text-center">
               <p className="text-muted-foreground">
-                Enter your information and click Calculate to see your potential growth.
+                {compareMode 
+                  ? "Enter information for both scenarios and click Calculate to see the comparison."
+                  : "Enter your information and click Calculate to see your potential growth."}
               </p>
             </Card>
           )}
