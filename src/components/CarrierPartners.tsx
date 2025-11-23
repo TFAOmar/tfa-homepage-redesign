@@ -8,6 +8,10 @@ import northAmerican from "@/assets/carriers/north-american.png";
 import athene from "@/assets/carriers/athene.png";
 import midlandNational from "@/assets/carriers/midland-national.png";
 import lincoln from "@/assets/carriers/lincoln.png";
+import prudential from "@/assets/carriers/prudential.png";
+import massmutual from "@/assets/carriers/massmutual.png";
+import americanNational from "@/assets/carriers/american-national.png";
+import principal from "@/assets/carriers/principal.png";
 
 const carriers = [
   { name: "Allianz", logo: allianz },
@@ -20,6 +24,10 @@ const carriers = [
   { name: "Athene", logo: athene },
   { name: "Midland National", logo: midlandNational },
   { name: "Lincoln Financial Group", logo: lincoln },
+  { name: "Prudential", logo: prudential },
+  { name: "MassMutual", logo: massmutual },
+  { name: "American National", logo: americanNational },
+  { name: "Principal", logo: principal },
 ];
 
 const CarrierPartners = () => {
