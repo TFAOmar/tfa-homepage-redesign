@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import tfaLogo from "@/assets/tfa-logo.png";
 import { Link } from "react-router-dom";
+import { CartDrawer } from "./shop/CartDrawer";
 
 const Header = () => {
   return (
@@ -18,7 +19,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-foreground hover:text-accent font-medium transition-colors">
               Home
             </Link>
@@ -37,10 +38,14 @@ const Header = () => {
             <Link to="/locations" className="text-foreground hover:text-accent font-medium transition-colors">
               Locations
             </Link>
+            <Link to="/shop" className="text-foreground hover:text-accent font-medium transition-colors">
+              Shop
+            </Link>
           </nav>
 
-          {/* CTA Button */}
-          <div className="flex items-center gap-4">
+          {/* CTA & Cart */}
+          <div className="flex items-center gap-3">
+            <CartDrawer />
             <Link to="/contact">
               <Button className="hidden sm:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
                 Book Consultation
