@@ -34,9 +34,9 @@ const Header = () => {
             <Link to="/events" className="text-foreground hover:text-accent font-medium transition-colors">
               Events
             </Link>
-            <a href="/#locations" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/locations" className="text-foreground hover:text-accent font-medium transition-colors">
               Locations
-            </a>
+            </Link>
           </nav>
 
           {/* CTA Button */}
