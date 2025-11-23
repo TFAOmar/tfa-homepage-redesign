@@ -33,7 +33,7 @@ const Hero = () => {
           <div className="flex flex-col items-center gap-3 mb-4 md:mb-5">
             <Button 
               size="lg" 
-              className="w-full sm:w-auto max-w-[320px] bg-navy hover:bg-navy/90 text-white text-base md:text-lg font-bold px-10 py-6 md:py-7 rounded-full shadow-lg hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] transition-all duration-200 hover:scale-[1.03] border border-gold/20"
+              className="w-full sm:w-auto max-w-[320px] bg-gold hover:bg-gold/90 text-navy text-base md:text-lg font-bold px-10 py-6 md:py-7 rounded-full shadow-[0_8px_32px_rgba(212,175,55,0.5)] hover:shadow-[0_8px_40px_rgba(212,175,55,0.7)] transition-all duration-200 hover:scale-[1.05] border-2 border-gold"
             >
               Book Consultation
               <Calendar className="ml-2 h-5 w-5" />
