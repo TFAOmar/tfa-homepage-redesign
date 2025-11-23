@@ -1,28 +1,22 @@
 import Hero from "@/components/Hero";
-import CarrierPartners from "@/components/CarrierPartners";
-import CredibilityBadges from "@/components/CredibilityBadges";
-import Stats from "@/components/Stats";
+import TrustStrip from "@/components/TrustStrip";
+import WhyTrustTFA from "@/components/WhyTrustTFA";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
-import Advisors from "@/components/Advisors";
+import AdvisorPreview from "@/components/AdvisorPreview";
 import Testimonials from "@/components/Testimonials";
-import Education from "@/components/Education";
-import Locations from "@/components/Locations";
 import FinalCTA from "@/components/FinalCTA";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
       <Hero />
-      <CarrierPartners />
-      <CredibilityBadges />
-      <Stats />
+      <TrustStrip />
       <Services />
+      <WhyTrustTFA />
       <Process />
-      <Advisors />
+      <AdvisorPreview />
       <Testimonials />
-      <Education />
-      <Locations />
       <FinalCTA />
     </div>
   );

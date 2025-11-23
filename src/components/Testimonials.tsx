@@ -3,70 +3,58 @@ import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Robert & Linda Martinez",
-    location: "Phoenix, AZ",
-    text: "After working with TFA, we finally have clarity on our retirement path. Their comprehensive approach helped us consolidate our accounts and create a tax-efficient income strategy. We sleep better at night knowing our future is secure.",
-    result: "Reduced taxes by 30% and increased retirement income",
+    name: "Robert & Linda M.",
+    role: "Client",
+    text: "We finally have clarity on our retirement path. The peace of mind knowing our future is secure is worth everything.",
   },
   {
-    name: "James Anderson",
-    location: "Chicago, IL",
-    text: "The estate planning guidance we received was invaluable. Our advisor helped us structure our assets to minimize taxes and ensure our children's financial security. The peace of mind is worth everything.",
-    result: "Protected $2.3M estate from unnecessary taxation",
-  },
-  {
-    name: "Patricia Chen",
-    location: "Seattle, WA",
-    text: "As a small business owner, I needed help rolling over my old 401(k) and creating a retirement plan. TFA's team made the process seamless and educated me every step of the way. Highly professional.",
-    result: "Successfully transitioned $850K with zero penalties",
+    name: "James A.",
+    role: "Client",
+    text: "The estate planning guidance was invaluable. Our advisor helped us structure our assets to ensure our children's financial security.",
   },
 ];
 
 const Testimonials = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-secondary/30 to-background">
+    <section className="py-24 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">
-            Client Success Stories
+            What Our Clients Say
           </h2>
           <p className="text-xl text-muted-foreground">
             Real families, real results, lasting relationships
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {testimonials.map((testimonial, index) => (
-            <Card
+            <div
               key={index}
-              className="glass border-0 relative overflow-hidden group hover:shadow-xl transition-all duration-300"
+              className="relative p-8 rounded-2xl glass border-0 hover:shadow-xl transition-all duration-300 animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              <CardContent className="p-8">
-                <Quote className="h-12 w-12 text-accent/20 mb-4" />
-                
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-accent text-accent" />
-                  ))}
-                </div>
+              <Quote className="h-16 w-16 text-accent/10 mb-6" />
+              
+              <div className="flex gap-1 mb-6">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-5 w-5 fill-accent text-accent" />
+                ))}
+              </div>
 
-                <p className="text-foreground leading-relaxed mb-6 italic">
-                  "{testimonial.text}"
+              <p className="text-lg text-foreground leading-relaxed mb-6 italic">
+                "{testimonial.text}"
+              </p>
+
+              <div className="pt-4 border-t border-accent/10">
+                <p className="font-semibold text-navy text-lg">
+                  {testimonial.name}
                 </p>
-
-                <div className="border-t border-accent/20 pt-4">
-                  <p className="font-semibold text-accent text-sm mb-3">
-                    {testimonial.result}
-                  </p>
-                  <p className="font-semibold text-navy">
-                    {testimonial.name}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {testimonial.location}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+                <p className="text-sm text-muted-foreground">
+                  {testimonial.role}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
