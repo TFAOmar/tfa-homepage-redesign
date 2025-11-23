@@ -2,22 +2,32 @@ import AdvisorsHero from "@/components/advisors/AdvisorsHero";
 import AdvisorsFilters from "@/components/advisors/AdvisorsFilters";
 import AdvisorsGrid from "@/components/advisors/AdvisorsGrid";
 import AdvisorsCTA from "@/components/advisors/AdvisorsCTA";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { advisors, Advisor } from "@/data/advisors";
+import { useAdvisorStore } from "@/stores/advisorStore";
 
 const Advisors = () => {
-  const [filteredAdvisors, setFilteredAdvisors] = useState<Advisor[]>(advisors);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const [selectedState, setSelectedState] = useState("All States");
   const [selectedSpecialty, setSelectedSpecialty] = useState("All Specialties");
+  
+  const getApprovedAdvisors = useAdvisorStore((state) => state.getApprovedAdvisors);
+  const dynamicAdvisors = getApprovedAdvisors();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    let filtered = advisors;
+  // Combine static and dynamic advisors
+  const allAdvisors = useMemo(() => {
+    const combined = [...advisors, ...dynamicAdvisors];
+    // Sort alphabetically by name
+    return combined.sort((a, b) => a.name.localeCompare(b.name));
+  }, [dynamicAdvisors]);
+
+  const filteredAdvisors = useMemo(() => {
+    let filtered = allAdvisors;
 
     // Filter by type
     if (selectedType !== "All") {
@@ -46,8 +56,8 @@ const Advisors = () => {
       );
     }
 
-    setFilteredAdvisors(filtered);
-  }, [searchQuery, selectedType, selectedState, selectedSpecialty]);
+    return filtered;
+  }, [allAdvisors, searchQuery, selectedType, selectedState, selectedSpecialty]);
 
   return (
     <div className="min-h-screen">
