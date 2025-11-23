@@ -18,19 +18,19 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#services" className="text-foreground hover:text-accent font-medium transition-colors">
+            <a href="/" className="text-foreground hover:text-accent font-medium transition-colors">
+              Home
+            </a>
+            <a href="/about" className="text-foreground hover:text-accent font-medium transition-colors">
+              About Us
+            </a>
+            <a href="/#services" className="text-foreground hover:text-accent font-medium transition-colors">
               Services
             </a>
-            <a href="#process" className="text-foreground hover:text-accent font-medium transition-colors">
-              Our Process
-            </a>
-            <a href="#advisors" className="text-foreground hover:text-accent font-medium transition-colors">
+            <a href="/#advisors" className="text-foreground hover:text-accent font-medium transition-colors">
               Advisors
             </a>
-            <a href="#education" className="text-foreground hover:text-accent font-medium transition-colors">
-              Resources
-            </a>
-            <a href="#locations" className="text-foreground hover:text-accent font-medium transition-colors">
+            <a href="/#locations" className="text-foreground hover:text-accent font-medium transition-colors">
               Locations
             </a>
           </nav>
