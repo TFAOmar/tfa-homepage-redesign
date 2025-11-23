@@ -14,36 +14,34 @@ const FinalCTA = () => {
       <div className="container mx-auto px-6 md:px-12 lg:px-20 relative z-10 max-w-[1280px]">
         <div className="max-w-[760px] mx-auto text-center">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-            Your Financial Future Deserves a Plan.
-            <span className="block text-gold mt-2">Let's Build It Together.</span>
+            Ready to Secure Your Family's Future?
+            <span className="block text-gold mt-2">Let's Start the Conversation.</span>
           </h2>
           
-          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-6 leading-relaxed">
-            Take the first step toward financial confidence. Schedule your complimentary consultation with one of our expert advisors today.
+          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-10 leading-relaxed">
+            Book your free, no-obligation consultation today and take the first step toward financial peace of mind.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col items-center gap-4">
             <Button 
               size="lg" 
-              className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-7 neuro-button group text-base"
+              className="bg-gold hover:bg-gold/90 text-navy text-lg font-bold px-12 py-7 rounded-full shadow-[0_8px_32px_rgba(212,175,55,0.5)] hover:shadow-[0_8px_40px_rgba(212,175,55,0.7)] transition-all duration-200 hover:scale-[1.05] border-2 border-gold group"
             >
-              <Phone className="mr-2 h-5 w-5" />
-              Schedule Your Consultation
+              Book Your Free Consultation
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             
-            <Button 
-              size="lg"
-              variant="outline"
-              className="border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-navy text-lg px-10 py-7 backdrop-blur-sm bg-white/10 text-base"
+            <p className="text-primary-foreground/70 text-sm">
+              Free consultation • No obligations • Completely confidential
+            </p>
+            
+            <a 
+              href="tel:8005550123"
+              className="text-primary-foreground/80 hover:text-gold text-base transition-colors mt-2"
             >
-              Call (800) 555-0123
-            </Button>
+              Or call us: <span className="font-semibold">(800) 555-0123</span>
+            </a>
           </div>
-
-          <p className="text-primary-foreground/70 mt-8 text-sm">
-            No obligation. Completely confidential. Expert guidance.
-          </p>
         </div>
       </div>
     </section>

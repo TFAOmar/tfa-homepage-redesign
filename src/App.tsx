@@ -53,7 +53,7 @@ const App = () => (
             </Routes>
           </main>
           <Footer />
-          <FloatingCTA showOnTablet={false} hideOnPages={["/contact"]} />
+          <FloatingCTA hideOnPages={["/contact"]} />
         </div>
       </BrowserRouter>
     </TooltipProvider>
