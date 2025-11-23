@@ -29,9 +29,9 @@ const reasons = [
 
 const WhyTrustTFA = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-secondary/20 to-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-secondary/20 to-background">
+      <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1280px]">
+        <div className="text-center max-w-[700px] mx-auto mb-12 md:mb-16 lg:mb-20">
           <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">
             Why Families Trust TFA
           </h2>

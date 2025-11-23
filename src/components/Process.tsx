@@ -20,9 +20,9 @@ const steps = [
 
 const Process = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-secondary/30 to-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-secondary/30 to-background">
+      <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1280px]">
+        <div className="text-center max-w-[700px] mx-auto mb-12 md:mb-16 lg:mb-20">
           <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">
             Our Proven Process
           </h2>
@@ -31,7 +31,7 @@ const Process = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto">
           {steps.map((step, index) => (
             <div key={index} className="relative text-center group">
               {/* Connector Line - Hidden on last item */}
@@ -46,7 +46,7 @@ const Process = () => {
                 </div>
               </div>
               
-              <h3 className="text-xl font-semibold text-navy mb-3">
+              <h3 className="text-xl font-semibold text-navy mb-2.5">
                 {step.title}
               </h3>
               <p className="text-muted-foreground">
