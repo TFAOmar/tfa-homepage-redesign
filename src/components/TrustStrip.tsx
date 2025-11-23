@@ -86,7 +86,7 @@ const TrustStrip = () => {
             {duplicatedCarriers.map((carrier, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 flex items-center justify-center h-16 w-32 grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100"
+                className="flex-shrink-0 flex items-center justify-center h-20 md:h-24 w-40 md:w-48 grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100"
               >
                 <img
                   src={carrier.logo}
