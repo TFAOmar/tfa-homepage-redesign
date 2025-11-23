@@ -4,55 +4,55 @@ import { Quote, Star } from "lucide-react";
 const testimonials = [
   {
     name: "Robert & Linda M.",
-    role: "Retired Couple, Ohio",
-    text: "We finally have clarity on our retirement path. The peace of mind knowing our future is secure is worth everything.",
+    role: "Ohio",
+    text: "We finally have clarity on our retirement. The peace of mind is worth everything.",
   },
   {
     name: "James A.",
-    role: "Business Owner, Texas",
-    text: "The estate planning guidance was invaluable. Our advisor helped us structure our assets to ensure our children's financial security.",
+    role: "Texas",
+    text: "Our advisor helped us protect our children's future. We feel secure knowing everything is in place.",
   },
   {
     name: "Patricia & Michael R.",
-    role: "Family, California",
-    text: "Our advisor took the time to understand our goals and created a plan that actually works for our family. We couldn't be happier.",
+    role: "California",
+    text: "They took the time to understand us. Our plan actually works for our family.",
   },
 ];
 
 const Testimonials = () => {
   return (
-    <section className="py-16 md:py-20 lg:py-24 bg-background">
-      <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1280px]">
-        <div className="text-center max-w-[700px] mx-auto mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">
+    <section className="py-20 md:py-28 lg:py-32 bg-background">
+      <div className="container mx-auto px-6 md:px-20 lg:px-20 max-w-[1280px]">
+        <div className="text-center max-w-[700px] mx-auto mb-16 md:mb-20">
+          <h2 className="text-4xl md:text-5xl font-bold text-navy mb-5">
             What Our Clients Say
           </h2>
           <p className="text-xl text-muted-foreground">
-            Real families, real results, lasting relationships
+            Real families, real peace of mind
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="relative p-8 rounded-2xl glass border-0 hover:shadow-xl transition-all duration-300 animate-fade-in"
+              className="relative p-10 rounded-2xl glass border-0 hover:shadow-xl transition-all duration-300 animate-fade-in flex flex-col"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <Quote className="h-16 w-16 text-accent/10 mb-6" />
+              <Quote className="h-12 w-12 text-accent/20 mb-7" strokeWidth={1.5} />
               
-              <div className="flex gap-1 mb-6">
+              <div className="flex gap-1 mb-7">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-5 w-5 fill-accent text-accent" />
                 ))}
               </div>
 
-              <p className="text-lg text-foreground leading-relaxed mb-6 italic">
+              <p className="text-lg text-foreground leading-relaxed mb-8 flex-grow">
                 "{testimonial.text}"
               </p>
 
-              <div className="pt-4 border-t border-accent/10">
-                <p className="font-semibold text-navy text-lg">
+              <div className="pt-6 border-t border-accent/10 mt-auto">
+                <p className="font-bold text-navy text-lg mb-1">
                   {testimonial.name}
                 </p>
                 <p className="text-sm text-muted-foreground">

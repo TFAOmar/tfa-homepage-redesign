@@ -1,90 +1,86 @@
 import { 
   TrendingUp, 
   Shield, 
-  FileText, 
   Calculator, 
   Heart, 
   PiggyBank, 
-  RefreshCw, 
-  Umbrella, 
-  Users 
+  Users,
+  ArrowRight
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 
 const services = [
   {
-    icon: TrendingUp,
-    title: "Income Planning",
-    description: "Never worry about running out of money in retirement — enjoy steady, reliable income for life.",
+    icon: Shield,
+    title: "Life Insurance",
+    description: "Protect your family's future if something happens to you.",
   },
   {
     icon: PiggyBank,
-    title: "Investment Management",
-    description: "Grow your wealth with confidence using strategies designed around your family's goals.",
+    title: "Retirement Planning",
+    description: "Enjoy retirement without worrying about money.",
   },
   {
-    icon: FileText,
-    title: "Estate & Legacy Planning",
-    description: "Protect what you've built and pass your wealth to the next generation tax-efficiently.",
+    icon: TrendingUp,
+    title: "Investment Planning",
+    description: "Grow your wealth with guidance you can trust.",
+  },
+  {
+    icon: Heart,
+    title: "Estate Planning",
+    description: "Ensure your legacy is protected and your family is cared for.",
   },
   {
     icon: Calculator,
-    title: "Tax Planning",
-    description: "Keep more of what you earn with smart strategies that reduce your tax burden.",
+    title: "Tax Strategies",
+    description: "Keep more of what you earn with simple, smart planning.",
   },
   {
-    icon: Shield,
-    title: "Life Insurance",
-    description: "Secure your family's financial future if the unexpected happens.",
-  },
-  {
-    icon: RefreshCw,
-    title: "401(k) Rollovers & Retirement Plans",
-    description: "Transition your retirement accounts smoothly and maximize your nest egg.",
+    icon: Users,
+    title: "Family Protection",
+    description: "Comprehensive care that grows with your family.",
   },
 ];
 
 const Services = () => {
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-background">
-      <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1280px]">
-        <div className="text-center max-w-[700px] mx-auto mb-12 md:mb-16 lg:mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">
-            Comprehensive Financial Planning Services
+    <section className="py-20 md:py-28 lg:py-32 bg-background">
+      <div className="container mx-auto px-6 md:px-20 lg:px-20 max-w-[1280px]">
+        <div className="text-center max-w-[700px] mx-auto mb-16 md:mb-20">
+          <h2 className="text-4xl md:text-5xl font-bold text-navy mb-5">
+            What We Help You With
           </h2>
           <p className="text-xl text-muted-foreground">
-            Tailored strategies designed to meet your unique goals and secure your family's future.
+            Comprehensive financial guidance designed around your family's needs
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10 md:mb-12 lg:mb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto mb-12">
           {services.map((service, index) => (
-            <Card
+            <div
               key={index}
-              className="glass border-0 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer"
+              className="group p-10 rounded-2xl glass border-0 hover:shadow-xl transition-all duration-300 animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              <CardContent className="p-6 md:p-8">
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-accent/10 text-accent mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-colors duration-300">
-                  <service.icon className="h-7 w-7" strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-semibold text-navy mb-3 group-hover:text-accent transition-colors">
-                  {service.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {service.description}
-                </p>
-              </CardContent>
-            </Card>
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 text-accent mb-7 group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300 group-hover:scale-110">
+                <service.icon className="h-8 w-8" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-xl font-bold text-navy mb-4">
+                {service.title}
+              </h3>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                {service.description}
+              </p>
+            </div>
           ))}
         </div>
 
         <div className="text-center">
           <a 
             href="/services"
-            className="inline-flex items-center text-accent hover:text-accent/80 font-semibold transition-colors group"
+            className="inline-flex items-center text-accent hover:text-accent/80 font-semibold text-lg transition-colors group"
           >
-            View All Services
-            <RefreshCw className="ml-2 h-4 w-4 group-hover:rotate-180 transition-transform duration-500" />
+            Learn more about our services
+            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
       </div>
