@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import tfaLogo from "@/assets/tfa-logo.png";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -8,25 +9,28 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img 
               src={tfaLogo} 
               alt="The Financial Architects" 
               className="h-12 w-auto"
             />
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="/" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/" className="text-foreground hover:text-accent font-medium transition-colors">
               Home
-            </a>
-            <a href="/about" className="text-foreground hover:text-accent font-medium transition-colors">
+            </Link>
+            <Link to="/about" className="text-foreground hover:text-accent font-medium transition-colors">
               About Us
-            </a>
-            <a href="/services" className="text-foreground hover:text-accent font-medium transition-colors">
+            </Link>
+            <Link to="/services" className="text-foreground hover:text-accent font-medium transition-colors">
               Services
-            </a>
+            </Link>
+            <Link to="/process" className="text-foreground hover:text-accent font-medium transition-colors">
+              Our Process
+            </Link>
             <a href="/#advisors" className="text-foreground hover:text-accent font-medium transition-colors">
               Advisors
             </a>
