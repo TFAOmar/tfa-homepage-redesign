@@ -19,44 +19,47 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-foreground hover:text-accent font-medium transition-colors">
+          <nav className="hidden lg:flex items-center gap-5">
+            <Link to="/" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
               Home
             </Link>
-            <Link to="/about" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/about" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
               About Us
             </Link>
-            <Link to="/services" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/services" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
               Services
             </Link>
-            <Link to="/process" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/process" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
               Our Process
             </Link>
-            <Link to="/events" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/advisors" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
+              Advisors
+            </Link>
+            <Link to="/events" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
               Events
             </Link>
-            <Link to="/locations" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/locations" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
               Locations
             </Link>
-            <Link to="/blog" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/blog" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
               Blog
             </Link>
-            <Link to="/shop" className="text-foreground hover:text-accent font-medium transition-colors">
+            <Link to="/shop" className="text-foreground hover:text-accent font-medium transition-colors text-sm">
               Shop
             </Link>
           </nav>
 
           {/* CTA & Cart */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <CartDrawer />
-            <Link to="/contact">
-              <Button className="hidden sm:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Link to="/contact" className="hidden sm:block">
+              <Button className="bg-accent hover:bg-accent/90 text-accent-foreground text-sm px-4">
                 Book Consultation
               </Button>
             </Link>
             
             {/* Mobile Menu Button */}
-            <Button variant="ghost" size="icon" className="md:hidden">
+            <Button variant="ghost" size="icon" className="lg:hidden">
               <Menu className="h-6 w-6" />
             </Button>
           </div>
