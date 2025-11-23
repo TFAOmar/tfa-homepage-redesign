@@ -16,7 +16,7 @@ const Hero = () => {
       </div>
 
       {/* Content - Mobile First */}
-      <div className="container mx-auto px-6 md:px-12 lg:px-20 relative z-10 py-24 md:py-32">
+      <div className="container mx-auto px-6 md:px-20 lg:px-20 relative z-10 py-24 md:py-32">
         <div className="max-w-[90%] md:max-w-[700px] mx-auto text-center animate-fade-in-up">
           {/* Headline */}
           <h1 className="text-[28px] leading-[1.2] md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-4 tracking-tight">

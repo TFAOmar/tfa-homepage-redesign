@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { advisors } from "@/data/advisors";
 
@@ -9,86 +8,64 @@ const AdvisorPreview = () => {
   const featuredAdvisors = advisors.slice(0, 3);
 
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-background to-secondary/20">
-      <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-[1280px]">
-        <div className="text-center max-w-[700px] mx-auto mb-12 md:mb-16 lg:mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-navy mb-4">
-            Meet Our Advisors & Brokers
+    <section className="py-20 md:py-28 lg:py-32 bg-secondary/30">
+      <div className="container mx-auto px-6 md:px-20 lg:px-20 max-w-[1280px]">
+        <div className="text-center max-w-[700px] mx-auto mb-16 md:mb-20">
+          <h2 className="text-4xl md:text-5xl font-bold text-navy mb-5">
+            Meet Our Advisors
           </h2>
           <p className="text-xl text-muted-foreground">
-            A national team dedicated to serving families and business owners with integrity and care.
+            Experienced professionals dedicated to your financial success
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-10 md:mb-12 lg:mb-16">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-10 mb-14">
           {featuredAdvisors.map((advisor, index) => (
-            <Card
+            <div
               key={advisor.id}
-              className="glass border-0 overflow-hidden hover:shadow-xl transition-all duration-300 group animate-fade-in"
+              className="group bg-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-fade-in hover:-translate-y-1"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <CardContent className="p-0">
-                {/* Advisor Image */}
-                <div className="relative h-64 bg-gradient-to-br from-accent/20 to-navy/20 flex items-center justify-center overflow-hidden">
-                  {advisor.image ? (
-                    <img
-                      src={advisor.image}
-                      alt={`${advisor.name} headshot`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-32 h-32 rounded-full bg-accent/10 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-accent">
-                        {advisor.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Advisor Info */}
-                <div className="p-6 md:p-8">
-                  <h3 className="text-xl font-semibold text-navy mb-1 group-hover:text-accent transition-colors">
-                    {advisor.name}
-                  </h3>
-                  <p className="text-sm text-accent font-medium mb-2">
-                    {advisor.title}
-                  </p>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                    <MapPin className="h-4 w-4" />
-                    <span>
-                      {advisor.city}, {advisor.state}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-6 line-clamp-3">
-                    {advisor.bio}
-                  </p>
-                  <Link to={`/contact?advisor=${advisor.id}`}>
-                    <Button
-                      variant="outline"
-                      className="w-full border-accent/20 hover:border-accent hover:bg-accent/10"
-                    >
-                      Connect with {advisor.name.split(" ")[0]}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+              <div className="aspect-[4/3] overflow-hidden bg-secondary/20">
+                <img
+                  src={advisor.image}
+                  alt={advisor.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-navy mb-2">
+                  {advisor.name}
+                </h3>
+                
+                <p className="text-accent font-semibold mb-4 text-base">
+                  {advisor.city}, {advisor.state}
+                </p>
+                
+                <p className="text-muted-foreground text-base leading-relaxed mb-6 line-clamp-2">
+                  {advisor.bio}
+                </p>
+                
+                <Link to={`/contact?advisor=${advisor.id}`}>
+                  <Button
+                    variant="outline"
+                    className="w-full group-hover:bg-accent group-hover:text-accent-foreground group-hover:border-accent transition-all text-base py-6"
+                  >
+                    Connect with {advisor.name.split(" ")[0]}
+                  </Button>
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
 
         <div className="text-center">
           <Link to="/advisors">
-            <Button
-              size="lg"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-6 text-base neuro-button group"
-            >
-              View All Advisors
+            <a className="inline-flex items-center text-accent hover:text-accent/80 font-semibold text-lg transition-colors group">
+              View all advisors
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            </a>
           </Link>
         </div>
       </div>
