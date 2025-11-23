@@ -1,6 +1,4 @@
 import { useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import PartnersHero from "@/components/partners/PartnersHero";
 import CarrierCard from "@/components/partners/CarrierCard";
 import CarrierDetail from "@/components/partners/CarrierDetail";
@@ -27,7 +25,6 @@ const Partners = () => {
 
   return (
     <div className="min-h-screen">
-      <Header />
       <PartnersHero />
       
       {/* Carrier Cards Grid */}
@@ -76,8 +73,6 @@ const Partners = () => {
           </div>
         </section>
       )}
-
-      <Footer />
     </div>
   );
 };

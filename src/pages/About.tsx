@@ -1,5 +1,3 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import AboutHero from "@/components/about/AboutHero";
 import FoundingStory from "@/components/about/FoundingStory";
 import MissionVision from "@/components/about/MissionVision";
@@ -12,7 +10,6 @@ import AboutCTA from "@/components/about/AboutCTA";
 const About = () => {
   return (
     <div className="min-h-screen">
-      <Header />
       <AboutHero />
       <FoundingStory />
       <MissionVision />
@@ -21,7 +18,6 @@ const About = () => {
       <Timeline />
       <NationalImpact />
       <AboutCTA />
-      <Footer />
     </div>
   );
 };
