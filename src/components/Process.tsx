@@ -3,23 +3,18 @@ import { MessageCircle, ClipboardCheck, LineChart, Target } from "lucide-react";
 const steps = [
   {
     icon: MessageCircle,
-    title: "Discovery Meeting",
-    description: "We listen to your goals, concerns, and financial aspirations in a comfortable, no-pressure environment.",
+    title: "Discovery",
+    description: "Understand your goals, values, and financial aspirations in a comfortable environment.",
   },
   {
     icon: ClipboardCheck,
-    title: "Comprehensive Analysis",
-    description: "Our team reviews your complete financial picture to identify opportunities and potential risks.",
-  },
-  {
-    icon: LineChart,
-    title: "Custom Strategy",
-    description: "We design a personalized financial plan that aligns with your values and objectives.",
+    title: "Strategy",
+    description: "Build a custom financial plan aligned with your unique objectives and life vision.",
   },
   {
     icon: Target,
-    title: "Ongoing Partnership",
-    description: "Regular reviews and adjustments ensure your plan evolves with your life's changing needs.",
+    title: "Guidance",
+    description: "Lifetime support with regular reviews and updates as your needs evolve.",
   },
 ];
 
@@ -36,7 +31,7 @@ const Process = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
           {steps.map((step, index) => (
             <div key={index} className="relative text-center group">
               {/* Connector Line - Hidden on last item */}
