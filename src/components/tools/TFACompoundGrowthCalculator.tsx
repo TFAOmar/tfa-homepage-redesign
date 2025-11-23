@@ -7,7 +7,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { TrendingUp, DollarSign, PiggyBank, GitCompare } from "lucide-react";
+import { TrendingUp, DollarSign, PiggyBank, GitCompare, ChevronDown, ChevronUp } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface CalculatorInputs {
   initialInvestment: number;
@@ -34,6 +35,8 @@ interface ComparisonResults {
 const TFACompoundGrowthCalculator = () => {
   const [compareMode, setCompareMode] = useState(false);
   const [scenarioBMode, setScenarioBMode] = useState<"none" | "no-interest" | "custom">("none");
+  const [showTable, setShowTable] = useState(false);
+  const [selectedScenario, setSelectedScenario] = useState<"scenarioA" | "scenarioB">("scenarioA");
   
   const [inputs, setInputs] = useState<CalculatorInputs>({
     initialInvestment: 10000,
@@ -196,6 +199,29 @@ const TFACompoundGrowthCalculator = () => {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(value);
+  };
+
+  const formatCurrencyWithDecimals = (value: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
+  const generateTableData = (scenarioResults: CalculationResults, scenarioInputs: CalculatorInputs) => {
+    return scenarioResults.yearlyData.map((yearData) => {
+      const totalContributions = 
+        scenarioInputs.initialInvestment + 
+        (scenarioInputs.monthlyContribution * 12 * yearData.year);
+      
+      return {
+        year: yearData.year,
+        futureValue: yearData.balance,
+        totalContributions: totalContributions,
+      };
+    });
   };
 
   return (
@@ -599,6 +625,122 @@ const TFACompoundGrowthCalculator = () => {
                 </div>
               </Card>
 
+              {/* Table Toggle & Display */}
+              <div className="space-y-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowTable(!showTable)}
+                  className="w-full h-12 flex items-center justify-center gap-2"
+                >
+                  {showTable ? (
+                    <>
+                      Hide Table
+                      <ChevronUp className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      Show Table
+                      <ChevronDown className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+
+                {showTable && (
+                  <Card className="p-6 bg-white/5 backdrop-blur-sm border-white/10 rounded-2xl animate-fade-in">
+                    <Tabs value={selectedScenario} onValueChange={(v) => setSelectedScenario(v as "scenarioA" | "scenarioB")} className="w-full">
+                      <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-6">
+                        <TabsTrigger value="scenarioA">Scenario A</TabsTrigger>
+                        <TabsTrigger value="scenarioB">Scenario B</TabsTrigger>
+                      </TabsList>
+
+                      <TabsContent value="scenarioA" className="mt-0">
+                        <div className="mb-4">
+                          <h3 className="text-lg font-semibold text-foreground mb-1">
+                            Total Savings in US Dollars
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Scenario A - Your Investment Plan ({inputs.annualRate.toFixed(2)}%)
+                          </p>
+                        </div>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="border-b border-border/50 bg-muted/20">
+                                <th className="text-left py-3 px-4 font-semibold">Years</th>
+                                <th className="text-right py-3 px-4 font-semibold">
+                                  Future Value ({inputs.annualRate.toFixed(2)}%)
+                                </th>
+                                <th className="text-right py-3 px-4 font-semibold">Total Contributions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {generateTableData(comparisonResults.scenarioA, inputs).map((row, index) => (
+                                <tr
+                                  key={row.year}
+                                  className={`border-b border-border/30 ${
+                                    index % 2 === 0 ? "bg-background/20" : "bg-transparent"
+                                  }`}
+                                >
+                                  <td className="py-2.5 px-4">Year {row.year}</td>
+                                  <td className="py-2.5 px-4 text-right font-medium">
+                                    {formatCurrencyWithDecimals(row.futureValue)}
+                                  </td>
+                                  <td className="py-2.5 px-4 text-right font-medium">
+                                    {formatCurrencyWithDecimals(row.totalContributions)}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </TabsContent>
+
+                      <TabsContent value="scenarioB" className="mt-0">
+                        <div className="mb-4">
+                          <h3 className="text-lg font-semibold text-foreground mb-1">
+                            Total Savings in US Dollars
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Scenario B - Baseline ({scenarioBInputs.annualRate.toFixed(2)}%)
+                          </p>
+                        </div>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="border-b border-border/50 bg-muted/20">
+                                <th className="text-left py-3 px-4 font-semibold">Years</th>
+                                <th className="text-right py-3 px-4 font-semibold">
+                                  Future Value ({scenarioBInputs.annualRate.toFixed(2)}%)
+                                </th>
+                                <th className="text-right py-3 px-4 font-semibold">Total Contributions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {generateTableData(comparisonResults.scenarioB, scenarioBInputs).map((row, index) => (
+                                <tr
+                                  key={row.year}
+                                  className={`border-b border-border/30 ${
+                                    index % 2 === 0 ? "bg-background/20" : "bg-transparent"
+                                  }`}
+                                >
+                                  <td className="py-2.5 px-4">Year {row.year}</td>
+                                  <td className="py-2.5 px-4 text-right font-medium">
+                                    {formatCurrencyWithDecimals(row.futureValue)}
+                                  </td>
+                                  <td className="py-2.5 px-4 text-right font-medium">
+                                    {formatCurrencyWithDecimals(row.totalContributions)}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
+                  </Card>
+                )}
+              </div>
+
               {/* Advisory CTA */}
               <Card className="p-8 bg-background/40 backdrop-blur-sm border-border/50 text-center">
                 <h3 className="text-xl font-semibold mb-2">See What This Could Look Like for You</h3>
@@ -691,6 +833,71 @@ const TFACompoundGrowthCalculator = () => {
                   </ResponsiveContainer>
                 </div>
               </Card>
+
+              {/* Table Toggle & Display */}
+              <div className="space-y-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowTable(!showTable)}
+                  className="w-full h-12 flex items-center justify-center gap-2"
+                >
+                  {showTable ? (
+                    <>
+                      Hide Table
+                      <ChevronUp className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      Show Table
+                      <ChevronDown className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+
+                {showTable && (
+                  <Card className="p-6 bg-white/5 backdrop-blur-sm border-white/10 rounded-2xl animate-fade-in">
+                    <div className="mb-4">
+                      <h3 className="text-lg font-semibold text-foreground mb-1">
+                        Total Savings in US Dollars
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Year-by-year breakdown ({inputs.annualRate.toFixed(2)}%)
+                      </p>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-border/50 bg-muted/20">
+                            <th className="text-left py-3 px-4 font-semibold">Years</th>
+                            <th className="text-right py-3 px-4 font-semibold">
+                              Future Value ({inputs.annualRate.toFixed(2)}%)
+                            </th>
+                            <th className="text-right py-3 px-4 font-semibold">Total Contributions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {generateTableData(results, inputs).map((row, index) => (
+                            <tr
+                              key={row.year}
+                              className={`border-b border-border/30 ${
+                                index % 2 === 0 ? "bg-background/20" : "bg-transparent"
+                              }`}
+                            >
+                              <td className="py-2.5 px-4">Year {row.year}</td>
+                              <td className="py-2.5 px-4 text-right font-medium">
+                                {formatCurrencyWithDecimals(row.futureValue)}
+                              </td>
+                              <td className="py-2.5 px-4 text-right font-medium">
+                                {formatCurrencyWithDecimals(row.totalContributions)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
+                )}
+              </div>
 
               {/* Breakdown */}
               <Card className="p-6 bg-background/40 backdrop-blur-sm border-border/50">
