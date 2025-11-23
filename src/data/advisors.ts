@@ -1,5 +1,5 @@
 export interface Advisor {
-  id: number;
+  id: number | string;
   name: string;
   title: string;
   type: "Advisor" | "Broker";
@@ -10,6 +10,9 @@ export interface Advisor {
   specialties: string[];
   licenses: string[];
   image?: string;
+  email?: string;
+  phone?: string;
+  yearsOfExperience?: number;
 }
 
 export const advisors: Advisor[] = [

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Phone, Calendar } from "lucide-react";
+import { Phone, Calendar, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const AdvisorsCTA = () => {
@@ -39,6 +39,16 @@ const AdvisorsCTA = () => {
           <p className="text-muted-foreground mt-6 text-sm">
             Free consultation • No pressure • Personalized advisor recommendations
           </p>
+
+          <div className="mt-8 pt-8 border-t border-border/50">
+            <p className="text-muted-foreground mb-4">Are you an advisor or broker?</p>
+            <Link to="/advisors/onboard">
+              <Button size="lg" variant="secondary" className="group">
+                <UserPlus className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                Join Our Network
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
