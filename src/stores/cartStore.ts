@@ -94,7 +94,7 @@ export const useCartStore = create<CartStore>()(
           const checkoutUrl = await createStorefrontCheckout(items);
           setCheckoutUrl(checkoutUrl);
         } catch (error) {
-          console.error('Failed to create checkout:', error);
+          // Error already logged in shopify.ts
           throw error;
         } finally {
           setLoading(false);

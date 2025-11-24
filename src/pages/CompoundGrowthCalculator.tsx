@@ -1,7 +1,10 @@
-import { Calculator } from "lucide-react";
+import { useEffect } from "react";
 import TFACompoundGrowthCalculator from "@/components/tools/TFACompoundGrowthCalculator";
 
 const CompoundGrowthCalculator = () => {
+  useEffect(() => {
+    document.title = "Compound Growth Calculator | The Financial Architects";
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
       {/* Header */}
