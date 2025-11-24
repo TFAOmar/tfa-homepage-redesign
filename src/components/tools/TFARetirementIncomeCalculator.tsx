@@ -161,17 +161,28 @@ export default function TFARetirementIncomeCalculator() {
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
         {/* Left Column - Inputs */}
         <div className="space-y-8 animate-fade-in">
-          {/* Personal Timeline */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <Calendar className="w-5 h-5 text-primary" />
-                Personal Timeline
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="currentAge">Current Age</Label>
+          {/* Main Inputs Card */}
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl p-6 md:p-8">
+            {/* Header with gold accent */}
+            <div className="mb-6 pb-4 border-b border-white/10">
+              <div className="h-1 w-14 rounded-full bg-primary mb-4" />
+              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+                Retirement Income Inputs
+              </h3>
+              <p className="text-xs md:text-sm text-muted-foreground">
+                Tell us about your age, savings, and estimated benefits.
+              </p>
+            </div>
+
+            {/* Personal Timeline Subsection */}
+            <div className="space-y-4 mb-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Timeline
+              </p>
+              
+              <div className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="currentAge" className="text-xs md:text-sm text-foreground">Current Age</Label>
                 <Input
                   id="currentAge"
                   type="number"
@@ -179,12 +190,12 @@ export default function TFARetirementIncomeCalculator() {
                   onChange={(e) => setCurrentAge(Number(e.target.value))}
                   min={18}
                   max={80}
-                  className="mt-1.5"
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
                 />
-                {errors.currentAge && <p className="text-xs text-destructive mt-1">{errors.currentAge}</p>}
+                {errors.currentAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentAge}</p>}
               </div>
-              <div>
-                <Label htmlFor="retirementAge">Planned Retirement Age</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="retirementAge" className="text-xs md:text-sm text-foreground">Planned Retirement Age</Label>
                 <Input
                   id="retirementAge"
                   type="number"
@@ -192,152 +203,148 @@ export default function TFARetirementIncomeCalculator() {
                   onChange={(e) => setRetirementAge(Number(e.target.value))}
                   min={currentAge + 1}
                   max={80}
-                  className="mt-1.5"
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
                 />
-                {errors.retirementAge && <p className="text-xs text-destructive mt-1">{errors.retirementAge}</p>}
+                {errors.retirementAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.retirementAge}</p>}
               </div>
-              <div>
-                <Label htmlFor="incomeEndAge">Plan For Income Until Age</Label>
-                <p className="text-xs text-muted-foreground mt-1">How long do you want your money to last?</p>
+              <div className="space-y-1.5">
+                <Label htmlFor="incomeEndAge" className="text-xs md:text-sm text-foreground">Plan For Income Until Age</Label>
+                <p className="text-[11px] md:text-xs text-muted-foreground">How long do you want your money to last?</p>
                 <Input
                   id="incomeEndAge"
                   type="number"
                   value={incomeEndAge}
                   onChange={(e) => setIncomeEndAge(Number(e.target.value))}
                   min={retirementAge + 1}
-                  className="mt-1.5"
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
                 />
-                {errors.incomeEndAge && <p className="text-xs text-destructive mt-1">{errors.incomeEndAge}</p>}
+                  {errors.incomeEndAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.incomeEndAge}</p>}
+                </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Savings & Growth */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <TrendingUp className="w-5 h-5 text-primary" />
-                Savings & Growth (Before Retirement)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="currentSavings">Current Retirement Savings ($)</Label>
-                <Input
-                  id="currentSavings"
-                  type="number"
-                  value={currentSavings}
-                  onChange={(e) => setCurrentSavings(Number(e.target.value))}
-                  min={0}
-                  className="mt-1.5"
-                />
-                {errors.currentSavings && <p className="text-xs text-destructive mt-1">{errors.currentSavings}</p>}
+            {/* Savings & Growth Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Savings & Growth
+              </p>
+              
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="currentSavings" className="text-xs md:text-sm text-foreground">Current Retirement Savings ($)</Label>
+                  <Input
+                    id="currentSavings"
+                    type="number"
+                    value={currentSavings}
+                    onChange={(e) => setCurrentSavings(Number(e.target.value))}
+                    min={0}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  />
+                  {errors.currentSavings && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentSavings}</p>}
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="monthlyContribution" className="text-xs md:text-sm text-foreground">Monthly Contribution Until Retirement ($)</Label>
+                  <Input
+                    id="monthlyContribution"
+                    type="number"
+                    value={monthlyContribution}
+                    onChange={(e) => setMonthlyContribution(Number(e.target.value))}
+                    min={0}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  />
+                  {errors.monthlyContribution && (
+                    <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.monthlyContribution}</p>
+                  )}
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="returnBeforeRetirement" className="text-xs md:text-sm text-foreground">Expected Annual Return Before Retirement (%)</Label>
+                  <Input
+                    id="returnBeforeRetirement"
+                    type="number"
+                    value={returnBeforeRetirement}
+                    onChange={(e) => setReturnBeforeRetirement(Number(e.target.value))}
+                    min={0}
+                    max={15}
+                    step={0.1}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  />
+                  {errors.returnBeforeRetirement && (
+                    <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.returnBeforeRetirement}</p>
+                  )}
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="returnDuringRetirement" className="text-xs md:text-sm text-foreground">Expected Annual Return During Retirement (%)</Label>
+                  <Input
+                    id="returnDuringRetirement"
+                    type="number"
+                    value={returnDuringRetirement}
+                    onChange={(e) => setReturnDuringRetirement(Number(e.target.value))}
+                    min={0}
+                    max={10}
+                    step={0.1}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  />
+                  {errors.returnDuringRetirement && (
+                    <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.returnDuringRetirement}</p>
+                  )}
+                </div>
               </div>
-              <div>
-                <Label htmlFor="monthlyContribution">Monthly Contribution Until Retirement ($)</Label>
-                <Input
-                  id="monthlyContribution"
-                  type="number"
-                  value={monthlyContribution}
-                  onChange={(e) => setMonthlyContribution(Number(e.target.value))}
-                  min={0}
-                  className="mt-1.5"
-                />
-                {errors.monthlyContribution && (
-                  <p className="text-xs text-destructive mt-1">{errors.monthlyContribution}</p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="returnBeforeRetirement">Expected Annual Return Before Retirement (%)</Label>
-                <Input
-                  id="returnBeforeRetirement"
-                  type="number"
-                  value={returnBeforeRetirement}
-                  onChange={(e) => setReturnBeforeRetirement(Number(e.target.value))}
-                  min={0}
-                  max={15}
-                  step={0.1}
-                  className="mt-1.5"
-                />
-                {errors.returnBeforeRetirement && (
-                  <p className="text-xs text-destructive mt-1">{errors.returnBeforeRetirement}</p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="returnDuringRetirement">Expected Annual Return During Retirement (%)</Label>
-                <Input
-                  id="returnDuringRetirement"
-                  type="number"
-                  value={returnDuringRetirement}
-                  onChange={(e) => setReturnDuringRetirement(Number(e.target.value))}
-                  min={0}
-                  max={10}
-                  step={0.1}
-                  className="mt-1.5"
-                />
-                {errors.returnDuringRetirement && (
-                  <p className="text-xs text-destructive mt-1">{errors.returnDuringRetirement}</p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Income Sources */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <DollarSign className="w-5 h-5 text-primary" />
+            {/* Income Sources Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Income Sources in Retirement
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="socialSecurity">Estimated Monthly Social Security ($)</Label>
-                <p className="text-xs text-muted-foreground mt-1">Use your latest SSA benefit estimate if available.</p>
-                <Input
-                  id="socialSecurity"
-                  type="number"
-                  value={socialSecurity}
-                  onChange={(e) => setSocialSecurity(Number(e.target.value))}
-                  min={0}
-                  className="mt-1.5"
-                />
+              </p>
+              
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="socialSecurity" className="text-xs md:text-sm text-foreground">Estimated Monthly Social Security ($)</Label>
+                  <p className="text-[11px] md:text-xs text-muted-foreground">Use your latest SSA benefit estimate if available.</p>
+                  <Input
+                    id="socialSecurity"
+                    type="number"
+                    value={socialSecurity}
+                    onChange={(e) => setSocialSecurity(Number(e.target.value))}
+                    min={0}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="pension" className="text-xs md:text-sm text-foreground">Monthly Pension Income ($)</Label>
+                  <Input
+                    id="pension"
+                    type="number"
+                    value={pension}
+                    onChange={(e) => setPension(Number(e.target.value))}
+                    min={0}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="otherIncome" className="text-xs md:text-sm text-foreground">Other Monthly Income in Retirement ($)</Label>
+                  <p className="text-[11px] md:text-xs text-muted-foreground">Example: rental income, part-time work</p>
+                  <Input
+                    id="otherIncome"
+                    type="number"
+                    value={otherIncome}
+                    onChange={(e) => setOtherIncome(Number(e.target.value))}
+                    min={0}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  />
+                </div>
               </div>
-              <div>
-                <Label htmlFor="pension">Monthly Pension Income ($)</Label>
-                <Input
-                  id="pension"
-                  type="number"
-                  value={pension}
-                  onChange={(e) => setPension(Number(e.target.value))}
-                  min={0}
-                  className="mt-1.5"
-                />
-              </div>
-              <div>
-                <Label htmlFor="otherIncome">Other Monthly Income in Retirement ($)</Label>
-                <p className="text-xs text-muted-foreground mt-1">Example: rental income, part-time work</p>
-                <Input
-                  id="otherIncome"
-                  type="number"
-                  value={otherIncome}
-                  onChange={(e) => setOtherIncome(Number(e.target.value))}
-                  min={0}
-                  className="mt-1.5"
-                />
-              </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Goal */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-            <CardHeader>
-              <CardTitle className="text-foreground">Goal</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div>
-                <Label htmlFor="desiredIncome">Desired Monthly Retirement Income ($)</Label>
-                <p className="text-xs text-muted-foreground mt-1">
+            {/* Goal Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Goal
+              </p>
+              
+              <div className="space-y-1.5">
+                <Label htmlFor="desiredIncome" className="text-xs md:text-sm text-foreground">Desired Monthly Retirement Income ($)</Label>
+                <p className="text-[11px] md:text-xs text-muted-foreground">
                   Total amount you'd like to live on each month (before taxes).
                 </p>
                 <Input
@@ -346,10 +353,10 @@ export default function TFARetirementIncomeCalculator() {
                   value={desiredIncome}
                   onChange={(e) => setDesiredIncome(Number(e.target.value))}
                   min={0}
-                  className="mt-1.5"
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
                 />
               </div>
-            </CardContent>
+            </div>
           </Card>
 
           {/* Action Buttons */}

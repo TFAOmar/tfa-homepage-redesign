@@ -321,19 +321,30 @@ export default function TFATaxImpactCalculator() {
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
         {/* Left Column - Inputs */}
         <div className="space-y-6 animate-fade-in">
-          {/* Filing Profile */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <FileText className="w-5 h-5 text-primary" />
+          {/* Main Inputs Card */}
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl p-6 md:p-8">
+            {/* Header with gold accent */}
+            <div className="mb-6 pb-4 border-b border-white/10">
+              <div className="h-1 w-14 rounded-full bg-primary mb-4" />
+              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+                Tax & Income Inputs
+              </h3>
+              <p className="text-xs md:text-sm text-muted-foreground">
+                Share your filing status, state, and retirement income sources.
+              </p>
+            </div>
+
+            {/* Filing Profile Subsection */}
+            <div className="space-y-4 mb-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Filing Profile
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="filing-status">Filing Status</Label>
+              </p>
+              
+              <div className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="filing-status" className="text-xs md:text-sm text-foreground">Filing Status</Label>
                 <Select value={filingStatus} onValueChange={(v) => setFilingStatus(v as FilingStatus)}>
-                  <SelectTrigger id="filing-status" className="mt-1.5 h-12">
+                  <SelectTrigger id="filing-status" className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground px-3.5 py-2.5 md:px-4 md:py-3">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -345,10 +356,10 @@ export default function TFATaxImpactCalculator() {
                 </Select>
               </div>
 
-              <div>
-                <Label htmlFor="state">State of Residence</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="state" className="text-xs md:text-sm text-foreground">State of Residence</Label>
                 <Select value={stateCode} onValueChange={setStateCode}>
-                  <SelectTrigger id="state" className="mt-1.5 h-12">
+                  <SelectTrigger id="state" className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground px-3.5 py-2.5 md:px-4 md:py-3">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
@@ -360,51 +371,49 @@ export default function TFATaxImpactCalculator() {
                   </SelectContent>
                 </Select>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Retirement Income */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <DollarSign className="w-5 h-5 text-primary" />
+            {/* Retirement Income Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Retirement Income
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="total-income">Total Annual Retirement Income (Before Taxes)</Label>
-                <Input
-                  id="total-income"
-                  type="number"
-                  value={totalAnnualIncome}
-                  onChange={(e) => setTotalAnnualIncome(Number(e.target.value))}
-                  min={0}
-                  className="mt-1.5 h-12"
-                />
-              </div>
-
-              {/* Advanced Breakdown Toggle */}
-              <div className="flex items-center justify-between pt-2 pb-2">
-                <div className="flex items-center gap-2">
-                  <Switch
-                    id="advanced-breakdown"
-                    checked={showAdvanced}
-                    onCheckedChange={setShowAdvanced}
-                    className="data-[state=checked]:bg-primary"
+              </p>
+              
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="total-income" className="text-xs md:text-sm text-foreground">Total Annual Retirement Income (Before Taxes)</Label>
+                  <Input
+                    id="total-income"
+                    type="number"
+                    value={totalAnnualIncome}
+                    onChange={(e) => setTotalAnnualIncome(Number(e.target.value))}
+                    min={0}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
                   />
-                  <Label htmlFor="advanced-breakdown" className="cursor-pointer font-medium">
-                    Advanced Income Breakdown
-                  </Label>
                 </div>
-                {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </div>
 
-              {showAdvanced && (
-                <div className="space-y-4 pt-2 border-t border-border/30 animate-fade-in">
-                  <p className="text-sm text-muted-foreground">
-                    Break down your income sources for more accurate tax estimates.
-                  </p>
+                {/* Advanced Breakdown Toggle */}
+                <div className="flex items-center justify-between pt-2 pb-2">
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      id="advanced-breakdown"
+                      checked={showAdvanced}
+                      onCheckedChange={setShowAdvanced}
+                      className="data-[state=checked]:bg-primary"
+                    />
+                    <Label htmlFor="advanced-breakdown" className="cursor-pointer font-medium text-xs md:text-sm">
+                      Advanced Income Breakdown
+                    </Label>
+                  </div>
+                  {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+
+                {showAdvanced && (
+                  <div className="space-y-4 pt-2 border-t border-border/30 animate-fade-in">
+                    <p className="text-xs md:text-sm text-muted-foreground">
+                      Break down your income sources for more accurate tax estimates.
+                    </p>
 
                   {hasBreakdownMismatch && (
                     <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
@@ -458,9 +467,9 @@ export default function TFATaxImpactCalculator() {
                   </div>
 
                   <div>
-                    <Label htmlFor="social-security">Social Security Benefits ($/year)</Label>
+                    <Label htmlFor="ss">Social Security Benefits ($/year)</Label>
                     <Input
-                      id="social-security"
+                      id="ss"
                       type="number"
                       value={incomeBreakdown.socialSecurity}
                       onChange={(e) =>
@@ -496,29 +505,29 @@ export default function TFATaxImpactCalculator() {
                       className="mt-1.5"
                     />
                   </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                  </div>
+                )}
+              </div>
+            </div>
 
-          {/* Goal */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-            <CardHeader>
-              <CardTitle className="text-foreground">Goal (Optional)</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div>
-                <Label htmlFor="desired-income">Desired Monthly After-Tax Income</Label>
+            {/* Goal Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Goal (Optional)
+              </p>
+              
+              <div className="space-y-1.5">
+                <Label htmlFor="desired-income" className="text-xs md:text-sm text-foreground">Desired Monthly After-Tax Income</Label>
                 <Input
                   id="desired-income"
                   type="number"
                   value={desiredMonthlyIncome}
                   onChange={(e) => setDesiredMonthlyIncome(Number(e.target.value))}
                   min={0}
-                  className="mt-1.5 h-12"
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
                 />
               </div>
-            </CardContent>
+            </div>
           </Card>
 
           {/* Action Buttons */}
