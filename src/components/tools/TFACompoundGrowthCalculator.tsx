@@ -271,7 +271,7 @@ const TFACompoundGrowthCalculator = () => {
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="initial" className="text-xs md:text-sm text-foreground">
+                <Label htmlFor="initial" className="text-sm md:text-base font-medium text-foreground">
                   Initial Investment Amount ($)
                 </Label>
                 <Input
@@ -282,7 +282,7 @@ const TFACompoundGrowthCalculator = () => {
                   onChange={(e) =>
                     setInputs({ ...inputs, initialInvestment: Number(e.target.value) })
                   }
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.initialInvestment && (
                   <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.initialInvestment}</p>
@@ -290,7 +290,7 @@ const TFACompoundGrowthCalculator = () => {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="monthly" className="text-xs md:text-sm text-foreground">
+                <Label htmlFor="monthly" className="text-sm md:text-base font-medium text-foreground">
                   Monthly Contribution ($)
                 </Label>
                 <Input
@@ -301,7 +301,7 @@ const TFACompoundGrowthCalculator = () => {
                   onChange={(e) =>
                     setInputs({ ...inputs, monthlyContribution: Number(e.target.value) })
                   }
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.monthlyContribution && (
                   <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.monthlyContribution}</p>
@@ -316,7 +316,7 @@ const TFACompoundGrowthCalculator = () => {
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="years" className="text-xs md:text-sm text-foreground">
+                <Label htmlFor="years" className="text-sm md:text-base font-medium text-foreground">
                   Length of Time (Years)
                 </Label>
                 <Input
@@ -326,7 +326,7 @@ const TFACompoundGrowthCalculator = () => {
                   max="50"
                   value={inputs.years}
                   onChange={(e) => setInputs({ ...inputs, years: Number(e.target.value) })}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.years && (
                   <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.years}</p>
@@ -334,7 +334,7 @@ const TFACompoundGrowthCalculator = () => {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="rate" className="text-xs md:text-sm text-foreground">
+                <Label htmlFor="rate" className="text-sm md:text-base font-medium text-foreground">
                   Estimated Annual Rate of Return (%)
                 </Label>
                 <Input
@@ -345,7 +345,7 @@ const TFACompoundGrowthCalculator = () => {
                   step="0.1"
                   value={inputs.annualRate}
                   onChange={(e) => setInputs({ ...inputs, annualRate: Number(e.target.value) })}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.annualRate && (
                   <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.annualRate}</p>
@@ -360,7 +360,7 @@ const TFACompoundGrowthCalculator = () => {
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="frequency" className="text-xs md:text-sm text-foreground">
+                <Label htmlFor="frequency" className="text-sm md:text-base font-medium text-foreground">
                   Compounding Frequency
                 </Label>
                 <Select
@@ -369,7 +369,7 @@ const TFACompoundGrowthCalculator = () => {
                     setInputs({ ...inputs, compoundingFrequency: Number(value) })
                   }
                 >
-                  <SelectTrigger id="frequency" className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground px-3.5 py-2.5 md:px-4 md:py-3">
+                  <SelectTrigger id="frequency" className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

@@ -15,15 +15,16 @@ export default function TaxImpactCalculator() {
 
         <main className="container mx-auto px-4 pt-24 pb-16 md:pt-32 md:pb-24">
           {/* Page Header */}
-          <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+          <div className="max-w-5xl mx-auto text-center mb-12 md:mb-16 animate-fade-in">
+            <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-3">
               Tax Impact Calculator
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
+            <div className="h-1.5 w-16 bg-primary rounded-full mx-auto mb-6" />
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10">
               Estimate how much of your retirement income may go to federal and state taxes — and how much you could
               have left each month.
             </p>
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 max-w-2xl mx-auto">
               <p className="text-sm text-muted-foreground leading-relaxed">
                 This tool provides an estimate of your potential tax impact in retirement using simplified federal and
                 state assumptions. It's for educational purposes only and is not tax advice.

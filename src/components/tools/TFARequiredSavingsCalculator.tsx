@@ -161,11 +161,11 @@ export default function TFARequiredSavingsCalculator() {
               
               <div className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="goalType" className="text-xs md:text-sm text-foreground">
+                <Label htmlFor="goalType" className="text-sm md:text-base font-medium text-foreground">
                   Goal Type
                 </Label>
                 <Select value={goalType} onValueChange={setGoalType}>
-                  <SelectTrigger id="goalType" className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground px-3.5 py-2.5 md:px-4 md:py-3">
+                  <SelectTrigger id="goalType" className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -178,7 +178,7 @@ export default function TFARequiredSavingsCalculator() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="targetAmount" className="text-xs md:text-sm text-foreground">
+                <Label htmlFor="targetAmount" className="text-sm md:text-base font-medium text-foreground">
                   Target Goal Amount ($)
                 </Label>
                 <Input
@@ -186,13 +186,13 @@ export default function TFARequiredSavingsCalculator() {
                   type="number"
                   value={targetAmount}
                   onChange={(e) => setTargetAmount(e.target.value)}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                   min="0"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="yearsUntilGoal" className="text-xs md:text-sm text-foreground">
+                <Label htmlFor="yearsUntilGoal" className="text-sm md:text-base font-medium text-foreground">
                   Years Until Goal
                 </Label>
                 <Input
@@ -200,10 +200,10 @@ export default function TFARequiredSavingsCalculator() {
                   type="number"
                   value={yearsUntilGoal}
                   onChange={(e) => setYearsUntilGoal(e.target.value)}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                   min="1"
                 />
-                <p className="text-[11px] md:text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground mt-1">
                   How many years from now until you want to reach this goal?
                 </p>
               </div>
@@ -218,7 +218,7 @@ export default function TFARequiredSavingsCalculator() {
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="currentSavings" className="text-xs md:text-sm text-foreground">
+                  <Label htmlFor="currentSavings" className="text-sm md:text-base font-medium text-foreground">
                     Current Savings Toward This Goal ($)
                   </Label>
                   <Input
@@ -226,13 +226,13 @@ export default function TFARequiredSavingsCalculator() {
                     type="number"
                     value={currentSavings}
                     onChange={(e) => setCurrentSavings(e.target.value)}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                     min="0"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="returnRate" className="text-xs md:text-sm text-foreground">
+                  <Label htmlFor="returnRate" className="text-sm md:text-base font-medium text-foreground">
                     Expected Annual Rate of Return (%)
                   </Label>
                   <Input
@@ -240,7 +240,7 @@ export default function TFARequiredSavingsCalculator() {
                     type="number"
                     value={returnRate}
                     onChange={(e) => setReturnRate(e.target.value)}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                     min="0"
                     max="20"
                     step="0.1"

@@ -5,16 +5,14 @@ const CompoundGrowthCalculator = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
       {/* Header */}
-      <section className="bg-navy text-white py-16 lg:py-24">
-        <div className="container mx-auto px-4 lg:px-20 max-w-7xl">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold/20 mb-6">
-              <Calculator className="w-8 h-8 text-gold" />
-            </div>
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+      <section className="pt-16 md:pt-20 pb-10">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center animate-fade-in">
+            <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-3">
               Compound Growth Calculator
             </h1>
-            <p className="text-lg lg:text-xl text-white/80 leading-relaxed">
+            <div className="h-1.5 w-16 bg-primary rounded-full mx-auto mb-6" />
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10">
               See how consistent saving and compounding growth can impact your financial future
               over time.
             </p>
