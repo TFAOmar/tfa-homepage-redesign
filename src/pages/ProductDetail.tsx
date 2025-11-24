@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { ShoppingCart, ArrowLeft, Loader2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ShoppingCart, ArrowLeft, Loader2, Minus, Plus } from "lucide-react";
 import { ShopifyProduct, fetchProductByHandle, fetchProducts } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [relatedProducts, setRelatedProducts] = useState<ShopifyProduct[]>([]);
+  const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore(state => state.addItem);
 
   useEffect(() => {
@@ -48,22 +50,28 @@ const ProductDetail = () => {
   }, [handle]);
 
   const handleAddToCart = () => {
-    if (!product || !selectedVariant) return;
+    if (!product || !selectedVariant || quantity < 1) return;
 
     const cartItem = {
       product,
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
       price: selectedVariant.price,
-      quantity: 1,
+      quantity: Math.max(1, Math.min(99, quantity)),
       selectedOptions: selectedVariant.selectedOptions
     };
     
     addItem(cartItem);
     
     toast.success("Added to cart", {
-      description: `${product.node.title} has been added to your cart.`,
+      description: `${quantity} × ${product.node.title} added to your cart.`,
     });
+    
+    setQuantity(1);
+  };
+
+  const handleQuantityChange = (value: number) => {
+    setQuantity(Math.max(1, Math.min(99, value)));
   };
 
   if (loading) {
@@ -164,9 +172,46 @@ const ProductDetail = () => {
               </div>
             )}
 
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-white/90">
+                Quantity
+              </label>
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleQuantityChange(quantity - 1)}
+                  disabled={quantity <= 1}
+                  className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white disabled:opacity-50"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <Input
+                  type="number"
+                  min="1"
+                  max="99"
+                  value={quantity}
+                  onChange={(e) => {
+                    const val = e.target.value === '' ? 1 : parseInt(e.target.value);
+                    handleQuantityChange(val);
+                  }}
+                  className="w-20 text-center bg-white/10 border-white/20 text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleQuantityChange(quantity + 1)}
+                  disabled={quantity >= 99}
+                  className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white disabled:opacity-50"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
             <Button
               onClick={handleAddToCart}
-              disabled={!selectedVariant?.availableForSale}
+              disabled={!selectedVariant?.availableForSale || quantity < 1}
               size="lg"
               className="w-full md:w-auto px-8 rounded-full bg-primary text-primary-foreground font-semibold hover:shadow-[0_0_15px_rgba(var(--primary),0.5)] transition-all"
             >
