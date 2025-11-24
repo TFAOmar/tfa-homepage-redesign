@@ -342,9 +342,9 @@ export default function TFATaxImpactCalculator() {
               
               <div className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="filing-status" className="text-xs md:text-sm text-foreground">Filing Status</Label>
+                <Label htmlFor="filing-status" className="text-sm md:text-base font-medium text-foreground">Filing Status</Label>
                 <Select value={filingStatus} onValueChange={(v) => setFilingStatus(v as FilingStatus)}>
-                  <SelectTrigger id="filing-status" className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground px-3.5 py-2.5 md:px-4 md:py-3">
+                  <SelectTrigger id="filing-status" className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -357,9 +357,9 @@ export default function TFATaxImpactCalculator() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="state" className="text-xs md:text-sm text-foreground">State of Residence</Label>
+                <Label htmlFor="state" className="text-sm md:text-base font-medium text-foreground">State of Residence</Label>
                 <Select value={stateCode} onValueChange={setStateCode}>
-                  <SelectTrigger id="state" className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground px-3.5 py-2.5 md:px-4 md:py-3">
+                  <SelectTrigger id="state" className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
@@ -382,14 +382,14 @@ export default function TFATaxImpactCalculator() {
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="total-income" className="text-xs md:text-sm text-foreground">Total Annual Retirement Income (Before Taxes)</Label>
+                  <Label htmlFor="total-income" className="text-sm md:text-base font-medium text-foreground">Total Annual Retirement Income (Before Taxes)</Label>
                   <Input
                     id="total-income"
                     type="number"
                     value={totalAnnualIncome}
                     onChange={(e) => setTotalAnnualIncome(Number(e.target.value))}
                     min={0}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                   />
                 </div>
 

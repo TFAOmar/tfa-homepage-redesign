@@ -182,7 +182,7 @@ export default function TFARetirementIncomeCalculator() {
               
               <div className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="currentAge" className="text-xs md:text-sm text-foreground">Current Age</Label>
+                <Label htmlFor="currentAge" className="text-sm md:text-base font-medium text-foreground">Current Age</Label>
                 <Input
                   id="currentAge"
                   type="number"
@@ -190,12 +190,12 @@ export default function TFARetirementIncomeCalculator() {
                   onChange={(e) => setCurrentAge(Number(e.target.value))}
                   min={18}
                   max={80}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.currentAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentAge}</p>}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="retirementAge" className="text-xs md:text-sm text-foreground">Planned Retirement Age</Label>
+                <Label htmlFor="retirementAge" className="text-sm md:text-base font-medium text-foreground">Planned Retirement Age</Label>
                 <Input
                   id="retirementAge"
                   type="number"
@@ -203,20 +203,20 @@ export default function TFARetirementIncomeCalculator() {
                   onChange={(e) => setRetirementAge(Number(e.target.value))}
                   min={currentAge + 1}
                   max={80}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.retirementAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.retirementAge}</p>}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="incomeEndAge" className="text-xs md:text-sm text-foreground">Plan For Income Until Age</Label>
-                <p className="text-[11px] md:text-xs text-muted-foreground">How long do you want your money to last?</p>
+                <Label htmlFor="incomeEndAge" className="text-sm md:text-base font-medium text-foreground">Plan For Income Until Age</Label>
+                <p className="text-xs text-muted-foreground mt-1">How long do you want your money to last?</p>
                 <Input
                   id="incomeEndAge"
                   type="number"
                   value={incomeEndAge}
                   onChange={(e) => setIncomeEndAge(Number(e.target.value))}
                   min={retirementAge + 1}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                   {errors.incomeEndAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.incomeEndAge}</p>}
                 </div>
@@ -231,14 +231,14 @@ export default function TFARetirementIncomeCalculator() {
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="currentSavings" className="text-xs md:text-sm text-foreground">Current Retirement Savings ($)</Label>
+                  <Label htmlFor="currentSavings" className="text-sm md:text-base font-medium text-foreground">Current Retirement Savings ($)</Label>
                   <Input
                     id="currentSavings"
                     type="number"
                     value={currentSavings}
                     onChange={(e) => setCurrentSavings(Number(e.target.value))}
                     min={0}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                   />
                   {errors.currentSavings && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentSavings}</p>}
                 </div>

@@ -39,14 +39,15 @@ export default function Tools() {
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-background/95">
       <main className="container mx-auto px-4 pt-24 pb-16 md:pt-32 md:pb-24">
         {/* Page Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16 md:mb-20 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+        <div className="max-w-5xl mx-auto text-center mb-16 md:mb-20 animate-fade-in">
+          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-3">
             Financial Tools & Calculators
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
+          <div className="h-1.5 w-16 bg-primary rounded-full mx-auto mb-6" />
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10">
             Plan, project, and better understand your financial future with our easy-to-use calculators built for families and individuals planning for retirement, investments, and tax efficiency.
           </p>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 max-w-2xl mx-auto">
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
               These tools offer clear, educational estimates to help you make informed decisions. For personalized recommendations tailored to your situation, connect with a TFA advisor anytime.
             </p>
@@ -54,32 +55,32 @@ export default function Tools() {
         </div>
 
         {/* Tools Grid */}
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-10">
           {tools.map((tool, index) => (
             <div
               key={tool.title}
-              className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:-translate-y-1 hover:shadow-xl animate-fade-in"
+              className="group bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/40 animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Icon */}
-              <div className="mb-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 transition-all duration-300 group-hover:scale-110 group-hover:border-primary/40">
-                  <tool.icon className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
+              <div className="mb-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 p-3">
+                  <tool.icon className="w-6 h-6 text-primary" />
                 </div>
               </div>
 
               {/* Content */}
-              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-4 tracking-tight">
+              <h2 className="text-lg md:text-xl font-semibold text-foreground tracking-tight mb-2">
                 {tool.title}
               </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6 min-h-[4.5rem]">
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
                 {tool.description}
               </p>
 
               {/* CTA Button */}
               <Link to={tool.link} className="block">
                 <Button
-                  className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground font-semibold rounded-full py-6 transition-all duration-300 hover:shadow-lg hover:shadow-primary/25"
+                  className="w-full rounded-full bg-primary text-primary-foreground font-semibold px-6 py-3 hover:shadow-[0_0_15px_rgba(var(--primary),0.5)] transition-all duration-300"
                 >
                   Open Calculator
                 </Button>
