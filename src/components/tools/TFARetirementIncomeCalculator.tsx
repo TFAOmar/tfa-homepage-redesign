@@ -74,49 +74,58 @@ export default function TFARetirementIncomeCalculator() {
   const calculateRetirementIncome = () => {
     if (!validateInputs()) return;
 
-    const yearsToRetirement = retirementAge - currentAge;
-    const yearsInRetirement = incomeEndAge - retirementAge;
+    const yearsToRetirement = Math.max(1, retirementAge - currentAge);
+    const yearsInRetirement = Math.max(1, incomeEndAge - retirementAge);
     const monthsToRetirement = yearsToRetirement * 12;
     const monthsInRetirement = yearsInRetirement * 12;
 
     // Future value of current savings
-    const rateBeforeRetirement = returnBeforeRetirement / 100;
-    const futureValueOfSavings = currentSavings * Math.pow(1 + rateBeforeRetirement, yearsToRetirement);
+    const rateBeforeRetirement = Math.max(0, returnBeforeRetirement || 0) / 100;
+    const futureValueOfSavings = (currentSavings || 0) * Math.pow(1 + rateBeforeRetirement, yearsToRetirement);
 
     // Future value of monthly contributions
     const monthlyRate = rateBeforeRetirement / 12;
-    const futureValueOfContributions =
-      monthlyContribution *
-      ((Math.pow(1 + monthlyRate, monthsToRetirement) - 1) / monthlyRate) *
-      (1 + monthlyRate);
+    let futureValueOfContributions = 0;
+    
+    if (monthlyContribution > 0 && monthlyRate > 0) {
+      futureValueOfContributions =
+        monthlyContribution *
+        ((Math.pow(1 + monthlyRate, monthsToRetirement) - 1) / monthlyRate) *
+        (1 + monthlyRate);
+    } else if (monthlyContribution > 0) {
+      // No growth case
+      futureValueOfContributions = monthlyContribution * monthsToRetirement;
+    }
 
     const savingsAtRetirement = futureValueOfSavings + futureValueOfContributions;
 
     // Monthly income from savings (using amortization formula)
-    const retirementMonthlyRate = returnDuringRetirement / 100 / 12;
+    const retirementMonthlyRate = Math.max(0, returnDuringRetirement || 0) / 100 / 12;
     let monthlyFromSavings = 0;
 
-    if (retirementMonthlyRate > 0) {
-      monthlyFromSavings =
-        (savingsAtRetirement * retirementMonthlyRate * Math.pow(1 + retirementMonthlyRate, monthsInRetirement)) /
-        (Math.pow(1 + retirementMonthlyRate, monthsInRetirement) - 1);
-    } else {
-      // If no return during retirement, simple division
-      monthlyFromSavings = savingsAtRetirement / monthsInRetirement;
+    if (monthsInRetirement > 0) {
+      if (retirementMonthlyRate > 0 && savingsAtRetirement > 0) {
+        monthlyFromSavings =
+          (savingsAtRetirement * retirementMonthlyRate * Math.pow(1 + retirementMonthlyRate, monthsInRetirement)) /
+          (Math.pow(1 + retirementMonthlyRate, monthsInRetirement) - 1);
+      } else {
+        // If no return during retirement, simple division
+        monthlyFromSavings = savingsAtRetirement / monthsInRetirement;
+      }
     }
 
-    const totalMonthlyIncome = monthlyFromSavings + socialSecurity + pension + otherIncome;
-    const gap = totalMonthlyIncome - desiredIncome;
+    const totalMonthlyIncome = monthlyFromSavings + (socialSecurity || 0) + (pension || 0) + (otherIncome || 0);
+    const gap = totalMonthlyIncome - (desiredIncome || 0);
 
     setResults({
-      savingsAtRetirement,
-      monthlyFromSavings,
-      totalMonthlyIncome,
-      socialSecurity,
-      pension,
-      otherIncome,
-      desiredIncome,
-      gap,
+      savingsAtRetirement: isFinite(savingsAtRetirement) ? savingsAtRetirement : 0,
+      monthlyFromSavings: isFinite(monthlyFromSavings) ? monthlyFromSavings : 0,
+      totalMonthlyIncome: isFinite(totalMonthlyIncome) ? totalMonthlyIncome : 0,
+      socialSecurity: socialSecurity || 0,
+      pension: pension || 0,
+      otherIncome: otherIncome || 0,
+      desiredIncome: desiredIncome || 0,
+      gap: isFinite(gap) ? gap : 0,
       yearsToRetirement,
       yearsInRetirement,
     });
@@ -139,6 +148,7 @@ export default function TFARetirementIncomeCalculator() {
   };
 
   const formatCurrency = (value: number) => {
+    if (!isFinite(value)) return "$0";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -187,7 +197,10 @@ export default function TFARetirementIncomeCalculator() {
                   id="currentAge"
                   type="number"
                   value={currentAge}
-                  onChange={(e) => setCurrentAge(Number(e.target.value))}
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? 18 : Number(e.target.value);
+                    setCurrentAge(Math.max(18, Math.min(80, value)));
+                  }}
                   min={18}
                   max={80}
                   className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
@@ -200,7 +213,10 @@ export default function TFARetirementIncomeCalculator() {
                   id="retirementAge"
                   type="number"
                   value={retirementAge}
-                  onChange={(e) => setRetirementAge(Number(e.target.value))}
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? currentAge + 1 : Number(e.target.value);
+                    setRetirementAge(Math.max(currentAge + 1, Math.min(80, value)));
+                  }}
                   min={currentAge + 1}
                   max={80}
                   className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
@@ -214,7 +230,10 @@ export default function TFARetirementIncomeCalculator() {
                   id="incomeEndAge"
                   type="number"
                   value={incomeEndAge}
-                  onChange={(e) => setIncomeEndAge(Number(e.target.value))}
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? retirementAge + 1 : Number(e.target.value);
+                    setIncomeEndAge(Math.max(retirementAge + 1, value));
+                  }}
                   min={retirementAge + 1}
                   className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
@@ -236,7 +255,10 @@ export default function TFARetirementIncomeCalculator() {
                     id="currentSavings"
                     type="number"
                     value={currentSavings}
-                    onChange={(e) => setCurrentSavings(Number(e.target.value))}
+                    onChange={(e) => {
+                      const value = e.target.value === '' ? 0 : Number(e.target.value);
+                      setCurrentSavings(Math.max(0, value));
+                    }}
                     min={0}
                     className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                   />

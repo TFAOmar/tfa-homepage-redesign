@@ -81,11 +81,11 @@ const TFACompoundGrowthCalculator = () => {
   };
 
   const calculateScenario = (scenarioInputs: CalculatorInputs): CalculationResults => {
-    const P = scenarioInputs.initialInvestment;
-    const PMT = scenarioInputs.monthlyContribution;
-    const r = scenarioInputs.annualRate / 100;
-    const n = scenarioInputs.compoundingFrequency;
-    const t = scenarioInputs.years;
+    const P = Math.max(0, scenarioInputs.initialInvestment || 0);
+    const PMT = Math.max(0, scenarioInputs.monthlyContribution || 0);
+    const r = Math.max(0, Math.min(20, scenarioInputs.annualRate || 0)) / 100;
+    const n = scenarioInputs.compoundingFrequency || 12;
+    const t = Math.max(1, Math.min(50, scenarioInputs.years || 1));
 
     // Calculate yearly balances for chart
     const yearlyData: { year: number; balance: number }[] = [];
@@ -98,27 +98,31 @@ const TFACompoundGrowthCalculator = () => {
       const adjustedPMT = PMT * (12 / n);
       
       let contributionsGrowth = 0;
-      if (periods > 0) {
+      if (periods > 0 && r > 0) {
         contributionsGrowth = adjustedPMT * ((Math.pow(1 + r / n, periods) - 1) / (r / n));
         
         // If contributing at the beginning, multiply by (1 + r/n)
         if (scenarioInputs.contributionTiming === "beginning") {
           contributionsGrowth *= (1 + r / n);
         }
+      } else if (periods > 0) {
+        // No interest case
+        contributionsGrowth = adjustedPMT * periods;
       }
       
       const balance = principalGrowth + contributionsGrowth;
-      yearlyData.push({ year, balance: Math.round(balance * 100) / 100 });
+      const safeBalance = isFinite(balance) ? balance : 0;
+      yearlyData.push({ year, balance: Math.round(safeBalance * 100) / 100 });
     }
 
-    const finalBalance = yearlyData[yearlyData.length - 1].balance;
+    const finalBalance = yearlyData[yearlyData.length - 1]?.balance || 0;
     const totalContributions = P + (PMT * 12 * t);
     const totalGrowth = finalBalance - totalContributions;
 
     return {
-      finalBalance,
-      totalContributions,
-      totalGrowth,
+      finalBalance: isFinite(finalBalance) ? finalBalance : 0,
+      totalContributions: isFinite(totalContributions) ? totalContributions : 0,
+      totalGrowth: isFinite(totalGrowth) ? totalGrowth : 0,
       yearlyData,
     };
   };
@@ -193,6 +197,7 @@ const TFACompoundGrowthCalculator = () => {
   };
 
   const formatCurrency = (value: number) => {
+    if (!isFinite(value)) return "$0";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -202,6 +207,7 @@ const TFACompoundGrowthCalculator = () => {
   };
 
   const formatCurrencyWithDecimals = (value: number) => {
+    if (!isFinite(value)) return "$0.00";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -279,9 +285,10 @@ const TFACompoundGrowthCalculator = () => {
                   type="number"
                   min="0"
                   value={inputs.initialInvestment}
-                  onChange={(e) =>
-                    setInputs({ ...inputs, initialInvestment: Number(e.target.value) })
-                  }
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? 0 : Number(e.target.value);
+                    setInputs({ ...inputs, initialInvestment: Math.max(0, value) });
+                  }}
                   className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.initialInvestment && (
@@ -298,9 +305,10 @@ const TFACompoundGrowthCalculator = () => {
                   type="number"
                   min="0"
                   value={inputs.monthlyContribution}
-                  onChange={(e) =>
-                    setInputs({ ...inputs, monthlyContribution: Number(e.target.value) })
-                  }
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? 0 : Number(e.target.value);
+                    setInputs({ ...inputs, monthlyContribution: Math.max(0, value) });
+                  }}
                   className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.monthlyContribution && (
@@ -325,7 +333,10 @@ const TFACompoundGrowthCalculator = () => {
                   min="1"
                   max="50"
                   value={inputs.years}
-                  onChange={(e) => setInputs({ ...inputs, years: Number(e.target.value) })}
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? 1 : Number(e.target.value);
+                    setInputs({ ...inputs, years: Math.max(1, Math.min(50, value)) });
+                  }}
                   className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.years && (
@@ -344,7 +355,10 @@ const TFACompoundGrowthCalculator = () => {
                   max="20"
                   step="0.1"
                   value={inputs.annualRate}
-                  onChange={(e) => setInputs({ ...inputs, annualRate: Number(e.target.value) })}
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? 0 : Number(e.target.value);
+                    setInputs({ ...inputs, annualRate: Math.max(0, Math.min(20, value)) });
+                  }}
                   className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
                 />
                 {errors.annualRate && (

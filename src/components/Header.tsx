@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, ChevronDown, TrendingUp, Shield, FileText, Users, Calendar, MapPin, Phone, ShoppingBag, Briefcase, Heart, Home as HomeIcon, Building2, PiggyBank, LineChart, Repeat, DollarSign, LifeBuoy, Stethoscope, Landmark, Scale, BookOpen, Award, Calculator } from "lucide-react";
+import { Menu, Building2, PiggyBank, LineChart, Repeat, DollarSign, Shield, Stethoscope, Landmark, Scale, Calculator, BookOpen, Calendar, Award, Users, ShoppingBag } from "lucide-react";
 import tfaLogo from "@/assets/tfa-logo.png";
 import { Link } from "react-router-dom";
 import { CartDrawer } from "./shop/CartDrawer";

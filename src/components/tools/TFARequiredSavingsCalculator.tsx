@@ -36,6 +36,7 @@ export default function TFARequiredSavingsCalculator() {
   const [result, setResult] = useState<CalculationResult | null>(null);
 
   const formatCurrency = (value: number) => {
+    if (!isFinite(value)) return "$0";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -45,6 +46,7 @@ export default function TFARequiredSavingsCalculator() {
   };
 
   const formatCurrencyWithDecimals = (value: number) => {
+    if (!isFinite(value)) return "$0.00";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -54,12 +56,12 @@ export default function TFARequiredSavingsCalculator() {
   };
 
   const calculateRequiredSavings = () => {
-    const FV = parseFloat(targetAmount) || 0;
-    const PV = parseFloat(currentSavings) || 0;
-    const years = parseFloat(yearsUntilGoal) || 0;
-    const rate = (parseFloat(returnRate) || 0) / 100;
+    const FV = Math.max(0, parseFloat(targetAmount) || 0);
+    const PV = Math.max(0, parseFloat(currentSavings) || 0);
+    const years = Math.max(1, parseFloat(yearsUntilGoal) || 1);
+    const rate = Math.max(0, Math.min(20, parseFloat(returnRate) || 0)) / 100;
 
-    if (FV <= 0 || years <= 0) {
+    if (FV <= 0) {
       return;
     }
 
@@ -68,9 +70,13 @@ export default function TFARequiredSavingsCalculator() {
 
     if (savingsMode === "lumpsum") {
       // Calculate lump sum needed today
-      const pvRequired = FV / Math.pow(1 + rate, years);
-      requiredAmount = Math.max(0, pvRequired - PV);
-      isOnTrack = requiredAmount === 0;
+      if (rate > 0 && years > 0) {
+        const pvRequired = FV / Math.pow(1 + rate, years);
+        requiredAmount = Math.max(0, pvRequired - PV);
+      } else {
+        requiredAmount = Math.max(0, FV - PV);
+      }
+      isOnTrack = requiredAmount === 0 || PV >= FV;
     } else if (savingsMode === "annual") {
       // Calculate annual contribution needed
       const futureValueOfCurrentSavings = PV * Math.pow(1 + rate, years);
@@ -80,9 +86,14 @@ export default function TFARequiredSavingsCalculator() {
         requiredAmount = 0;
         isOnTrack = true;
       } else {
-        // Future value of annuity formula: FV = PMT * [((1 + r)^n - 1) / r]
-        const fvAnnuityFactor = (Math.pow(1 + rate, years) - 1) / rate;
-        requiredAmount = remainingNeeded / fvAnnuityFactor;
+        if (rate > 0) {
+          // Future value of annuity formula: FV = PMT * [((1 + r)^n - 1) / r]
+          const fvAnnuityFactor = (Math.pow(1 + rate, years) - 1) / rate;
+          requiredAmount = fvAnnuityFactor > 0 ? remainingNeeded / fvAnnuityFactor : 0;
+        } else {
+          // No growth case
+          requiredAmount = remainingNeeded / years;
+        }
       }
     } else {
       // Calculate monthly contribution needed
@@ -95,17 +106,22 @@ export default function TFARequiredSavingsCalculator() {
         requiredAmount = 0;
         isOnTrack = true;
       } else {
-        // Future value of annuity formula with monthly periods
-        const fvAnnuityFactor = (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
-        requiredAmount = remainingNeeded / fvAnnuityFactor;
+        if (monthlyRate > 0) {
+          // Future value of annuity formula with monthly periods
+          const fvAnnuityFactor = (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+          requiredAmount = fvAnnuityFactor > 0 ? remainingNeeded / fvAnnuityFactor : 0;
+        } else {
+          // No growth case
+          requiredAmount = remainingNeeded / months;
+        }
       }
     }
 
     setResult({
-      requiredAmount,
+      requiredAmount: isFinite(requiredAmount) ? Math.max(0, requiredAmount) : 0,
       targetGoal: FV,
       timeframe: years,
-      returnRate: parseFloat(returnRate),
+      returnRate: parseFloat(returnRate) || 0,
       currentSavings: PV,
       mode: savingsMode,
       isOnTrack,

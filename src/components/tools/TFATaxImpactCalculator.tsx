@@ -173,21 +173,21 @@ export default function TFATaxImpactCalculator() {
   const [results, setResults] = useState<TaxResults | null>(null);
 
   const calculateFederalTax = (taxableIncome: number, status: FilingStatus): number => {
+    if (!isFinite(taxableIncome) || taxableIncome <= 0) return 0;
+    
     const brackets = federalBrackets[status];
     let tax = 0;
-    let previousMax = 0;
 
     for (const bracket of brackets) {
       if (taxableIncome > bracket.min) {
         const taxableInThisBracket = Math.min(taxableIncome, bracket.max) - bracket.min;
         tax += taxableInThisBracket * bracket.rate;
-        previousMax = bracket.max;
       } else {
         break;
       }
     }
 
-    return tax;
+    return isFinite(tax) ? tax : 0;
   };
 
   const calculateSocialSecurityTaxable = (
@@ -215,34 +215,33 @@ export default function TFATaxImpactCalculator() {
 
   const calculateTaxImpact = () => {
     // Calculate total income from breakdown if advanced mode is enabled
-    let actualTotalIncome = totalAnnualIncome;
+    let actualTotalIncome = totalAnnualIncome || 0;
     if (showAdvanced) {
       actualTotalIncome =
-        incomeBreakdown.traditional401k +
-        incomeBreakdown.rothWithdrawals +
-        incomeBreakdown.taxableInvestments +
-        incomeBreakdown.socialSecurity +
-        incomeBreakdown.pension +
-        incomeBreakdown.otherIncome;
+        (incomeBreakdown.traditional401k || 0) +
+        (incomeBreakdown.rothWithdrawals || 0) +
+        (incomeBreakdown.taxableInvestments || 0) +
+        (incomeBreakdown.socialSecurity || 0) +
+        (incomeBreakdown.pension || 0) +
+        (incomeBreakdown.otherIncome || 0);
     }
 
     // Calculate taxable Social Security
     const otherTaxableIncome =
-      incomeBreakdown.traditional401k +
-      incomeBreakdown.taxableInvestments +
-      incomeBreakdown.pension +
-      incomeBreakdown.otherIncome;
+      (incomeBreakdown.traditional401k || 0) +
+      (incomeBreakdown.taxableInvestments || 0) +
+      (incomeBreakdown.pension || 0) +
+      (incomeBreakdown.otherIncome || 0);
 
     const taxableSocialSecurity = showAdvanced
-      ? calculateSocialSecurityTaxable(incomeBreakdown.socialSecurity, otherTaxableIncome, filingStatus)
-      : incomeBreakdown.socialSecurity * 0.85; // Simplified assumption
+      ? calculateSocialSecurityTaxable(incomeBreakdown.socialSecurity || 0, otherTaxableIncome, filingStatus)
+      : (incomeBreakdown.socialSecurity || 0) * 0.85; // Simplified assumption
 
     // Calculate total taxable income (Roth withdrawals are not taxable)
-    const grossTaxableIncome =
-      otherTaxableIncome + taxableSocialSecurity;
+    const grossTaxableIncome = otherTaxableIncome + taxableSocialSecurity;
 
     // Apply standard deduction
-    const standardDeduction = standardDeductions[filingStatus];
+    const standardDeduction = standardDeductions[filingStatus] || 0;
     const taxableIncome = Math.max(0, grossTaxableIncome - standardDeduction);
 
     // Calculate federal tax
@@ -262,17 +261,17 @@ export default function TFATaxImpactCalculator() {
     const combinedEffectiveRate = actualTotalIncome > 0 ? (totalTax / actualTotalIncome) * 100 : 0;
 
     setResults({
-      totalRetirementIncome: actualTotalIncome,
-      taxableIncome,
-      federalTax,
-      stateTax,
-      totalTax,
-      afterTaxAnnual,
-      afterTaxMonthly,
-      federalEffectiveRate,
-      stateEffectiveRate,
-      combinedEffectiveRate,
-      taxableSocialSecurity,
+      totalRetirementIncome: isFinite(actualTotalIncome) ? actualTotalIncome : 0,
+      taxableIncome: isFinite(taxableIncome) ? taxableIncome : 0,
+      federalTax: isFinite(federalTax) ? federalTax : 0,
+      stateTax: isFinite(stateTax) ? stateTax : 0,
+      totalTax: isFinite(totalTax) ? totalTax : 0,
+      afterTaxAnnual: isFinite(afterTaxAnnual) ? afterTaxAnnual : 0,
+      afterTaxMonthly: isFinite(afterTaxMonthly) ? afterTaxMonthly : 0,
+      federalEffectiveRate: isFinite(federalEffectiveRate) ? federalEffectiveRate : 0,
+      stateEffectiveRate: isFinite(stateEffectiveRate) ? stateEffectiveRate : 0,
+      combinedEffectiveRate: isFinite(combinedEffectiveRate) ? combinedEffectiveRate : 0,
+      taxableSocialSecurity: isFinite(taxableSocialSecurity) ? taxableSocialSecurity : 0,
     });
   };
 
@@ -294,6 +293,7 @@ export default function TFATaxImpactCalculator() {
   };
 
   const formatCurrency = (value: number) => {
+    if (!isFinite(value)) return "$0";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -303,6 +303,7 @@ export default function TFATaxImpactCalculator() {
   };
 
   const formatPercent = (value: number) => {
+    if (!isFinite(value)) return "0.00%";
     return `${value.toFixed(2)}%`;
   };
 
