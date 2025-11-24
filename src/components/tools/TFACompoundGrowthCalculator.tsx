@@ -252,136 +252,157 @@ const TFACompoundGrowthCalculator = () => {
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
         {/* Scenario A Inputs Section */}
         <div className="space-y-6">
-          <Card className="p-6 lg:p-8 bg-background/40 backdrop-blur-sm border-border/50">
-            {compareMode && (
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Scenario A — Your Investment Plan
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Configure your full investment strategy
-                </p>
-              </div>
-            )}
+          <Card className="p-6 lg:p-8 bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl">
+            {/* Header with gold accent */}
+            <div className="mb-6 pb-4 border-b border-white/10">
+              <div className="h-1 w-14 rounded-full bg-primary mb-4" />
+              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+                {compareMode ? "Scenario A — Your Investment Plan" : "Inputs"}
+              </h3>
+              <p className="text-xs md:text-sm text-muted-foreground">
+                {compareMode ? "Configure your full investment strategy" : "Enter your starting amount, contributions, and assumptions."}
+              </p>
+            </div>
           <div className="space-y-6">
-            <div>
-              <Label htmlFor="initial" className="text-sm font-medium mb-2 block">
-                Initial Investment Amount ($)
-              </Label>
-              <Input
-                id="initial"
-                type="number"
-                min="0"
-                value={inputs.initialInvestment}
-                onChange={(e) =>
-                  setInputs({ ...inputs, initialInvestment: Number(e.target.value) })
-                }
-                className="h-12"
-              />
-              {errors.initialInvestment && (
-                <p className="text-destructive text-xs mt-1">{errors.initialInvestment}</p>
-              )}
+            {/* Savings & Growth Subsection */}
+            <div className="space-y-4">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Savings & Growth
+              </p>
+              
+              <div className="space-y-1.5">
+                <Label htmlFor="initial" className="text-xs md:text-sm text-foreground">
+                  Initial Investment Amount ($)
+                </Label>
+                <Input
+                  id="initial"
+                  type="number"
+                  min="0"
+                  value={inputs.initialInvestment}
+                  onChange={(e) =>
+                    setInputs({ ...inputs, initialInvestment: Number(e.target.value) })
+                  }
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                />
+                {errors.initialInvestment && (
+                  <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.initialInvestment}</p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="monthly" className="text-xs md:text-sm text-foreground">
+                  Monthly Contribution ($)
+                </Label>
+                <Input
+                  id="monthly"
+                  type="number"
+                  min="0"
+                  value={inputs.monthlyContribution}
+                  onChange={(e) =>
+                    setInputs({ ...inputs, monthlyContribution: Number(e.target.value) })
+                  }
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                />
+                {errors.monthlyContribution && (
+                  <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.monthlyContribution}</p>
+                )}
+              </div>
             </div>
 
-            <div>
-              <Label htmlFor="monthly" className="text-sm font-medium mb-2 block">
-                Monthly Contribution ($)
-              </Label>
-              <Input
-                id="monthly"
-                type="number"
-                min="0"
-                value={inputs.monthlyContribution}
-                onChange={(e) =>
-                  setInputs({ ...inputs, monthlyContribution: Number(e.target.value) })
-                }
-                className="h-12"
-              />
-              {errors.monthlyContribution && (
-                <p className="text-destructive text-xs mt-1">{errors.monthlyContribution}</p>
-              )}
+            {/* Timeline Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Timeline
+              </p>
+              
+              <div className="space-y-1.5">
+                <Label htmlFor="years" className="text-xs md:text-sm text-foreground">
+                  Length of Time (Years)
+                </Label>
+                <Input
+                  id="years"
+                  type="number"
+                  min="1"
+                  max="50"
+                  value={inputs.years}
+                  onChange={(e) => setInputs({ ...inputs, years: Number(e.target.value) })}
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                />
+                {errors.years && (
+                  <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.years}</p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="rate" className="text-xs md:text-sm text-foreground">
+                  Estimated Annual Rate of Return (%)
+                </Label>
+                <Input
+                  id="rate"
+                  type="number"
+                  min="0"
+                  max="20"
+                  step="0.1"
+                  value={inputs.annualRate}
+                  onChange={(e) => setInputs({ ...inputs, annualRate: Number(e.target.value) })}
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                />
+                {errors.annualRate && (
+                  <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.annualRate}</p>
+                )}
+              </div>
             </div>
 
-            <div>
-              <Label htmlFor="years" className="text-sm font-medium mb-2 block">
-                Length of Time (Years)
-              </Label>
-              <Input
-                id="years"
-                type="number"
-                min="1"
-                max="50"
-                value={inputs.years}
-                onChange={(e) => setInputs({ ...inputs, years: Number(e.target.value) })}
-                className="h-12"
-              />
-              {errors.years && (
-                <p className="text-destructive text-xs mt-1">{errors.years}</p>
-              )}
-            </div>
+            {/* Advanced Settings Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Advanced Settings
+              </p>
+              
+              <div className="space-y-1.5">
+                <Label htmlFor="frequency" className="text-xs md:text-sm text-foreground">
+                  Compounding Frequency
+                </Label>
+                <Select
+                  value={inputs.compoundingFrequency.toString()}
+                  onValueChange={(value) =>
+                    setInputs({ ...inputs, compoundingFrequency: Number(value) })
+                  }
+                >
+                  <SelectTrigger id="frequency" className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground px-3.5 py-2.5 md:px-4 md:py-3">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">Annually</SelectItem>
+                    <SelectItem value="2">Semiannually</SelectItem>
+                    <SelectItem value="4">Quarterly</SelectItem>
+                    <SelectItem value="12">Monthly</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div>
-              <Label htmlFor="rate" className="text-sm font-medium mb-2 block">
-                Estimated Annual Rate of Return (%)
-              </Label>
-              <Input
-                id="rate"
-                type="number"
-                min="0"
-                max="20"
-                step="0.1"
-                value={inputs.annualRate}
-                onChange={(e) => setInputs({ ...inputs, annualRate: Number(e.target.value) })}
-                className="h-12"
-              />
-              {errors.annualRate && (
-                <p className="text-destructive text-xs mt-1">{errors.annualRate}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="frequency" className="text-sm font-medium mb-2 block">
-                Compounding Frequency
-              </Label>
-              <Select
-                value={inputs.compoundingFrequency.toString()}
-                onValueChange={(value) =>
-                  setInputs({ ...inputs, compoundingFrequency: Number(value) })
-                }
-              >
-                <SelectTrigger id="frequency" className="h-12">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">Annually</SelectItem>
-                  <SelectItem value="2">Semiannually</SelectItem>
-                  <SelectItem value="4">Quarterly</SelectItem>
-                  <SelectItem value="12">Monthly</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label className="text-sm font-medium mb-3 block">Contribution Timing</Label>
-              <RadioGroup
-                value={inputs.contributionTiming}
-                onValueChange={(value: "beginning" | "end") =>
-                  setInputs({ ...inputs, contributionTiming: value })
-                }
-              >
-                <div className="flex items-center space-x-2 mb-2">
-                  <RadioGroupItem value="beginning" id="beginning" />
-                  <Label htmlFor="beginning" className="font-normal cursor-pointer">
-                    Contribute at the beginning of each period
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="end" id="end" />
-                  <Label htmlFor="end" className="font-normal cursor-pointer">
-                    Contribute at the end of each period
-                  </Label>
-                </div>
-              </RadioGroup>
+              <div className="space-y-1.5">
+                <Label className="text-xs md:text-sm text-foreground">Contribution Timing</Label>
+                <RadioGroup
+                  value={inputs.contributionTiming}
+                  onValueChange={(value: "beginning" | "end") =>
+                    setInputs({ ...inputs, contributionTiming: value })
+                  }
+                >
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="beginning" id="beginning" />
+                    <Label htmlFor="beginning" className="text-xs md:text-sm font-normal cursor-pointer text-foreground">
+                      Contribute at the beginning of each period
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="end" id="end" />
+                    <Label htmlFor="end" className="text-xs md:text-sm font-normal cursor-pointer text-foreground">
+                      Contribute at the end of each period
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
             </div>
 
             <div className="flex gap-3 pt-4">
@@ -405,12 +426,13 @@ const TFACompoundGrowthCalculator = () => {
 
           {/* Scenario B Inputs Section */}
           {compareMode && (
-            <Card className="p-6 lg:p-8 bg-background/40 backdrop-blur-sm border-border/50 border-gold/20">
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
+            <Card className="p-6 lg:p-8 bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl border-primary/30">
+              <div className="mb-6 pb-4 border-b border-white/10">
+                <div className="h-1 w-14 rounded-full bg-primary mb-4" />
+                <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
                   Scenario B — Baseline Comparison
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-xs md:text-sm text-muted-foreground mb-4">
                   Compare your plan against a different approach
                 </p>
                 

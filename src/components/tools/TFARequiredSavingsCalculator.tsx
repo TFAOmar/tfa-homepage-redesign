@@ -140,19 +140,32 @@ export default function TFARequiredSavingsCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         {/* Left Column - Inputs */}
         <div className="space-y-6 animate-fade-in">
-          {/* Goal Section */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6 rounded-2xl">
-            <h2 className="text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <Target className="w-5 h-5 text-primary" />
-              Your Goal
-            </h2>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="goalType" className="text-sm font-medium text-foreground">
+          {/* Main Inputs Card */}
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl p-6 md:p-8">
+            {/* Header with gold accent */}
+            <div className="mb-6 pb-4 border-b border-white/10">
+              <div className="h-1 w-14 rounded-full bg-primary mb-4" />
+              <h2 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+                Goal & Savings Inputs
+              </h2>
+              <p className="text-xs md:text-sm text-muted-foreground">
+                Set your target and see how much you may need to save.
+              </p>
+            </div>
+
+            {/* Your Goal Subsection */}
+            <div className="space-y-4 mb-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Your Goal
+              </p>
+              
+              <div className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="goalType" className="text-xs md:text-sm text-foreground">
                   Goal Type
                 </Label>
                 <Select value={goalType} onValueChange={setGoalType}>
-                  <SelectTrigger id="goalType" className="bg-background/50 border-white/10">
+                  <SelectTrigger id="goalType" className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground px-3.5 py-2.5 md:px-4 md:py-3">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -164,8 +177,8 @@ export default function TFARequiredSavingsCalculator() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="targetAmount" className="text-sm font-medium text-foreground">
+              <div className="space-y-1.5">
+                <Label htmlFor="targetAmount" className="text-xs md:text-sm text-foreground">
                   Target Goal Amount ($)
                 </Label>
                 <Input
@@ -173,13 +186,13 @@ export default function TFARequiredSavingsCalculator() {
                   type="number"
                   value={targetAmount}
                   onChange={(e) => setTargetAmount(e.target.value)}
-                  className="bg-background/50 border-white/10"
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
                   min="0"
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="yearsUntilGoal" className="text-sm font-medium text-foreground">
+              <div className="space-y-1.5">
+                <Label htmlFor="yearsUntilGoal" className="text-xs md:text-sm text-foreground">
                   Years Until Goal
                 </Label>
                 <Input
@@ -187,81 +200,83 @@ export default function TFARequiredSavingsCalculator() {
                   type="number"
                   value={yearsUntilGoal}
                   onChange={(e) => setYearsUntilGoal(e.target.value)}
-                  className="bg-background/50 border-white/10"
+                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
                   min="1"
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[11px] md:text-xs text-muted-foreground">
                   How many years from now until you want to reach this goal?
                 </p>
               </div>
             </div>
-          </Card>
+          </div>
 
-          {/* Existing Savings Section */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6 rounded-2xl">
-            <h2 className="text-xl font-semibold text-foreground mb-6">
-              Existing Savings
-            </h2>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="currentSavings" className="text-sm font-medium text-foreground">
-                  Current Savings Toward This Goal ($)
-                </Label>
-                <Input
-                  id="currentSavings"
-                  type="number"
-                  value={currentSavings}
-                  onChange={(e) => setCurrentSavings(e.target.value)}
-                  className="bg-background/50 border-white/10"
-                  min="0"
-                />
-              </div>
+            {/* Existing Savings Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Existing Savings
+              </p>
+              
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="currentSavings" className="text-xs md:text-sm text-foreground">
+                    Current Savings Toward This Goal ($)
+                  </Label>
+                  <Input
+                    id="currentSavings"
+                    type="number"
+                    value={currentSavings}
+                    onChange={(e) => setCurrentSavings(e.target.value)}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    min="0"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="returnRate" className="text-sm font-medium text-foreground">
-                  Expected Annual Rate of Return (%)
-                </Label>
-                <Input
-                  id="returnRate"
-                  type="number"
-                  value={returnRate}
-                  onChange={(e) => setReturnRate(e.target.value)}
-                  className="bg-background/50 border-white/10"
-                  min="0"
-                  max="20"
-                  step="0.1"
-                />
+                <div className="space-y-1.5">
+                  <Label htmlFor="returnRate" className="text-xs md:text-sm text-foreground">
+                    Expected Annual Rate of Return (%)
+                  </Label>
+                  <Input
+                    id="returnRate"
+                    type="number"
+                    value={returnRate}
+                    onChange={(e) => setReturnRate(e.target.value)}
+                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    min="0"
+                    max="20"
+                    step="0.1"
+                  />
+                </div>
               </div>
             </div>
-          </Card>
 
-          {/* Savings Style Section */}
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6 rounded-2xl">
-            <h2 className="text-xl font-semibold text-foreground mb-6">
-              How Do You Want to Save?
-            </h2>
-            <RadioGroup value={savingsMode} onValueChange={(value) => setSavingsMode(value as SavingsMode)}>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="monthly" id="monthly" />
-                  <Label htmlFor="monthly" className="text-sm font-medium cursor-pointer">
-                    Monthly Contribution
-                  </Label>
+            {/* Savings Style Subsection */}
+            <div className="space-y-4 mt-6 md:mt-6">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                How Do You Want to Save?
+              </p>
+              <RadioGroup value={savingsMode} onValueChange={(value) => setSavingsMode(value as SavingsMode)}>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="monthly" id="monthly" />
+                    <Label htmlFor="monthly" className="text-xs md:text-sm font-medium cursor-pointer text-foreground">
+                      Monthly Contribution
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="annual" id="annual" />
+                    <Label htmlFor="annual" className="text-xs md:text-sm font-medium cursor-pointer text-foreground">
+                      Annual Contribution
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="lumpsum" id="lumpsum" />
+                    <Label htmlFor="lumpsum" className="text-xs md:text-sm font-medium cursor-pointer text-foreground">
+                      One-Time Lump Sum Today
+                    </Label>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="annual" id="annual" />
-                  <Label htmlFor="annual" className="text-sm font-medium cursor-pointer">
-                    Annual Contribution
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="lumpsum" id="lumpsum" />
-                  <Label htmlFor="lumpsum" className="text-sm font-medium cursor-pointer">
-                    One-Time Lump Sum Today
-                  </Label>
-                </div>
-              </div>
-            </RadioGroup>
+              </RadioGroup>
+            </div>
           </Card>
 
           {/* Action Buttons */}
