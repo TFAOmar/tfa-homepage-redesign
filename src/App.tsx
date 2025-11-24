@@ -23,6 +23,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CompoundGrowthCalculator from "./pages/CompoundGrowthCalculator";
 import RetirementIncomeCalculator from "./pages/RetirementIncomeCalculator";
 import TaxImpactCalculator from "./pages/TaxImpactCalculator";
+import RequiredSavingsCalculator from "./pages/RequiredSavingsCalculator";
 import Tools from "./pages/Tools";
 import NotFound from "./pages/NotFound";
 
@@ -56,6 +57,7 @@ const App = () => (
               <Route path="/tools/compound-growth-calculator" element={<CompoundGrowthCalculator />} />
               <Route path="/tools/retirement-income-calculator" element={<RetirementIncomeCalculator />} />
               <Route path="/tools/tax-impact-calculator" element={<TaxImpactCalculator />} />
+              <Route path="/tools/required-savings-calculator" element={<RequiredSavingsCalculator />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

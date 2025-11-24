@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { TrendingUp, PiggyBank, Receipt } from "lucide-react";
+import { TrendingUp, PiggyBank, Receipt, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const tools = [
@@ -21,6 +21,12 @@ const tools = [
     title: "Tax Impact Calculator",
     description: "Estimate federal and state tax implications on your retirement income and see how much you may keep after taxes.",
     link: "/tools/tax-impact-calculator",
+  },
+  {
+    icon: Target,
+    title: "Required Savings to Hit Your Goal",
+    description: "Find out how much you may need to save each month, each year, or as a lump sum today to reach a specific future financial goal.",
+    link: "/tools/required-savings-calculator",
   },
 ];
 
@@ -48,7 +54,7 @@ export default function Tools() {
         </div>
 
         {/* Tools Grid */}
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8">
           {tools.map((tool, index) => (
             <div
               key={tool.title}
