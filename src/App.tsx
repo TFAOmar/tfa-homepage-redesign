@@ -14,6 +14,7 @@ import Events from "./pages/Events";
 import Locations from "./pages/Locations";
 import Contact from "./pages/Contact";
 import Shop from "./pages/Shop";
+import ProductDetail from "./pages/ProductDetail";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Advisors from "./pages/Advisors";
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/partners" element={<Partners />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/product/:handle" element={<ProductDetail />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/advisors" element={<Advisors />} />
