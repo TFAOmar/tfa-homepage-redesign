@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
 import { ShoppingCart, ArrowLeft, Loader2 } from "lucide-react";
-import { ShopifyProduct, fetchProductByHandle } from "@/lib/shopify";
+import { ShopifyProduct, fetchProductByHandle, fetchProducts } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 
@@ -13,6 +14,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
+  const [relatedProducts, setRelatedProducts] = useState<ShopifyProduct[]>([]);
   const addItem = useCartStore(state => state.addItem);
 
   useEffect(() => {
@@ -21,9 +23,19 @@ const ProductDetail = () => {
       
       try {
         setLoading(true);
-        const data = await fetchProductByHandle(handle);
-        setProduct(data);
-        setSelectedVariant(data?.node.variants.edges[0].node);
+        const [productData, allProducts] = await Promise.all([
+          fetchProductByHandle(handle),
+          fetchProducts(10)
+        ]);
+        
+        setProduct(productData);
+        setSelectedVariant(productData?.node.variants.edges[0].node);
+        
+        // Filter out current product and take first 3
+        const related = allProducts
+          .filter(p => p.node.handle !== handle)
+          .slice(0, 3);
+        setRelatedProducts(related);
       } catch (error) {
         console.error("Error loading product:", error);
         toast.error("Failed to load product");
@@ -163,6 +175,49 @@ const ProductDetail = () => {
             </Button>
           </div>
         </div>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-semibold text-white mb-6">You May Also Like</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {relatedProducts.map((relatedProduct) => {
+                const imageUrl = relatedProduct.node.images.edges[0]?.node.url;
+                const price = parseFloat(relatedProduct.node.priceRange.minVariantPrice.amount);
+
+                return (
+                  <Card
+                    key={relatedProduct.node.id}
+                    className="group cursor-pointer overflow-hidden bg-white/10 backdrop-blur-xl border-white/20 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--primary),0.3)]"
+                    onClick={() => navigate(`/product/${relatedProduct.node.handle}`)}
+                  >
+                    <div className="aspect-square overflow-hidden bg-secondary/20">
+                      {imageUrl ? (
+                        <img
+                          src={imageUrl}
+                          alt={relatedProduct.node.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <ShoppingCart className="h-16 w-16 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-6">
+                      <h3 className="font-semibold text-lg text-white mb-2 line-clamp-2">
+                        {relatedProduct.node.title}
+                      </h3>
+                      <p className="text-2xl font-bold text-primary">
+                        {relatedProduct.node.priceRange.minVariantPrice.currencyCode} ${price.toFixed(2)}
+                      </p>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
