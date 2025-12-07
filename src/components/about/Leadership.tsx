@@ -1,26 +1,49 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Linkedin, Mail, Facebook, Instagram, Youtube } from "lucide-react";
+import { Linkedin, Mail, Facebook, Instagram, Youtube, Quote, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const leaders = [
+interface Leader {
+  name: string;
+  title: string;
+  subtitle?: string;
+  image: string;
+  intro: string;
+  mantra?: string;
+  highlights: string[];
+  expertise?: string[];
+  closing: string;
+  linkedin?: string;
+  facebook?: string;
+  instagram?: string;
+  youtube?: string;
+}
+
+const leaders: Leader[] = [
   {
     name: "Manuel Soto",
     title: "CEO & Founder",
     subtitle: "National Financial Strategist | Founder | Speaker",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop",
-    bio: `Manuel "Manny" Soto is the CEO and Founder of The Financial Architects, one of the fastest-growing financial services organizations in the country. With nearly two decades of experience across insurance, retirement planning, investments, business strategies, and income protection, Manny has dedicated his career to helping families and business owners gain clarity, confidence, and control over their financial future.
-
-Manny began as a top-producing agent at a young age and quickly rose to become a respected broker and agency owner. Guided by his personal mantra — "Change what you're doing to change what you're getting" — he built a client base of nearly 2,000 households and has trained thousands of insurance agents, investment advisors, and financial professionals across the United States.
-
-What makes Manny different is his approach to planning. He rejects the idea of "one-size-fits-all" and instead champions needs-based, context-driven strategies. A young family, a business owner, and a retiree each face unique financial challenges — and Manny is known for designing precise, actionable plans that match each client's real-world situation.
-
-His expertise spans Social Security optimization, retirement & income planning, annuities & protected growth strategies, life insurance & legacy strategies, business structures & tax-efficient planning, college planning, reverse mortgage planning, and comprehensive wealth protection.
-
-Manny is also a widely sought-after speaker, known for breaking down complex concepts into simple, empowering guidance. His educational events have helped thousands of families and professionals understand how money works and how to make it work for them.
-
-During the pandemic, Manny launched The Financial Architects Franchise Model, expanding TFA's mission nationwide. His vision is bold and simple: Provide every American household and business with access to the financial knowledge, tools, and strategies they deserve.
-
-Today, Manny leads TFA with a focus on innovation, advisor development, and life-changing client outcomes — building a national organization grounded in integrity, education, and results.`,
+    intro: `Manuel "Manny" Soto is the CEO and Founder of The Financial Architects, one of the fastest-growing financial services organizations in the country. With nearly two decades of experience across insurance, retirement planning, investments, business strategies, and income protection, Manny has dedicated his career to helping families and business owners gain clarity, confidence, and control over their financial future.`,
+    mantra: "Change what you're doing to change what you're getting",
+    highlights: [
+      "Built a client base of nearly 2,000 households",
+      "Trained thousands of insurance agents, investment advisors, and financial professionals across the United States",
+      "Rose from top-producing agent to respected broker and agency owner at a young age",
+      "Launched The Financial Architects Franchise Model during the pandemic, expanding TFA's mission nationwide",
+      "Widely sought-after speaker known for breaking down complex concepts into simple, empowering guidance",
+    ],
+    expertise: [
+      "Social Security Optimization",
+      "Retirement & Income Planning",
+      "Annuities & Protected Growth",
+      "Life Insurance & Legacy",
+      "Business Structures & Tax Planning",
+      "College Planning",
+      "Reverse Mortgage Planning",
+      "Comprehensive Wealth Protection",
+    ],
+    closing: `What makes Manny different is his approach to planning. He rejects "one-size-fits-all" and instead champions needs-based, context-driven strategies. Today, Manny leads TFA with a focus on innovation, advisor development, and life-changing client outcomes — building a national organization grounded in integrity, education, and results.`,
     linkedin: "https://linkedin.com/in/manuelsoto",
     facebook: "https://facebook.com/manuelsoto",
     instagram: "https://instagram.com/moneybusinessmanny",
@@ -30,15 +53,15 @@ Today, Manny leads TFA with a focus on innovation, advisor development, and life
     name: "Omar Sanchez",
     title: "Chief Operating Officer & Managing Partner",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=600&fit=crop",
-    bio: `Omar Sanchez is the Chief Operating Officer and Managing Partner of The Financial Architects, where he leads the firm's national expansion, advisor development, and the implementation of modern financial planning systems. Known for his ability to simplify complex strategies and build scalable processes, Omar has become one of the leading architects behind TFA's mission: helping families, business owners, and agents make smarter financial decisions with confidence.
-
-A first-generation Mexican-American from Southern California, Omar built his career by recognizing a gap in financial education within the Latino community. In 2015, he founded InsuranceLatino.com, one of the first platforms dedicated to teaching Spanish-speaking families about life insurance, retirement planning, and financial protection. His commitment to clarity, transparency, and education continues to shape his leadership at TFA today.
-
-At The Financial Architects, Omar oversees firm-wide operations and technology, advisor onboarding, training, and development, strategic partnerships and new business divisions, digital client experience and modern planning tools, and expansion systems and organizational growth.
-
-Omar is recognized for blending high-level financial strategy with real-world practicality, making him a trusted guide for both clients and advisors. Whether he's coaching a new agent, designing a planning system, or helping a family secure their financial future, he brings the same focus: integrity, education, and long-term protection.
-
-Outside of work, Omar is a dedicated husband and father who values family above all. His purpose — both personally and professionally — is to help families build stability, wealth, and generational security.`,
+    intro: `Omar Sanchez is the Chief Operating Officer and Managing Partner of The Financial Architects, where he leads the firm's national expansion, advisor development, and the implementation of modern financial planning systems. Known for his ability to simplify complex strategies and build scalable processes, Omar has become one of the leading architects behind TFA's mission.`,
+    highlights: [
+      "First-generation Mexican-American from Southern California who recognized a gap in financial education within the Latino community",
+      "Founded InsuranceLatino.com in 2015 — one of the first platforms teaching Spanish-speaking families about financial protection",
+      "Leads firm-wide operations, technology, and digital client experience",
+      "Oversees advisor onboarding, training, and professional development",
+      "Drives strategic partnerships, new business divisions, and organizational growth",
+    ],
+    closing: `Omar is recognized for blending high-level financial strategy with real-world practicality, making him a trusted guide for both clients and advisors. Outside of work, Omar is a dedicated husband and father who values family above all. His purpose — both personally and professionally — is to help families build stability, wealth, and generational security.`,
     linkedin: "https://linkedin.com/in/omarsanchez",
   },
 ];
@@ -56,43 +79,108 @@ const Leadership = () => {
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto space-y-12">
+        <div className="max-w-6xl mx-auto space-y-16">
           {leaders.map((leader, index) => (
             <Card
               key={index}
               className="glass border-0 overflow-hidden hover:shadow-2xl transition-all duration-300"
             >
-              <div className="grid md:grid-cols-3 gap-8">
+              <div className="grid lg:grid-cols-3 gap-0">
                 {/* Image */}
-                <div className="relative h-80 md:h-auto overflow-hidden">
+                <div className="relative h-80 lg:h-auto min-h-[400px] overflow-hidden">
                   <img
                     src={leader.image}
                     alt={leader.name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent" />
+                  
+                  {/* Name overlay on mobile */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 lg:hidden">
+                    <h3 className="text-2xl font-bold text-white mb-1">
+                      {leader.name}
+                    </h3>
+                    <p className="text-[#E4B548] font-semibold">
+                      {leader.title}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Content */}
-                <CardContent className="md:col-span-2 p-8 flex flex-col justify-center">
-                  <h3 className="text-3xl font-bold text-navy mb-1">
-                    {leader.name}
-                  </h3>
-                  <p className="text-xl text-accent font-semibold mb-1">
-                    {leader.title}
-                  </p>
-                  {leader.subtitle && (
-                    <p className="text-sm text-muted-foreground mb-5">
-                      {leader.subtitle}
+                <CardContent className="lg:col-span-2 p-6 md:p-8 lg:p-10">
+                  {/* Header - desktop only */}
+                  <div className="hidden lg:block mb-6">
+                    <h3 className="text-3xl font-bold text-navy mb-1">
+                      {leader.name}
+                    </h3>
+                    <p className="text-xl text-accent font-semibold">
+                      {leader.title}
                     </p>
-                  )}
-                  {!leader.subtitle && <div className="mb-5" />}
-                  
+                    {leader.subtitle && (
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {leader.subtitle}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Intro */}
                   <p className="text-foreground leading-relaxed mb-6">
-                    {leader.bio}
+                    {leader.intro}
                   </p>
 
-                  <div className="flex flex-wrap gap-3">
+                  {/* Mantra Quote */}
+                  {leader.mantra && (
+                    <div className="bg-[#E4B548]/10 border-l-4 border-[#E4B548] p-4 rounded-r-lg mb-6">
+                      <div className="flex items-start gap-3">
+                        <Quote className="h-5 w-5 text-[#E4B548] flex-shrink-0 mt-0.5" />
+                        <p className="text-navy font-semibold italic">
+                          "{leader.mantra}"
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Highlights */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-bold text-navy uppercase tracking-wider mb-3">
+                      Key Achievements
+                    </h4>
+                    <ul className="space-y-2">
+                      {leader.highlights.map((highlight, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <CheckCircle className="h-4 w-4 text-[#E4B548] flex-shrink-0 mt-1" />
+                          <span className="text-sm text-foreground">{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Expertise Tags */}
+                  {leader.expertise && leader.expertise.length > 0 && (
+                    <div className="mb-6">
+                      <h4 className="text-sm font-bold text-navy uppercase tracking-wider mb-3">
+                        Areas of Expertise
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {leader.expertise.map((item, i) => (
+                          <span 
+                            key={i}
+                            className="px-3 py-1 bg-navy/5 text-navy text-xs font-medium rounded-full border border-navy/10"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Closing */}
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                    {leader.closing}
+                  </p>
+
+                  {/* Social Links */}
+                  <div className="flex flex-wrap gap-2 pt-4 border-t border-border/50">
                     {leader.linkedin && (
                       <a href={leader.linkedin} target="_blank" rel="noopener noreferrer">
                         <Button
