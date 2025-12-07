@@ -22,7 +22,7 @@ const stats = [
   },
   {
     icon: DollarSign,
-    value: "$2.5B+",
+    value: "$100M+",
     label: "Assets Guided",
     description: "Trusted with families' financial futures",
   },
