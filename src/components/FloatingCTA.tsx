@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, X } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 interface FloatingCTAProps {
   hideOnPages?: string[];
@@ -44,13 +44,15 @@ const FloatingCTA = ({ hideOnPages = ["/contact"] }: FloatingCTAProps) => {
             <p className="text-white text-sm sm:text-base font-semibold text-center sm:text-left">
               Ready to secure your future?
             </p>
-            <Button
-              size="default"
-              className="w-full sm:w-auto bg-gold hover:bg-gold/90 text-navy font-bold px-7 py-6 rounded-full shadow-lg hover:shadow-gold/40 transition-all duration-200 hover:scale-105 text-base"
-            >
-              Book Consultation
-              <Calendar className="ml-2 h-4 w-4" />
-            </Button>
+            <Link to="/book-consultation">
+              <Button
+                size="default"
+                className="w-full sm:w-auto rounded-full bg-[#E4B548] text-black font-semibold px-7 py-6 hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all hover:scale-105 text-base"
+              >
+                Book Consultation
+                <Calendar className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
 
           {/* Dismiss button */}

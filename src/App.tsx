@@ -27,6 +27,8 @@ import TaxImpactCalculator from "./pages/TaxImpactCalculator";
 import RequiredSavingsCalculator from "./pages/RequiredSavingsCalculator";
 import Tools from "./pages/Tools";
 import BusinessInsurance from "./pages/BusinessInsurance";
+import BookConsultation from "./pages/BookConsultation";
+import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,12 +64,14 @@ const App = () => (
               <Route path="/tools/tax-impact-calculator" element={<TaxImpactCalculator />} />
               <Route path="/tools/required-savings-calculator" element={<RequiredSavingsCalculator />} />
               <Route path="/business-insurance" element={<BusinessInsurance />} />
+              <Route path="/book-consultation" element={<BookConsultation />} />
+              <Route path="/thank-you" element={<ThankYou />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <Footer />
-          <FloatingCTA hideOnPages={["/contact"]} />
+          <FloatingCTA hideOnPages={["/contact", "/book-consultation", "/thank-you"]} />
         </div>
       </BrowserRouter>
     </TooltipProvider>

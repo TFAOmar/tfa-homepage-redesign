@@ -191,8 +191,8 @@ const Header = () => {
           {/* CTA & Mobile Menu */}
           <div className="flex items-center gap-2">
             <CartDrawer />
-            <Link to="/contact" className="hidden lg:block">
-              <Button className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg hover:shadow-xl transition-all">
+            <Link to="/book-consultation" className="hidden lg:block">
+              <Button className="rounded-full bg-[#E4B548] text-black font-semibold px-6 py-5 hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all">
                 Book Consultation
               </Button>
             </Link>
@@ -276,8 +276,8 @@ const Header = () => {
                   </Link>
 
                   <div className="pt-4 border-t">
-                    <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
-                      <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                    <Link to="/book-consultation" onClick={() => setMobileMenuOpen(false)}>
+                      <Button className="w-full rounded-full bg-[#E4B548] text-black font-semibold hover:shadow-[0_0_25px_rgba(228,181,72,0.45)]">
                         Book Consultation
                       </Button>
                     </Link>

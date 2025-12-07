@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const AboutCTA = () => {
   return (
@@ -15,13 +16,15 @@ const AboutCTA = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6 neuro-button group"
-            >
-              <Calendar className="mr-2 h-5 w-5" />
-              Book Your Consultation
-            </Button>
+            <Link to="/book-consultation">
+              <Button 
+                size="lg" 
+                className="rounded-full bg-[#E4B548] text-black font-semibold px-8 py-6 text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all"
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Book Your Consultation
+              </Button>
+            </Link>
             
             <Button 
               size="lg"

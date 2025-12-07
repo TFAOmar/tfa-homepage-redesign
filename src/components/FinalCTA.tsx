@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const FinalCTA = () => {
   return (
@@ -22,13 +23,15 @@ const FinalCTA = () => {
           </p>
 
           <div className="flex flex-col items-center gap-5">
-            <Button 
-              size="lg" 
-              className="bg-gold hover:bg-gold/90 text-navy text-lg font-bold px-14 py-8 rounded-full shadow-[0_8px_32px_rgba(212,175,55,0.5)] hover:shadow-[0_8px_40px_rgba(212,175,55,0.7)] transition-all duration-200 hover:scale-[1.05] border-2 border-gold group"
-            >
-              Book Consultation
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link to="/book-consultation">
+              <Button 
+                size="lg" 
+                className="rounded-full bg-[#E4B548] text-black font-semibold px-8 py-8 text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all hover:scale-[1.05] border-2 border-[#E4B548] group"
+              >
+                Book Consultation
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
             
             <p className="text-primary-foreground/80 text-base mt-1">
               Free consultation • No obligations • Completely confidential

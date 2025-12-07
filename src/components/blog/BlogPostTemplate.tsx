@@ -78,10 +78,10 @@ export const BlogPostTemplate = ({
             <p className="text-xl text-muted-foreground mb-8">
               Our expert advisors are here to help you navigate your financial planning journey. Schedule a complimentary consultation today.
             </p>
-            <Link to="/contact">
+            <Link to="/book-consultation">
               <Button 
                 size="lg" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6"
+                className="rounded-full bg-[#E4B548] text-black font-semibold px-8 py-6 text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all"
               >
                 <Phone className="mr-2 h-5 w-5" />
                 Speak with an Advisor
