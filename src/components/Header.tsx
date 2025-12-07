@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, Building2, PiggyBank, LineChart, Repeat, DollarSign, Shield, Stethoscope, Landmark, Scale, Calculator, BookOpen, Calendar, Award, Users, ShoppingBag } from "lucide-react";
 import tfaLogo from "@/assets/tfa-logo.png";
@@ -66,9 +66,23 @@ const resourcesMenu = [
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-transparent backdrop-blur-md">
+    <header className={`sticky top-0 z-50 w-full border-b backdrop-blur-md transition-all duration-300 ${
+      isScrolled 
+        ? "bg-background/95 border-border/40 shadow-sm" 
+        : "bg-transparent border-white/10"
+    }`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
