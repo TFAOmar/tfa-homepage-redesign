@@ -5,17 +5,22 @@ import { Button } from "@/components/ui/button";
 const leaders = [
   {
     name: "Manuel Soto",
-    title: "C.E.O. & Managing Partner",
+    title: "CEO & Founder",
+    subtitle: "National Financial Strategist | Founder | Speaker",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop",
-    bio: `Manuel Soto, "The Financial Architect," has been in the financial industry for nearly two decades. He is the owner and CEO of TFA Insurance Advisors, which is headquartered in Chino Hills, CA.
+    bio: `Manuel "Manny" Soto is the CEO and Founder of The Financial Architects, one of the fastest-growing financial services organizations in the country. With nearly two decades of experience across insurance, retirement planning, investments, business strategies, and income protection, Manny has dedicated his career to helping families and business owners gain clarity, confidence, and control over their financial future.
 
-Manny went from a TOP producing agent to a broker/owner at a young age. By following his personal mantra, "Change what you're doing to change what you're getting", Manny has accumulated close to 2,000 personal clients and has trained thousands of insurance agents, registered representatives, and investment advisors.
+Manny began as a top-producing agent at a young age and quickly rose to become a respected broker and agency owner. Guided by his personal mantra — "Change what you're doing to change what you're getting" — he built a client base of nearly 2,000 households and has trained thousands of insurance agents, investment advisors, and financial professionals across the United States.
 
-What sets Manny apart from other financial representatives is his needs based planning programs. He does not believe in a one size fits all strategy. Manny knows that designing a course of action varies contextually — a beginner family has different needs than a senior citizen in their retirement age. His ability to customize these plans is possible because of his financial skill set developed through years of experience and study.
+What makes Manny different is his approach to planning. He rejects the idea of "one-size-fits-all" and instead champions needs-based, context-driven strategies. A young family, a business owner, and a retiree each face unique financial challenges — and Manny is known for designing precise, actionable plans that match each client's real-world situation.
 
-Manny is a HUGE believer in results based financial strategies and enjoys sharing his knowledge by speaking publicly. He often speaks at events on programs ranging from Social Security, annuities, life insurance, college planning, business structures, reverse mortgages, and many more.
+His expertise spans Social Security optimization, retirement & income planning, annuities & protected growth strategies, life insurance & legacy strategies, business structures & tax-efficient planning, college planning, reverse mortgage planning, and comprehensive wealth protection.
 
-During the pandemic, Manny also made a decision to franchise the financial planning opportunity. In this way, he hopes to expand The Financial Architects' reach so that people all over the United States are receiving the financial knowledge they deserve.`,
+Manny is also a widely sought-after speaker, known for breaking down complex concepts into simple, empowering guidance. His educational events have helped thousands of families and professionals understand how money works and how to make it work for them.
+
+During the pandemic, Manny launched The Financial Architects Franchise Model, expanding TFA's mission nationwide. His vision is bold and simple: Provide every American household and business with access to the financial knowledge, tools, and strategies they deserve.
+
+Today, Manny leads TFA with a focus on innovation, advisor development, and life-changing client outcomes — building a national organization grounded in integrity, education, and results.`,
     linkedin: "https://linkedin.com/in/manuelsoto",
     facebook: "https://facebook.com/manuelsoto",
     instagram: "https://instagram.com/moneybusinessmanny",
@@ -70,12 +75,18 @@ const Leadership = () => {
 
                 {/* Content */}
                 <CardContent className="md:col-span-2 p-8 flex flex-col justify-center">
-                  <h3 className="text-3xl font-bold text-navy mb-2">
+                  <h3 className="text-3xl font-bold text-navy mb-1">
                     {leader.name}
                   </h3>
-                  <p className="text-xl text-accent font-semibold mb-6">
+                  <p className="text-xl text-accent font-semibold mb-1">
                     {leader.title}
                   </p>
+                  {leader.subtitle && (
+                    <p className="text-sm text-muted-foreground mb-5">
+                      {leader.subtitle}
+                    </p>
+                  )}
+                  {!leader.subtitle && <div className="mb-5" />}
                   
                   <p className="text-foreground leading-relaxed mb-6">
                     {leader.bio}
