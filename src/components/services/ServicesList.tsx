@@ -8,7 +8,8 @@ import {
   Shield, 
   RefreshCw, 
   Umbrella, 
-  Users 
+  Users,
+  Building2
 } from "lucide-react";
 
 const services = [
@@ -119,6 +120,19 @@ const services = [
       "Plan design and vendor selection",
       "Ongoing administration and benchmarking",
     ],
+  },
+  {
+    icon: Building2,
+    title: "Business Insurance",
+    description: "Secure the right commercial insurance — liability, property, workers' comp, commercial auto, and more — tailored to how your business operates.",
+    forWhom: "Small businesses, professional offices, contractors, and service companies",
+    benefits: [
+      "General liability and property coverage",
+      "Workers' compensation and commercial auto",
+      "Professional liability (E&O) and cyber coverage",
+      "Custom protection plans for your unique risks",
+    ],
+    link: "/business-insurance",
   },
 ];
 
