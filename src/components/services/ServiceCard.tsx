@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 
 interface ServiceCardProps {
@@ -9,9 +10,10 @@ interface ServiceCardProps {
   description: string;
   forWhom: string;
   benefits: string[];
+  link?: string;
 }
 
-const ServiceCard = ({ icon: Icon, title, description, forWhom, benefits }: ServiceCardProps) => {
+const ServiceCard = ({ icon: Icon, title, description, forWhom, benefits, link }: ServiceCardProps) => {
   return (
     <Card className="glass border-0 hover:shadow-xl transition-all duration-300 group">
       <CardContent className="p-8 md:p-10">
@@ -30,12 +32,24 @@ const ServiceCard = ({ icon: Icon, title, description, forWhom, benefits }: Serv
               {description}
             </p>
 
-            <Button 
-              className="bg-accent hover:bg-accent/90 text-accent-foreground group-hover:scale-105 transition-transform"
-            >
-              Speak With an Advisor
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            {link ? (
+              <Button 
+                asChild
+                className="bg-accent hover:bg-accent/90 text-accent-foreground group-hover:scale-105 transition-transform"
+              >
+                <Link to={link}>
+                  Learn More
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            ) : (
+              <Button 
+                className="bg-accent hover:bg-accent/90 text-accent-foreground group-hover:scale-105 transition-transform"
+              >
+                Speak With an Advisor
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            )}
           </div>
 
           {/* Right: Details */}
