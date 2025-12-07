@@ -26,6 +26,7 @@ import RetirementIncomeCalculator from "./pages/RetirementIncomeCalculator";
 import TaxImpactCalculator from "./pages/TaxImpactCalculator";
 import RequiredSavingsCalculator from "./pages/RequiredSavingsCalculator";
 import Tools from "./pages/Tools";
+import BusinessInsurance from "./pages/BusinessInsurance";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +61,7 @@ const App = () => (
               <Route path="/tools/retirement-income-calculator" element={<RetirementIncomeCalculator />} />
               <Route path="/tools/tax-impact-calculator" element={<TaxImpactCalculator />} />
               <Route path="/tools/required-savings-calculator" element={<RequiredSavingsCalculator />} />
+              <Route path="/business-insurance" element={<BusinessInsurance />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

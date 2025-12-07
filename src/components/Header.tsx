@@ -42,6 +42,7 @@ const servicesMenu = [
     items: [
       { name: "Life Insurance", icon: Shield, href: "/services#life-insurance", description: "Protect your family's future" },
       { name: "Health Care Planning", icon: Stethoscope, href: "/services#healthcare", description: "Plan for medical expenses" },
+      { name: "Business Insurance", icon: Building2, href: "/business-insurance", description: "Protect your business" },
       { name: "Group Retirement Plans", icon: Building2, href: "/services#group-plans", description: "Employee benefit solutions" },
     ]
   },
