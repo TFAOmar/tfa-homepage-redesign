@@ -17,12 +17,12 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Headshot */}
-      <div className="relative h-56 bg-gradient-to-br from-navy/20 to-accent/20 overflow-hidden">
+      <div className="relative h-64 bg-gradient-to-br from-navy/20 to-accent/20 overflow-hidden">
         {advisor.image ? (
           <img 
             src={advisor.image} 
             alt={advisor.name}
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-contain object-center bg-gradient-to-b from-gray-400 to-gray-600"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
