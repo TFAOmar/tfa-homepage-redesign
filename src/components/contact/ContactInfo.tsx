@@ -1,17 +1,11 @@
 import { Phone, Mail, Clock, MapPin } from "lucide-react";
 import teamPhoto from "@/assets/team-photo.jpg";
 import { Link } from "react-router-dom";
-
 const ContactInfo = () => {
-  return (
-    <div className="space-y-8">
+  return <div className="space-y-8">
       {/* Team Photo */}
       <div className="glass rounded-2xl overflow-hidden">
-        <img 
-          src={teamPhoto} 
-          alt="TFA Advisor Team" 
-          className="w-full h-64 object-cover"
-        />
+        <img src={teamPhoto} alt="TFA Advisor Team" className="w-full h-64 object-cover" />
         <div className="p-6">
           <h3 className="text-2xl font-bold text-navy mb-2">
             Our Expert Team
@@ -35,10 +29,7 @@ const ContactInfo = () => {
           </div>
           <div>
             <h4 className="font-semibold text-foreground mb-1">Phone</h4>
-            <a 
-              href="tel:8883505396" 
-              className="text-lg text-accent hover:underline"
-            >
+            <a href="tel:8883505396" className="text-lg text-accent hover:underline">
               (888) 350-5396
             </a>
             <p className="text-sm text-muted-foreground">Toll-free nationwide</p>
@@ -52,10 +43,7 @@ const ContactInfo = () => {
           </div>
           <div>
             <h4 className="font-semibold text-foreground mb-1">Email</h4>
-            <a 
-              href="mailto:info@tfainsuranceadvisors.com" 
-              className="text-lg text-accent hover:underline"
-            >
+            <a href="mailto:info@tfainsuranceadvisors.com" className="text-lg text-accent hover:underline">
               info@tfainsuranceadvisors.com
             </a>
             <p className="text-sm text-muted-foreground">We respond within 24 hours</p>
@@ -86,10 +74,7 @@ const ContactInfo = () => {
             <h4 className="font-semibold text-foreground mb-1">Headquarters</h4>
             <p className="text-foreground">13890 Peyton Dr</p>
             <p className="text-foreground mb-2">Chino Hills, CA 91709</p>
-            <Link 
-              to="/locations"
-              className="text-accent hover:underline text-sm font-medium"
-            >
+            <Link to="/locations" className="text-accent hover:underline text-sm font-medium">
               View all 29 office locations →
             </Link>
           </div>
@@ -111,12 +96,10 @@ const ContactInfo = () => {
           <p className="text-sm text-muted-foreground">Years Experience</p>
         </div>
         <div className="glass p-6 rounded-xl text-center">
-          <p className="text-3xl font-bold text-accent mb-1">$2.5B+</p>
+          <p className="text-3xl font-bold text-accent mb-1">$100M+</p>
           <p className="text-sm text-muted-foreground">Assets Guided</p>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ContactInfo;
