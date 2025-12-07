@@ -151,7 +151,7 @@ const ThankYou = () => {
                       Get the most out of your consultation with our exclusive preparation guide. Learn what documents to gather, questions to ask, and how to clarify your financial goals before we meet.
                     </p>
                     <Button 
-                      className="rounded-full bg-[#E4B548] text-black font-semibold px-8 py-6 hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all hover:scale-105"
+                      className="btn-primary-cta px-8 py-6 hover:scale-105"
                     >
                       <Download className="mr-2 h-5 w-5" />
                       Download Free Guide

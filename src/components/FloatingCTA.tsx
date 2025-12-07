@@ -47,7 +47,7 @@ const FloatingCTA = ({ hideOnPages = ["/contact"] }: FloatingCTAProps) => {
             <Link to="/book-consultation">
               <Button
                 size="default"
-                className="w-full sm:w-auto rounded-full bg-[#E4B548] text-black font-semibold px-7 py-6 hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all hover:scale-105 text-base"
+                className="w-full sm:w-auto btn-primary-cta px-7 py-6 hover:scale-105 text-base"
               >
                 Book Consultation
                 <Calendar className="ml-2 h-4 w-4" />

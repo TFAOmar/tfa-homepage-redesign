@@ -131,6 +131,15 @@ All colors MUST be HSL.
     box-shadow: 4px 4px 8px rgba(163, 177, 198, 0.6), -4px -4px 8px rgba(255, 255, 255, 0.5);
   }
   
+  /* Primary CTA Button - Gold with dark hover */
+  .btn-primary-cta {
+    @apply rounded-full bg-[#E4B548] text-black font-semibold transition-all;
+  }
+  
+  .btn-primary-cta:hover {
+    @apply bg-[#1a2744] text-white shadow-[0_0_25px_rgba(228,181,72,0.45)];
+  }
+  
   .animate-fade-in-up {
     animation: fadeInUp 0.8s ease-out forwards;
   }

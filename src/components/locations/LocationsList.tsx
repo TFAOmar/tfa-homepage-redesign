@@ -107,7 +107,7 @@ const LocationsList = () => {
                 <CardFooter className="flex gap-2">
                   <Link to="/book-consultation" className="flex-1">
                     <Button 
-                      className="w-full rounded-full bg-[#E4B548] text-black font-semibold hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all"
+                      className="w-full btn-primary-cta"
                     >
                       Book Consultation
                     </Button>

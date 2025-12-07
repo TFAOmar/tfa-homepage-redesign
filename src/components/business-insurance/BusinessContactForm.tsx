@@ -358,7 +358,7 @@ const BusinessContactForm = () => {
         type="submit"
         disabled={isSubmitting}
         data-analytics-id="business-insurance-form-submit"
-        className="w-full rounded-full bg-[#E4B548] text-black font-semibold px-8 py-4 hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-8"
+        className="w-full btn-primary-cta px-8 py-4 disabled:opacity-50 disabled:cursor-not-allowed mt-8"
       >
         {isSubmitting ? "Submitting..." : "Submit My Business Insurance Request"}
       </button>
