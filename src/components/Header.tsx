@@ -78,10 +78,10 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 w-full border-b backdrop-blur-xl transition-all duration-300 ${
+    <header className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
       isScrolled 
-        ? "bg-[hsl(220,50%,8%,0.85)] border-white/20 shadow-lg" 
-        : "bg-transparent border-transparent"
+        ? "bg-white/90 backdrop-blur-2xl border-gray-200/50 shadow-lg" 
+        : "bg-transparent backdrop-blur-none border-transparent"
     }`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
