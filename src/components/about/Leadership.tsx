@@ -1,14 +1,25 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Linkedin, Mail } from "lucide-react";
+import { Linkedin, Mail, Facebook, Instagram, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const leaders = [
   {
-    name: "Manny Soto",
-    title: "Chief Executive Officer",
+    name: "Manuel Soto",
+    title: "C.E.O. & Managing Partner",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop",
-    bio: "Manny founded The Financial Architects in 2015 with a vision to democratize comprehensive wealth planning. With over 25 years in the financial services industry, he has dedicated his career to helping families navigate complex financial decisions with confidence. Before founding TFA, Manny held senior leadership roles at major financial institutions, where he witnessed firsthand the gap in personalized service for middle-market families. A Certified Financial Planner® and frequent industry speaker, Manny believes that financial education is the foundation of lasting wealth. Outside the office, he volunteers with financial literacy programs and enjoys spending time with his wife and three children.",
-    linkedin: "#",
+    bio: `Manuel Soto, "The Financial Architect," has been in the financial industry for nearly two decades. He is the owner and CEO of TFA Insurance Advisors, which is headquartered in Chino Hills, CA.
+
+Manny went from a TOP producing agent to a broker/owner at a young age. By following his personal mantra, "Change what you're doing to change what you're getting", Manny has accumulated close to 2,000 personal clients and has trained thousands of insurance agents, registered representatives, and investment advisors.
+
+What sets Manny apart from other financial representatives is his needs based planning programs. He does not believe in a one size fits all strategy. Manny knows that designing a course of action varies contextually — a beginner family has different needs than a senior citizen in their retirement age. His ability to customize these plans is possible because of his financial skill set developed through years of experience and study.
+
+Manny is a HUGE believer in results based financial strategies and enjoys sharing his knowledge by speaking publicly. He often speaks at events on programs ranging from Social Security, annuities, life insurance, college planning, business structures, reverse mortgages, and many more.
+
+During the pandemic, Manny also made a decision to franchise the financial planning opportunity. In this way, he hopes to expand The Financial Architects' reach so that people all over the United States are receiving the financial knowledge they deserve.`,
+    linkedin: "https://linkedin.com/in/manuelsoto",
+    facebook: "https://facebook.com/manuelsoto",
+    instagram: "https://instagram.com/moneybusinessmanny",
+    youtube: "https://youtube.com/@thefinancialarchitects",
   },
   {
     name: "Omar Sanchez",
@@ -62,15 +73,55 @@ const Leadership = () => {
                     {leader.bio}
                   </p>
 
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-navy text-navy hover:bg-navy hover:text-primary-foreground"
-                    >
-                      <Linkedin className="h-4 w-4 mr-2" />
-                      LinkedIn
-                    </Button>
+                  <div className="flex flex-wrap gap-3">
+                    {leader.linkedin && (
+                      <a href={leader.linkedin} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-navy text-navy hover:bg-navy hover:text-primary-foreground"
+                        >
+                          <Linkedin className="h-4 w-4 mr-2" />
+                          LinkedIn
+                        </Button>
+                      </a>
+                    )}
+                    {leader.facebook && (
+                      <a href={leader.facebook} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-navy text-navy hover:bg-navy hover:text-primary-foreground"
+                        >
+                          <Facebook className="h-4 w-4 mr-2" />
+                          Facebook
+                        </Button>
+                      </a>
+                    )}
+                    {leader.instagram && (
+                      <a href={leader.instagram} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-navy text-navy hover:bg-navy hover:text-primary-foreground"
+                        >
+                          <Instagram className="h-4 w-4 mr-2" />
+                          Instagram
+                        </Button>
+                      </a>
+                    )}
+                    {leader.youtube && (
+                      <a href={leader.youtube} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-navy text-navy hover:bg-navy hover:text-primary-foreground"
+                        >
+                          <Youtube className="h-4 w-4 mr-2" />
+                          YouTube
+                        </Button>
+                      </a>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"
