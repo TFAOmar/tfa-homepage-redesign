@@ -23,10 +23,18 @@ During the pandemic, Manny also made a decision to franchise the financial plann
   },
   {
     name: "Omar Sanchez",
-    title: "Chief Operating Officer",
+    title: "Chief Operating Officer & Managing Partner",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=600&fit=crop",
-    bio: "Omar joined The Financial Architects as COO in 2016, bringing 20+ years of operational excellence and strategic growth experience. His leadership has been instrumental in scaling TFA from a single office to 29 nationwide locations while maintaining the firm's commitment to personalized service. Prior to TFA, Omar led operations for a national advisory network and held executive positions at Fortune 500 financial firms. He holds an MBA from Northwestern University's Kellogg School of Management and is a Chartered Financial Analyst® charterholder. Omar is passionate about building systems that empower advisors to serve clients better. He serves on the board of several community financial education initiatives and enjoys cycling and coaching youth soccer.",
-    linkedin: "#",
+    bio: `Omar Sanchez is the Chief Operating Officer and Managing Partner of The Financial Architects, where he leads the firm's national expansion, advisor development, and the implementation of modern financial planning systems. Known for his ability to simplify complex strategies and build scalable processes, Omar has become one of the leading architects behind TFA's mission: helping families, business owners, and agents make smarter financial decisions with confidence.
+
+A first-generation Mexican-American from Southern California, Omar built his career by recognizing a gap in financial education within the Latino community. In 2015, he founded InsuranceLatino.com, one of the first platforms dedicated to teaching Spanish-speaking families about life insurance, retirement planning, and financial protection. His commitment to clarity, transparency, and education continues to shape his leadership at TFA today.
+
+At The Financial Architects, Omar oversees firm-wide operations and technology, advisor onboarding, training, and development, strategic partnerships and new business divisions, digital client experience and modern planning tools, and expansion systems and organizational growth.
+
+Omar is recognized for blending high-level financial strategy with real-world practicality, making him a trusted guide for both clients and advisors. Whether he's coaching a new agent, designing a planning system, or helping a family secure their financial future, he brings the same focus: integrity, education, and long-term protection.
+
+Outside of work, Omar is a dedicated husband and father who values family above all. His purpose — both personally and professionally — is to help families build stability, wealth, and generational security.`,
+    linkedin: "https://linkedin.com/in/omarsanchez",
   },
 ];
 
