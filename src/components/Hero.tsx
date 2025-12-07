@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-financial.jpg";
 
 const Hero = () => {
@@ -29,15 +30,16 @@ const Hero = () => {
             Trusted advisors helping you protect, grow, and secure your financial future.
           </p>
 
-          {/* Primary CTA */}
           <div className="flex flex-col items-center gap-3 mb-4 md:mb-5">
-            <Button 
-              size="lg" 
-              className="w-full sm:w-auto max-w-[320px] bg-gold hover:bg-gold/90 text-navy text-base md:text-lg font-bold px-10 py-6 md:py-7 rounded-full shadow-[0_8px_32px_rgba(212,175,55,0.5)] hover:shadow-[0_8px_40px_rgba(212,175,55,0.7)] transition-all duration-200 hover:scale-[1.05] border-2 border-gold"
-            >
-              Book Consultation
-              <Calendar className="ml-2 h-5 w-5" />
-            </Button>
+            <Link to="/book-consultation">
+              <Button 
+                size="lg" 
+                className="w-full sm:w-auto max-w-[320px] rounded-full bg-[#E4B548] text-black font-semibold px-8 py-6 md:py-7 text-base md:text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all hover:scale-[1.05] border-2 border-[#E4B548]"
+              >
+                Book Consultation
+                <Calendar className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
             
             {/* Conversion micro-copy */}
             <p className="text-sm text-white/60 font-light">

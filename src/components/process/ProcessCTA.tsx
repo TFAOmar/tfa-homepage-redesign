@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ProcessCTA = () => {
   return (
@@ -14,13 +15,15 @@ const ProcessCTA = () => {
             Take the first step toward financial clarity. Schedule a complimentary consultation and discover how our proven process can help you achieve your goals.
           </p>
 
-          <Button 
-            size="lg" 
-            className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-12 py-6 neuro-button"
-          >
-            <Calendar className="mr-2 h-5 w-5" />
-            Book Your Consultation
-          </Button>
+          <Link to="/book-consultation">
+            <Button 
+              size="lg" 
+              className="rounded-full bg-[#E4B548] text-black font-semibold px-12 py-6 text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all"
+            >
+              <Calendar className="mr-2 h-5 w-5" />
+              Book Your Consultation
+            </Button>
+          </Link>
 
           <p className="text-muted-foreground mt-6 text-sm">
             No pressure. No sales pitch. Just honest conversation about your financial future.

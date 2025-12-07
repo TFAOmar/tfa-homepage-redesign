@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone, Clock, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 import { locations } from "@/data/locations";
 
 const LocationsList = () => {
@@ -104,11 +105,13 @@ const LocationsList = () => {
                 </CardContent>
 
                 <CardFooter className="flex gap-2">
-                  <Button 
-                    className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground"
-                  >
-                    Book Consultation
-                  </Button>
+                  <Link to="/book-consultation" className="flex-1">
+                    <Button 
+                      className="w-full rounded-full bg-[#E4B548] text-black font-semibold hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all"
+                    >
+                      Book Consultation
+                    </Button>
+                  </Link>
                   <Button 
                     variant="outline"
                     className="border-2 border-navy text-navy hover:bg-navy hover:text-primary-foreground"
