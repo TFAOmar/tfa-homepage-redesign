@@ -1,5 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Linkedin, Mail, Facebook, Instagram, Youtube, Quote, CheckCircle } from "lucide-react";
+import mannySotoImg from "@/assets/leadership/manny-soto.jpg";
+import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
 import { Button } from "@/components/ui/button";
 
 interface Leader {
@@ -23,7 +25,7 @@ const leaders: Leader[] = [
     name: "Manuel Soto",
     title: "CEO & Founder",
     subtitle: "National Financial Strategist | Founder | Speaker",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop",
+    image: mannySotoImg,
     intro: `Manuel "Manny" Soto is the CEO and Founder of The Financial Architects, one of the fastest-growing financial services organizations in the country. With nearly two decades of experience across insurance, retirement planning, investments, business strategies, and income protection, Manny has dedicated his career to helping families and business owners gain clarity, confidence, and control over their financial future.`,
     mantra: "Change what you're doing to change what you're getting",
     highlights: [
@@ -52,7 +54,7 @@ const leaders: Leader[] = [
   {
     name: "Omar Sanchez",
     title: "Chief Operating Officer & Managing Partner",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=600&fit=crop",
+    image: omarSanchezImg,
     intro: `Omar Sanchez is the Chief Operating Officer and Managing Partner of The Financial Architects, where he leads the firm's national expansion, advisor development, and the implementation of modern financial planning systems. Known for his ability to simplify complex strategies and build scalable processes, Omar has become one of the leading architects behind TFA's mission.`,
     highlights: [
       "First-generation Mexican-American from Southern California who recognized a gap in financial education within the Latino community",
