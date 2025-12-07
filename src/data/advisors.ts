@@ -147,6 +147,45 @@ export const advisors: Advisor[] = [
     image: "/src/assets/advisors/jennifer-ramos.jpg"
   },
   {
+    id: "hamlet-ohandjanian",
+    name: "Hamlet Ohandjanian",
+    title: "Financial Advisor",
+    type: "Advisor",
+    state: "California",
+    city: "Los Angeles",
+    region: "West",
+    bio: "Dedicated to providing comprehensive financial planning and wealth management strategies.",
+    specialties: ["Retirement Planning", "Investment Management", "Tax Strategies"],
+    licenses: ["Series 65", "Life & Health"],
+    image: "/src/assets/advisors/hamlet-ohandjanian.jpg"
+  },
+  {
+    id: "delia-plascencia",
+    name: "Delia Plascencia",
+    title: "Financial Advisor",
+    type: "Advisor",
+    state: "California",
+    city: "Los Angeles",
+    region: "West",
+    bio: "Passionate about helping families achieve their financial dreams through personalized guidance.",
+    specialties: ["Life Insurance", "Estate Planning", "Retirement Planning"],
+    licenses: ["Series 65", "Life & Health"],
+    image: "/src/assets/advisors/delia-plascencia.jpg"
+  },
+  {
+    id: "mariah-lorenzen",
+    name: "Mariah Lorenzen",
+    title: "Financial Advisor",
+    type: "Advisor",
+    state: "California",
+    city: "Orange County",
+    region: "West",
+    bio: "Committed to building lasting relationships and creating customized financial solutions.",
+    specialties: ["Retirement Planning", "Tax Strategies", "Estate Planning"],
+    licenses: ["Series 65", "Life & Health"],
+    image: "/src/assets/advisors/mariah-lorenzen.jpg"
+  },
+  {
     id: 1,
     name: "Michael Rodriguez",
     title: "Senior Financial Advisor",
