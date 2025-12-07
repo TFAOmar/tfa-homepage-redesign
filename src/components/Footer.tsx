@@ -60,20 +60,20 @@ const Footer = () => {
               <li className="flex items-start gap-2">
                 <Phone className="h-5 w-5 text-gold mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-primary-foreground/80">(800) 555-0123</p>
-                  <p className="text-primary-foreground/60 text-sm">Mon-Fri 8am-6pm EST</p>
+                  <p className="text-primary-foreground/80">(888) 350-5396</p>
+                  <p className="text-primary-foreground/60 text-sm">Mon-Fri 8am-6pm PST</p>
                 </div>
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="h-5 w-5 text-gold mt-0.5 flex-shrink-0" />
-                <a href="mailto:info@tfawealthplanning.com" className="text-primary-foreground/80 hover:text-gold transition-colors">
-                  info@tfawealthplanning.com
+                <a href="mailto:info@tfainsuranceadvisors.com" className="text-primary-foreground/80 hover:text-gold transition-colors">
+                  info@tfainsuranceadvisors.com
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="h-5 w-5 text-gold mt-0.5 flex-shrink-0" />
                 <p className="text-primary-foreground/80">
-                  29 Locations<br />Nationwide
+                  13890 Peyton Dr<br />Chino Hills, CA 91709
                 </p>
               </li>
             </ul>

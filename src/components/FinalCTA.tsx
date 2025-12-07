@@ -38,10 +38,10 @@ const FinalCTA = () => {
             </p>
             
             <a 
-              href="tel:8005550123"
+              href="tel:8883505396"
               className="text-primary-foreground/70 hover:text-gold text-base transition-colors mt-3"
             >
-              Or call <span className="font-semibold">(800) 555-0123</span>
+              Or call <span className="font-semibold">(888) 350-5396</span>
             </a>
           </div>
         </div>

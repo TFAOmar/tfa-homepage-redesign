@@ -36,10 +36,10 @@ const ContactInfo = () => {
           <div>
             <h4 className="font-semibold text-foreground mb-1">Phone</h4>
             <a 
-              href="tel:8005550123" 
+              href="tel:8883505396" 
               className="text-lg text-accent hover:underline"
             >
-              (800) 555-0123
+              (888) 350-5396
             </a>
             <p className="text-sm text-muted-foreground">Toll-free nationwide</p>
           </div>
@@ -53,10 +53,10 @@ const ContactInfo = () => {
           <div>
             <h4 className="font-semibold text-foreground mb-1">Email</h4>
             <a 
-              href="mailto:info@tfawealthplanning.com" 
+              href="mailto:info@tfainsuranceadvisors.com" 
               className="text-lg text-accent hover:underline"
             >
-              info@tfawealthplanning.com
+              info@tfainsuranceadvisors.com
             </a>
             <p className="text-sm text-muted-foreground">We respond within 24 hours</p>
           </div>
@@ -77,19 +77,20 @@ const ContactInfo = () => {
           </div>
         </div>
 
-        {/* Locations */}
+        {/* Headquarters */}
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
             <MapPin className="h-6 w-6 text-accent" />
           </div>
           <div>
-            <h4 className="font-semibold text-foreground mb-1">Locations</h4>
-            <p className="text-foreground mb-2">29 offices nationwide</p>
+            <h4 className="font-semibold text-foreground mb-1">Headquarters</h4>
+            <p className="text-foreground">13890 Peyton Dr</p>
+            <p className="text-foreground mb-2">Chino Hills, CA 91709</p>
             <Link 
               to="/locations"
               className="text-accent hover:underline text-sm font-medium"
             >
-              Find your nearest office →
+              View all 29 office locations →
             </Link>
           </div>
         </div>
