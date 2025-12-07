@@ -186,6 +186,19 @@ export const advisors: Advisor[] = [
     image: "/src/assets/advisors/mariah-lorenzen.jpg"
   },
   {
+    id: "sean-cagle",
+    name: "Sean Cagle",
+    title: "Financial Advisor",
+    type: "Advisor",
+    state: "California",
+    city: "Los Angeles",
+    region: "West",
+    bio: "Driven to help clients build wealth and achieve financial freedom through strategic planning.",
+    specialties: ["Retirement Planning", "Investment Management", "Tax Strategies"],
+    licenses: ["Series 65", "Life & Health"],
+    image: "/src/assets/advisors/sean-cagle.jpg"
+  },
+  {
     id: 1,
     name: "Michael Rodriguez",
     title: "Senior Financial Advisor",
