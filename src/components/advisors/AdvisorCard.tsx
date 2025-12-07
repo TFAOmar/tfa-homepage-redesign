@@ -16,13 +16,21 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
       className="glass hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col group overflow-hidden animate-fade-in"
       style={{ animationDelay: `${index * 50}ms` }}
     >
-      {/* Headshot Placeholder */}
-      <div className="relative h-48 bg-gradient-to-br from-navy/20 to-accent/20 overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-32 h-32 rounded-full bg-gradient-to-br from-navy to-accent/60 flex items-center justify-center text-primary-foreground text-4xl font-bold">
-            {advisor.name.split(' ').map(n => n[0]).join('')}
+      {/* Headshot */}
+      <div className="relative h-56 bg-gradient-to-br from-navy/20 to-accent/20 overflow-hidden">
+        {advisor.image ? (
+          <img 
+            src={advisor.image} 
+            alt={advisor.name}
+            className="w-full h-full object-cover object-top"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-navy to-accent/60 flex items-center justify-center text-primary-foreground text-4xl font-bold">
+              {advisor.name.split(' ').map(n => n[0]).join('')}
+            </div>
           </div>
-        </div>
+        )}
         {/* Subtle glow effect on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
