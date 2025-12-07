@@ -17,6 +17,19 @@ export interface Advisor {
 
 export const advisors: Advisor[] = [
   {
+    id: 0,
+    name: "Manuel Soto",
+    title: "Founder & CEO",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Founder of TFA Insurance Advisors, dedicated to helping families achieve financial security and build lasting legacies.",
+    specialties: ["Retirement Planning", "Tax Strategies", "Estate Planning", "Business Planning"],
+    licenses: ["Series 65", "Life & Health"],
+    image: "/src/assets/leadership/manny-soto.jpg"
+  },
+  {
     id: 1,
     name: "Michael Rodriguez",
     title: "Senior Financial Advisor",
