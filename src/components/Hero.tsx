@@ -34,7 +34,7 @@ const Hero = () => {
             <Link to="/book-consultation">
               <Button 
                 size="lg" 
-                className="w-full sm:w-auto max-w-[320px] rounded-full bg-[#E4B548] text-black font-semibold px-8 py-6 md:py-7 text-base md:text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all hover:scale-[1.05] border-2 border-[#E4B548]"
+                className="w-full sm:w-auto max-w-[320px] btn-primary-cta px-8 py-6 md:py-7 text-base md:text-lg hover:scale-[1.05] border-2 border-[#E4B548] hover:border-[#1a2744]"
               >
                 Book Consultation
                 <Calendar className="ml-2 h-5 w-5" />

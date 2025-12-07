@@ -19,7 +19,7 @@ const AdvisorsCTA = () => {
             <Link to="/book-consultation">
               <Button 
                 size="lg" 
-                className="rounded-full bg-[#E4B548] text-black font-semibold px-8 py-6 text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all"
+                className="btn-primary-cta px-8 py-6 text-lg"
               >
                 <Calendar className="mr-2 h-5 w-5" />
                 Request a Match

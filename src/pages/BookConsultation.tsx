@@ -170,7 +170,7 @@ const BookConsultation = () => {
                     <Link to="/thank-you">
                       <Button 
                         onClick={handleCalendlySchedule}
-                        className="rounded-full bg-[#E4B548] text-black font-semibold px-8 py-6 text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all hover:scale-105"
+                        className="btn-primary-cta px-8 py-6 text-lg hover:scale-105"
                       >
                         Schedule My Consultation
                         <ArrowRight className="ml-2 h-5 w-5" />
@@ -312,7 +312,7 @@ const BookConsultation = () => {
           </p>
           <a href="#top">
             <Button 
-              className="rounded-full bg-[#E4B548] text-black font-semibold px-8 py-6 text-lg hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all hover:scale-105"
+              className="btn-primary-cta px-8 py-6 text-lg hover:scale-105"
             >
               Book Consultation Now
               <Calendar className="ml-2 h-5 w-5" />

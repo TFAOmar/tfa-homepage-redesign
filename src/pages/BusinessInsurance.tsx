@@ -44,7 +44,7 @@ const BusinessInsurance = () => {
             <a
               href="#intake-form"
               data-analytics-id="hero-cta-request-review"
-              className="rounded-full bg-[#E4B548] text-black font-semibold px-8 py-4 hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all"
+              className="btn-primary-cta px-8 py-4"
             >
               Request a Business Insurance Review
             </a>
@@ -179,7 +179,7 @@ const BusinessInsurance = () => {
             <a
               href="#intake-form"
               data-analytics-id="process-cta-start-review"
-              className="inline-block rounded-full bg-[#E4B548] text-black font-semibold px-8 py-4 hover:shadow-[0_0_25px_rgba(228,181,72,0.45)] transition-all"
+              className="inline-block btn-primary-cta px-8 py-4"
             >
               Start My Business Insurance Review
             </a>
