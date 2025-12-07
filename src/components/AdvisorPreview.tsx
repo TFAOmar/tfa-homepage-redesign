@@ -26,11 +26,11 @@ const AdvisorPreview = () => {
               className="group bg-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-fade-in hover:-translate-y-1"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="aspect-[4/3] overflow-hidden bg-secondary/20">
+              <div className="aspect-square overflow-hidden bg-gradient-to-b from-gray-400 to-gray-600">
                 <img
                   src={advisor.image}
                   alt={advisor.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
               
