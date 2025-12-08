@@ -54,16 +54,16 @@ const CarrierPartners = () => {
             
             {/* Scrolling container */}
             <div className="carousel-scroll group/carousel">
-              <div className="carousel-track flex gap-12 items-center">
+              <div className="carousel-track flex gap-16 md:gap-20 items-center">
                 {duplicatedCarriers.map((carrier, index) => (
                   <div
                     key={`${carrier.name}-${index}`}
-                    className="group relative flex-shrink-0 w-80 h-40 flex items-center justify-center transition-all duration-300 hover:scale-105"
+                    className="group relative flex-shrink-0 w-48 sm:w-56 md:w-96 h-28 sm:h-32 md:h-48 flex items-center justify-center transition-all duration-300 hover:scale-105"
                   >
                     <img
                       src={carrier.logo}
                       alt={`${carrier.name} logo`}
-                      className="max-h-36 w-auto object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 ease-out"
+                      className="max-h-24 sm:max-h-28 md:max-h-44 w-auto object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 ease-out"
                       title={carrier.name}
                       loading="lazy"
                     />
