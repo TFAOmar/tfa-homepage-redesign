@@ -162,12 +162,12 @@ export const advisors: Advisor[] = [
   {
     id: "delia-plascencia",
     name: "Delia Plascencia",
-    title: "Financial Advisor",
+    title: "Franchise Partner",
     type: "Advisor",
     state: "California",
     city: "Los Angeles",
     region: "West",
-    bio: "Passionate about helping families achieve their financial dreams through personalized guidance.",
+    bio: "Born to parents who migrated from Guadalajara, Mexico, Delia has always been fueled by the immigrant spirit. A mother of two incredible children, she co-owned a staffing agency in the Inland Empire before launching an interior design firm in 2016. In 2020, she co-launched a podcast on relationships and faith. Today, she and her sister own a TFA franchise, helping families with financial planning—guided by her faith, resilience, and pursuit of meaningful connections.",
     specialties: ["Life Insurance", "Estate Planning", "Retirement Planning"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/delia-plascencia.jpg"
