@@ -110,13 +110,13 @@ export const advisors: Advisor[] = [
   {
     id: "jorge-hernandez",
     name: "Jorge Hernandez",
-    title: "Senior Financial Advisor",
+    title: "Managing Partner",
     type: "Advisor",
     state: "California",
     city: "Inland Empire",
     region: "West",
-    bio: "Bringing years of experience to help clients achieve their financial goals and protect their families.",
-    specialties: ["Business Planning", "Retirement Planning", "Tax Strategies"],
+    bio: "With over 30 years in estate planning, Jorge is a trusted guide for families and business owners. Holding an English degree from University of La Verne and a Juris Doctorate, he began his career at Transamerica before becoming a Managing Partner at TFA. Jorge regularly leads estate planning workshops, turning legal jargon into everyday language and helping families avoid probate, reduce taxes, and pass down wealth efficiently.",
+    specialties: ["Estate Planning", "Tax Strategies", "Business Planning"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/jorge-hernandez.jpg"
   },
