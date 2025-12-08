@@ -1,4 +1,3 @@
-import { Shield, Award, CheckCircle2, Building2, Scale, Users2 } from "lucide-react";
 import allianzLogo from "@/assets/carriers/allianz.png";
 import atheneLogoLogo from "@/assets/carriers/athene.png";
 import corebridgeLogo from "@/assets/carriers/corebridge.png";
@@ -31,39 +30,6 @@ const carriers = [
   { name: "American National", logo: americanNationalLogo },
 ];
 
-const affiliations = [
-  {
-    icon: Shield,
-    name: "NAIFA Member",
-    description: "National Association of Insurance and Financial Advisors",
-  },
-  {
-    icon: Award,
-    name: "BBB Accredited",
-    description: "Better Business Bureau A+ Rating",
-  },
-  {
-    icon: CheckCircle2,
-    name: "State Licensed",
-    description: "Licensed across all 50 states",
-  },
-  {
-    icon: Building2,
-    name: "FSP Professional",
-    description: "Society of Financial Service Professionals",
-  },
-  {
-    icon: Scale,
-    name: "FINRA Compliant",
-    description: "Adhering to regulatory standards",
-  },
-  {
-    icon: Users2,
-    name: "MDRT Member",
-    description: "Million Dollar Round Table",
-  },
-];
-
 const TrustStrip = () => {
   const duplicatedCarriers = [...carriers, ...carriers];
 
@@ -78,7 +44,7 @@ const TrustStrip = () => {
         </div>
 
         {/* Carrier Logos Carousel */}
-        <div className="relative mb-24 md:mb-32">
+        <div className="relative">
           <div className="flex gap-16 md:gap-20 animate-scroll hover:pause-animation">
             {duplicatedCarriers.map((carrier, index) => (
               <div
@@ -93,30 +59,6 @@ const TrustStrip = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Professional Affiliations - Clean and minimal */}
-        <div className="text-center mb-12 md:mb-14">
-          <h3 className="text-2xl md:text-3xl font-bold text-navy">
-            Licensed & Accredited Nationwide
-          </h3>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 max-w-3xl mx-auto">
-          {affiliations.slice(0, 4).map((affiliation, index) => (
-            <div
-              key={index}
-              className="group flex flex-col items-center text-center animate-fade-in"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 text-accent mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300 group-hover:scale-110">
-                <affiliation.icon className="h-7 w-7" strokeWidth={1.5} />
-              </div>
-              <h4 className="font-semibold text-navy text-base">
-                {affiliation.name}
-              </h4>
-            </div>
-          ))}
         </div>
       </div>
 
