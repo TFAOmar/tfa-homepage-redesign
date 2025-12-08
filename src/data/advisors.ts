@@ -45,13 +45,13 @@ export const advisors: Advisor[] = [
   {
     id: "elena-esquivel",
     name: "Elena Esquivel",
-    title: "Financial Advisor",
+    title: "Financial Strategist & Retirement Specialist",
     type: "Advisor",
     state: "California",
     city: "Los Angeles",
     region: "West",
-    bio: "Dedicated to empowering clients with financial knowledge and strategies for long-term success.",
-    specialties: ["Estate Planning", "Tax Strategies", "Retirement Planning"],
+    bio: "With over 15 years in Insurance and Financial Services, Elena specializes in Medicare planning, Income Protection, and Retirement Strategies. A former top producer at Kaiser Permanente for five consecutive years, she now guides clients through 401(k) rollovers, wealth protection, and retirement income maximization. Her mission: to empower families to build a legacy of financial freedom and peace of mind.",
+    specialties: ["Retirement Planning", "401(k) Guidance", "Estate Planning", "Tax Strategies"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/elena-esquivel.jpg"
   },
