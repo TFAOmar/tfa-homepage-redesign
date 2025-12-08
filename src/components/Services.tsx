@@ -5,39 +5,63 @@ import {
   Heart, 
   PiggyBank, 
   Users,
-  ArrowRight
+  ArrowRight,
+  FileText,
+  RefreshCw,
+  Umbrella,
+  Building2
 } from "lucide-react";
 
 const services = [
   {
-    icon: Shield,
-    title: "Life Insurance",
-    description: "Protect your family's future if something happens to you.",
+    icon: TrendingUp,
+    title: "Income Planning",
+    description: "Create reliable income streams that last throughout retirement.",
   },
   {
     icon: PiggyBank,
-    title: "Retirement Planning",
-    description: "Enjoy retirement without worrying about money.",
+    title: "Investment Management",
+    description: "Build a diversified portfolio aligned with your goals.",
   },
   {
-    icon: TrendingUp,
-    title: "Investment Planning",
-    description: "Grow your wealth with guidance you can trust.",
-  },
-  {
-    icon: Heart,
-    title: "Estate Planning",
-    description: "Ensure your legacy is protected and your family is cared for.",
+    icon: FileText,
+    title: "Estate & Legacy Planning",
+    description: "Ensure your wealth transfers efficiently to loved ones.",
   },
   {
     icon: Calculator,
-    title: "Tax Strategies",
-    description: "Keep more of what you earn with simple, smart planning.",
+    title: "Tax Planning",
+    description: "Reduce your tax burden and keep more of what you earn.",
+  },
+  {
+    icon: Heart,
+    title: "Health Care Planning",
+    description: "Navigate Medicare and healthcare cost projections.",
+  },
+  {
+    icon: Shield,
+    title: "Annuities",
+    description: "Guaranteed income and principal protection options.",
+  },
+  {
+    icon: RefreshCw,
+    title: "401(k) Rollovers",
+    description: "Consolidate retirement accounts with more options.",
+  },
+  {
+    icon: Umbrella,
+    title: "Insurance",
+    description: "Protect your family with life, disability, and LTC coverage.",
   },
   {
     icon: Users,
-    title: "Family Protection",
-    description: "Comprehensive care that grows with your family.",
+    title: "Group Retirement Plans",
+    description: "Design employer-sponsored retirement benefits.",
+  },
+  {
+    icon: Building2,
+    title: "Business Insurance",
+    description: "Commercial coverage tailored to your business needs.",
   },
 ];
 
