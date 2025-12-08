@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import allianzLogo from "@/assets/carriers/allianz.png";
 import atheneLogoLogo from "@/assets/carriers/athene.png";
 import corebridgeLogo from "@/assets/carriers/corebridge.png";
@@ -14,20 +15,20 @@ import prudentialLogo from "@/assets/carriers/prudential.png";
 import americanNationalLogo from "@/assets/carriers/american-national.png";
 
 const carriers = [
-  { name: "Allianz", logo: allianzLogo },
-  { name: "Athene", logo: atheneLogoLogo },
-  { name: "Corebridge Financial", logo: corebridgeLogo },
-  { name: "F&G", logo: fngLogo },
-  { name: "Foresters Financial", logo: forestersLogo },
-  { name: "Lincoln Financial", logo: lincolnLogo },
-  { name: "MassMutual", logo: massmutualLogo },
-  { name: "Midland National", logo: midlandLogo },
-  { name: "Mutual of Omaha", logo: mutualOmahaLogo },
-  { name: "National Life Group", logo: nationalLifeLogo },
-  { name: "North American", logo: northAmericanLogo },
-  { name: "Principal", logo: principalLogo },
-  { name: "Prudential", logo: prudentialLogo },
-  { name: "American National", logo: americanNationalLogo },
+  { name: "Allianz", logo: allianzLogo, id: "allianz" },
+  { name: "Athene", logo: atheneLogoLogo, id: "athene" },
+  { name: "Corebridge Financial", logo: corebridgeLogo, id: "corebridge" },
+  { name: "F&G", logo: fngLogo, id: "fng" },
+  { name: "Foresters Financial", logo: forestersLogo, id: "foresters" },
+  { name: "Lincoln Financial", logo: lincolnLogo, id: "lincoln" },
+  { name: "MassMutual", logo: massmutualLogo, id: "massmutual" },
+  { name: "Midland National", logo: midlandLogo, id: "midland-national" },
+  { name: "Mutual of Omaha", logo: mutualOmahaLogo, id: "mutual-of-omaha" },
+  { name: "National Life Group", logo: nationalLifeLogo, id: "national-life" },
+  { name: "North American", logo: northAmericanLogo, id: "north-american" },
+  { name: "Principal", logo: principalLogo, id: "principal" },
+  { name: "Prudential", logo: prudentialLogo, id: "prudential" },
+  { name: "American National", logo: americanNationalLogo, id: "american-national" },
 ];
 
 const TrustStrip = () => {
@@ -47,16 +48,17 @@ const TrustStrip = () => {
         <div className="relative">
           <div className="flex gap-16 md:gap-20 animate-scroll hover:pause-animation">
             {duplicatedCarriers.map((carrier, index) => (
-              <div
+              <Link
                 key={index}
-                className="flex-shrink-0 flex items-center justify-center h-16 md:h-20 w-36 md:w-44 grayscale hover:grayscale-0 transition-all duration-500 opacity-60 hover:opacity-100"
+                to={`/partners?carrier=${carrier.id}`}
+                className="flex-shrink-0 flex items-center justify-center h-16 md:h-20 w-36 md:w-44 grayscale hover:grayscale-0 transition-all duration-500 opacity-60 hover:opacity-100 cursor-pointer"
               >
                 <img
                   src={carrier.logo}
                   alt={`${carrier.name} logo`}
                   className="max-h-full max-w-full object-contain"
                 />
-              </div>
+              </Link>
             ))}
           </div>
         </div>
