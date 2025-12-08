@@ -41,7 +41,7 @@ const FloatingCTA = ({ hideOnPages = ["/contact"] }: FloatingCTAProps) => {
         <div className="container mx-auto px-5 py-5 flex items-center justify-between gap-4">
           {/* Mobile: Stacked layout */}
           <div className="flex-1 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <p className="text-white text-sm sm:text-base font-semibold text-center sm:text-left">
+            <p className="text-[#E4B548] text-sm sm:text-base font-semibold text-center sm:text-left">
               Ready to secure your future?
             </p>
             <Link to="/book-consultation">
