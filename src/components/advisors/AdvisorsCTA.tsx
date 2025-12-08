@@ -26,14 +26,16 @@ const AdvisorsCTA = () => {
               </Button>
             </Link>
             
-            <Button 
-              size="lg"
-              variant="outline"
-              className="border-2 border-navy text-navy hover:bg-navy hover:text-primary-foreground text-lg px-8 py-6"
-            >
-              <Phone className="mr-2 h-5 w-5" />
-              Call (800) 555-0123
-            </Button>
+            <a href="tel:+18778324872">
+              <Button 
+                size="lg"
+                variant="outline"
+                className="border-2 border-navy text-navy hover:bg-navy hover:text-primary-foreground text-lg px-8 py-6"
+              >
+                <Phone className="mr-2 h-5 w-5" />
+                Call (877) 832-4872
+              </Button>
+            </a>
           </div>
 
           <p className="text-muted-foreground mt-6 text-sm">
