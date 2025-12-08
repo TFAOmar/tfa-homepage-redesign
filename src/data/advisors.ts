@@ -175,14 +175,14 @@ export const advisors: Advisor[] = [
   {
     id: "mariah-lorenzen",
     name: "Mariah Lorenzen",
-    title: "Financial Advisor",
+    title: "Head of Franchise Operations",
     type: "Advisor",
     state: "California",
     city: "Orange County",
     region: "West",
-    bio: "Committed to building lasting relationships and creating customized financial solutions.",
-    specialties: ["Retirement Planning", "Tax Strategies", "Estate Planning"],
-    licenses: ["Series 65", "Life & Health"],
+    bio: "Mariah has extensive experience in financial services, serving as Head of Franchise Operations at TFA since 2019. Her career spans roles at New American Funding, Finance of America Commercial, CrossCountry Mortgage, Carrington Mortgage Services, and Green Tree Servicing. A licensed loan originator focused on purchase and refinance transactions, Mariah brings deep mortgage expertise to help clients achieve their financial goals.",
+    specialties: ["Mortgage Financing", "Retirement Planning", "Tax Strategies"],
+    licenses: ["Loan Originator", "Life & Health"],
     image: "/src/assets/advisors/mariah-lorenzen.jpg"
   },
   {
