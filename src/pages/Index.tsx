@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import TrustStrip from "@/components/TrustStrip";
-import WhyTrustTFA from "@/components/WhyTrustTFA";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import AdvisorPreview from "@/components/AdvisorPreview";
@@ -14,7 +13,6 @@ const Index = () => {
       <Hero />
       <TrustStrip />
       <Services />
-      <WhyTrustTFA />
       <Process />
       <AdvisorPreview />
       <Testimonials />
