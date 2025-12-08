@@ -71,12 +71,12 @@ export const advisors: Advisor[] = [
   {
     id: "ronald-brown",
     name: "Ronald Brown",
-    title: "Financial Advisor",
+    title: "Managing Partner",
     type: "Advisor",
     state: "Texas",
     city: "Houston",
     region: "Southwest",
-    bio: "Committed to helping families achieve financial independence through tailored planning strategies.",
+    bio: "Ron retired from his first career of over 30 years in the automotive industry, working with top dealers including 18 years with the Penske organization where he grew from general sales manager to president of a region. With a love of helping people and seeing the need for sound financial education, Ron joined his life partner Jennifer Ramos in business to help families achieve financial security.",
     specialties: ["Retirement Planning", "Life Insurance", "Estate Planning"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/ronald-brown.jpg"
