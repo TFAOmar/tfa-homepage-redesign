@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import PartnersHero from "@/components/partners/PartnersHero";
 import CarrierCard from "@/components/partners/CarrierCard";
 import CarrierDetail from "@/components/partners/CarrierDetail";
@@ -7,7 +8,18 @@ import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Partners = () => {
+  const [searchParams] = useSearchParams();
   const [selectedCarrier, setSelectedCarrier] = useState<string | null>(null);
+
+  useEffect(() => {
+    const carrierParam = searchParams.get("carrier");
+    if (carrierParam && carrierDetails.some(c => c.id === carrierParam)) {
+      setSelectedCarrier(carrierParam);
+      setTimeout(() => {
+        document.getElementById('carrier-detail')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  }, [searchParams]);
 
   const handleCarrierSelect = (carrierId: string) => {
     setSelectedCarrier(carrierId);
