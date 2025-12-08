@@ -32,7 +32,7 @@ const AdvisorsFilters = ({
   ].filter(Boolean).length;
 
   return (
-    <section className="py-12 bg-gradient-to-b from-secondary/30 to-background sticky top-0 z-40 backdrop-blur-sm">
+    <section className="py-12 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           {/* Search Bar */}
