@@ -97,14 +97,14 @@ export const advisors: Advisor[] = [
   {
     id: "celeste-sierra",
     name: "Celeste Sierra",
-    title: "Financial Advisor",
-    type: "Advisor",
+    title: "Mortgage Broker & Financial Advisor",
+    type: "Broker",
     state: "California",
     city: "Riverside",
     region: "West",
-    bio: "Passionate about building lasting client relationships and creating customized financial plans.",
-    specialties: ["Life Insurance", "Estate Planning", "Retirement Planning"],
-    licenses: ["Series 65", "Life & Health"],
+    bio: "With 26 years in mortgage financing, Celeste is Broker/Owner of LOAN|BOX Loans. Her career spans leadership roles at Bank of Manhattan, JL Investments, and American General Finance. A California Real Estate Broker and 2011 'Outstanding Small Businesswoman' honoree, she's passionate about community involvement and is a proud mother of two daughters, Cayllie and Mayah.",
+    specialties: ["Mortgage Financing", "Real Estate", "Retirement Planning"],
+    licenses: ["Real Estate Broker", "Life & Health"],
     image: "/src/assets/advisors/celeste-sierra.jpg"
   },
   {
