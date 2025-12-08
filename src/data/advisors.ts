@@ -32,13 +32,13 @@ export const advisors: Advisor[] = [
   {
     id: "israel-castaneda",
     name: "Israel Castaneda",
-    title: "Financial Advisor",
+    title: "Partner",
     type: "Advisor",
     state: "California",
     city: "Los Angeles",
     region: "West",
-    bio: "Passionate about helping families build wealth and secure their financial futures through personalized strategies.",
-    specialties: ["Retirement Planning", "Life Insurance", "Investment Management"],
+    bio: "Israel helps families build generational security and long-term financial peace of mind. Specializing in life insurance, retirement planning, living trusts, and estate-protection strategies, he makes complex financial decisions easy to understand. Known for his clear communication and genuine care, Israel focuses on the 'why' behind every financial move, helping families protect what matters most and build a legacy for the next generation.",
+    specialties: ["Life Insurance", "Retirement Planning", "Estate Planning", "Tax Strategies"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/israel-castaneda.jpg"
   },
