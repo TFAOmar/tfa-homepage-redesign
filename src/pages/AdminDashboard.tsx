@@ -1,155 +1,165 @@
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAdvisorStore, DynamicAdvisor } from "@/stores/advisorStore";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { CheckCircle2, XCircle, Clock, Shield, MapPin } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { Shield, Users, Clock, EyeOff, Archive, Settings } from "lucide-react";
+import AdminHeader from "@/components/admin/AdminHeader";
+import AdvisorTable from "@/components/admin/AdvisorTable";
+import AdvisorEditModal from "@/components/admin/AdvisorEditModal";
+import BulkActionsBar from "@/components/admin/BulkActionsBar";
+import PendingApprovals from "@/components/admin/PendingApprovals";
 
 const AdminDashboard = () => {
   const {
     advisors,
     adminApprovalEnabled,
     toggleAdminApproval,
+    updateAdvisor,
     approveAdvisor,
     rejectAdvisor,
+    hideAdvisor,
+    archiveAdvisor,
+    restoreAdvisor,
+    deleteAdvisorPermanently,
+    bulkApprove,
+    bulkHide,
+    bulkArchive,
     getPendingAdvisors,
-    getApprovedAdvisors,
+    getPublishedAdvisors,
+    getHiddenAdvisors,
+    getArchivedAdvisors,
   } = useAdvisorStore();
 
-  const pendingAdvisors = getPendingAdvisors();
-  const approvedAdvisors = getApprovedAdvisors();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [stateFilter, setStateFilter] = useState("All States");
+  const [titleFilter, setTitleFilter] = useState("All Titles");
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [editingAdvisor, setEditingAdvisor] = useState<DynamicAdvisor | null>(null);
+  const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleApprove = (id: string, name: string) => {
+  const pendingAdvisors = getPendingAdvisors();
+  const publishedAdvisors = getPublishedAdvisors();
+  const hiddenAdvisors = getHiddenAdvisors();
+  const archivedAdvisors = getArchivedAdvisors();
+
+  const filterAdvisors = (list: DynamicAdvisor[]) => {
+    return list.filter((advisor) => {
+      const matchesSearch = searchQuery === "" || 
+        advisor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        advisor.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        advisor.state.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesState = stateFilter === "All States" || advisor.state === stateFilter;
+      const matchesTitle = titleFilter === "All Titles" || advisor.title === titleFilter;
+
+      return matchesSearch && matchesState && matchesTitle;
+    });
+  };
+
+  const currentAdvisors = useMemo(() => {
+    switch (activeTab) {
+      case "pending": return filterAdvisors(pendingAdvisors);
+      case "published": return filterAdvisors(publishedAdvisors);
+      case "hidden": return filterAdvisors(hiddenAdvisors);
+      case "archived": return filterAdvisors(archivedAdvisors);
+      default: return filterAdvisors(advisors);
+    }
+  }, [activeTab, advisors, searchQuery, stateFilter, titleFilter]);
+
+  const handleApprove = (id: string) => {
     approveAdvisor(id);
-    toast.success(`Approved ${name}`, {
-      description: "Profile is now live in the directory.",
-    });
+    toast.success("Advisor Approved", { description: "Profile is now live in the directory." });
   };
 
-  const handleReject = (id: string, name: string) => {
-    rejectAdvisor(id);
-    toast.error(`Rejected ${name}`, {
-      description: "Profile has been rejected.",
-    });
+  const handleReject = (id: string, reason?: string) => {
+    rejectAdvisor(id, reason);
+    toast.error("Profile Rejected", { description: reason || "Profile has been rejected." });
   };
 
-  const AdvisorCard = ({ advisor, showActions }: { advisor: DynamicAdvisor; showActions: boolean }) => (
-    <Card className="glass">
-      <CardContent className="p-6">
-        <div className="flex gap-4">
-          {advisor.image ? (
-            <img
-              src={advisor.image}
-              alt={advisor.name}
-              className="w-20 h-20 rounded-full object-cover border-2 border-accent"
-            />
-          ) : (
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-navy to-accent/60 flex items-center justify-center text-primary-foreground text-2xl font-bold">
-              {advisor.name.split(' ').map(n => n[0]).join('')}
-            </div>
-          )}
+  const handleHide = (id: string) => {
+    hideAdvisor(id);
+    toast.info("Profile Hidden", { description: "Profile removed from public directory." });
+  };
 
-          <div className="flex-1 space-y-3">
-            <div>
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-xl font-bold text-navy">{advisor.name}</h3>
-                  <p className="text-sm text-muted-foreground">{advisor.title}</p>
-                  <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-1">
-                    <MapPin className="h-3.5 w-3.5 text-accent" />
-                    <span>{advisor.city}, {advisor.state}</span>
-                  </div>
-                </div>
-                <Badge variant={advisor.status === 'approved' ? 'default' : 'secondary'} className="ml-2">
-                  {advisor.status === 'approved' ? (
-                    <><CheckCircle2 className="h-3 w-3 mr-1" /> Approved</>
-                  ) : advisor.status === 'pending' ? (
-                    <><Clock className="h-3 w-3 mr-1" /> Pending</>
-                  ) : (
-                    <><XCircle className="h-3 w-3 mr-1" /> Rejected</>
-                  )}
-                </Badge>
-              </div>
-            </div>
+  const handleArchive = (id: string) => {
+    archiveAdvisor(id);
+    toast.info("Profile Archived", { description: "Profile moved to archive." });
+  };
 
-            <p className="text-sm text-foreground/80 leading-relaxed">{advisor.bio}</p>
+  const handleRestore = (id: string) => {
+    restoreAdvisor(id);
+    toast.success("Profile Restored", { description: "Profile is now live in the directory." });
+  };
 
-            <div className="flex flex-wrap gap-1.5">
-              {advisor.specialties.slice(0, 3).map((specialty, idx) => (
-                <Badge
-                  key={idx}
-                  variant="secondary"
-                  className="text-xs bg-accent/10 text-accent border-accent/20"
-                >
-                  {specialty}
-                </Badge>
-              ))}
-            </div>
+  const handleDelete = (id: string) => {
+    deleteAdvisorPermanently(id);
+    toast.error("Profile Deleted", { description: "Profile permanently removed." });
+  };
 
-            <div className="flex items-center gap-2 flex-wrap">
-              {advisor.licenses.map((license, idx) => (
-                <div key={idx} className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Shield className="h-3 w-3 text-accent" />
-                  <span>{license}</span>
-                </div>
-              ))}
-            </div>
+  const handleSaveEdit = (id: string, updates: Partial<DynamicAdvisor>) => {
+    updateAdvisor(id, updates);
+    toast.success("Profile Updated", { description: "Changes saved successfully." });
+  };
 
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>📧 {advisor.email}</span>
-              <span>•</span>
-              <span>📞 {advisor.phone}</span>
-              <span>•</span>
-              <span>🎓 {advisor.yearsOfExperience} years exp.</span>
-            </div>
+  const handleBulkApprove = () => {
+    bulkApprove(selectedIds);
+    toast.success(`${selectedIds.length} Profiles Approved`);
+    setSelectedIds([]);
+  };
 
-            {showActions && advisor.status === 'pending' && (
-              <div className="flex gap-2 pt-2">
-                <Button
-                  onClick={() => handleApprove(advisor.id, advisor.name)}
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" />
-                  Approve
-                </Button>
-                <Button
-                  onClick={() => handleReject(advisor.id, advisor.name)}
-                  variant="destructive"
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Reject
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  const handleBulkHide = () => {
+    bulkHide(selectedIds);
+    toast.info(`${selectedIds.length} Profiles Hidden`);
+    setSelectedIds([]);
+  };
+
+  const handleBulkArchive = () => {
+    bulkArchive(selectedIds);
+    toast.info(`${selectedIds.length} Profiles Archived`);
+    setSelectedIds([]);
+  };
 
   return (
     <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="text-center mb-12 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
-            Admin Dashboard
-          </h1>
+        {/* Header */}
+        <div className="text-center mb-8 animate-fade-in">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Shield className="h-10 w-10 text-accent" />
+            <h1 className="text-4xl md:text-5xl font-bold text-navy">Admin Dashboard</h1>
+          </div>
           <p className="text-xl text-muted-foreground">
-            Manage advisor profiles and approval settings
+            Manage advisor profiles and approval workflows
           </p>
         </div>
 
+        {/* Stats & Filters */}
+        <div className="mb-8">
+          <AdminHeader
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            stateFilter={stateFilter}
+            onStateFilterChange={setStateFilter}
+            titleFilter={titleFilter}
+            onTitleFilterChange={setTitleFilter}
+            totalAdvisors={advisors.length}
+            pendingCount={pendingAdvisors.length}
+          />
+        </div>
+
         {/* Settings Card */}
-        <Card className="glass mb-8 animate-fade-in" style={{ animationDelay: "100ms" }}>
-          <CardHeader>
-            <CardTitle className="text-navy">Settings</CardTitle>
-            <CardDescription>Configure approval workflow</CardDescription>
+        <Card className="glass mb-8 animate-fade-in">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-2">
+              <Settings className="h-5 w-5 text-accent" />
+              <CardTitle className="text-navy">Workflow Settings</CardTitle>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
@@ -161,87 +171,119 @@ const AdminDashboard = () => {
                     : "New profiles are automatically published to directory"}
                 </p>
               </div>
-              <Switch
-                checked={adminApprovalEnabled}
-                onCheckedChange={toggleAdminApproval}
-              />
+              <Switch checked={adminApprovalEnabled} onCheckedChange={toggleAdminApproval} />
             </div>
           </CardContent>
         </Card>
 
-        {/* Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card className="glass animate-fade-in" style={{ animationDelay: "200ms" }}>
-            <CardContent className="p-6 text-center">
-              <div className="text-4xl font-bold text-navy mb-2">{advisors.length}</div>
-              <div className="text-muted-foreground">Total Submissions</div>
-            </CardContent>
-          </Card>
-          <Card className="glass animate-fade-in" style={{ animationDelay: "250ms" }}>
-            <CardContent className="p-6 text-center">
-              <div className="text-4xl font-bold text-green-600 mb-2">{approvedAdvisors.length}</div>
-              <div className="text-muted-foreground">Approved</div>
-            </CardContent>
-          </Card>
-          <Card className="glass animate-fade-in" style={{ animationDelay: "300ms" }}>
-            <CardContent className="p-6 text-center">
-              <div className="text-4xl font-bold text-orange-600 mb-2">{pendingAdvisors.length}</div>
-              <div className="text-muted-foreground">Pending Review</div>
-            </CardContent>
-          </Card>
+        {/* Bulk Actions */}
+        <div className="mb-4">
+          <BulkActionsBar
+            selectedCount={selectedIds.length}
+            onClear={() => setSelectedIds([])}
+            onBulkApprove={handleBulkApprove}
+            onBulkHide={handleBulkHide}
+            onBulkArchive={handleBulkArchive}
+          />
         </div>
 
-        {/* Pending Advisors */}
-        {pendingAdvisors.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-navy mb-6 animate-fade-in" style={{ animationDelay: "350ms" }}>
-              Pending Approval ({pendingAdvisors.length})
-            </h2>
-            <div className="space-y-4">
-              {pendingAdvisors.map((advisor, index) => (
-                <div
-                  key={advisor.id}
-                  className="animate-fade-in"
-                  style={{ animationDelay: `${400 + index * 50}ms` }}
-                >
-                  <AdvisorCard advisor={advisor} showActions={true} />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="glass p-1">
+            <TabsTrigger value="all" className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
+              <Users className="h-4 w-4 mr-2" />
+              All ({advisors.length})
+            </TabsTrigger>
+            <TabsTrigger value="pending" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">
+              <Clock className="h-4 w-4 mr-2" />
+              Pending ({pendingAdvisors.length})
+            </TabsTrigger>
+            <TabsTrigger value="published" className="data-[state=active]:bg-green-600 data-[state=active]:text-white">
+              Published ({publishedAdvisors.length})
+            </TabsTrigger>
+            <TabsTrigger value="hidden" className="data-[state=active]:bg-gray-500 data-[state=active]:text-white">
+              <EyeOff className="h-4 w-4 mr-2" />
+              Hidden ({hiddenAdvisors.length})
+            </TabsTrigger>
+            <TabsTrigger value="archived" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
+              <Archive className="h-4 w-4 mr-2" />
+              Archived ({archivedAdvisors.length})
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Approved Advisors */}
-        {approvedAdvisors.length > 0 && (
-          <div>
-            <h2 className="text-3xl font-bold text-navy mb-6">
-              Approved Advisors ({approvedAdvisors.length})
-            </h2>
-            <div className="space-y-4">
-              {approvedAdvisors.map((advisor, index) => (
-                <div
-                  key={advisor.id}
-                  className="animate-fade-in"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <AdvisorCard advisor={advisor} showActions={false} />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+          <TabsContent value="pending" className="space-y-6">
+            <PendingApprovals
+              advisors={currentAdvisors}
+              onApprove={handleApprove}
+              onReject={handleReject}
+              onView={setEditingAdvisor}
+            />
+          </TabsContent>
 
-        {advisors.length === 0 && (
-          <Card className="glass">
-            <CardContent className="p-12 text-center">
-              <Clock className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-navy mb-2">No Submissions Yet</h3>
-              <p className="text-muted-foreground">
-                Advisor submissions will appear here for review
-              </p>
-            </CardContent>
-          </Card>
-        )}
+          <TabsContent value="all">
+            <AdvisorTable
+              advisors={currentAdvisors}
+              selectedIds={selectedIds}
+              onSelectChange={setSelectedIds}
+              onEdit={setEditingAdvisor}
+              onApprove={handleApprove}
+              onHide={handleHide}
+              onArchive={handleArchive}
+              onRestore={handleRestore}
+              onDelete={handleDelete}
+            />
+          </TabsContent>
+
+          <TabsContent value="published">
+            <AdvisorTable
+              advisors={currentAdvisors}
+              selectedIds={selectedIds}
+              onSelectChange={setSelectedIds}
+              onEdit={setEditingAdvisor}
+              onApprove={handleApprove}
+              onHide={handleHide}
+              onArchive={handleArchive}
+              onRestore={handleRestore}
+              onDelete={handleDelete}
+            />
+          </TabsContent>
+
+          <TabsContent value="hidden">
+            <AdvisorTable
+              advisors={currentAdvisors}
+              selectedIds={selectedIds}
+              onSelectChange={setSelectedIds}
+              onEdit={setEditingAdvisor}
+              onApprove={handleApprove}
+              onHide={handleHide}
+              onArchive={handleArchive}
+              onRestore={handleRestore}
+              onDelete={handleDelete}
+            />
+          </TabsContent>
+
+          <TabsContent value="archived">
+            <AdvisorTable
+              advisors={currentAdvisors}
+              selectedIds={selectedIds}
+              onSelectChange={setSelectedIds}
+              onEdit={setEditingAdvisor}
+              onApprove={handleApprove}
+              onHide={handleHide}
+              onArchive={handleArchive}
+              onRestore={handleRestore}
+              onDelete={handleDelete}
+            />
+          </TabsContent>
+        </Tabs>
+
+        {/* Edit Modal */}
+        <AdvisorEditModal
+          advisor={editingAdvisor}
+          open={!!editingAdvisor}
+          onClose={() => setEditingAdvisor(null)}
+          onSave={handleSaveEdit}
+        />
       </div>
     </div>
   );
