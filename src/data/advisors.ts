@@ -136,12 +136,12 @@ export const advisors: Advisor[] = [
   {
     id: "jennifer-ramos",
     name: "Jennifer Ramos",
-    title: "Financial Advisor",
+    title: "Managing Partner",
     type: "Advisor",
     state: "California",
-    city: "Orange County",
+    city: "Rancho Cucamonga",
     region: "West",
-    bio: "Focused on empowering clients with the knowledge and tools to achieve lasting financial success.",
+    bio: "Jennifer has been licensed in the financial services industry for over 20 years. Known as the 'trainer of the trainers,' she has coached hundreds of new financial advisors. A Sales Hall of Fame inductee for the number of clients she helped, Jennifer expanded TFA's footprint by opening an office in Rancho Cucamonga to serve her neighbors and community.",
     specialties: ["Retirement Planning", "Tax Strategies", "Investment Management"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/jennifer-ramos.jpg"
