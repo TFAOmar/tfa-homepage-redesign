@@ -84,12 +84,12 @@ export const advisors: Advisor[] = [
   {
     id: "erika-manzano",
     name: "Erika Manzano",
-    title: "Financial Advisor",
+    title: "Financial Educator",
     type: "Advisor",
     state: "California",
     city: "San Diego",
     region: "West",
-    bio: "Helping clients navigate their financial journey with personalized guidance and expertise.",
+    bio: "Erika prides herself in financial education that helps individuals, families, and business owners align their financial decisions with their faith. Through personalized coaching, workshops, and educational resources, she fosters both financial health and spiritual growth while supporting clients' beliefs and long-term goals.",
     specialties: ["Retirement Planning", "Tax Strategies", "Investment Management"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/erika-manzano.jpg"
