@@ -188,13 +188,13 @@ export const advisors: Advisor[] = [
   {
     id: "sean-cagle",
     name: "Sean Cagle",
-    title: "Financial Advisor",
+    title: "Senior Estate Planning Partner",
     type: "Advisor",
     state: "California",
     city: "Los Angeles",
     region: "West",
-    bio: "Driven to help clients build wealth and achieve financial freedom through strategic planning.",
-    specialties: ["Retirement Planning", "Investment Management", "Tax Strategies"],
+    bio: "Sean specializes in all aspects of estate planning, creating customized strategies that safeguard assets and preserve family legacies. He is dedicated to helping clients design plans that reflect their values while providing peace of mind for generations to come.",
+    specialties: ["Estate Planning", "Tax Strategies", "Retirement Planning"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/sean-cagle.jpg"
   }
