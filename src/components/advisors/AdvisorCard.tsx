@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { MapPin, Shield, Calendar } from "lucide-react";
+import { MapPin, Shield, Calendar, ExternalLink } from "lucide-react";
 import { Advisor } from "@/data/advisors";
 import { Link } from "react-router-dom";
 
+interface ExtendedAdvisor extends Advisor {
+  schedulingLink?: string;
+}
+
 interface AdvisorCardProps {
-  advisor: Advisor;
+  advisor: Advisor | ExtendedAdvisor;
   index: number;
 }
 
@@ -89,14 +93,26 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
       </CardContent>
 
       <CardFooter className="pt-0">
-        <Link to="/contact" className="w-full">
-          <Button 
-            className="w-full bg-accent hover:bg-accent/90 text-accent-foreground neuro-button group/btn"
-          >
-            <Calendar className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-            Schedule with {advisor.name.split(' ')[0]}
-          </Button>
-        </Link>
+        {('schedulingLink' in advisor && advisor.schedulingLink) ? (
+          <a href={advisor.schedulingLink} target="_blank" rel="noopener noreferrer" className="w-full">
+            <Button 
+              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground neuro-button group/btn"
+            >
+              <Calendar className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
+              Meet {advisor.name.split(' ')[0]}
+              <ExternalLink className="ml-2 h-3 w-3 opacity-70" />
+            </Button>
+          </a>
+        ) : (
+          <Link to={`/contact?advisor=${encodeURIComponent(advisor.name)}`} className="w-full">
+            <Button 
+              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground neuro-button group/btn"
+            >
+              <Calendar className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
+              Schedule with {advisor.name.split(' ')[0]}
+            </Button>
+          </Link>
+        )}
       </CardFooter>
     </Card>
   );

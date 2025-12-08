@@ -24,24 +24,38 @@ const specialtyOptions = [
   "Business Planning",
   "401(k) Guidance",
   "Investment Management",
+  "College Planning",
 ];
 
-const regions = {
-  "California": "West",
-  "New York": "Northeast",
-  "Texas": "Southwest",
-  "Florida": "Southeast",
-  "Illinois": "Midwest",
-  "Washington": "West",
-  "Georgia": "Southeast",
-  "Arizona": "West",
-  "Pennsylvania": "Northeast",
-  "Colorado": "Mountain",
-  "North Carolina": "Southeast",
-  "Minnesota": "Midwest",
-  "Massachusetts": "Northeast",
-  "Oregon": "West",
-  "Tennessee": "Southeast",
+const allStates = [
+  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+  "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+  "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+  "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+  "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+  "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+  "Wisconsin", "Wyoming"
+];
+
+const getRegion = (state: string): string => {
+  const regionMap: Record<string, string> = {
+    "Connecticut": "Northeast", "Maine": "Northeast", "Massachusetts": "Northeast",
+    "New Hampshire": "Northeast", "Rhode Island": "Northeast", "Vermont": "Northeast",
+    "New Jersey": "Northeast", "New York": "Northeast", "Pennsylvania": "Northeast",
+    "Illinois": "Midwest", "Indiana": "Midwest", "Michigan": "Midwest", "Ohio": "Midwest",
+    "Wisconsin": "Midwest", "Iowa": "Midwest", "Kansas": "Midwest", "Minnesota": "Midwest",
+    "Missouri": "Midwest", "Nebraska": "Midwest", "North Dakota": "Midwest", "South Dakota": "Midwest",
+    "Delaware": "Southeast", "Florida": "Southeast", "Georgia": "Southeast", "Maryland": "Southeast",
+    "North Carolina": "Southeast", "South Carolina": "Southeast", "Virginia": "Southeast",
+    "West Virginia": "Southeast", "Alabama": "Southeast", "Kentucky": "Southeast",
+    "Mississippi": "Southeast", "Tennessee": "Southeast", "Arkansas": "Southeast", "Louisiana": "Southeast",
+    "Oklahoma": "Southwest", "Texas": "Southwest", "Arizona": "Southwest", "New Mexico": "Southwest",
+    "Colorado": "Mountain", "Idaho": "Mountain", "Montana": "Mountain", "Nevada": "Mountain",
+    "Utah": "Mountain", "Wyoming": "Mountain",
+    "Alaska": "West", "California": "West", "Hawaii": "West", "Oregon": "West", "Washington": "West",
+  };
+  return regionMap[state] || "National";
 };
 
 const formSchema = z.object({
@@ -103,7 +117,7 @@ const OnboardingForm = () => {
   };
 
   const onSubmit = (data: FormValues) => {
-    const region = regions[data.state as keyof typeof regions] || "National";
+    const region = getRegion(data.state);
     
     addAdvisor({
       name: data.name,
@@ -313,7 +327,7 @@ const OnboardingForm = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-background z-50 max-h-[300px]">
-                            {Object.keys(regions).map((state) => (
+                            {allStates.map((state) => (
                               <SelectItem key={state} value={state}>
                                 {state}
                               </SelectItem>
