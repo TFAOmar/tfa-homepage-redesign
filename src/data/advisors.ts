@@ -149,13 +149,13 @@ export const advisors: Advisor[] = [
   {
     id: "hamlet-ohandjanian",
     name: "Hamlet Ohandjanian",
-    title: "Financial Advisor",
+    title: "Managing Partner",
     type: "Advisor",
     state: "California",
     city: "Los Angeles",
     region: "West",
-    bio: "Dedicated to providing comprehensive financial planning and wealth management strategies.",
-    specialties: ["Retirement Planning", "Investment Management", "Tax Strategies"],
+    bio: "After a 28-year career in the hospitality industry as a Director of Operations, where he developed and promoted dozens of industry leaders, Hamlet saw the need for more result-driven financial educators and strategists. A God-loving family man, he is passionate about helping others with integrity and transparency, seeing every individual as an opportunity to help someone and their family with retirement and financial planning strategies.",
+    specialties: ["Retirement Planning", "Financial Planning", "Tax Strategies"],
     licenses: ["Series 65", "Life & Health"],
     image: "/src/assets/advisors/hamlet-ohandjanian.jpg"
   },
