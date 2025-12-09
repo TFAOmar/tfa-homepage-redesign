@@ -11,7 +11,7 @@ const LocationsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<string>("All");
 
-  const regions = ["All", "West", "Mountain", "Southwest", "Midwest", "Southeast", "Northeast"];
+  const regions = ["All", "Southern California", "Arizona", "Pacific Northwest"];
 
   const filteredLocations = useMemo(() => {
     return locations.filter((location) => {
@@ -112,12 +112,18 @@ const LocationsList = () => {
                       Book Consultation
                     </Button>
                   </Link>
-                  <Button 
-                    variant="outline"
-                    className="border-2 border-navy text-navy hover:bg-navy hover:text-primary-foreground"
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Directions
-                  </Button>
+                    <Button 
+                      variant="outline"
+                      className="border-2 border-navy text-navy hover:bg-navy hover:text-primary-foreground"
+                    >
+                      Directions
+                    </Button>
+                  </a>
                 </CardFooter>
               </Card>
             ))}
