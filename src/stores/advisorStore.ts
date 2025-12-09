@@ -30,6 +30,8 @@ export interface DynamicAdvisor {
 interface AdvisorStore {
   advisors: DynamicAdvisor[];
   adminApprovalEnabled: boolean;
+  homepageAdvisorIds: (number | string)[];
+  homepageAdvisorCount: number;
   addAdvisor: (advisor: Omit<DynamicAdvisor, 'id' | 'createdAt' | 'status'>) => void;
   updateAdvisor: (id: string, updates: Partial<Omit<DynamicAdvisor, 'id' | 'createdAt'>>) => void;
   approveAdvisor: (id: string) => void;
@@ -46,7 +48,10 @@ interface AdvisorStore {
   getPendingAdvisors: () => DynamicAdvisor[];
   getHiddenAdvisors: () => DynamicAdvisor[];
   getArchivedAdvisors: () => DynamicAdvisor[];
-  getApprovedAdvisors: () => DynamicAdvisor[]; // Legacy compatibility
+  getApprovedAdvisors: () => DynamicAdvisor[];
+  setHomepageAdvisorIds: (ids: (number | string)[]) => void;
+  setHomepageAdvisorCount: (count: number) => void;
+  toggleHomepageAdvisor: (id: number | string) => void;
 }
 
 export const useAdvisorStore = create<AdvisorStore>()(
@@ -54,6 +59,8 @@ export const useAdvisorStore = create<AdvisorStore>()(
     (set, get) => ({
       advisors: [],
       adminApprovalEnabled: false,
+      homepageAdvisorIds: [],
+      homepageAdvisorCount: 3,
       
       addAdvisor: (advisor) => {
         const newAdvisor: DynamicAdvisor = {
@@ -170,9 +177,27 @@ export const useAdvisorStore = create<AdvisorStore>()(
         return get().advisors.filter((advisor) => advisor.status === 'archived');
       },
 
-      // Legacy compatibility
       getApprovedAdvisors: () => {
         return get().advisors.filter((advisor) => advisor.status === 'published');
+      },
+
+      setHomepageAdvisorIds: (ids) => {
+        set({ homepageAdvisorIds: ids });
+      },
+
+      setHomepageAdvisorCount: (count) => {
+        set({ homepageAdvisorCount: count });
+      },
+
+      toggleHomepageAdvisor: (id) => {
+        set((state) => {
+          const currentIds = state.homepageAdvisorIds;
+          if (currentIds.includes(id)) {
+            return { homepageAdvisorIds: currentIds.filter((i) => i !== id) };
+          } else {
+            return { homepageAdvisorIds: [...currentIds, id] };
+          }
+        });
       },
     }),
     {
