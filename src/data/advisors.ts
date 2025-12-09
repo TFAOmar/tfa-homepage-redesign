@@ -42,7 +42,7 @@ export const advisors: Advisor[] = [
     region: "West",
     bio: "Founder of TFA Insurance Advisors, dedicated to helping families achieve financial security and build lasting legacies.",
     specialties: ["Retirement Planning", "Tax Strategies", "Estate Planning", "Business Planning"],
-    licenses: ["Life & Health"],
+    licenses: ["Life & Health (Lic# 0D87636)"],
     image: manuelSotoImg
   },
   {
@@ -51,11 +51,11 @@ export const advisors: Advisor[] = [
     title: "Partner",
     type: "Advisor",
     state: "California",
-    city: "Los Angeles",
+    city: "Madera",
     region: "West",
     bio: "Israel helps families build generational security and long-term financial peace of mind. Specializing in life insurance, retirement planning, living trusts, and estate-protection strategies, he makes complex financial decisions easy to understand. Known for his clear communication and genuine care, Israel focuses on the 'why' behind every financial move, helping families protect what matters most and build a legacy for the next generation.",
     specialties: ["Life Insurance", "Retirement Planning", "Estate Planning", "Tax Strategies"],
-    licenses: ["Life & Health"],
+    licenses: ["Life & Health (Lic# 0I35205)"],
     image: israelCastanedaImg
   },
   {
@@ -64,11 +64,11 @@ export const advisors: Advisor[] = [
     title: "Financial Strategist & Retirement Specialist",
     type: "Advisor",
     state: "California",
-    city: "Los Angeles",
+    city: "Chino Hills",
     region: "West",
     bio: "With over 15 years in Insurance and Financial Services, Elena specializes in Medicare planning, Income Protection, and Retirement Strategies. A former top producer at Kaiser Permanente for five consecutive years, she now guides clients through 401(k) rollovers, wealth protection, and retirement income maximization. Her mission: to empower families to build a legacy of financial freedom and peace of mind.",
     specialties: ["Retirement Planning", "401(k) Guidance", "Estate Planning", "Tax Strategies"],
-    licenses: ["Life & Health"],
+    licenses: ["Life & Health (Lic# 4218087)"],
     image: elenaEsquivelImg
   },
   {
@@ -91,12 +91,12 @@ export const advisors: Advisor[] = [
     name: "Ronald Brown",
     title: "Managing Partner",
     type: "Advisor",
-    state: "Texas",
-    city: "Houston",
-    region: "Southwest",
+    state: "California",
+    city: "Rancho Cucamonga",
+    region: "West",
     bio: "Ron retired from his first career of over 30 years in the automotive industry, working with top dealers including 18 years with the Penske organization where he grew from general sales manager to president of a region. With a love of helping people and seeing the need for sound financial education, Ron joined his life partner Jennifer Ramos in business to help families achieve financial security.",
     specialties: ["Retirement Planning", "Life Insurance", "Estate Planning"],
-    licenses: ["Life & Health"],
+    licenses: ["Life & Health (Lic# 4418658)"],
     image: ronaldBrownImg
   },
   {
@@ -105,11 +105,11 @@ export const advisors: Advisor[] = [
     title: "Financial Educator",
     type: "Advisor",
     state: "California",
-    city: "San Diego",
+    city: "Chino Hills",
     region: "West",
     bio: "Erika prides herself in financial education that helps individuals, families, and business owners align their financial decisions with their faith. Through personalized coaching, workshops, and educational resources, she fosters both financial health and spiritual growth while supporting clients' beliefs and long-term goals.",
     specialties: ["Retirement Planning", "Tax Strategies", "Investment Management"],
-    licenses: ["Life & Health"],
+    licenses: ["Life & Health (Lic# 0L33842)"],
     image: erikaManzanoImg
   },
   {
@@ -118,11 +118,11 @@ export const advisors: Advisor[] = [
     title: "Mortgage Broker & Financial Advisor",
     type: "Broker",
     state: "California",
-    city: "Riverside",
+    city: "Claremont",
     region: "West",
     bio: "With 26 years in mortgage financing, Celeste is Broker/Owner of LOAN|BOX Loans. Her career spans leadership roles at Bank of Manhattan, JL Investments, and American General Finance. A California Real Estate Broker and 2011 'Outstanding Small Businesswoman' honoree, she's passionate about community involvement and is a proud mother of two daughters, Cayllie and Mayah.",
     specialties: ["Mortgage Financing", "Real Estate", "Retirement Planning"],
-    licenses: ["Real Estate Broker", "Life & Health"],
+    licenses: ["Real Estate Broker", "Life & Health (Lic# 0C25357)"],
     image: celesteSierraImg
   },
   {
@@ -131,11 +131,11 @@ export const advisors: Advisor[] = [
     title: "Managing Partner",
     type: "Advisor",
     state: "California",
-    city: "Inland Empire",
+    city: "Glendora",
     region: "West",
     bio: "With over 30 years in estate planning, Jorge is a trusted guide for families and business owners. Holding an English degree from University of La Verne and a Juris Doctorate, he began his career at Transamerica before becoming a Managing Partner at TFA. Jorge regularly leads estate planning workshops, turning legal jargon into everyday language and helping families avoid probate, reduce taxes, and pass down wealth efficiently.",
     specialties: ["Estate Planning", "Tax Strategies", "Business Planning"],
-    licenses: ["Life & Health"],
+    licenses: ["Life & Health (Lic# 0F66052)"],
     image: jorgeHernandezImg
   },
   {
@@ -144,7 +144,7 @@ export const advisors: Advisor[] = [
     title: "Financial Advisors",
     type: "Advisor",
     state: "California",
-    city: "Los Angeles",
+    city: "Whittier",
     region: "West",
     bio: "A dynamic duo dedicated to helping families build generational wealth and financial security.",
     specialties: ["Retirement Planning", "Estate Planning", "Life Insurance"],
@@ -170,11 +170,11 @@ export const advisors: Advisor[] = [
     title: "Managing Partner",
     type: "Advisor",
     state: "California",
-    city: "Los Angeles",
+    city: "Granada Hills",
     region: "West",
     bio: "After a 28-year career in the hospitality industry as a Director of Operations, where he developed and promoted dozens of industry leaders, Hamlet saw the need for more result-driven financial educators and strategists. A God-loving family man, he is passionate about helping others with integrity and transparency, seeing every individual as an opportunity to help someone and their family with retirement and financial planning strategies.",
     specialties: ["Retirement Planning", "Financial Planning", "Tax Strategies"],
-    licenses: ["Life & Health"],
+    licenses: ["Life & Health (Lic# 4379309)"],
     image: hamletOhandjanianImg
   },
   {
@@ -183,11 +183,11 @@ export const advisors: Advisor[] = [
     title: "Franchise Partner",
     type: "Advisor",
     state: "California",
-    city: "Los Angeles",
+    city: "Corona",
     region: "West",
     bio: "Born to parents who migrated from Guadalajara, Mexico, Delia has always been fueled by the immigrant spirit. A mother of two incredible children, she co-owned a staffing agency in the Inland Empire before launching an interior design firm in 2016. In 2020, she co-launched a podcast on relationships and faith. Today, she and her sister own a TFA franchise, helping families with financial planning—guided by her faith, resilience, and pursuit of meaningful connections.",
     specialties: ["Life Insurance", "Estate Planning", "Retirement Planning"],
-    licenses: ["Life & Health"],
+    licenses: ["Life & Health (Lic# 4222120)"],
     image: deliaPlascenciaImg
   },
   {
@@ -196,11 +196,11 @@ export const advisors: Advisor[] = [
     title: "Head of Franchise Operations",
     type: "Advisor",
     state: "California",
-    city: "Orange County",
+    city: "Chino Hills",
     region: "West",
     bio: "Mariah has extensive experience in financial services, serving as Head of Franchise Operations at TFA since 2019. Her career spans roles at New American Funding, Finance of America Commercial, CrossCountry Mortgage, Carrington Mortgage Services, and Green Tree Servicing. A licensed loan originator focused on purchase and refinance transactions, Mariah brings deep mortgage expertise to help clients achieve their financial goals.",
     specialties: ["Mortgage Financing", "Retirement Planning", "Tax Strategies"],
-    licenses: ["Loan Originator", "Life & Health"],
+    licenses: ["Loan Originator", "Life & Health (Lic# 0F93770)"],
     image: mariahLorenzenImg
   },
   {
@@ -208,9 +208,9 @@ export const advisors: Advisor[] = [
     name: "Sean Cagle",
     title: "Senior Estate Planning Partner",
     type: "Advisor",
-    state: "California",
-    city: "Los Angeles",
-    region: "West",
+    state: "Arizona",
+    city: "Arizona",
+    region: "Southwest",
     bio: "Sean specializes in all aspects of estate planning, creating customized strategies that safeguard assets and preserve family legacies. He is dedicated to helping clients design plans that reflect their values while providing peace of mind for generations to come.",
     specialties: ["Estate Planning", "Tax Strategies", "Retirement Planning"],
     licenses: ["Life & Health"],
