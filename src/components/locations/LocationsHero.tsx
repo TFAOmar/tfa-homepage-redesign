@@ -15,7 +15,7 @@ const LocationsHero = () => {
           Our Locations
         </h1>
         <p className="text-xl md:text-2xl text-primary-foreground/90 max-w-3xl mx-auto leading-relaxed">
-          With 29 offices nationwide, expert financial guidance is always within reach
+          With 19 offices across California, Arizona, and Oregon, expert financial guidance is always within reach
         </p>
       </div>
     </section>
