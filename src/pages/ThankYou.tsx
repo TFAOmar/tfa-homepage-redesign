@@ -177,13 +177,13 @@ const ThankYou = () => {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <a 
-                href="tel:+18778324872" 
+                href="tel:+18883505396" 
                 className="flex items-center gap-3 text-foreground hover:text-[#E4B548] transition-colors"
               >
                 <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
                   <Phone className="h-5 w-5" />
                 </div>
-                <span className="font-medium">(877) 832-4872</span>
+                <span className="font-medium">(888) 350-5396</span>
               </a>
               <a 
                 href="mailto:info@tfainsuranceadvisors.com" 

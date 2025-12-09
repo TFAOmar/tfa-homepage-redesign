@@ -38,9 +38,9 @@ const CareersCTA = () => {
 
           {/* Contact Info */}
           <div className="flex flex-wrap justify-center gap-6 md:gap-10 text-white/80">
-            <a href="tel:8778324872" className="flex items-center gap-2 hover:text-accent transition-colors">
+            <a href="tel:+18883505396" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Phone className="h-5 w-5" />
-              <span>(877) 832-4872</span>
+              <span>(888) 350-5396</span>
             </a>
             <a href="mailto:info@tfainsuranceadvisors.com" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Mail className="h-5 w-5" />
