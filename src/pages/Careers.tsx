@@ -4,6 +4,7 @@ import CareerPaths from "@/components/careers/CareerPaths";
 import WhyJoinTFA from "@/components/careers/WhyJoinTFA";
 import AgentPath from "@/components/careers/AgentPath";
 import FranchisePath from "@/components/careers/FranchisePath";
+import CareersInquiryForm from "@/components/careers/CareersInquiryForm";
 import CareersCTA from "@/components/careers/CareersCTA";
 
 const Careers = () => {
@@ -18,6 +19,7 @@ const Careers = () => {
       <WhyJoinTFA />
       <AgentPath />
       <FranchisePath />
+      <CareersInquiryForm />
       <CareersCTA />
     </div>
   );
