@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, Building2, PiggyBank, LineChart, Repeat, DollarSign, Shield, Stethoscope, Landmark, Scale, Calculator, BookOpen, Calendar, Award, Users, ShoppingBag } from "lucide-react";
+import { Menu, Building2, PiggyBank, LineChart, Repeat, DollarSign, Shield, Stethoscope, Landmark, Scale, Calculator, BookOpen, Calendar, Award, Users, ShoppingBag, Briefcase } from "lucide-react";
 import tfaLogo from "@/assets/tfa-logo.png";
 import { Link } from "react-router-dom";
 import { CartDrawer } from "./shop/CartDrawer";
@@ -62,6 +62,7 @@ const resourcesMenu = [
   { name: "Partners", icon: Award, href: "/partners", description: "Our insurance carriers" },
   { name: "Advisor Directory", icon: Users, href: "/advisors", description: "Meet our team" },
   { name: "Shop", icon: ShoppingBag, href: "/shop", description: "Financial resources" },
+  { name: "Careers", icon: Briefcase, href: "/careers", description: "Join our team" },
 ];
 
 const Header = () => {

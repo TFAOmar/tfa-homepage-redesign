@@ -30,6 +30,7 @@ import Tools from "./pages/Tools";
 import BusinessInsurance from "./pages/BusinessInsurance";
 import BookConsultation from "./pages/BookConsultation";
 import ThankYou from "./pages/ThankYou";
+import Careers from "./pages/Careers";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,6 +69,7 @@ const App = () => (
               <Route path="/business-insurance" element={<BusinessInsurance />} />
               <Route path="/book-consultation" element={<BookConsultation />} />
               <Route path="/thank-you" element={<ThankYou />} />
+              <Route path="/careers" element={<Careers />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
