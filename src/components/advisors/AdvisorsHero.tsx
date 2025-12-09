@@ -20,7 +20,7 @@ const AdvisorsHero = () => {
         <p className="text-xl md:text-2xl text-primary-foreground/90 max-w-3xl mx-auto leading-relaxed mb-8">
           280+ licensed professionals across 29 locations, ready to guide you toward financial confidence
         </p>
-        <Link to="/advisors/onboard">
+        <Link to="/careers">
           <Button 
             size="lg" 
             className="bg-accent hover:bg-accent/90 text-accent-foreground neuro-button px-8 py-6 text-lg"
