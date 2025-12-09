@@ -21,8 +21,8 @@ const LocationsMap = () => {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/light-v11",
-        center: [-98.5795, 39.8283], // Center of USA
-        zoom: 3.5,
+        center: [-117.5, 34.0], // Center on Southern California
+        zoom: 6,
       });
 
       // Add navigation controls
@@ -83,7 +83,7 @@ const LocationsMap = () => {
             Find Your Nearest Office
           </h2>
           <p className="text-xl text-muted-foreground">
-            29 locations across the United States, ready to serve you
+            19 locations across California, Arizona, and Oregon
           </p>
         </div>
 
