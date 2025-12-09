@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { locations } from "@/data/locations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,70 +6,115 @@ import { MapPin } from "lucide-react";
 
 const LocationsMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState("");
-  const [tokenSubmitted, setTokenSubmitted] = useState(false);
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const [apiKey, setApiKey] = useState("");
+  const [keySubmitted, setKeySubmitted] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const initializeMap = useCallback(() => {
+    if (!mapContainer.current || typeof google === "undefined") return;
+
+    // Center on Southern California
+    const center = { lat: 34.0, lng: -117.5 };
+
+    mapRef.current = new google.maps.Map(mapContainer.current, {
+      center,
+      zoom: 7,
+      styles: [
+        {
+          featureType: "all",
+          elementType: "geometry",
+          stylers: [{ saturation: -20 }]
+        },
+        {
+          featureType: "water",
+          elementType: "geometry.fill",
+          stylers: [{ color: "#d4e4f7" }]
+        }
+      ],
+      mapTypeControl: false,
+      streetViewControl: false,
+    });
+
+    // Add markers for each location
+    const infoWindow = new google.maps.InfoWindow();
+
+    locations.forEach((location) => {
+      const marker = new google.maps.Marker({
+        position: { lat: location.coordinates[1], lng: location.coordinates[0] },
+        map: mapRef.current,
+        title: location.name,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 10,
+          fillColor: "#E4B548",
+          fillOpacity: 1,
+          strokeColor: "#0A0F1F",
+          strokeWeight: 2,
+        },
+      });
+
+      const contentString = `
+        <div style="padding: 8px; max-width: 250px;">
+          <h3 style="font-weight: bold; font-size: 16px; margin-bottom: 4px; color: #0A0F1F;">${location.city}, ${location.state}</h3>
+          <p style="font-size: 13px; color: #555; margin-bottom: 4px;">${location.address}</p>
+          <p style="font-size: 13px; color: #555; margin-bottom: 4px;">
+            <a href="tel:${location.phone}" style="color: #E4B548; text-decoration: none;">${location.phone}</a>
+          </p>
+          <p style="font-size: 12px; color: #888;">${location.hours}</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}" 
+             target="_blank" 
+             style="display: inline-block; margin-top: 8px; padding: 6px 12px; background: #E4B548; color: #0A0F1F; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: 600;">
+            Get Directions
+          </a>
+        </div>
+      `;
+
+      marker.addListener("click", () => {
+        infoWindow.setContent(contentString);
+        infoWindow.open(mapRef.current, marker);
+      });
+    });
+
+    setMapLoaded(true);
+  }, []);
 
   useEffect(() => {
-    if (!mapContainer.current || !tokenSubmitted || !mapboxToken) return;
+    if (!keySubmitted || !apiKey) return;
 
-    try {
-      mapboxgl.accessToken = mapboxToken;
-
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: "mapbox://styles/mapbox/light-v11",
-        center: [-117.5, 34.0], // Center on Southern California
-        zoom: 6,
-      });
-
-      // Add navigation controls
-      map.current.addControl(
-        new mapboxgl.NavigationControl({
-          visualizePitch: true,
-        }),
-        "top-right"
-      );
-
-      // Add markers for each location
-      locations.forEach((location) => {
-        const el = document.createElement("div");
-        el.className = "custom-marker";
-        el.innerHTML = `
-          <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-foreground">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-          </div>
-        `;
-
-        const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
-          <div class="p-2">
-            <h3 class="font-bold text-base mb-1">${location.name}, ${location.state}</h3>
-            <p class="text-sm text-gray-600 mb-1">${location.address}</p>
-            <p class="text-sm text-gray-600 mb-1">${location.phone}</p>
-            <p class="text-xs text-gray-500">${location.hours}</p>
-          </div>
-        `);
-
-        new mapboxgl.Marker(el)
-          .setLngLat(location.coordinates)
-          .setPopup(popup)
-          .addTo(map.current!);
-      });
-    } catch (error) {
-      console.error("Error initializing map:", error);
+    // Check if Google Maps is already loaded
+    if (typeof google !== "undefined" && google.maps) {
+      initializeMap();
+      return;
     }
 
-    return () => {
-      map.current?.remove();
-    };
-  }, [tokenSubmitted, mapboxToken]);
+    // Load Google Maps script
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+    script.async = true;
+    script.defer = true;
 
-  const handleSubmitToken = () => {
-    if (mapboxToken.trim()) {
-      setTokenSubmitted(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).initMap = initializeMap;
+
+    script.onerror = () => {
+      console.error("Failed to load Google Maps");
+      setKeySubmitted(false);
+    };
+
+    document.head.appendChild(script);
+
+    return () => {
+      const existingScript = document.querySelector(`script[src*="maps.googleapis.com"]`);
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
+  }, [keySubmitted, apiKey, initializeMap]);
+
+  const handleSubmitKey = () => {
+    if (apiKey.trim()) {
+      setKeySubmitted(true);
     }
   };
 
@@ -87,7 +130,7 @@ const LocationsMap = () => {
           </p>
         </div>
 
-        {!tokenSubmitted ? (
+        {!keySubmitted ? (
           <div className="max-w-2xl mx-auto glass p-8 rounded-2xl">
             <div className="flex items-start gap-3 mb-6">
               <MapPin className="h-6 w-6 text-accent flex-shrink-0 mt-1" />
@@ -96,14 +139,14 @@ const LocationsMap = () => {
                   Enable Interactive Map
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  To view our office locations on an interactive map, please enter your Mapbox public token. You can get a free token at{" "}
+                  To view our office locations on an interactive map, please enter your Google Maps API key. You can get one at{" "}
                   <a 
-                    href="https://mapbox.com" 
+                    href="https://console.cloud.google.com/google/maps-apis" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-accent hover:underline"
                   >
-                    mapbox.com
+                    Google Cloud Console
                   </a>
                 </p>
               </div>
@@ -112,13 +155,14 @@ const LocationsMap = () => {
             <div className="flex gap-4">
               <Input
                 type="text"
-                placeholder="Enter your Mapbox public token"
-                value={mapboxToken}
-                onChange={(e) => setMapboxToken(e.target.value)}
+                placeholder="Enter your Google Maps API key"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
                 className="flex-1"
+                onKeyDown={(e) => e.key === "Enter" && handleSubmitKey()}
               />
               <Button 
-                onClick={handleSubmitToken}
+                onClick={handleSubmitKey}
                 className="bg-accent hover:bg-accent/90 text-accent-foreground"
               >
                 Load Map
@@ -130,8 +174,16 @@ const LocationsMap = () => {
             </p>
           </div>
         ) : (
-          <div className="glass rounded-2xl overflow-hidden">
+          <div className="glass rounded-2xl overflow-hidden relative">
             <div ref={mapContainer} className="w-full h-[600px]" />
+            {!mapLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-secondary/50">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4"></div>
+                  <p className="text-muted-foreground">Loading map...</p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
