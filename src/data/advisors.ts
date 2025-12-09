@@ -77,12 +77,14 @@ export const advisors: Advisor[] = [
     title: "Senior Financial Advisor",
     type: "Advisor",
     state: "California",
-    city: "Orange County",
+    city: "San Dimas",
     region: "West",
     bio: "Experienced advisor focused on comprehensive wealth management and retirement planning solutions.",
     specialties: ["Retirement Planning", "Business Planning", "Tax Strategies"],
     licenses: ["Series 65", "Life & Health"],
-    image: joseEstradaImg
+    image: joseEstradaImg,
+    email: "Jose@agefinancial.com",
+    phone: "(909) 592-5481"
   },
   {
     id: "ronald-brown",
