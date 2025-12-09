@@ -1,9 +1,7 @@
 import { Target, Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-
 const MissionVision = () => {
-  return (
-    <section className="py-24 bg-gradient-to-b from-secondary/30 to-background">
+  return <section className="py-24 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Mission */}
@@ -18,7 +16,7 @@ const MissionVision = () => {
               </h3>
               
               <p className="text-lg text-foreground leading-relaxed">
-                To empower families with the knowledge, strategies, and ongoing support they need to achieve financial clarity, build lasting wealth, and create meaningful legacies for future generations.
+                To educate and empower families with the knowledge, strategies, and ongoing support they need to achieve financial clarity, build lasting wealth, and create meaningful legacies for future generations.
               </p>
             </CardContent>
           </Card>
@@ -41,8 +39,6 @@ const MissionVision = () => {
           </Card>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default MissionVision;
