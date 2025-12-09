@@ -44,7 +44,7 @@ const AdvisorsCTA = () => {
 
           <div className="mt-8 pt-8 border-t border-border/50">
             <p className="text-muted-foreground mb-4">Are you an advisor or broker?</p>
-            <Link to="/advisors/onboard">
+            <Link to="/careers">
               <Button size="lg" variant="secondary" className="group">
                 <UserPlus className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 Join Our Network
