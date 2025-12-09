@@ -4,7 +4,7 @@ const milestones = [
   {
     year: "2015",
     title: "The Beginning",
-    description: "TFA founded with a single office in Phoenix, AZ and a mission to provide comprehensive financial planning to families nationwide.",
+    description: "TFA founded with a single office in Chino, CA and a mission to provide comprehensive financial planning to families nationwide.",
   },
   {
     year: "2017",
