@@ -2,10 +2,24 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { advisors } from "@/data/advisors";
+import { useAdvisorStore } from "@/stores/advisorStore";
+import { useMemo } from "react";
 
 const AdvisorPreview = () => {
-  // Get first 3 approved advisors
-  const featuredAdvisors = advisors.slice(0, 3);
+  const { homepageAdvisorIds, homepageAdvisorCount } = useAdvisorStore();
+
+  const featuredAdvisors = useMemo(() => {
+    if (homepageAdvisorIds.length > 0) {
+      // Use selected advisors in the order they were selected
+      const selected = homepageAdvisorIds
+        .map(id => advisors.find(a => a.id === id))
+        .filter(Boolean)
+        .slice(0, homepageAdvisorCount);
+      return selected;
+    }
+    // Default to first N advisors
+    return advisors.slice(0, homepageAdvisorCount);
+  }, [homepageAdvisorIds, homepageAdvisorCount]);
 
   return (
     <section className="py-20 md:py-28 lg:py-32 bg-secondary/30">
@@ -19,40 +33,46 @@ const AdvisorPreview = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 md:gap-10 mb-14">
+        <div className={`grid gap-8 md:gap-10 mb-14 ${
+          featuredAdvisors.length === 1 ? 'md:grid-cols-1 max-w-md mx-auto' :
+          featuredAdvisors.length === 2 ? 'md:grid-cols-2 max-w-3xl mx-auto' :
+          featuredAdvisors.length <= 3 ? 'md:grid-cols-3' :
+          featuredAdvisors.length === 4 ? 'md:grid-cols-2 lg:grid-cols-4' :
+          'md:grid-cols-2 lg:grid-cols-3'
+        }`}>
           {featuredAdvisors.map((advisor, index) => (
             <div
-              key={advisor.id}
+              key={advisor?.id}
               className="group bg-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-fade-in hover:-translate-y-1"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="aspect-square overflow-hidden bg-gradient-to-b from-gray-400 to-gray-600">
                 <img
-                  src={advisor.image}
-                  alt={advisor.name}
+                  src={advisor?.image}
+                  alt={advisor?.name}
                   className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
               
               <div className="p-8">
                 <h3 className="text-2xl font-bold text-navy mb-2">
-                  {advisor.name}
+                  {advisor?.name}
                 </h3>
                 
                 <p className="text-accent font-semibold mb-4 text-base">
-                  {advisor.city}, {advisor.state}
+                  {advisor?.city}, {advisor?.state}
                 </p>
                 
                 <p className="text-muted-foreground text-base leading-relaxed mb-6 line-clamp-2">
-                  {advisor.bio}
+                  {advisor?.bio}
                 </p>
                 
-                <Link to={`/contact?advisor=${advisor.id}`}>
+                <Link to={`/contact?advisor=${advisor?.id}`}>
                   <Button
                     variant="outline"
                     className="w-full group-hover:bg-accent group-hover:text-accent-foreground group-hover:border-accent transition-all text-base py-6"
                   >
-                    Connect with {advisor.name.split(" ")[0]}
+                    Connect with {advisor?.name?.split(" ")[0]}
                   </Button>
                 </Link>
               </div>

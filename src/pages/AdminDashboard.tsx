@@ -10,6 +10,7 @@ import AdvisorTable from "@/components/admin/AdvisorTable";
 import AdvisorEditModal from "@/components/admin/AdvisorEditModal";
 import BulkActionsBar from "@/components/admin/BulkActionsBar";
 import PendingApprovals from "@/components/admin/PendingApprovals";
+import HomepageAdvisorSettings from "@/components/admin/HomepageAdvisorSettings";
 
 const AdminDashboard = () => {
   const {
@@ -153,28 +154,34 @@ const AdminDashboard = () => {
           />
         </div>
 
-        {/* Settings Card */}
-        <Card className="glass mb-8 animate-fade-in">
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-2">
-              <Settings className="h-5 w-5 text-accent" />
-              <CardTitle className="text-navy">Workflow Settings</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-foreground">Admin Approval Required</h3>
-                <p className="text-sm text-muted-foreground">
-                  {adminApprovalEnabled
-                    ? "New profiles must be approved before appearing in directory"
-                    : "New profiles are automatically published to directory"}
-                </p>
+        {/* Settings Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {/* Workflow Settings Card */}
+          <Card className="glass animate-fade-in">
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <Settings className="h-5 w-5 text-accent" />
+                <CardTitle className="text-navy">Workflow Settings</CardTitle>
               </div>
-              <Switch checked={adminApprovalEnabled} onCheckedChange={toggleAdminApproval} />
-            </div>
-          </CardContent>
-        </Card>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-foreground">Admin Approval Required</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {adminApprovalEnabled
+                      ? "New profiles must be approved before appearing in directory"
+                      : "New profiles are automatically published to directory"}
+                  </p>
+                </div>
+                <Switch checked={adminApprovalEnabled} onCheckedChange={toggleAdminApproval} />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Homepage Advisor Settings */}
+          <HomepageAdvisorSettings />
+        </div>
 
         {/* Bulk Actions */}
         <div className="mb-4">
