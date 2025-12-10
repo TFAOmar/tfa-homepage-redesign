@@ -202,6 +202,22 @@ export const useAdvisorStore = create<AdvisorStore>()(
     }),
     {
       name: 'advisor-storage',
+      partialize: (state) => ({
+        advisors: state.advisors,
+        adminApprovalEnabled: state.adminApprovalEnabled,
+        homepageAdvisorIds: state.homepageAdvisorIds,
+        homepageAdvisorCount: state.homepageAdvisorCount,
+      }),
+      merge: (persistedState, currentState) => {
+        const persisted = persistedState as Partial<AdvisorStore> | undefined;
+        return {
+          ...currentState,
+          advisors: persisted?.advisors ?? currentState.advisors,
+          adminApprovalEnabled: persisted?.adminApprovalEnabled ?? currentState.adminApprovalEnabled,
+          homepageAdvisorIds: persisted?.homepageAdvisorIds ?? currentState.homepageAdvisorIds,
+          homepageAdvisorCount: persisted?.homepageAdvisorCount ?? currentState.homepageAdvisorCount,
+        };
+      },
     }
   )
 );
