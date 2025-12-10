@@ -165,9 +165,9 @@ const FranchisePath = () => {
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/contact">
+            <Link to="/careers/franchise">
               <Button className="btn-primary-cta group">
-                Explore Franchise Opportunities
+                Learn More & Apply
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
