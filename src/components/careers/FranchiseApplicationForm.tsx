@@ -1,0 +1,534 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Send, Building2, Phone, Mail } from "lucide-react";
+
+const franchiseFormSchema = z.object({
+  firstName: z.string().trim().min(1, "First name is required").max(50),
+  lastName: z.string().trim().min(1, "Last name is required").max(50),
+  email: z.string().trim().email("Please enter a valid email address").max(255),
+  phone: z.string().trim().min(10, "Please enter a valid phone number").max(20),
+  city: z.string().trim().min(1, "City is required").max(100),
+  state: z.string().trim().min(1, "State is required").max(50),
+  currentOccupation: z.string().trim().min(1, "Current occupation is required").max(100),
+  hasInsuranceLicense: z.enum(["yes", "no"], {
+    required_error: "Please select your license status",
+  }),
+  insuranceExperience: z.enum(["none", "1-3", "3-5", "5-10", "10+"], {
+    required_error: "Please select your experience level",
+  }),
+  leadershipExperience: z.enum(["none", "1-3", "3-5", "5-10", "10+"], {
+    required_error: "Please select your leadership experience",
+  }),
+  liquidCapital: z.enum(["under-25k", "25k-50k", "50k-100k", "100k-250k", "250k+"], {
+    required_error: "Please select your liquid capital range",
+  }),
+  netWorth: z.enum(["under-100k", "100k-250k", "250k-500k", "500k-1m", "1m+"], {
+    required_error: "Please select your net worth range",
+  }),
+  preferredTerritory: z.string().trim().min(1, "Preferred territory is required").max(200),
+  timeline: z.enum(["asap", "1-3-months", "3-6-months", "6-12-months", "exploring"], {
+    required_error: "Please select your timeline",
+  }),
+  referralSource: z.string().trim().max(200).optional(),
+  whyFranchise: z.string().trim().min(50, "Please provide more detail (at least 50 characters)").max(2000),
+  agreeToDisclosure: z.boolean().refine((val) => val === true, {
+    message: "You must agree to receive the FDD",
+  }),
+});
+
+type FranchiseFormData = z.infer<typeof franchiseFormSchema>;
+
+const FranchiseApplicationForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const form = useForm<FranchiseFormData>({
+    resolver: zodResolver(franchiseFormSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      city: "",
+      state: "",
+      currentOccupation: "",
+      hasInsuranceLicense: undefined,
+      insuranceExperience: undefined,
+      leadershipExperience: undefined,
+      liquidCapital: undefined,
+      netWorth: undefined,
+      preferredTerritory: "",
+      timeline: undefined,
+      referralSource: "",
+      whyFranchise: "",
+      agreeToDisclosure: false,
+    },
+  });
+
+  const onSubmit = async (data: FranchiseFormData) => {
+    setIsSubmitting(true);
+    
+    // Simulate form submission
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    
+    toast({
+      title: "Franchise Application Submitted!",
+      description: "Thank you for your interest in owning a TFA franchise. Our franchise development team will contact you within 48 hours.",
+    });
+    
+    form.reset();
+    setIsSubmitting(false);
+  };
+
+  return (
+    <section className="py-24 bg-background">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+              <Building2 className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Franchise Application</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Apply for a TFA Franchise
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Complete this application to start the franchise discovery process. 
+              All information is kept strictly confidential.
+            </p>
+          </div>
+
+          {/* Form Card */}
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-border/50 p-8 md:p-12 shadow-lg">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                {/* Personal Information Section */}
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/50">
+                    Personal Information
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name *</FormLabel>
+                            <FormControl>
+                              <Input placeholder="John" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name *</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Doe" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email Address *</FormLabel>
+                            <FormControl>
+                              <Input type="email" placeholder="john@example.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone Number *</FormLabel>
+                            <FormControl>
+                              <Input type="tel" placeholder="(555) 123-4567" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>City *</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Los Angeles" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="state"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>State *</FormLabel>
+                            <FormControl>
+                              <Input placeholder="California" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="currentOccupation"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Current Occupation *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g. Business Owner, Sales Director" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Experience Section */}
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/50">
+                    Experience & Background
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="hasInsuranceLicense"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Do you hold an insurance license? *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="yes">Yes</SelectItem>
+                                <SelectItem value="no">No</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="insuranceExperience"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Insurance Industry Experience *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select experience" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="none">No experience</SelectItem>
+                                <SelectItem value="1-3">1-3 years</SelectItem>
+                                <SelectItem value="3-5">3-5 years</SelectItem>
+                                <SelectItem value="5-10">5-10 years</SelectItem>
+                                <SelectItem value="10+">10+ years</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="leadershipExperience"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Leadership/Management Experience *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select experience" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="none">No experience</SelectItem>
+                              <SelectItem value="1-3">1-3 years</SelectItem>
+                              <SelectItem value="3-5">3-5 years</SelectItem>
+                              <SelectItem value="5-10">5-10 years</SelectItem>
+                              <SelectItem value="10+">10+ years</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Financial Section */}
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/50">
+                    Financial Qualifications
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="liquidCapital"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Available Liquid Capital *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select range" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="under-25k">Under $25,000</SelectItem>
+                                <SelectItem value="25k-50k">$25,000 - $50,000</SelectItem>
+                                <SelectItem value="50k-100k">$50,000 - $100,000</SelectItem>
+                                <SelectItem value="100k-250k">$100,000 - $250,000</SelectItem>
+                                <SelectItem value="250k+">$250,000+</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>
+                              Cash or assets that can be quickly converted
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="netWorth"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Estimated Net Worth *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select range" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="under-100k">Under $100,000</SelectItem>
+                                <SelectItem value="100k-250k">$100,000 - $250,000</SelectItem>
+                                <SelectItem value="250k-500k">$250,000 - $500,000</SelectItem>
+                                <SelectItem value="500k-1m">$500,000 - $1,000,000</SelectItem>
+                                <SelectItem value="1m+">$1,000,000+</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Territory & Timeline */}
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/50">
+                    Territory & Timeline
+                  </h3>
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="preferredTerritory"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Preferred Territory/Market *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g. Orange County, CA or Phoenix Metro Area" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            List your top 1-3 preferred geographic areas
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="timeline"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Target Timeline to Open *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select timeline" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="asap">As soon as possible</SelectItem>
+                              <SelectItem value="1-3-months">1-3 months</SelectItem>
+                              <SelectItem value="3-6-months">3-6 months</SelectItem>
+                              <SelectItem value="6-12-months">6-12 months</SelectItem>
+                              <SelectItem value="exploring">Just exploring options</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Additional Info */}
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/50">
+                    Additional Information
+                  </h3>
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="referralSource"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>How did you hear about TFA franchising?</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g. Referral, LinkedIn, Google, Event" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="whyFranchise"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Why are you interested in a TFA franchise? *</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Tell us about your goals, relevant experience, and what attracts you to franchise ownership..."
+                              className="min-h-[140px] resize-none"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Minimum 50 characters
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Agreement Checkbox */}
+                <FormField
+                  control={form.control}
+                  name="agreeToDisclosure"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-lg border border-border/50 p-4 bg-muted/30">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="cursor-pointer">
+                          I agree to receive the Franchise Disclosure Document (FDD) and related materials *
+                        </FormLabel>
+                        <FormDescription>
+                          Your information will be kept strictly confidential and used only for franchise development purposes.
+                        </FormDescription>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Submit Button */}
+                <div className="pt-4">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full md:w-auto btn-primary-cta px-8 py-6 text-lg group"
+                  >
+                    {isSubmitting ? (
+                      "Submitting..."
+                    ) : (
+                      <>
+                        Submit Franchise Application
+                        <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
+
+          {/* Contact Info */}
+          <div className="mt-8 text-center">
+            <p className="text-muted-foreground mb-4">Prefer to speak with someone first?</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="tel:+18883505396" className="inline-flex items-center gap-2 text-foreground hover:text-accent transition-colors">
+                <Phone className="h-4 w-4" />
+                (888) 350-5396
+              </a>
+              <a href="mailto:info@tfainsuranceadvisors.com" className="inline-flex items-center gap-2 text-foreground hover:text-accent transition-colors">
+                <Mail className="h-4 w-4" />
+                info@tfainsuranceadvisors.com
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FranchiseApplicationForm;
