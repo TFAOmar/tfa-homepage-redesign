@@ -2,84 +2,84 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AgentApplicationForm from "@/components/careers/AgentApplicationForm";
-import { 
-  GraduationCap, 
-  FileCheck, 
-  UserCheck, 
-  Rocket, 
-  DollarSign, 
-  TrendingUp,
-  Users,
-  BookOpen,
-  Shield,
-  Award,
-  Clock,
-  Briefcase,
-  CheckCircle2,
-  ArrowRight
-} from "lucide-react";
-
-const steps = [
-  {
-    icon: GraduationCap,
-    title: "Pre-Licensing Education",
-    description: "Complete 32 hours of pre-licensing education through XCEL Solutions.",
-    details: ["$49 with TFA discount code", "Self-paced online learning", "Life Pre-Licensing Bundle"],
-  },
-  {
-    icon: FileCheck,
-    title: "Pass Your Exam",
-    description: "Schedule and pass your Life Agent Examination through PSI Exams.",
-    details: ["$55-$88 exam fee", "Fingerprinting at test site ($68.95)", "Study materials provided"],
-  },
-  {
-    icon: UserCheck,
-    title: "Get Licensed & Contract",
-    description: "Apply for your California Life & Health License, then complete TFA contracting.",
-    details: ["$193 license application", "TFA Membership: $49.99 (one-time)", "Skool Community: $29.99/month"],
-  },
-  {
-    icon: Rocket,
-    title: "Launch Your Career",
-    description: "Complete TFA Quick Start training and start building your client base.",
-    details: ["Signal Advisors portal setup", "Carrier appointments", "Ongoing mentorship"],
-  },
-];
-
-const compensationTiers = [
-  { level: "Agent", commission: "50%", description: "Entry level - Start building your book of business" },
-  { level: "Advisor", commission: "60%", description: "10 policies written or promoted by Managing Partner" },
-  { level: "Sr. Advisor", commission: "70%", description: "25 policies written + consistent production" },
-  { level: "Partner", commission: "80%", description: "50 policies written + team building begins" },
-  { level: "Sr. Partner", commission: "90%", description: "100 policies + leadership responsibilities" },
-  { level: "Managing Partner", commission: "100%", description: "Full commission + override on team production" },
-];
-
-const benefits = [
-  { icon: BookOpen, title: "Comprehensive Training", description: "Weekly trainings, product knowledge, and sales mastery courses" },
-  { icon: Users, title: "Mentorship Program", description: "Learn from top-producing advisors with proven track records" },
-  { icon: Shield, title: "Back-Office Support", description: "Admin, compliance, and case management handled for you" },
-  { icon: TrendingUp, title: "Lead Generation", description: "Access to marketing systems and lead sources" },
-  { icon: Award, title: "Recognition & Rewards", description: "Incentive trips, bonuses, and public recognition" },
-  { icon: Clock, title: "Flexible Schedule", description: "Build your business on your terms with no cap on earnings" },
-];
-
-const whyTFA = [
-  "No cold calling required - warm market and referral-based approach",
-  "Work with top-rated carriers (MassMutual, Prudential, Allianz, and more)",
-  "Renewal commissions for passive income",
-  "Clear advancement path with transparent requirements",
-  "Community of like-minded professionals",
-  "No prior experience required - we train you from scratch",
-];
-
+import { GraduationCap, FileCheck, UserCheck, Rocket, DollarSign, TrendingUp, Users, BookOpen, Shield, Award, Clock, Briefcase, CheckCircle2, ArrowRight } from "lucide-react";
+const steps = [{
+  icon: GraduationCap,
+  title: "Pre-Licensing Education",
+  description: "Complete 32 hours of pre-licensing education through XCEL Solutions.",
+  details: ["$49 with TFA discount code", "Self-paced online learning", "Life Pre-Licensing Bundle"]
+}, {
+  icon: FileCheck,
+  title: "Pass Your Exam",
+  description: "Schedule and pass your Life Agent Examination through PSI Exams.",
+  details: ["$55-$88 exam fee", "Fingerprinting at test site ($68.95)", "Study materials provided"]
+}, {
+  icon: UserCheck,
+  title: "Get Licensed & Contract",
+  description: "Apply for your California Life & Health License, then complete TFA contracting.",
+  details: ["$193 license application", "TFA Membership: $49.99 (one-time)", "Skool Community: $29.99/month"]
+}, {
+  icon: Rocket,
+  title: "Launch Your Career",
+  description: "Complete TFA Quick Start training and start building your client base.",
+  details: ["Signal Advisors portal setup", "Carrier appointments", "Ongoing mentorship"]
+}];
+const compensationTiers = [{
+  level: "Agent",
+  commission: "50%",
+  description: "Entry level - Start building your book of business"
+}, {
+  level: "Advisor",
+  commission: "60%",
+  description: "10 policies written or promoted by Managing Partner"
+}, {
+  level: "Sr. Advisor",
+  commission: "70%",
+  description: "25 policies written + consistent production"
+}, {
+  level: "Partner",
+  commission: "80%",
+  description: "50 policies written + team building begins"
+}, {
+  level: "Sr. Partner",
+  commission: "90%",
+  description: "100 policies + leadership responsibilities"
+}, {
+  level: "Managing Partner",
+  commission: "100%",
+  description: "Full commission + override on team production"
+}];
+const benefits = [{
+  icon: BookOpen,
+  title: "Comprehensive Training",
+  description: "Weekly trainings, product knowledge, and sales mastery courses"
+}, {
+  icon: Users,
+  title: "Mentorship Program",
+  description: "Learn from top-producing advisors with proven track records"
+}, {
+  icon: Shield,
+  title: "Back-Office Support",
+  description: "Admin, compliance, and case management handled for you"
+}, {
+  icon: TrendingUp,
+  title: "Lead Generation",
+  description: "Access to marketing systems and lead sources"
+}, {
+  icon: Award,
+  title: "Recognition & Rewards",
+  description: "Incentive trips, bonuses, and public recognition"
+}, {
+  icon: Clock,
+  title: "Flexible Schedule",
+  description: "Build your business on your terms with no cap on earnings"
+}];
+const whyTFA = ["No cold calling required - warm market and referral-based approach", "Work with top-rated carriers (MassMutual, Prudential, Allianz, and more)", "Renewal commissions for passive income", "Clear advancement path with transparent requirements", "Community of like-minded professionals", "No prior experience required - we train you from scratch"];
 const AgentRecruitment = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary via-primary/95 to-primary/90 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMtNi42MjcgMC0xMiA1LjM3My0xMiAxMnM1LjM3MyAxMiAxMiAxMiAxMi01LjM3MyAxMi0xMi01LjM3My0xMi0xMi0xMnoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9nPjwvc3ZnPg==')] opacity-30" />
@@ -104,7 +104,7 @@ const AgentRecruitment = () => {
                 </Button>
               </a>
               <a href="#compensation">
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 text-lg px-8 py-6">
+                <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 text-primary">
                   View Compensation
                 </Button>
               </a>
@@ -126,12 +126,10 @@ const AgentRecruitment = () => {
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
-              {whyTFA.map((item, index) => (
-                <div key={index} className="flex items-start gap-3 p-4 bg-white/80 backdrop-blur-xl rounded-xl border border-border/50">
+              {whyTFA.map((item, index) => <div key={index} className="flex items-start gap-3 p-4 bg-white/80 backdrop-blur-xl rounded-xl border border-border/50">
                   <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
                   <span className="text-foreground">{item}</span>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
         </div>
@@ -149,18 +147,13 @@ const AgentRecruitment = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {benefits.map((benefit, index) => (
-              <div 
-                key={index} 
-                className="bg-white/80 backdrop-blur-xl rounded-2xl border border-border/50 p-6 hover:shadow-lg transition-shadow"
-              >
+            {benefits.map((benefit, index) => <div key={index} className="bg-white/80 backdrop-blur-xl rounded-2xl border border-border/50 p-6 hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
                   <benefit.icon className="h-6 w-6 text-accent" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>
                 <p className="text-muted-foreground">{benefit.description}</p>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
@@ -188,18 +181,13 @@ const AgentRecruitment = () => {
                 <div className="text-center">Commission</div>
                 <div className="text-right hidden sm:block">Requirements</div>
               </div>
-              {compensationTiers.map((tier, index) => (
-                <div 
-                  key={index} 
-                  className={`grid grid-cols-3 p-4 items-center ${index % 2 === 0 ? 'bg-white/50' : 'bg-white/80'} border-t border-border/30`}
-                >
+              {compensationTiers.map((tier, index) => <div key={index} className={`grid grid-cols-3 p-4 items-center ${index % 2 === 0 ? 'bg-white/50' : 'bg-white/80'} border-t border-border/30`}>
                   <div className="font-medium text-foreground">{tier.level}</div>
                   <div className="text-center">
                     <span className="text-2xl font-bold text-accent">{tier.commission}</span>
                   </div>
                   <div className="text-right text-sm text-muted-foreground hidden sm:block">{tier.description}</div>
-                </div>
-              ))}
+                </div>)}
             </div>
 
             <div className="mt-8 p-6 bg-accent/10 rounded-xl border border-accent/20">
@@ -235,8 +223,7 @@ const AgentRecruitment = () => {
               <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent via-accent/50 to-accent/20 hidden md:block" />
               
               <div className="space-y-6">
-                {steps.map((step, index) => (
-                  <div key={index} className="relative flex gap-6">
+                {steps.map((step, index) => <div key={index} className="relative flex gap-6">
                     <div className="flex-shrink-0 w-16 h-16 bg-accent rounded-2xl flex items-center justify-center z-10 shadow-lg">
                       <step.icon className="h-8 w-8 text-primary" />
                     </div>
@@ -247,15 +234,12 @@ const AgentRecruitment = () => {
                       </div>
                       <p className="text-muted-foreground mb-4">{step.description}</p>
                       <ul className="flex flex-wrap gap-2">
-                        {step.details.map((detail, i) => (
-                          <li key={i} className="text-xs bg-muted/50 text-muted-foreground px-3 py-1 rounded-full">
+                        {step.details.map((detail, i) => <li key={i} className="text-xs bg-muted/50 text-muted-foreground px-3 py-1 rounded-full">
                             {detail}
-                          </li>
-                        ))}
+                          </li>)}
                       </ul>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
           </div>
@@ -295,8 +279,6 @@ const AgentRecruitment = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default AgentRecruitment;
