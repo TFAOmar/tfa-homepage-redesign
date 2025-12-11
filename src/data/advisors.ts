@@ -69,7 +69,7 @@ export const advisors: Advisor[] = [
     city: "Chino Hills",
     region: "West",
     bio: "With over 15 years in Insurance and Financial Services, Elena specializes in Medicare planning, Income Protection, Retirement Strategies, and comprehensive Estate Planning. A former top producer at Kaiser Permanente for five consecutive years, she excels in guiding clients through 401(k) rollovers, wealth-preservation strategies, sustainable retirement income, and estate planning solutions including living trusts and legacy protection. Her mission: to empower families with clarity, confidence, and lasting financial freedom.",
-    specialties: ["Retirement Planning", "401(k) Guidance", "Estate Planning", "Tax Strategies"],
+    specialties: ["Retirement Planning", "401(k) Guidance", "Estate Planning", "Tax Strategies", "Medicare Planning", "Life Insurance"],
     licenses: ["Life & Health (Lic# 4218087)"],
     image: elenaEsquivelImg,
     email: "eeesquivel@tfainsuranceadvisors.com",
@@ -112,7 +112,7 @@ export const advisors: Advisor[] = [
     city: "Chino Hills",
     region: "West",
     bio: "Erika prides herself in financial education that helps individuals, families, and business owners align their financial decisions with their faith. Through personalized coaching, workshops, and educational resources, she fosters both financial health and spiritual growth while supporting clients' beliefs and long-term goals.",
-    specialties: ["Retirement Planning", "Tax Strategies", "Investment Management"],
+    specialties: ["Retirement Planning", "Tax Strategies", "Investment Management", "Business Planning"],
     licenses: ["Life & Health (Lic# 0L33842)"],
     image: erikaManzanoImg
   },
