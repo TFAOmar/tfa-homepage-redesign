@@ -357,7 +357,7 @@ const FranchiseRecruitment = () => {
                 </Button>
               </a>
               <Link to="/contact">
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 text-lg px-8 py-6">
+                <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 text-primary">
                   Schedule Discovery Call
                 </Button>
               </Link>
