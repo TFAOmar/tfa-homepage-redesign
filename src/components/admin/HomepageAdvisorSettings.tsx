@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Home, User, RotateCcw, GripVertical, Eye } from "lucide-react";
+import { Home, User, RotateCcw, GripVertical, Eye, X } from "lucide-react";
 import { useAdvisorStore } from "@/stores/advisorStore";
 import { advisors as staticAdvisors } from "@/data/advisors";
 import { useMemo } from "react";
@@ -29,9 +29,10 @@ import { CSS } from "@dnd-kit/utilities";
 interface SortableAdvisorItemProps {
   id: number | string;
   advisor: typeof staticAdvisors[0];
+  onRemove: () => void;
 }
 
-const SortableAdvisorItem = ({ id, advisor }: SortableAdvisorItemProps) => {
+const SortableAdvisorItem = ({ id, advisor, onRemove }: SortableAdvisorItemProps) => {
   const {
     attributes,
     listeners,
@@ -78,6 +79,13 @@ const SortableAdvisorItem = ({ id, advisor }: SortableAdvisorItemProps) => {
           <p className="text-xs text-muted-foreground truncate">{advisor.title}</p>
         </div>
       </div>
+      <button
+        onClick={onRemove}
+        className="p-1 hover:bg-destructive/20 rounded text-muted-foreground hover:text-destructive transition-colors"
+        title="Remove from selection"
+      >
+        <X className="h-4 w-4" />
+      </button>
     </div>
   );
 };
@@ -211,6 +219,7 @@ const HomepageAdvisorSettings = () => {
                       key={advisor.id}
                       id={advisor.id}
                       advisor={advisor}
+                      onRemove={() => handleToggleAdvisor(advisor.id)}
                     />
                   ))}
                 </div>
