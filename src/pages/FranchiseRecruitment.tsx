@@ -128,7 +128,7 @@ const FranchiseRecruitment = () => {
                 </Button>
               </a>
               <a href="#investment">
-                <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 text-secondary-foreground">
+                <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 hover:text-white text-lg px-8 py-6 text-secondary-foreground">
                   View Investment Details
                 </Button>
               </a>
