@@ -14,6 +14,7 @@ import deliaPlascenciaImg from "@/assets/advisors/delia-plascencia.jpg";
 import mariahLorenzenImg from "@/assets/advisors/mariah-lorenzen.jpg";
 import seanCagleImg from "@/assets/advisors/sean-cagle.jpg";
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
+import ruthPachecoImg from "@/assets/advisors/ruth-pacheco.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -231,6 +232,20 @@ export const advisors: Advisor[] = [
     specialties: ["Retirement Planning", "Estate Planning", "Tax Strategies", "Business Planning", "Life Insurance"],
     licenses: ["Life & Health"],
     image: vanessaSanchezImg
+  },
+  {
+    id: "ruth-pacheco",
+    name: "Ruth Pacheco",
+    title: "Reverse Mortgage Specialist",
+    type: "Broker",
+    state: "California",
+    city: "Upland",
+    region: "West",
+    bio: "With more than 36 years of lending experience, Ruth is a prominent residential mortgage professional and Reverse Mortgage Certified specialist. Her diverse experience as business owner, loan processor, and loan officer through several market cycles gives her a competitive edge. Her passion for people and dedication to excellence ensures every transaction is handled with care. 'I am not number one, YOU are!'",
+    specialties: ["Mortgage Financing", "Retirement Planning", "Real Estate"],
+    licenses: ["NMLS# 252846", "Reverse Mortgage Certified"],
+    image: ruthPachecoImg,
+    yearsOfExperience: 36
   }
 ];
 
