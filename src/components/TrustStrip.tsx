@@ -44,9 +44,14 @@ const TrustStrip = () => {
           </h2>
         </div>
 
-        {/* Carrier Logos Carousel */}
+        {/* Carrier Logos Marquee with Edge Fade */}
         <div className="relative">
-          <div className="flex gap-16 md:gap-20 animate-scroll hover:pause-animation">
+          {/* Left fade mask */}
+          <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          {/* Right fade mask */}
+          <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          
+          <div className="flex gap-16 md:gap-20 animate-marquee hover:[animation-play-state:paused]">
             {duplicatedCarriers.map((carrier, index) => (
               <Link
                 key={index}
@@ -65,19 +70,16 @@ const TrustStrip = () => {
       </div>
 
       <style>{`
-        @keyframes scroll {
+        @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        .animate-scroll {
-          animation: scroll 60s linear infinite;
-        }
-        .pause-animation:hover {
-          animation-play-state: paused;
+        .animate-marquee {
+          animation: marquee 45s linear infinite;
         }
         @media (max-width: 768px) {
-          .animate-scroll {
-            animation-duration: 40s;
+          .animate-marquee {
+            animation-duration: 30s;
           }
         }
       `}</style>
