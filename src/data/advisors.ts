@@ -62,15 +62,17 @@ export const advisors: Advisor[] = [
   {
     id: "elena-esquivel",
     name: "Elena Esquivel",
-    title: "Financial Strategist & Retirement Specialist",
+    title: "Financial Strategist & Estate Planning Consultant",
     type: "Advisor",
     state: "California",
     city: "Chino Hills",
     region: "West",
-    bio: "With over 15 years in Insurance and Financial Services, Elena specializes in Medicare planning, Income Protection, and Retirement Strategies. A former top producer at Kaiser Permanente for five consecutive years, she now guides clients through 401(k) rollovers, wealth protection, and retirement income maximization. Her mission: to empower families to build a legacy of financial freedom and peace of mind.",
+    bio: "With over 15 years in Insurance and Financial Services, Elena specializes in Medicare planning, Income Protection, Retirement Strategies, and comprehensive Estate Planning. A former top producer at Kaiser Permanente for five consecutive years, she excels in guiding clients through 401(k) rollovers, wealth-preservation strategies, sustainable retirement income, and estate planning solutions including living trusts and legacy protection. Her mission: to empower families with clarity, confidence, and lasting financial freedom.",
     specialties: ["Retirement Planning", "401(k) Guidance", "Estate Planning", "Tax Strategies"],
     licenses: ["Life & Health (Lic# 4218087)"],
-    image: elenaEsquivelImg
+    image: elenaEsquivelImg,
+    email: "eeesquivel@tfainsuranceadvisors.com",
+    phone: "(951) 255-4997"
   },
   {
     id: "jose-estrada",
