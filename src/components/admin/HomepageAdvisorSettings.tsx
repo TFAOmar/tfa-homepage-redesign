@@ -7,6 +7,7 @@ import { Home, User, RotateCcw, GripVertical, Eye } from "lucide-react";
 import { useAdvisorStore } from "@/stores/advisorStore";
 import { advisors as staticAdvisors } from "@/data/advisors";
 import { useMemo } from "react";
+import { toast } from "@/hooks/use-toast";
 import {
   DndContext,
   closestCenter,
@@ -123,7 +124,28 @@ const HomepageAdvisorSettings = () => {
       const oldIndex = homepageAdvisorIds.indexOf(active.id as number | string);
       const newIndex = homepageAdvisorIds.indexOf(over.id as number | string);
       reorderHomepageAdvisors(oldIndex, newIndex);
+      toast({ title: "Order updated", description: "Advisor display order has been saved." });
     }
+  };
+
+  const handleCountChange = (value: number[]) => {
+    setHomepageAdvisorCount(value[0]);
+    toast({ title: "Settings saved", description: `Displaying ${value[0]} advisor${value[0] !== 1 ? 's' : ''} on homepage.` });
+  };
+
+  const handleToggleAdvisor = (id: number | string) => {
+    const isCurrentlySelected = homepageAdvisorIds.includes(id);
+    toggleHomepageAdvisor(id);
+    const advisor = staticAdvisors.find(a => a.id === id);
+    toast({ 
+      title: isCurrentlySelected ? "Advisor removed" : "Advisor added",
+      description: `${advisor?.name} ${isCurrentlySelected ? 'removed from' : 'added to'} homepage.`
+    });
+  };
+
+  const handleClearSelection = () => {
+    clearHomepageAdvisors();
+    toast({ title: "Selection cleared", description: "All advisors have been deselected." });
   };
 
   return (
@@ -146,7 +168,7 @@ const HomepageAdvisorSettings = () => {
           </div>
           <Slider
             value={[homepageAdvisorCount]}
-            onValueChange={(value) => setHomepageAdvisorCount(value[0])}
+            onValueChange={handleCountChange}
             min={1}
             max={6}
             step={1}
@@ -167,7 +189,7 @@ const HomepageAdvisorSettings = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={clearHomepageAdvisors}
+                onClick={handleClearSelection}
                 className="text-muted-foreground hover:text-foreground"
               >
                 <RotateCcw className="h-4 w-4 mr-1" />
@@ -215,11 +237,11 @@ const HomepageAdvisorSettings = () => {
               <div
                 key={advisor.id}
                 className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-accent/50 hover:bg-secondary/50 transition-all cursor-pointer"
-                onClick={() => toggleHomepageAdvisor(advisor.id)}
+                onClick={() => handleToggleAdvisor(advisor.id)}
               >
                 <Checkbox
                   checked={false}
-                  onCheckedChange={() => toggleHomepageAdvisor(advisor.id)}
+                  onCheckedChange={() => handleToggleAdvisor(advisor.id)}
                   className="data-[state=checked]:bg-accent data-[state=checked]:border-accent"
                 />
                 <div className="flex items-center gap-3 flex-1 min-w-0">
