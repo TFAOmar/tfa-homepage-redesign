@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { MapPin, Shield, Calendar, ExternalLink } from "lucide-react";
+import { MapPin, Shield, Calendar, ExternalLink, Award } from "lucide-react";
 import { Advisor } from "@/data/advisors";
 import { Link } from "react-router-dom";
 
@@ -47,9 +47,17 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
           <p className="text-sm text-muted-foreground font-medium">
             {advisor.title}
           </p>
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="h-3.5 w-3.5 text-accent" />
-            <span>{advisor.city}, {advisor.state}</span>
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 text-accent" />
+              <span>{advisor.city}, {advisor.state}</span>
+            </div>
+            {advisor.yearsOfExperience && (
+              <div className="flex items-center gap-1.5">
+                <Award className="h-3.5 w-3.5 text-accent" />
+                <span>{advisor.yearsOfExperience}+ Years</span>
+              </div>
+            )}
           </div>
         </div>
       </CardHeader>
