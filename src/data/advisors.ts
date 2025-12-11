@@ -264,5 +264,6 @@ export const specialties = [
   "Business Planning",
   "401(k) Guidance",
   "Investment Management",
-  "Mortgage Financing"
+  "Mortgage Financing",
+  "Real Estate"
 ];
