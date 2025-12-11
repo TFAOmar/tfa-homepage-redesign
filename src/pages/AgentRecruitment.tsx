@@ -104,7 +104,7 @@ const AgentRecruitment = () => {
                 </Button>
               </a>
               <a href="#compensation">
-                <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 text-primary">
+                <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 hover:text-white text-lg px-8 py-6 text-primary">
                   View Compensation
                 </Button>
               </a>
