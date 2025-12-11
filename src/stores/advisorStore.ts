@@ -52,6 +52,7 @@ interface AdvisorStore {
   setHomepageAdvisorIds: (ids: (number | string)[]) => void;
   setHomepageAdvisorCount: (count: number) => void;
   toggleHomepageAdvisor: (id: number | string) => void;
+  clearHomepageAdvisors: () => void;
 }
 
 export const useAdvisorStore = create<AdvisorStore>()(
@@ -198,6 +199,10 @@ export const useAdvisorStore = create<AdvisorStore>()(
             return { homepageAdvisorIds: [...currentIds, id] };
           }
         });
+      },
+
+      clearHomepageAdvisors: () => {
+        set({ homepageAdvisorIds: [] });
       },
     }),
     {

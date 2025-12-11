@@ -2,7 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Home, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Home, User, RotateCcw } from "lucide-react";
 import { useAdvisorStore } from "@/stores/advisorStore";
 import { advisors as staticAdvisors } from "@/data/advisors";
 
@@ -11,7 +12,8 @@ const HomepageAdvisorSettings = () => {
     homepageAdvisorIds, 
     homepageAdvisorCount, 
     setHomepageAdvisorCount, 
-    toggleHomepageAdvisor 
+    toggleHomepageAdvisor,
+    clearHomepageAdvisors 
   } = useAdvisorStore();
 
   return (
@@ -49,7 +51,20 @@ const HomepageAdvisorSettings = () => {
 
         {/* Advisor Selection */}
         <div className="space-y-3">
-          <Label className="text-sm font-medium">Select Featured Advisors</Label>
+          <div className="flex items-center justify-between">
+            <Label className="text-sm font-medium">Select Featured Advisors</Label>
+            {homepageAdvisorIds.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearHomepageAdvisors}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <RotateCcw className="h-4 w-4 mr-1" />
+                Clear Selection
+              </Button>
+            )}
+          </div>
           <p className="text-xs text-muted-foreground mb-3">
             If none selected, the first {homepageAdvisorCount} advisors will be shown by default
           </p>
