@@ -3,9 +3,10 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Home, User, RotateCcw, GripVertical } from "lucide-react";
+import { Home, User, RotateCcw, GripVertical, Eye } from "lucide-react";
 import { useAdvisorStore } from "@/stores/advisorStore";
 import { advisors as staticAdvisors } from "@/data/advisors";
+import { useMemo } from "react";
 import {
   DndContext,
   closestCenter,
@@ -104,6 +105,17 @@ const HomepageAdvisorSettings = () => {
   const unselectedAdvisors = staticAdvisors.filter(
     advisor => !homepageAdvisorIds.includes(advisor.id)
   );
+
+  // Preview advisors - what will actually show on homepage
+  const previewAdvisors = useMemo(() => {
+    if (homepageAdvisorIds.length > 0) {
+      return homepageAdvisorIds
+        .map(id => staticAdvisors.find(a => a.id === id))
+        .filter(Boolean)
+        .slice(0, homepageAdvisorCount) as typeof staticAdvisors;
+    }
+    return staticAdvisors.slice(0, homepageAdvisorCount);
+  }, [homepageAdvisorIds, homepageAdvisorCount]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -229,6 +241,49 @@ const HomepageAdvisorSettings = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Live Preview */}
+        <div className="space-y-3 pt-4 border-t">
+          <div className="flex items-center gap-2">
+            <Eye className="h-4 w-4 text-accent" />
+            <Label className="text-sm font-medium">Homepage Preview</Label>
+          </div>
+          <div className="bg-secondary/30 rounded-xl p-6">
+            <div className="text-center mb-6">
+              <h3 className="text-lg font-bold text-navy mb-1">Meet Our Advisors</h3>
+              <p className="text-xs text-muted-foreground">
+                Experienced professionals dedicated to your financial success
+              </p>
+            </div>
+            <div className={`grid gap-4 ${
+              previewAdvisors.length === 1 ? 'grid-cols-1 max-w-[180px] mx-auto' :
+              previewAdvisors.length === 2 ? 'grid-cols-2 max-w-[380px] mx-auto' :
+              previewAdvisors.length <= 3 ? 'grid-cols-3' :
+              previewAdvisors.length === 4 ? 'grid-cols-2 lg:grid-cols-4' :
+              'grid-cols-3'
+            }`}>
+              {previewAdvisors.map((advisor) => (
+                <div
+                  key={advisor.id}
+                  className="bg-card rounded-lg overflow-hidden shadow-sm border"
+                >
+                  <div className="aspect-square overflow-hidden bg-gradient-to-b from-gray-400 to-gray-600">
+                    <img
+                      src={advisor.image}
+                      alt={advisor.name}
+                      className="w-full h-full object-contain object-center"
+                    />
+                  </div>
+                  <div className="p-3">
+                    <h4 className="text-sm font-bold text-navy truncate">{advisor.name}</h4>
+                    <p className="text-xs text-accent truncate">{advisor.city}, {advisor.state}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{advisor.bio}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </CardContent>
