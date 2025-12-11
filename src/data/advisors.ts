@@ -84,7 +84,7 @@ export const advisors: Advisor[] = [
     city: "San Dimas",
     region: "West",
     bio: "Experienced advisor focused on comprehensive wealth management and retirement planning solutions.",
-    specialties: ["Retirement Planning", "Business Planning", "Tax Strategies"],
+    specialties: ["Retirement Planning", "Business Planning", "Tax Strategies", "Investment Management"],
     licenses: ["Life & Health"],
     image: joseEstradaImg,
     email: "Jose@agefinancial.com",
@@ -177,7 +177,7 @@ export const advisors: Advisor[] = [
     city: "Granada Hills",
     region: "West",
     bio: "After a 28-year career in the hospitality industry as a Director of Operations, where he developed and promoted dozens of industry leaders, Hamlet saw the need for more result-driven financial educators and strategists. A God-loving family man, he is passionate about helping others with integrity and transparency, seeing every individual as an opportunity to help someone and their family with retirement and financial planning strategies.",
-    specialties: ["Retirement Planning", "Financial Planning", "Tax Strategies"],
+    specialties: ["Retirement Planning", "Tax Strategies", "Life Insurance"],
     licenses: ["Life & Health (Lic# 4379309)"],
     image: hamletOhandjanianImg
   },
@@ -203,7 +203,7 @@ export const advisors: Advisor[] = [
     city: "Chino Hills",
     region: "West",
     bio: "Mariah has extensive experience in financial services, serving as Head of Franchise Operations at TFA since 2019. Her career spans roles at New American Funding, Finance of America Commercial, CrossCountry Mortgage, Carrington Mortgage Services, and Green Tree Servicing. A licensed loan originator focused on purchase and refinance transactions, Mariah brings deep mortgage expertise to help clients achieve their financial goals.",
-    specialties: ["Mortgage Financing", "Retirement Planning", "Tax Strategies"],
+    specialties: ["Mortgage Financing", "Retirement Planning", "Tax Strategies", "Real Estate"],
     licenses: ["Loan Originator", "Life & Health (Lic# 0F93770)"],
     image: mariahLorenzenImg
   },
@@ -216,7 +216,7 @@ export const advisors: Advisor[] = [
     city: "Arizona",
     region: "Southwest",
     bio: "Sean specializes in all aspects of estate planning, creating customized strategies that safeguard assets and preserve family legacies. He is dedicated to helping clients design plans that reflect their values while providing peace of mind for generations to come.",
-    specialties: ["Estate Planning", "Tax Strategies", "Retirement Planning"],
+    specialties: ["Estate Planning", "Tax Strategies", "Retirement Planning", "Life Insurance"],
     licenses: ["Life & Health"],
     image: seanCagleImg
   },
