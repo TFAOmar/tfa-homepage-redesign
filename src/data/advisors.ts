@@ -73,7 +73,8 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health (Lic# 4218087)"],
     image: elenaEsquivelImg,
     email: "eeesquivel@tfainsuranceadvisors.com",
-    phone: "(951) 255-4997"
+    phone: "(951) 255-4997",
+    yearsOfExperience: 15
   },
   {
     id: "jose-estrada",
@@ -101,7 +102,8 @@ export const advisors: Advisor[] = [
     bio: "Ron retired from his first career of over 30 years in the automotive industry, working with top dealers including 18 years with the Penske organization where he grew from general sales manager to president of a region. With a love of helping people and seeing the need for sound financial education, Ron joined his life partner Jennifer Ramos in business to help families achieve financial security.",
     specialties: ["Retirement Planning", "Life Insurance", "Estate Planning"],
     licenses: ["Life & Health (Lic# 4418658)"],
-    image: ronaldBrownImg
+    image: ronaldBrownImg,
+    yearsOfExperience: 30
   },
   {
     id: "erika-manzano",
@@ -127,7 +129,8 @@ export const advisors: Advisor[] = [
     bio: "With 26 years in mortgage financing, Celeste is Broker/Owner of LOAN|BOX Loans. Her career spans leadership roles at Bank of Manhattan, JL Investments, and American General Finance. A California Real Estate Broker and 2011 'Outstanding Small Businesswoman' honoree, she's passionate about community involvement and is a proud mother of two daughters, Cayllie and Mayah.",
     specialties: ["Mortgage Financing", "Real Estate", "Retirement Planning"],
     licenses: ["Real Estate Broker", "Life & Health (Lic# 0C25357)"],
-    image: celesteSierraImg
+    image: celesteSierraImg,
+    yearsOfExperience: 26
   },
   {
     id: "jorge-hernandez",
@@ -140,7 +143,8 @@ export const advisors: Advisor[] = [
     bio: "With over 30 years in estate planning, Jorge is a trusted guide for families and business owners. Holding an English degree from University of La Verne and a Juris Doctorate, he began his career at Transamerica before becoming a Managing Partner at TFA. Jorge regularly leads estate planning workshops, turning legal jargon into everyday language and helping families avoid probate, reduce taxes, and pass down wealth efficiently.",
     specialties: ["Estate Planning", "Tax Strategies", "Business Planning"],
     licenses: ["Life & Health (Lic# 0F66052)"],
-    image: jorgeHernandezImg
+    image: jorgeHernandezImg,
+    yearsOfExperience: 30
   },
   {
     id: "joe-jessie-nieto",
@@ -166,7 +170,8 @@ export const advisors: Advisor[] = [
     bio: "Jennifer has been licensed in the financial services industry for over 20 years. Known as the 'trainer of the trainers,' she has coached hundreds of new financial advisors. A Sales Hall of Fame inductee for the number of clients she helped, Jennifer expanded TFA's footprint by opening an office in Rancho Cucamonga to serve her neighbors and community.",
     specialties: ["Retirement Planning", "Tax Strategies", "Investment Management"],
     licenses: ["Life & Health"],
-    image: jenniferRamosImg
+    image: jenniferRamosImg,
+    yearsOfExperience: 20
   },
   {
     id: "hamlet-ohandjanian",
@@ -179,7 +184,8 @@ export const advisors: Advisor[] = [
     bio: "After a 28-year career in the hospitality industry as a Director of Operations, where he developed and promoted dozens of industry leaders, Hamlet saw the need for more result-driven financial educators and strategists. A God-loving family man, he is passionate about helping others with integrity and transparency, seeing every individual as an opportunity to help someone and their family with retirement and financial planning strategies.",
     specialties: ["Retirement Planning", "Tax Strategies", "Life Insurance"],
     licenses: ["Life & Health (Lic# 4379309)"],
-    image: hamletOhandjanianImg
+    image: hamletOhandjanianImg,
+    yearsOfExperience: 28
   },
   {
     id: "delia-plascencia",
