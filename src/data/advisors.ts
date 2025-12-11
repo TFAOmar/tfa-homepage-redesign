@@ -13,6 +13,7 @@ import hamletOhandjanianImg from "@/assets/advisors/hamlet-ohandjanian.jpg";
 import deliaPlascenciaImg from "@/assets/advisors/delia-plascencia.jpg";
 import mariahLorenzenImg from "@/assets/advisors/mariah-lorenzen.jpg";
 import seanCagleImg from "@/assets/advisors/sean-cagle.jpg";
+import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -215,6 +216,19 @@ export const advisors: Advisor[] = [
     specialties: ["Estate Planning", "Tax Strategies", "Retirement Planning"],
     licenses: ["Life & Health"],
     image: seanCagleImg
+  },
+  {
+    id: "vanessa-sanchez",
+    name: "Vanessa Crystal Sanchez",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Vanessa guides individuals, families, and business owners through wealth building, protection, and long-term planning. Her holistic approach ensures every plan is intentional, strategic, and aligned with long-term goals—from retirement planning and tax-efficient life insurance to estate planning with living trusts. Known for her clarity and compassion, she turns overwhelming financial decisions into simple, actionable steps.",
+    specialties: ["Retirement Planning", "Estate Planning", "Tax Strategies", "Business Planning", "Life Insurance"],
+    licenses: ["Life & Health"],
+    image: vanessaSanchezImg
   }
 ];
 
