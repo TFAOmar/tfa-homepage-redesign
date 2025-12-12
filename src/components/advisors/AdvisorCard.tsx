@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 interface ExtendedAdvisor extends Advisor {
   schedulingLink?: string;
+  landingPage?: string;
 }
 
 interface AdvisorCardProps {
@@ -100,7 +101,20 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
         </div>
       </CardContent>
 
-      <CardFooter className="pt-0">
+      <CardFooter className="pt-0 flex-col gap-2">
+        {/* Landing Page Link */}
+        {('landingPage' in advisor && advisor.landingPage) && (
+          <Link to={advisor.landingPage} className="w-full">
+            <Button 
+              variant="outline"
+              className="w-full border-accent/30 text-accent hover:bg-accent/10"
+            >
+              View Full Profile
+            </Button>
+          </Link>
+        )}
+        
+        {/* Scheduling Button */}
         {('schedulingLink' in advisor && advisor.schedulingLink) ? (
           <a href={advisor.schedulingLink} target="_blank" rel="noopener noreferrer" className="w-full">
             <Button 

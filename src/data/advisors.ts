@@ -31,6 +31,7 @@ export interface Advisor {
   email?: string;
   phone?: string;
   yearsOfExperience?: number;
+  landingPage?: string;
 }
 
 export const advisors: Advisor[] = [
@@ -237,7 +238,8 @@ export const advisors: Advisor[] = [
     bio: "Vanessa guides individuals, families, and business owners through wealth building, protection, and long-term planning. Her holistic approach ensures every plan is intentional, strategic, and aligned with long-term goals—from retirement planning and tax-efficient life insurance to estate planning with living trusts. Known for her clarity and compassion, she turns overwhelming financial decisions into simple, actionable steps.",
     specialties: ["Retirement Planning", "Estate Planning", "Tax Strategies", "Business Planning", "Life Insurance"],
     licenses: ["Life & Health"],
-    image: vanessaSanchezImg
+    image: vanessaSanchezImg,
+    landingPage: "/advisor/vanessa-sanchez"
   },
   {
     id: "ruth-pacheco",
