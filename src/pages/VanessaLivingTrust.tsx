@@ -60,9 +60,7 @@ export default function VanessaLivingTrust() {
             <img src={tfaLogo} alt="The Financial Architects" className="h-12 md:h-16 object-contain drop-shadow-lg" />
           </div>
           <div className="h-10 w-px bg-accent/50" />
-          <div className="bg-white/30 backdrop-blur-md rounded-xl px-6 py-4">
-            <img src={brandonGroupLogo} alt="The Brandon Group" className="h-14 md:h-16 object-contain drop-shadow-lg" />
-          </div>
+          <img src={brandonGroupLogo} alt="The Brandon Group" className="h-14 md:h-16 object-contain drop-shadow-lg" />
         </div>
         <p className="text-center text-white/60 text-sm mt-3 tracking-wide">
           A Trusted Partnership for Your Family's Future
@@ -152,9 +150,7 @@ export default function VanessaLivingTrust() {
               expert guidance tailored to your family's unique needs.
             </p>
             <div className="flex items-center justify-center gap-6">
-              <div className="bg-white/30 backdrop-blur-md rounded-lg px-5 py-3">
-                <img src={brandonGroupLogo} alt="The Brandon Group" className="h-12 object-contain drop-shadow-md" />
-              </div>
+              <img src={brandonGroupLogo} alt="The Brandon Group" className="h-12 object-contain drop-shadow-md" />
               <span className="text-accent font-medium">×</span>
               <div className="bg-white/30 backdrop-blur-md rounded-lg px-5 py-3">
                 <img src={tfaLogo} alt="The Financial Architects" className="h-10 object-contain drop-shadow-md" />
@@ -234,9 +230,7 @@ export default function VanessaLivingTrust() {
               <img src={tfaLogo} alt="The Financial Architects" className="h-8 object-contain drop-shadow-sm" />
             </div>
             <span className="text-white/30">×</span>
-            <div className="bg-white/30 backdrop-blur-md rounded-lg px-5 py-3">
-              <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain drop-shadow-sm" />
-            </div>
+            <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain drop-shadow-sm" />
           </div>
           <p className="text-white/40 text-sm">
             © {new Date().getFullYear()} The Financial Architects. All rights reserved.
