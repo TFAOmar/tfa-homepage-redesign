@@ -57,7 +57,7 @@ export default function VanessaLivingTrust() {
       <header className="py-6 px-4 border-b border-white/10">
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-6 md:gap-10">
           <div className="bg-white/30 backdrop-blur-md rounded-xl px-6 py-4">
-            <img src={tfaLogo} alt="The Financial Architects" className="h-12 md:h-16 object-contain drop-shadow-lg" />
+            <img src={tfaLogo} alt="The Financial Architects" className="h-12 md:h-16 object-contain [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.9))_drop-shadow(0_0_4px_rgba(255,255,255,0.8))]" />
           </div>
           <div className="h-10 w-px bg-accent/50" />
           <img src={brandonGroupLogo} alt="The Brandon Group" className="h-14 md:h-16 object-contain [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.9))_drop-shadow(0_0_4px_rgba(255,255,255,0.8))]" />
@@ -153,7 +153,7 @@ export default function VanessaLivingTrust() {
               <img src={brandonGroupLogo} alt="The Brandon Group" className="h-12 object-contain [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.9))_drop-shadow(0_0_4px_rgba(255,255,255,0.8))]" />
               <span className="text-accent font-medium">×</span>
               <div className="bg-white/30 backdrop-blur-md rounded-lg px-5 py-3">
-                <img src={tfaLogo} alt="The Financial Architects" className="h-10 object-contain drop-shadow-md" />
+                <img src={tfaLogo} alt="The Financial Architects" className="h-10 object-contain [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.9))_drop-shadow(0_0_4px_rgba(255,255,255,0.8))]" />
               </div>
             </div>
           </div>
@@ -227,7 +227,7 @@ export default function VanessaLivingTrust() {
         <div className="max-w-6xl mx-auto text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="bg-white/30 backdrop-blur-md rounded-lg px-5 py-3">
-              <img src={tfaLogo} alt="The Financial Architects" className="h-8 object-contain drop-shadow-sm" />
+              <img src={tfaLogo} alt="The Financial Architects" className="h-8 object-contain [filter:drop-shadow(0_0_10px_rgba(255,255,255,0.9))_drop-shadow(0_0_3px_rgba(255,255,255,0.8))]" />
             </div>
             <span className="text-white/30">×</span>
             <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain [filter:drop-shadow(0_0_10px_rgba(255,255,255,0.9))_drop-shadow(0_0_3px_rgba(255,255,255,0.8))]" />
