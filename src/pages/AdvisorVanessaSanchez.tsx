@@ -75,7 +75,7 @@ const AdvisorVanessaSanchez = () => {
                 Helping individuals, families, and business owners build wealth, protect their assets, and plan for lasting legacies with clarity and compassion.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start mb-8">
                 <Link to="/book-consultation">
                   <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-8 py-6 w-full sm:w-auto">
                     <Calendar className="mr-2 h-5 w-5" />
@@ -86,6 +86,12 @@ const AdvisorVanessaSanchez = () => {
                   <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-secondary-foreground">
                     <Phone className="mr-2 h-5 w-5" />
                     Contact Me
+                  </Button>
+                </Link>
+                <Link to="/advisor/vanessa-sanchez/living-trust">
+                  <Button size="lg" variant="outline" className="border-accent/50 hover:bg-accent/20 text-lg px-8 py-6 w-full sm:w-auto text-accent">
+                    <Shield className="mr-2 h-5 w-5" />
+                    Living Trust Planning
                   </Button>
                 </Link>
               </div>
@@ -173,6 +179,15 @@ const AdvisorVanessaSanchez = () => {
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">{service.title}</h3>
                 <p className="text-muted-foreground">{service.description}</p>
+                {service.title === "Estate Planning" && (
+                  <Link 
+                    to="/advisor/vanessa-sanchez/living-trust" 
+                    className="inline-flex items-center text-accent hover:text-accent/80 mt-4 font-medium transition-colors"
+                  >
+                    Learn about Living Trusts
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Link>
+                )}
               </Card>)}
           </div>
         </div>
