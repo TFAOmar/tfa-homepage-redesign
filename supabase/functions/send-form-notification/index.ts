@@ -1,6 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -48,6 +51,21 @@ const getFormSubject = (formType: string, formData: Record<string, unknown>): st
   return subjects[formType] || `New Form Submission: ${formType}`;
 };
 
+const extractCommonFields = (formData: Record<string, unknown>) => {
+  const firstName = formData.firstName as string || "";
+  const lastName = formData.lastName as string || "";
+  const fullName = formData.fullName as string || formData.name as string || "";
+  
+  return {
+    email: (formData.email as string) || null,
+    name: fullName || `${firstName} ${lastName}`.trim() || null,
+    phone: (formData.phone as string) || null,
+    source: (formData.source as string) || null,
+    partner: (formData.partner as string) || null,
+    advisor: (formData.advisor as string) || null,
+  };
+};
+
 serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -59,9 +77,44 @@ serve(async (req: Request): Promise<Response> => {
       throw new Error("RESEND_API_KEY is not configured");
     }
 
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error("Supabase configuration is missing");
+    }
+
     const { formType, formData, recipientEmail }: FormNotificationRequest = await req.json();
 
     console.log(`Processing ${formType} form submission:`, JSON.stringify(formData));
+
+    // Create Supabase client with service role for database insert
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+    // Extract common fields for easier querying
+    const { email, name, phone, source, partner, advisor } = extractCommonFields(formData);
+
+    // Store submission in database
+    const { data: submissionData, error: dbError } = await supabase
+      .from("form_submissions")
+      .insert({
+        form_type: formType,
+        form_data: formData,
+        email,
+        name,
+        phone,
+        source,
+        partner,
+        advisor,
+        status: "new",
+        email_sent: false,
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error("Database insert error:", dbError);
+      // Continue with email even if DB insert fails
+    } else {
+      console.log("Form submission stored with ID:", submissionData?.id);
+    }
 
     // Default recipient - TFA main email
     const toEmail = recipientEmail || "leads@tfainsuranceadvisors.com";
@@ -91,6 +144,7 @@ serve(async (req: Request): Promise<Response> => {
             <div class="content">
               <h2 style="color: #0A0F1F; margin-top: 0;">${subject}</h2>
               <p>A new ${formType.replace(/-/g, " ")} form has been submitted with the following details:</p>
+              ${submissionData?.id ? `<p style="font-size: 12px; color: #666;">Submission ID: ${submissionData.id}</p>` : ""}
               <table>
                 ${formRows}
               </table>
@@ -127,7 +181,15 @@ serve(async (req: Request): Promise<Response> => {
 
     console.log("Email sent successfully:", data);
 
-    return new Response(JSON.stringify({ success: true, data }), {
+    // Update submission to mark email as sent
+    if (submissionData?.id) {
+      await supabase
+        .from("form_submissions")
+        .update({ email_sent: true })
+        .eq("id", submissionData.id);
+    }
+
+    return new Response(JSON.stringify({ success: true, data, submissionId: submissionData?.id }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
