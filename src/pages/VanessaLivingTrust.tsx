@@ -58,7 +58,7 @@ export default function VanessaLivingTrust() {
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-6 md:gap-10">
           <img src={tfaLogo} alt="The Financial Architects" className="h-12 md:h-16 object-contain" />
           <div className="h-10 w-px bg-accent/50" />
-          <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 md:h-14 object-contain" />
+          <img src={brandonGroupLogo} alt="The Brandon Group" className="h-14 md:h-16 object-contain drop-shadow-lg" />
         </div>
         <p className="text-center text-white/60 text-sm mt-3 tracking-wide">
           A Trusted Partnership for Your Family's Future
@@ -148,7 +148,7 @@ export default function VanessaLivingTrust() {
               expert guidance tailored to your family's unique needs.
             </p>
             <div className="flex items-center justify-center gap-6">
-              <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain opacity-80" />
+              <img src={brandonGroupLogo} alt="The Brandon Group" className="h-12 object-contain drop-shadow-md" />
               <span className="text-accent font-medium">×</span>
               <img src={tfaLogo} alt="The Financial Architects" className="h-10 object-contain opacity-80" />
             </div>
@@ -224,7 +224,7 @@ export default function VanessaLivingTrust() {
           <div className="flex items-center justify-center gap-4 mb-4">
             <img src={tfaLogo} alt="The Financial Architects" className="h-8 object-contain opacity-60" />
             <span className="text-white/30">×</span>
-            <img src={brandonGroupLogo} alt="The Brandon Group" className="h-6 object-contain opacity-60" />
+            <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain drop-shadow-sm" />
           </div>
           <p className="text-white/40 text-sm">
             © {new Date().getFullYear()} The Financial Architects. All rights reserved.
