@@ -2,7 +2,7 @@ import { Shield, FileText, Lock, Heart, ArrowDown, Phone, Mail, Calendar } from 
 import { Button } from "@/components/ui/button";
 import LivingTrustForm from "@/components/living-trust/LivingTrustForm";
 import tfaLogo from "@/assets/tfa-logo.png";
-import brandonGroupLogo from "@/assets/partners/the-brandon-group.svg";
+import brandonGroupLogo from "@/assets/partners/the-brandon-group.png";
 import vanessaPhoto from "@/assets/advisors/vanessa-sanchez.jpg";
 
 export default function VanessaLivingTrust() {
@@ -61,7 +61,7 @@ export default function VanessaLivingTrust() {
           </div>
           <div className="h-10 w-px bg-accent/50" />
           <div className="bg-white/30 backdrop-blur-md rounded-xl px-6 py-4">
-            <img src={brandonGroupLogo} alt="The Brandon Group" className="h-14 md:h-16 object-contain drop-shadow-lg invert" />
+            <img src={brandonGroupLogo} alt="The Brandon Group" className="h-14 md:h-16 object-contain drop-shadow-lg" />
           </div>
         </div>
         <p className="text-center text-white/60 text-sm mt-3 tracking-wide">
@@ -153,7 +153,7 @@ export default function VanessaLivingTrust() {
             </p>
             <div className="flex items-center justify-center gap-6">
               <div className="bg-white/30 backdrop-blur-md rounded-lg px-5 py-3">
-                <img src={brandonGroupLogo} alt="The Brandon Group" className="h-12 object-contain drop-shadow-md invert" />
+                <img src={brandonGroupLogo} alt="The Brandon Group" className="h-12 object-contain drop-shadow-md" />
               </div>
               <span className="text-accent font-medium">×</span>
               <div className="bg-white/30 backdrop-blur-md rounded-lg px-5 py-3">
@@ -235,7 +235,7 @@ export default function VanessaLivingTrust() {
             </div>
             <span className="text-white/30">×</span>
             <div className="bg-white/30 backdrop-blur-md rounded-lg px-5 py-3">
-              <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain drop-shadow-sm invert" />
+              <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain drop-shadow-sm" />
             </div>
           </div>
           <p className="text-white/40 text-sm">
