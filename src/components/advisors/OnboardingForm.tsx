@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Upload, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const licenseOptions = ["Life", "Health", "Series 6", "Series 7", "Series 63", "Series 65", "Series 66"];
 const specialtyOptions = [
@@ -116,8 +117,24 @@ const OnboardingForm = () => {
     }
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     const region = getRegion(data.state);
+    
+    // Send email notification
+    try {
+      await supabase.functions.invoke("send-form-notification", {
+        body: {
+          formType: "advisor-onboarding",
+          formData: {
+            ...data,
+            region,
+            image: data.image ? "[Image uploaded]" : "No image",
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Email notification error:", error);
+    }
     
     addAdvisor({
       name: data.name,

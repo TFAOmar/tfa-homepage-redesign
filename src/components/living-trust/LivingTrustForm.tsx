@@ -24,6 +24,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, CheckCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const livingTrustFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -70,50 +71,23 @@ export default function LivingTrustForm() {
     },
   });
 
-  const submitToPipedrive = async (data: LivingTrustFormData) => {
-    // Pipedrive API integration payload structure
-    // This will be sent to an Edge Function that handles the Pipedrive API call
-    const pipedrivePayload = {
-      person: {
-        name: `${data.firstName} ${data.lastName}`,
-        email: [{ value: data.email, primary: true }],
-        phone: [{ value: data.phone, primary: true }],
-      },
-      deal: {
-        title: `Living Trust Lead - ${data.firstName} ${data.lastName}`,
-        custom_fields: {
-          marital_status: data.maritalStatus,
-          owns_property: data.ownsProperty,
-          estate_value: data.estateValue,
-          preferred_contact: data.preferredContact,
-          best_time: data.bestTimeToReach,
-          notes: data.notes || "",
-        },
-      },
-      source: "living-trust-landing-page",
-      partner: "the-brandon-group",
-      advisor: "vanessa-sanchez",
-    };
-
-    // TODO: Uncomment and configure when Pipedrive Edge Function is ready
-    // const response = await supabase.functions.invoke('pipedrive-lead', {
-    //   body: pipedrivePayload
-    // });
-    // if (response.error) throw response.error;
-
-    // For now, log the payload for testing
-    console.log("Pipedrive Payload:", pipedrivePayload);
-    
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    return { success: true };
-  };
-
   const onSubmit = async (data: LivingTrustFormData) => {
     setIsSubmitting(true);
     try {
-      await submitToPipedrive(data);
+      const { error } = await supabase.functions.invoke("send-form-notification", {
+        body: {
+          formType: "living-trust",
+          formData: {
+            ...data,
+            source: "living-trust-landing-page",
+            partner: "the-brandon-group",
+            advisor: "vanessa-sanchez",
+          },
+        },
+      });
+
+      if (error) throw error;
+      
       setIsSubmitted(true);
       toast({
         title: "Request Submitted!",

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const BusinessContactForm = () => {
   const { toast } = useToast();
@@ -35,36 +36,52 @@ const BusinessContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const { error } = await supabase.functions.invoke("send-form-notification", {
+        body: {
+          formType: "business-insurance",
+          formData,
+        },
+      });
 
-    toast({
-      title: "Request Submitted!",
-      description: "We'll review your business insurance needs and contact you within 24 hours.",
-    });
+      if (error) throw error;
 
-    setIsSubmitting(false);
-    setFormData({
-      fullName: "",
-      businessName: "",
-      businessAddress: "",
-      entityType: "",
-      phone: "",
-      email: "",
-      website: "",
-      businessDescription: "",
-      squareFootage: "",
-      ownOrLease: "",
-      needWorkersComp: "",
-      employeeCount: "",
-      annualSales: "",
-      annualPayroll: "",
-      fein: "",
-      currentInsurer: "",
-      policyStartDate: "",
-      policyEndDate: "",
-      claimsHistory: "",
-    });
+      toast({
+        title: "Request Submitted!",
+        description: "We'll review your business insurance needs and contact you within 24 hours.",
+      });
+
+      setFormData({
+        fullName: "",
+        businessName: "",
+        businessAddress: "",
+        entityType: "",
+        phone: "",
+        email: "",
+        website: "",
+        businessDescription: "",
+        squareFootage: "",
+        ownOrLease: "",
+        needWorkersComp: "",
+        employeeCount: "",
+        annualSales: "",
+        annualPayroll: "",
+        fein: "",
+        currentInsurer: "",
+        policyStartDate: "",
+        policyEndDate: "",
+        claimsHistory: "",
+      });
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again or call us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClasses = "w-full rounded-xl bg-white/10 border border-white/20 placeholder:text-white/50 text-white px-4 py-3 focus:ring-2 focus:ring-[#E4B548] focus:outline-none shadow-inner shadow-black/20 transition-all";

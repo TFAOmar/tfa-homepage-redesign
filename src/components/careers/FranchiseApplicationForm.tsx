@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Send, Building2, Phone, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const franchiseFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -91,16 +92,32 @@ const FranchiseApplicationForm = () => {
   const onSubmit = async (data: FranchiseFormData) => {
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Franchise Application Submitted!",
-      description: "Thank you for your interest in owning a TFA franchise. Our franchise development team will contact you within 48 hours.",
-    });
-    
-    form.reset();
-    setIsSubmitting(false);
+    try {
+      const { error } = await supabase.functions.invoke("send-form-notification", {
+        body: {
+          formType: "franchise-application",
+          formData: data,
+        },
+      });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Franchise Application Submitted!",
+        description: "Thank you for your interest in owning a TFA franchise. Our franchise development team will contact you within 48 hours.",
+      });
+      
+      form.reset();
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again or call us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
