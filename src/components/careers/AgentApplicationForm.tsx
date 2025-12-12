@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Send, UserPlus, Phone, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const agentFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -77,16 +78,32 @@ const AgentApplicationForm = () => {
   const onSubmit = async (data: AgentFormData) => {
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Application Submitted Successfully!",
-      description: "Thank you for your interest in joining TFA. Our recruitment team will contact you within 24-48 hours.",
-    });
-    
-    form.reset();
-    setIsSubmitting(false);
+    try {
+      const { error } = await supabase.functions.invoke("send-form-notification", {
+        body: {
+          formType: "agent-application",
+          formData: data,
+        },
+      });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Application Submitted Successfully!",
+        description: "Thank you for your interest in joining TFA. Our recruitment team will contact you within 24-48 hours.",
+      });
+      
+      form.reset();
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again or call us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

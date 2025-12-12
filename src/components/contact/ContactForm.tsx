@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Send } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const contactFormSchema = z.object({
   name: z.string()
@@ -57,8 +58,14 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate form submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const { error } = await supabase.functions.invoke("send-form-notification", {
+        body: {
+          formType: "contact",
+          formData: data,
+        },
+      });
+
+      if (error) throw error;
 
       toast({
         title: "Message Sent Successfully!",
@@ -67,6 +74,7 @@ const ContactForm = () => {
 
       reset();
     } catch (error) {
+      console.error("Form submission error:", error);
       toast({
         title: "Error",
         description: "Something went wrong. Please try again or call us directly.",
