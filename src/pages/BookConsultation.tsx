@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, CheckCircle, Users, FileText, Clock, Shield, Award, Star, ArrowRight, Phone, Mail } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { Calendar, CheckCircle, Users, FileText, Clock, Shield, Award, Star, ArrowRight, Phone, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 // Carrier logos
 import allianzLogo from "@/assets/carriers/allianz.png";
@@ -12,10 +17,26 @@ import massmutualLogo from "@/assets/carriers/massmutual.png";
 import principalLogo from "@/assets/carriers/principal.png";
 import nationalLifeLogo from "@/assets/carriers/national-life.png";
 
+const consultationSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100),
+  email: z.string().trim().email("Please enter a valid email").max(255),
+  phone: z.string().trim().min(1, "Phone number is required").max(20),
+  interestCategory: z.string().min(1, "Please select an interest category"),
+});
+
+type ConsultationFormData = z.infer<typeof consultationSchema>;
+
 const BookConsultation = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { register, handleSubmit, formState: { errors } } = useForm<ConsultationFormData>({
+    resolver: zodResolver(consultationSchema),
+  });
+
   // Track page view
   useEffect(() => {
-    // Analytics: Track Lead event on page view
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'generate_lead', {
         event_category: 'booking',
@@ -24,13 +45,39 @@ const BookConsultation = () => {
     }
   }, []);
 
-  const handleCalendlySchedule = () => {
-    // Analytics: Track Schedule event
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'schedule', {
-        event_category: 'booking',
-        event_label: 'consultation_scheduled'
+  const onSubmit = async (data: ConsultationFormData) => {
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke("send-form-notification", {
+        body: {
+          formType: "book-consultation",
+          formData: {
+            ...data,
+            source: "book-consultation-page",
+          },
+        },
       });
+
+      if (error) throw error;
+
+      // Analytics: Track Schedule event
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'schedule', {
+          event_category: 'booking',
+          event_label: 'consultation_scheduled'
+        });
+      }
+
+      navigate("/thank-you");
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -137,45 +184,69 @@ const BookConsultation = () => {
                       Select a time that works for you. Our advisors are available Monday through Friday, 9 AM to 6 PM.
                     </p>
                     
-                    {/* Form Fields - These would be replaced by Calendly embed */}
-                    <div className="space-y-4 max-w-md mx-auto mb-8">
-                      <input 
-                        type="text" 
-                        placeholder="Your Full Name" 
-                        className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
-                      />
-                      <input 
-                        type="email" 
-                        placeholder="Email Address" 
-                        className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
-                      />
-                      <input 
-                        type="tel" 
-                        placeholder="Phone Number" 
-                        className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
-                      />
-                      <select 
-                        className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all text-muted-foreground"
-                      >
-                        <option value="">Select Interest Category</option>
-                        <option value="retirement">Retirement Planning</option>
-                        <option value="insurance">Life Insurance</option>
-                        <option value="investment">Investment Management</option>
-                        <option value="tax">Tax Strategy</option>
-                        <option value="estate">Estate Planning</option>
-                        <option value="business">Business Insurance</option>
-                      </select>
-                    </div>
+                    {/* Form Fields */}
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto mb-8">
+                      <div>
+                        <input 
+                          type="text" 
+                          placeholder="Your Full Name" 
+                          {...register("name")}
+                          className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
+                        />
+                        {errors.name && <p className="text-red-500 text-sm mt-1 text-left">{errors.name.message}</p>}
+                      </div>
+                      <div>
+                        <input 
+                          type="email" 
+                          placeholder="Email Address" 
+                          {...register("email")}
+                          className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
+                        />
+                        {errors.email && <p className="text-red-500 text-sm mt-1 text-left">{errors.email.message}</p>}
+                      </div>
+                      <div>
+                        <input 
+                          type="tel" 
+                          placeholder="Phone Number" 
+                          {...register("phone")}
+                          className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
+                        />
+                        {errors.phone && <p className="text-red-500 text-sm mt-1 text-left">{errors.phone.message}</p>}
+                      </div>
+                      <div>
+                        <select 
+                          {...register("interestCategory")}
+                          className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all text-muted-foreground"
+                        >
+                          <option value="">Select Interest Category</option>
+                          <option value="retirement">Retirement Planning</option>
+                          <option value="insurance">Life Insurance</option>
+                          <option value="investment">Investment Management</option>
+                          <option value="tax">Tax Strategy</option>
+                          <option value="estate">Estate Planning</option>
+                          <option value="business">Business Insurance</option>
+                        </select>
+                        {errors.interestCategory && <p className="text-red-500 text-sm mt-1 text-left">{errors.interestCategory.message}</p>}
+                      </div>
 
-                    <Link to="/thank-you">
                       <Button 
-                        onClick={handleCalendlySchedule}
-                        className="btn-primary-cta px-8 py-6 text-lg hover:scale-105"
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="btn-primary-cta px-8 py-6 text-lg hover:scale-105 w-full"
                       >
-                        Schedule My Consultation
-                        <ArrowRight className="ml-2 h-5 w-5" />
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          <>
+                            Schedule My Consultation
+                            <ArrowRight className="ml-2 h-5 w-5" />
+                          </>
+                        )}
                       </Button>
-                    </Link>
+                    </form>
                   </div>
                 </div>
               </CardContent>
