@@ -83,6 +83,7 @@ export default function LivingTrustForm() {
             partner: "the-brandon-group",
             advisor: "vanessa-sanchez",
           },
+          additionalRecipients: ["vsanchez@tfainsuranceadvisors.com"],
         },
       });
 
