@@ -17,15 +17,25 @@ interface FormNotificationRequest {
   additionalRecipients?: string[];
 }
 
+// HTML escape function to prevent XSS in email content
+const escapeHtml = (str: string): string => {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
+
 const formatFormData = (formData: Record<string, unknown>): string => {
   return Object.entries(formData)
     .filter(([_, value]) => value !== undefined && value !== null && value !== "")
     .map(([key, value]) => {
-      const formattedKey = key
+      const formattedKey = escapeHtml(key
         .replace(/([A-Z])/g, " $1")
         .replace(/^./, (str) => str.toUpperCase())
-        .trim();
-      const formattedValue = Array.isArray(value) ? value.join(", ") : String(value);
+        .trim());
+      const formattedValue = escapeHtml(Array.isArray(value) ? value.join(", ") : String(value));
       return `<tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: 600; background: #f9f9f9;">${formattedKey}</td><td style="padding: 8px; border: 1px solid #e5e5e5;">${formattedValue}</td></tr>`;
     })
     .join("");
