@@ -56,9 +56,13 @@ export default function VanessaLivingTrust() {
       {/* Co-Branded Header */}
       <header className="py-6 px-4 border-b border-white/10">
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-6 md:gap-10">
-          <img src={tfaLogo} alt="The Financial Architects" className="h-12 md:h-16 object-contain" />
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+            <img src={tfaLogo} alt="The Financial Architects" className="h-12 md:h-16 object-contain drop-shadow-lg" />
+          </div>
           <div className="h-10 w-px bg-accent/50" />
-          <img src={brandonGroupLogo} alt="The Brandon Group" className="h-14 md:h-16 object-contain drop-shadow-lg" />
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+            <img src={brandonGroupLogo} alt="The Brandon Group" className="h-14 md:h-16 object-contain drop-shadow-lg" />
+          </div>
         </div>
         <p className="text-center text-white/60 text-sm mt-3 tracking-wide">
           A Trusted Partnership for Your Family's Future
@@ -148,9 +152,13 @@ export default function VanessaLivingTrust() {
               expert guidance tailored to your family's unique needs.
             </p>
             <div className="flex items-center justify-center gap-6">
-              <img src={brandonGroupLogo} alt="The Brandon Group" className="h-12 object-contain drop-shadow-md" />
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2">
+                <img src={brandonGroupLogo} alt="The Brandon Group" className="h-12 object-contain drop-shadow-md" />
+              </div>
               <span className="text-accent font-medium">×</span>
-              <img src={tfaLogo} alt="The Financial Architects" className="h-10 object-contain opacity-80" />
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2">
+                <img src={tfaLogo} alt="The Financial Architects" className="h-10 object-contain drop-shadow-md" />
+              </div>
             </div>
           </div>
         </div>
@@ -222,9 +230,13 @@ export default function VanessaLivingTrust() {
       <footer className="py-8 px-4 border-t border-white/10">
         <div className="max-w-6xl mx-auto text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
-            <img src={tfaLogo} alt="The Financial Architects" className="h-8 object-contain opacity-60" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2">
+              <img src={tfaLogo} alt="The Financial Architects" className="h-8 object-contain drop-shadow-sm" />
+            </div>
             <span className="text-white/30">×</span>
-            <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain drop-shadow-sm" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2">
+              <img src={brandonGroupLogo} alt="The Brandon Group" className="h-10 object-contain drop-shadow-sm" />
+            </div>
           </div>
           <p className="text-white/40 text-sm">
             © {new Date().getFullYear()} The Financial Architects. All rights reserved.
