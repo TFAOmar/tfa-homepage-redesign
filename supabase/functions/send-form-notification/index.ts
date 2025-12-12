@@ -14,6 +14,7 @@ interface FormNotificationRequest {
   formType: string;
   formData: Record<string, unknown>;
   recipientEmail?: string;
+  additionalRecipients?: string[];
 }
 
 const formatFormData = (formData: Record<string, unknown>): string => {
@@ -81,7 +82,7 @@ serve(async (req: Request): Promise<Response> => {
       throw new Error("Supabase configuration is missing");
     }
 
-    const { formType, formData, recipientEmail }: FormNotificationRequest = await req.json();
+    const { formType, formData, recipientEmail, additionalRecipients }: FormNotificationRequest = await req.json();
 
     console.log(`Processing ${formType} form submission:`, JSON.stringify(formData));
 
@@ -116,8 +117,14 @@ serve(async (req: Request): Promise<Response> => {
       console.log("Form submission stored with ID:", submissionData?.id);
     }
 
-    // Default recipient - TFA main email
+    // Build recipients list - always include main leads email
     const toEmail = recipientEmail || "leads@tfainsuranceadvisors.com";
+    const recipients = [toEmail];
+    if (additionalRecipients && additionalRecipients.length > 0) {
+      recipients.push(...additionalRecipients);
+    }
+    console.log(`Sending email to recipients: ${recipients.join(", ")}`);
+    
     const subject = getFormSubject(formType, formData);
     const formRows = formatFormData(formData);
 
@@ -166,7 +173,7 @@ serve(async (req: Request): Promise<Response> => {
       },
       body: JSON.stringify({
         from: "TFA Leads <leads@tfainsuranceadvisors.com>",
-        to: [toEmail],
+        to: recipients,
         subject: subject,
         html: htmlContent,
       }),
