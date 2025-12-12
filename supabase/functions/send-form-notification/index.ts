@@ -64,7 +64,7 @@ serve(async (req: Request): Promise<Response> => {
     console.log(`Processing ${formType} form submission:`, JSON.stringify(formData));
 
     // Default recipient - TFA main email
-    const toEmail = recipientEmail || "info@tfainsuranceadvisors.com";
+    const toEmail = recipientEmail || "leads@tfainsuranceadvisors.com";
     const subject = getFormSubject(formType, formData);
     const formRows = formatFormData(formData);
 
