@@ -3,93 +3,56 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Calendar, 
-  Shield, 
-  Target, 
-  Users, 
-  Award,
-  ChevronRight,
-  Building2,
-  Heart,
-  Briefcase
-} from "lucide-react";
+import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRight, Building2, Heart, Briefcase } from "lucide-react";
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
-
 const AdvisorVanessaSanchez = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const specialties = [
-    "Retirement Planning",
-    "Estate Planning", 
-    "Tax Strategies",
-    "Business Planning",
-    "Life Insurance"
-  ];
-
-  const services = [
-    {
-      icon: Target,
-      title: "Retirement Planning",
-      description: "Strategic planning to ensure a comfortable and secure retirement tailored to your goals."
-    },
-    {
-      icon: Shield,
-      title: "Estate Planning",
-      description: "Comprehensive estate strategies including living trusts to protect and transfer your wealth."
-    },
-    {
-      icon: Building2,
-      title: "Tax Strategies",
-      description: "Tax-efficient solutions to maximize your wealth and minimize your tax burden."
-    },
-    {
-      icon: Briefcase,
-      title: "Business Planning",
-      description: "Tailored strategies for business owners to protect and grow their enterprises."
-    },
-    {
-      icon: Heart,
-      title: "Life Insurance",
-      description: "Tax-efficient life insurance solutions to protect your family's financial future."
-    },
-    {
-      icon: Users,
-      title: "Family Financial Planning",
-      description: "Holistic planning for families to build generational wealth and security."
-    }
-  ];
-
-  const processSteps = [
-    {
-      step: "01",
-      title: "Discovery Call",
-      description: "A complimentary conversation to understand your financial goals, concerns, and current situation."
-    },
-    {
-      step: "02",
-      title: "Personalized Analysis",
-      description: "Comprehensive review of your finances to identify opportunities and create a tailored strategy."
-    },
-    {
-      step: "03",
-      title: "Strategy Presentation",
-      description: "Clear presentation of your customized plan with actionable steps and recommendations."
-    },
-    {
-      step: "04",
-      title: "Implementation",
-      description: "Guided execution of your plan with ongoing support and adjustments as your life evolves."
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
+  const specialties = ["Retirement Planning", "Estate Planning", "Tax Strategies", "Business Planning", "Life Insurance"];
+  const services = [{
+    icon: Target,
+    title: "Retirement Planning",
+    description: "Strategic planning to ensure a comfortable and secure retirement tailored to your goals."
+  }, {
+    icon: Shield,
+    title: "Estate Planning",
+    description: "Comprehensive estate strategies including living trusts to protect and transfer your wealth."
+  }, {
+    icon: Building2,
+    title: "Tax Strategies",
+    description: "Tax-efficient solutions to maximize your wealth and minimize your tax burden."
+  }, {
+    icon: Briefcase,
+    title: "Business Planning",
+    description: "Tailored strategies for business owners to protect and grow their enterprises."
+  }, {
+    icon: Heart,
+    title: "Life Insurance",
+    description: "Tax-efficient life insurance solutions to protect your family's financial future."
+  }, {
+    icon: Users,
+    title: "Family Financial Planning",
+    description: "Holistic planning for families to build generational wealth and security."
+  }];
+  const processSteps = [{
+    step: "01",
+    title: "Discovery Call",
+    description: "A complimentary conversation to understand your financial goals, concerns, and current situation."
+  }, {
+    step: "02",
+    title: "Personalized Analysis",
+    description: "Comprehensive review of your finances to identify opportunities and create a tailored strategy."
+  }, {
+    step: "03",
+    title: "Strategy Presentation",
+    description: "Clear presentation of your customized plan with actionable steps and recommendations."
+  }, {
+    step: "04",
+    title: "Implementation",
+    description: "Guided execution of your plan with ongoing support and adjustments as your life evolves."
+  }];
+  return <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary/90" />
@@ -120,7 +83,7 @@ const AdvisorVanessaSanchez = () => {
                   </Button>
                 </Link>
                 <Link to="/contact">
-                  <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 hover:text-white text-white text-lg px-8 py-6 w-full sm:w-auto">
+                  <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-secondary-foreground">
                     <Phone className="mr-2 h-5 w-5" />
                     Contact Me
                   </Button>
@@ -144,11 +107,7 @@ const AdvisorVanessaSanchez = () => {
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
                 <div className="absolute -inset-4 bg-accent/20 rounded-3xl blur-2xl" />
-                <img
-                  src={vanessaSanchezImg}
-                  alt="Vanessa Crystal Sanchez - Financial Strategist"
-                  className="relative w-80 h-80 md:w-96 md:h-96 object-cover rounded-2xl shadow-2xl border-4 border-white/20"
-                />
+                <img src={vanessaSanchezImg} alt="Vanessa Crystal Sanchez - Financial Strategist" className="relative w-80 h-80 md:w-96 md:h-96 object-cover rounded-2xl shadow-2xl border-4 border-white/20" />
                 <div className="absolute -bottom-4 -right-4 bg-accent text-primary px-6 py-3 rounded-xl font-semibold shadow-lg">
                   <div className="flex items-center gap-2">
                     <Award className="h-5 w-5" />
@@ -185,14 +144,9 @@ const AdvisorVanessaSanchez = () => {
             <div className="mt-12 text-center">
               <h3 className="text-xl font-semibold text-foreground mb-6">Areas of Expertise</h3>
               <div className="flex flex-wrap gap-3 justify-center">
-                {specialties.map((specialty) => (
-                  <Badge 
-                    key={specialty}
-                    className="bg-accent/10 text-accent border-accent/30 px-4 py-2 text-sm"
-                  >
+                {specialties.map(specialty => <Badge key={specialty} className="bg-accent/10 text-accent border-accent/30 px-4 py-2 text-sm">
                     {specialty}
-                  </Badge>
-                ))}
+                  </Badge>)}
               </div>
             </div>
           </div>
@@ -213,18 +167,13 @@ const AdvisorVanessaSanchez = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {services.map((service, index) => (
-              <Card 
-                key={index}
-                className="bg-white/5 backdrop-blur-xl border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 group"
-              >
+            {services.map((service, index) => <Card key={index} className="bg-white/5 backdrop-blur-xl border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 group">
                 <div className="w-14 h-14 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent/30 transition-colors">
                   <service.icon className="h-7 w-7 text-accent" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">{service.title}</h3>
                 <p className="text-muted-foreground">{service.description}</p>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -243,18 +192,14 @@ const AdvisorVanessaSanchez = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {processSteps.map((step, index) => (
-              <div key={index} className="relative">
+            {processSteps.map((step, index) => <div key={index} className="relative">
                 <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-6 rounded-2xl h-full">
                   <div className="text-5xl font-bold text-accent/20 mb-4">{step.step}</div>
                   <h3 className="text-xl font-semibold text-foreground mb-3">{step.title}</h3>
                   <p className="text-muted-foreground">{step.description}</p>
                 </Card>
-                {index < processSteps.length - 1 && (
-                  <ChevronRight className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-accent/40 h-8 w-8" />
-                )}
-              </div>
-            ))}
+                {index < processSteps.length - 1 && <ChevronRight className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-accent/40 h-8 w-8" />}
+              </div>)}
           </div>
         </div>
       </section>
@@ -288,8 +233,6 @@ const AdvisorVanessaSanchez = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default AdvisorVanessaSanchez;
