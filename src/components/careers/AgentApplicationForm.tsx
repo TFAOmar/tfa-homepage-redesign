@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Send, UserPlus, Phone, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 
 const agentFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -55,6 +56,7 @@ type AgentFormData = z.infer<typeof agentFormSchema>;
 const AgentApplicationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { honeypotProps, isBot } = useHoneypot();
 
   const form = useForm<AgentFormData>({
     resolver: zodResolver(agentFormSchema),
@@ -76,6 +78,16 @@ const AgentApplicationForm = () => {
   });
 
   const onSubmit = async (data: AgentFormData) => {
+    // Silently reject bot submissions
+    if (isBot()) {
+      toast({
+        title: "Application Submitted Successfully!",
+        description: "Thank you for your interest in joining TFA. Our recruitment team will contact you within 24-48 hours.",
+      });
+      form.reset();
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -128,6 +140,17 @@ const AgentApplicationForm = () => {
           <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-border/50 p-8 md:p-12 shadow-lg">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {/* Honeypot field - hidden from humans, traps bots */}
+                <div className={honeypotClassName}>
+                  <label htmlFor="agent_portfolio_url">Portfolio URL</label>
+                  <input
+                    type="text"
+                    id="agent_portfolio_url"
+                    name="agent_portfolio_url"
+                    {...honeypotProps}
+                  />
+                </div>
+
                 {/* Name Row */}
                 <div className="grid md:grid-cols-2 gap-6">
                   <FormField

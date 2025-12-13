@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Send, UserPlus, Building2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 
 const careersFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50, "First name must be less than 50 characters"),
@@ -44,6 +45,7 @@ type CareersFormData = z.infer<typeof careersFormSchema>;
 const CareersInquiryForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { honeypotProps, isBot } = useHoneypot();
 
   const form = useForm<CareersFormData>({
     resolver: zodResolver(careersFormSchema),
@@ -60,6 +62,16 @@ const CareersInquiryForm = () => {
   });
 
   const onSubmit = async (data: CareersFormData) => {
+    // Silently reject bot submissions
+    if (isBot()) {
+      toast({
+        title: "Application Submitted!",
+        description: "Thank you for your interest. Our team will contact you within 24-48 hours.",
+      });
+      form.reset();
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -108,6 +120,17 @@ const CareersInquiryForm = () => {
           <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-border/50 p-8 md:p-12 shadow-lg">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {/* Honeypot field - hidden from humans, traps bots */}
+                <div className={honeypotClassName}>
+                  <label htmlFor="careers_linkedin">LinkedIn URL</label>
+                  <input
+                    type="text"
+                    id="careers_linkedin"
+                    name="careers_linkedin"
+                    {...honeypotProps}
+                  />
+                </div>
+
                 {/* Name Row */}
                 <div className="grid md:grid-cols-2 gap-6">
                   <FormField

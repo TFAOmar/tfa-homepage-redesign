@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 
 const BusinessContactForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { honeypotProps, isBot } = useHoneypot();
   const [formData, setFormData] = useState({
     fullName: "",
     businessName: "",
@@ -34,6 +36,21 @@ const BusinessContactForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Silently reject bot submissions
+    if (isBot()) {
+      toast({
+        title: "Request Submitted!",
+        description: "We'll review your business insurance needs and contact you within 24 hours.",
+      });
+      setFormData({
+        fullName: "", businessName: "", businessAddress: "", entityType: "", phone: "", email: "", website: "",
+        businessDescription: "", squareFootage: "", ownOrLease: "", needWorkersComp: "", employeeCount: "",
+        annualSales: "", annualPayroll: "", fein: "", currentInsurer: "", policyStartDate: "", policyEndDate: "", claimsHistory: "",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -90,6 +107,17 @@ const BusinessContactForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Honeypot field - hidden from humans, traps bots */}
+      <div className={honeypotClassName}>
+        <label htmlFor="company_website_url">Company URL</label>
+        <input
+          type="text"
+          id="company_website_url"
+          name="company_website_url"
+          {...honeypotProps}
+        />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Full Name */}
         <div>

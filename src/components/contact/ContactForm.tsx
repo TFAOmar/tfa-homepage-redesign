@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 
 const contactFormSchema = z.object({
   name: z.string()
@@ -37,6 +38,7 @@ type ContactFormData = z.infer<typeof contactFormSchema>;
 const ContactForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { honeypotProps, isBot } = useHoneypot();
 
   const {
     register,
@@ -55,6 +57,16 @@ const ContactForm = () => {
   const serviceValue = watch("service");
 
   const onSubmit = async (data: ContactFormData) => {
+    // Silently reject bot submissions
+    if (isBot()) {
+      toast({
+        title: "Message Sent Successfully!",
+        description: "We'll get back to you within 24 hours.",
+      });
+      reset();
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -93,6 +105,17 @@ const ContactForm = () => {
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Honeypot field - hidden from humans, traps bots */}
+        <div className={honeypotClassName}>
+          <label htmlFor="website_url">Website</label>
+          <input
+            type="text"
+            id="website_url"
+            name="website_url"
+            {...honeypotProps}
+          />
+        </div>
+
         {/* Name */}
         <div className="space-y-2">
           <Label htmlFor="name" className="text-foreground">

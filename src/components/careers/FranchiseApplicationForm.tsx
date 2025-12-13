@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Send, Building2, Phone, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 
 const franchiseFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -65,6 +66,7 @@ type FranchiseFormData = z.infer<typeof franchiseFormSchema>;
 const FranchiseApplicationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { honeypotProps, isBot } = useHoneypot();
 
   const form = useForm<FranchiseFormData>({
     resolver: zodResolver(franchiseFormSchema),
@@ -90,6 +92,16 @@ const FranchiseApplicationForm = () => {
   });
 
   const onSubmit = async (data: FranchiseFormData) => {
+    // Silently reject bot submissions
+    if (isBot()) {
+      toast({
+        title: "Franchise Application Submitted!",
+        description: "Thank you for your interest in owning a TFA franchise. Our franchise development team will contact you within 48 hours.",
+      });
+      form.reset();
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -143,6 +155,17 @@ const FranchiseApplicationForm = () => {
           <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-border/50 p-8 md:p-12 shadow-lg">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                {/* Honeypot field - hidden from humans, traps bots */}
+                <div className={honeypotClassName}>
+                  <label htmlFor="franchise_business_url">Business URL</label>
+                  <input
+                    type="text"
+                    id="franchise_business_url"
+                    name="franchise_business_url"
+                    {...honeypotProps}
+                  />
+                </div>
+
                 {/* Personal Information Section */}
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/50">
