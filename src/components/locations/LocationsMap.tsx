@@ -5,12 +5,84 @@ import { locations } from "@/data/locations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
+import { toast } from "sonner";
+
+// Validate Mapbox public token format
+const validateMapboxToken = (token: string): boolean => {
+  const regex = /^pk\.[a-zA-Z0-9_-]{60,}$/;
+  return regex.test(token.trim());
+};
+
+// Create marker element using DOM API (avoids innerHTML XSS risk)
+const createMarkerElement = (): HTMLDivElement => {
+  const container = document.createElement("div");
+  container.className = "custom-marker";
+
+  const markerDiv = document.createElement("div");
+  markerDiv.className = "w-8 h-8 bg-accent rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform";
+
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", "20");
+  svg.setAttribute("height", "20");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", "2");
+  svg.setAttribute("stroke-linecap", "round");
+  svg.setAttribute("stroke-linejoin", "round");
+  svg.classList.add("text-accent-foreground");
+
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z");
+
+  const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  circle.setAttribute("cx", "12");
+  circle.setAttribute("cy", "10");
+  circle.setAttribute("r", "3");
+
+  svg.appendChild(path);
+  svg.appendChild(circle);
+  markerDiv.appendChild(svg);
+  container.appendChild(markerDiv);
+
+  return container;
+};
+
+// Create popup content using DOM API (avoids setHTML XSS risk)
+const createPopupContent = (location: typeof locations[0]): HTMLDivElement => {
+  const container = document.createElement("div");
+  container.className = "p-2";
+
+  const title = document.createElement("h3");
+  title.className = "font-bold text-base mb-1";
+  title.textContent = `${location.name}, ${location.state}`;
+
+  const address = document.createElement("p");
+  address.className = "text-sm text-gray-600 mb-1";
+  address.textContent = location.address;
+
+  const phone = document.createElement("p");
+  phone.className = "text-sm text-gray-600 mb-1";
+  phone.textContent = location.phone;
+
+  const hours = document.createElement("p");
+  hours.className = "text-xs text-gray-500";
+  hours.textContent = location.hours;
+
+  container.appendChild(title);
+  container.appendChild(address);
+  container.appendChild(phone);
+  container.appendChild(hours);
+
+  return container;
+};
 
 const LocationsMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [mapboxToken, setMapboxToken] = useState("");
   const [tokenSubmitted, setTokenSubmitted] = useState(false);
+  const [tokenError, setTokenError] = useState("");
 
   useEffect(() => {
     if (!mapContainer.current || !tokenSubmitted || !mapboxToken) return;
@@ -33,27 +105,12 @@ const LocationsMap = () => {
         "top-right"
       );
 
-      // Add markers for each location
+      // Add markers for each location using DOM API
       locations.forEach((location) => {
-        const el = document.createElement("div");
-        el.className = "custom-marker";
-        el.innerHTML = `
-          <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-foreground">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-          </div>
-        `;
-
-        const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
-          <div class="p-2">
-            <h3 class="font-bold text-base mb-1">${location.name}, ${location.state}</h3>
-            <p class="text-sm text-gray-600 mb-1">${location.address}</p>
-            <p class="text-sm text-gray-600 mb-1">${location.phone}</p>
-            <p class="text-xs text-gray-500">${location.hours}</p>
-          </div>
-        `);
+        const el = createMarkerElement();
+        const popupContent = createPopupContent(location);
+        
+        const popup = new mapboxgl.Popup({ offset: 25 }).setDOMContent(popupContent);
 
         new mapboxgl.Marker(el)
           .setLngLat(location.coordinates)
@@ -62,6 +119,7 @@ const LocationsMap = () => {
       });
     } catch (error) {
       console.error("Error initializing map:", error);
+      toast.error("Failed to initialize map. Please check your Mapbox token.");
     }
 
     return () => {
@@ -70,9 +128,21 @@ const LocationsMap = () => {
   }, [tokenSubmitted, mapboxToken]);
 
   const handleSubmitToken = () => {
-    if (mapboxToken.trim()) {
-      setTokenSubmitted(true);
+    const trimmedToken = mapboxToken.trim();
+    
+    if (!trimmedToken) {
+      setTokenError("Please enter a Mapbox token");
+      return;
     }
+    
+    if (!validateMapboxToken(trimmedToken)) {
+      setTokenError("Invalid Mapbox token format. Token should start with 'pk.' followed by at least 60 characters.");
+      return;
+    }
+    
+    setTokenError("");
+    setMapboxToken(trimmedToken);
+    setTokenSubmitted(true);
   };
 
   return (
@@ -112,10 +182,13 @@ const LocationsMap = () => {
             <div className="flex gap-4">
               <Input
                 type="text"
-                placeholder="Enter your Mapbox public token"
+                placeholder="Enter your Mapbox public token (pk.xxx...)"
                 value={mapboxToken}
-                onChange={(e) => setMapboxToken(e.target.value)}
-                className="flex-1"
+                onChange={(e) => {
+                  setMapboxToken(e.target.value);
+                  setTokenError("");
+                }}
+                className={`flex-1 ${tokenError ? "border-red-500" : ""}`}
               />
               <Button 
                 onClick={handleSubmitToken}
@@ -124,6 +197,10 @@ const LocationsMap = () => {
                 Load Map
               </Button>
             </div>
+            
+            {tokenError && (
+              <p className="text-sm text-red-500 mt-2">{tokenError}</p>
+            )}
             
             <p className="text-sm text-muted-foreground mt-4">
               Or scroll down to browse our office listings below
