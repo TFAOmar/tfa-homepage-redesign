@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { Upload, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 
 const licenseOptions = ["Life", "Health", "Series 6", "Series 7", "Series 63", "Series 65", "Series 66"];
 const specialtyOptions = [
@@ -83,6 +84,7 @@ const OnboardingForm = () => {
   const addAdvisor = useAdvisorStore((state) => state.addAdvisor);
   const adminApprovalEnabled = useAdvisorStore((state) => state.adminApprovalEnabled);
   const [imagePreview, setImagePreview] = useState<string>();
+  const { honeypotProps, isBot } = useHoneypot();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -118,6 +120,17 @@ const OnboardingForm = () => {
   };
 
   const onSubmit = async (data: FormValues) => {
+    // Silently reject bot submissions
+    if (isBot()) {
+      toast.success("Profile Submitted!", {
+        description: adminApprovalEnabled 
+          ? "Your profile is pending admin approval." 
+          : "Your advisor profile is now live in the directory.",
+      });
+      navigate("/advisors");
+      return;
+    }
+
     const region = getRegion(data.state);
     
     // Send email notification
@@ -181,6 +194,17 @@ const OnboardingForm = () => {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {/* Honeypot field - hidden from humans, traps bots */}
+            <div className={honeypotClassName}>
+              <label htmlFor="advisor_profile_website">Website</label>
+              <input
+                type="text"
+                id="advisor_profile_website"
+                name="advisor_profile_website"
+                {...honeypotProps}
+              />
+            </div>
+
             {/* Personal Information */}
             <Card className="glass animate-fade-in" style={{ animationDelay: "100ms" }}>
               <CardHeader>

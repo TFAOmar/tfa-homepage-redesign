@@ -25,6 +25,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 
 const livingTrustFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -58,6 +59,7 @@ export default function LivingTrustForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
+  const { honeypotProps, isBot } = useHoneypot();
 
   const form = useForm<LivingTrustFormData>({
     resolver: zodResolver(livingTrustFormSchema),
@@ -72,6 +74,12 @@ export default function LivingTrustForm() {
   });
 
   const onSubmit = async (data: LivingTrustFormData) => {
+    // Silently reject bot submissions
+    if (isBot()) {
+      setIsSubmitted(true);
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const { error } = await supabase.functions.invoke("send-form-notification", {
@@ -136,6 +144,17 @@ export default function LivingTrustForm() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Honeypot field - hidden from humans, traps bots */}
+          <div className={honeypotClassName}>
+            <label htmlFor="trust_website">Website</label>
+            <input
+              type="text"
+              id="trust_website"
+              name="trust_website"
+              {...honeypotProps}
+            />
+          </div>
+
           {/* Name Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
