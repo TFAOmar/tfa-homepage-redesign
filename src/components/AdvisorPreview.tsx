@@ -2,11 +2,13 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { advisors } from "@/data/advisors";
-import { useAdvisorStore } from "@/stores/advisorStore";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 import { useMemo } from "react";
 
 const AdvisorPreview = () => {
-  const { homepageAdvisorIds, homepageAdvisorCount } = useAdvisorStore();
+  const { data: settings } = useAdminSettings();
+  const homepageAdvisorIds = settings?.homepage_advisor_ids ?? [];
+  const homepageAdvisorCount = settings?.homepage_advisor_count ?? 3;
 
   const featuredAdvisors = useMemo(() => {
     if (homepageAdvisorIds.length > 0) {

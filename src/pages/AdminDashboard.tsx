@@ -1,37 +1,30 @@
 import { useEffect, useState, useMemo } from "react";
-import { useAdvisorStore, DynamicAdvisor } from "@/stores/advisorStore";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Shield, Users, Clock, EyeOff, Archive, Settings } from "lucide-react";
+import { Shield, Users, Clock, EyeOff, Archive, Settings, Loader2 } from "lucide-react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdvisorTable from "@/components/admin/AdvisorTable";
 import AdvisorEditModal from "@/components/admin/AdvisorEditModal";
 import BulkActionsBar from "@/components/admin/BulkActionsBar";
 import PendingApprovals from "@/components/admin/PendingApprovals";
 import HomepageAdvisorSettings from "@/components/admin/HomepageAdvisorSettings";
+import { 
+  useAdminAdvisors, 
+  useUpdateAdvisor, 
+  useDeleteAdvisor, 
+  useBulkUpdateAdvisors,
+  DynamicAdvisor 
+} from "@/hooks/useDynamicAdvisors";
+import { useAdminApprovalSetting } from "@/hooks/useAdminSettings";
 
 const AdminDashboard = () => {
-  const {
-    advisors,
-    adminApprovalEnabled,
-    toggleAdminApproval,
-    updateAdvisor,
-    approveAdvisor,
-    rejectAdvisor,
-    hideAdvisor,
-    archiveAdvisor,
-    restoreAdvisor,
-    deleteAdvisorPermanently,
-    bulkApprove,
-    bulkHide,
-    bulkArchive,
-    getPendingAdvisors,
-    getPublishedAdvisors,
-    getHiddenAdvisors,
-    getArchivedAdvisors,
-  } = useAdvisorStore();
+  const { data: advisors = [], isLoading } = useAdminAdvisors();
+  const { adminApprovalEnabled, toggleAdminApproval, isLoading: settingsLoading } = useAdminApprovalSetting();
+  const updateAdvisor = useUpdateAdvisor();
+  const deleteAdvisor = useDeleteAdvisor();
+  const bulkUpdate = useBulkUpdateAdvisors();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [stateFilter, setStateFilter] = useState("All States");
@@ -44,10 +37,10 @@ const AdminDashboard = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const pendingAdvisors = getPendingAdvisors();
-  const publishedAdvisors = getPublishedAdvisors();
-  const hiddenAdvisors = getHiddenAdvisors();
-  const archivedAdvisors = getArchivedAdvisors();
+  const pendingAdvisors = useMemo(() => advisors.filter(a => a.status === "pending"), [advisors]);
+  const publishedAdvisors = useMemo(() => advisors.filter(a => a.status === "published"), [advisors]);
+  const hiddenAdvisors = useMemo(() => advisors.filter(a => a.status === "hidden"), [advisors]);
+  const archivedAdvisors = useMemo(() => advisors.filter(a => a.status === "archived"), [advisors]);
 
   const filterAdvisors = (list: DynamicAdvisor[]) => {
     return list.filter((advisor) => {
@@ -71,60 +64,84 @@ const AdminDashboard = () => {
       case "archived": return filterAdvisors(archivedAdvisors);
       default: return filterAdvisors(advisors);
     }
-  }, [activeTab, advisors, searchQuery, stateFilter, titleFilter]);
+  }, [activeTab, advisors, searchQuery, stateFilter, titleFilter, pendingAdvisors, publishedAdvisors, hiddenAdvisors, archivedAdvisors]);
 
   const handleApprove = (id: string) => {
-    approveAdvisor(id);
-    toast.success("Advisor Approved", { description: "Profile is now live in the directory." });
+    updateAdvisor.mutate(
+      { id, updates: { status: "published" } },
+      { onSuccess: () => toast.success("Advisor Approved", { description: "Profile is now live in the directory." }) }
+    );
   };
 
   const handleReject = (id: string, reason?: string) => {
-    rejectAdvisor(id, reason);
-    toast.error("Profile Rejected", { description: reason || "Profile has been rejected." });
+    updateAdvisor.mutate(
+      { id, updates: { status: "hidden", rejection_reason: reason } },
+      { onSuccess: () => toast.error("Profile Rejected", { description: reason || "Profile has been rejected." }) }
+    );
   };
 
   const handleHide = (id: string) => {
-    hideAdvisor(id);
-    toast.info("Profile Hidden", { description: "Profile removed from public directory." });
+    updateAdvisor.mutate(
+      { id, updates: { status: "hidden" } },
+      { onSuccess: () => toast.info("Profile Hidden", { description: "Profile removed from public directory." }) }
+    );
   };
 
   const handleArchive = (id: string) => {
-    archiveAdvisor(id);
-    toast.info("Profile Archived", { description: "Profile moved to archive." });
+    updateAdvisor.mutate(
+      { id, updates: { status: "archived" } },
+      { onSuccess: () => toast.info("Profile Archived", { description: "Profile moved to archive." }) }
+    );
   };
 
   const handleRestore = (id: string) => {
-    restoreAdvisor(id);
-    toast.success("Profile Restored", { description: "Profile is now live in the directory." });
+    updateAdvisor.mutate(
+      { id, updates: { status: "published" } },
+      { onSuccess: () => toast.success("Profile Restored", { description: "Profile is now live in the directory." }) }
+    );
   };
 
   const handleDelete = (id: string) => {
-    deleteAdvisorPermanently(id);
-    toast.error("Profile Deleted", { description: "Profile permanently removed." });
+    deleteAdvisor.mutate(id, {
+      onSuccess: () => toast.error("Profile Deleted", { description: "Profile permanently removed." }),
+    });
   };
 
   const handleSaveEdit = (id: string, updates: Partial<DynamicAdvisor>) => {
-    updateAdvisor(id, updates);
-    toast.success("Profile Updated", { description: "Changes saved successfully." });
+    updateAdvisor.mutate(
+      { id, updates },
+      { onSuccess: () => toast.success("Profile Updated", { description: "Changes saved successfully." }) }
+    );
   };
 
   const handleBulkApprove = () => {
-    bulkApprove(selectedIds);
-    toast.success(`${selectedIds.length} Profiles Approved`);
-    setSelectedIds([]);
+    bulkUpdate.mutate(
+      { ids: selectedIds, updates: { status: "published" } },
+      { onSuccess: () => { toast.success(`${selectedIds.length} Profiles Approved`); setSelectedIds([]); } }
+    );
   };
 
   const handleBulkHide = () => {
-    bulkHide(selectedIds);
-    toast.info(`${selectedIds.length} Profiles Hidden`);
-    setSelectedIds([]);
+    bulkUpdate.mutate(
+      { ids: selectedIds, updates: { status: "hidden" } },
+      { onSuccess: () => { toast.info(`${selectedIds.length} Profiles Hidden`); setSelectedIds([]); } }
+    );
   };
 
   const handleBulkArchive = () => {
-    bulkArchive(selectedIds);
-    toast.info(`${selectedIds.length} Profiles Archived`);
-    setSelectedIds([]);
+    bulkUpdate.mutate(
+      { ids: selectedIds, updates: { status: "archived" } },
+      { onSuccess: () => { toast.info(`${selectedIds.length} Profiles Archived`); setSelectedIds([]); } }
+    );
   };
+
+  if (isLoading || settingsLoading) {
+    return (
+      <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-accent" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">

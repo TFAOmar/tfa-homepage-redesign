@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DynamicAdvisor, AdvisorStatus } from "@/stores/advisorStore";
+import { DynamicAdvisor, AdvisorStatus } from "@/hooks/useDynamicAdvisors";
 import { Edit, Eye, EyeOff, Archive, Trash2, MoreHorizontal, CheckCircle2, ChevronUp, ChevronDown, MapPin, Shield } from "lucide-react";
 import { format } from "date-fns";
 
@@ -20,7 +20,7 @@ interface AdvisorTableProps {
   onDelete: (id: string) => void;
 }
 
-type SortField = "name" | "title" | "state" | "status" | "createdAt";
+type SortField = "name" | "title" | "state" | "status" | "created_at";
 type SortDirection = "asc" | "desc";
 
 const statusStyles: Record<AdvisorStatus, string> = {
@@ -61,9 +61,9 @@ const AdvisorTable = ({
   };
 
   const sortedAdvisors = [...advisors].sort((a, b) => {
-    if (sortField === "createdAt") {
-      const aTime = new Date(a.createdAt).getTime();
-      const bTime = new Date(b.createdAt).getTime();
+    if (sortField === "created_at") {
+      const aTime = new Date(a.created_at).getTime();
+      const bTime = new Date(b.created_at).getTime();
       return sortDirection === "asc" ? aTime - bTime : bTime - aTime;
     }
     
@@ -129,9 +129,9 @@ const AdvisorTable = ({
                   Status <SortIcon field="status" />
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("createdAt")}>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("created_at")}>
                 <div className="flex items-center gap-1">
-                  Date Added <SortIcon field="createdAt" />
+                  Date Added <SortIcon field="created_at" />
                 </div>
               </TableHead>
               <TableHead className="w-16">Actions</TableHead>
@@ -147,8 +147,8 @@ const AdvisorTable = ({
                   />
                 </TableCell>
                 <TableCell>
-                  {advisor.image ? (
-                    <img src={advisor.image} alt={advisor.name} className="w-10 h-10 rounded-full object-cover border border-accent/20" />
+                  {advisor.image_url ? (
+                    <img src={advisor.image_url} alt={advisor.name} className="w-10 h-10 rounded-full object-cover border border-accent/20" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-navy/30 to-accent/30 flex items-center justify-center text-xs font-bold text-navy">
                       {advisor.name.split(" ").map((n) => n[0]).join("")}
@@ -194,7 +194,7 @@ const AdvisorTable = ({
                   </Badge>
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
-                  {format(new Date(advisor.createdAt), "MMM d, yyyy")}
+                  {format(new Date(advisor.created_at), "MMM d, yyyy")}
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>

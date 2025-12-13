@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { DynamicAdvisor, AdvisorStatus } from "@/stores/advisorStore";
+import { DynamicAdvisor, AdvisorStatus } from "@/hooks/useDynamicAdvisors";
 import { Upload, CheckCircle2, X } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -27,14 +27,14 @@ const formSchema = z.object({
   city: z.string().min(2),
   state: z.string().min(1),
   bio: z.string().min(50).max(300),
-  passionateBio: z.string().max(300).optional(),
+  passionate_bio: z.string().max(300).optional(),
   licenses: z.array(z.string()).min(1),
   specialties: z.array(z.string()).min(1),
-  yearsOfExperience: z.number().min(0).max(50),
-  schedulingLink: z.string().url().optional().or(z.literal("")),
-  image: z.string().optional(),
+  years_of_experience: z.number().min(0).max(50),
+  scheduling_link: z.string().url().optional().or(z.literal("")),
+  image_url: z.string().optional(),
   status: z.enum(["pending", "published", "hidden", "archived"]),
-  displayPriority: z.number().optional(),
+  display_priority: z.number().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -58,7 +58,7 @@ const allStates = [
 ];
 
 const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalProps) => {
-  const [imagePreview, setImagePreview] = useState<string | undefined>(advisor?.image);
+  const [imagePreview, setImagePreview] = useState<string | undefined>(advisor?.image_url);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -71,14 +71,14 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
       city: "",
       state: "",
       bio: "",
-      passionateBio: "",
+      passionate_bio: "",
       licenses: [],
       specialties: [],
-      yearsOfExperience: 0,
-      schedulingLink: "",
-      image: "",
+      years_of_experience: 0,
+      scheduling_link: "",
+      image_url: "",
       status: "pending",
-      displayPriority: 0,
+      display_priority: 0,
     },
   });
 
@@ -93,16 +93,16 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
         city: advisor.city,
         state: advisor.state,
         bio: advisor.bio,
-        passionateBio: advisor.passionateBio || "",
+        passionate_bio: advisor.passionate_bio || "",
         licenses: advisor.licenses,
         specialties: advisor.specialties,
-        yearsOfExperience: advisor.yearsOfExperience,
-        schedulingLink: advisor.schedulingLink || "",
-        image: advisor.image || "",
+        years_of_experience: advisor.years_of_experience,
+        scheduling_link: advisor.scheduling_link || "",
+        image_url: advisor.image_url || "",
         status: advisor.status,
-        displayPriority: advisor.displayPriority || 0,
+        display_priority: advisor.display_priority || 0,
       });
-      setImagePreview(advisor.image);
+      setImagePreview(advisor.image_url);
     }
   }, [advisor, form]);
 
@@ -113,7 +113,7 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
       reader.onloadend = () => {
         const base64 = reader.result as string;
         setImagePreview(base64);
-        form.setValue("image", base64);
+        form.setValue("image_url", base64);
       };
       reader.readAsDataURL(file);
     }
@@ -258,7 +258,7 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
               
               <FormField
                 control={form.control}
-                name="yearsOfExperience"
+                name="years_of_experience"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Years of Experience</FormLabel>
@@ -364,7 +364,7 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
 
               <FormField
                 control={form.control}
-                name="schedulingLink"
+                name="scheduling_link"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Scheduling Link</FormLabel>
@@ -402,7 +402,7 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
 
                 <FormField
                   control={form.control}
-                  name="displayPriority"
+                  name="display_priority"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Display Priority</FormLabel>
@@ -421,7 +421,8 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
                 <X className="h-4 w-4 mr-2" />
                 Cancel
               </Button>
-              <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground neuro-button">
+              <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                <CheckCircle2 className="h-4 w-4 mr-2" />
                 Save Changes
               </Button>
             </div>
