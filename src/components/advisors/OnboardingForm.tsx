@@ -12,10 +12,11 @@ import { useSubmitAdvisor } from "@/hooks/useDynamicAdvisors";
 import { useAdminSettings } from "@/hooks/useAdminSettings";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Upload, CheckCircle2 } from "lucide-react";
+import { Upload, CheckCircle2, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { uploadAdvisorPhoto, validateImageFile, StorageError } from "@/lib/storage";
 
 const licenseOptions = ["Life", "Health", "Series 6", "Series 7", "Series 63", "Series 65", "Series 66"];
 const specialtyOptions = [
@@ -75,7 +76,6 @@ const formSchema = z.object({
   specialties: z.array(z.string()).min(1, "Select at least one specialty"),
   yearsOfExperience: z.number().min(0).max(50),
   schedulingLink: z.string().url().optional().or(z.literal("")),
-  image: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -86,6 +86,8 @@ const OnboardingForm = () => {
   const { data: settings } = useAdminSettings();
   const adminApprovalEnabled = settings?.admin_approval_enabled ?? false;
   const [imagePreview, setImagePreview] = useState<string>();
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const { honeypotProps, isBot } = useHoneypot();
 
   const form = useForm<FormValues>({
@@ -104,20 +106,21 @@ const OnboardingForm = () => {
       specialties: [],
       yearsOfExperience: 0,
       schedulingLink: "",
-      image: "",
     },
   });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setImagePreview(base64);
-        form.setValue("image", base64);
-      };
-      reader.readAsDataURL(file);
+      try {
+        validateImageFile(file);
+        setImageFile(file);
+        setImagePreview(URL.createObjectURL(file));
+      } catch (error) {
+        if (error instanceof StorageError) {
+          toast.error(error.message);
+        }
+      }
     }
   };
 
@@ -134,6 +137,25 @@ const OnboardingForm = () => {
     }
 
     const region = getRegion(data.state);
+    let imageUrl: string | undefined;
+    
+    // Upload image to Supabase Storage if provided
+    if (imageFile) {
+      setIsUploading(true);
+      try {
+        const result = await uploadAdvisorPhoto(imageFile);
+        imageUrl = result.url;
+      } catch (error) {
+        setIsUploading(false);
+        if (error instanceof StorageError) {
+          toast.error(error.message);
+        } else {
+          toast.error("Failed to upload image. Please try again.");
+        }
+        return;
+      }
+      setIsUploading(false);
+    }
     
     // Send email notification
     try {
@@ -143,7 +165,7 @@ const OnboardingForm = () => {
           formData: {
             ...data,
             region,
-            image: data.image ? "[Image uploaded]" : "No image",
+            image: imageUrl ? "[Image uploaded]" : "No image",
           },
         },
       });
@@ -166,7 +188,7 @@ const OnboardingForm = () => {
       specialties: data.specialties,
       licenses: data.licenses,
       years_of_experience: data.yearsOfExperience,
-      image_url: data.image,
+      image_url: imageUrl,
       scheduling_link: data.schedulingLink || undefined,
     }, {
       onSuccess: () => {
@@ -585,8 +607,10 @@ const OnboardingForm = () => {
                 type="submit"
                 size="lg"
                 className="bg-accent hover:bg-accent/90 text-accent-foreground neuro-button px-12"
+                disabled={isUploading || submitAdvisor.isPending}
               >
-                {adminApprovalEnabled ? "Submit for Review" : "Create Profile"}
+                {(isUploading || submitAdvisor.isPending) && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                {isUploading ? "Uploading Photo..." : adminApprovalEnabled ? "Submit for Review" : "Create Profile"}
               </Button>
             </div>
           </form>

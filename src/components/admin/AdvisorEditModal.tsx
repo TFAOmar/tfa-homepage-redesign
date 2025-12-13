@@ -8,9 +8,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { DynamicAdvisor, AdvisorStatus } from "@/hooks/useDynamicAdvisors";
-import { Upload, CheckCircle2, X } from "lucide-react";
+import { DynamicAdvisor } from "@/hooks/useDynamicAdvisors";
+import { Upload, CheckCircle2, X, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { uploadAdvisorPhoto, validateImageFile, StorageError } from "@/lib/storage";
 
 const licenseOptions = ["Life", "Health", "Series 6", "Series 7", "Series 63", "Series 65", "Series 66"];
 const specialtyOptions = [
@@ -32,7 +34,6 @@ const formSchema = z.object({
   specialties: z.array(z.string()).min(1),
   years_of_experience: z.number().min(0).max(50),
   scheduling_link: z.string().url().optional().or(z.literal("")),
-  image_url: z.string().optional(),
   status: z.enum(["pending", "published", "hidden", "archived"]),
   display_priority: z.number().optional(),
 });
@@ -59,6 +60,8 @@ const allStates = [
 
 const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalProps) => {
   const [imagePreview, setImagePreview] = useState<string | undefined>(advisor?.image_url);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -76,7 +79,6 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
       specialties: [],
       years_of_experience: 0,
       scheduling_link: "",
-      image_url: "",
       status: "pending",
       display_priority: 0,
     },
@@ -98,32 +100,54 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
         specialties: advisor.specialties,
         years_of_experience: advisor.years_of_experience,
         scheduling_link: advisor.scheduling_link || "",
-        image_url: advisor.image_url || "",
         status: advisor.status,
         display_priority: advisor.display_priority || 0,
       });
       setImagePreview(advisor.image_url);
+      setImageFile(null);
     }
   }, [advisor, form]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setImagePreview(base64);
-        form.setValue("image_url", base64);
-      };
-      reader.readAsDataURL(file);
+      try {
+        validateImageFile(file);
+        setImageFile(file);
+        setImagePreview(URL.createObjectURL(file));
+      } catch (error) {
+        if (error instanceof StorageError) {
+          toast.error(error.message);
+        }
+      }
     }
   };
 
-  const onSubmit = (data: FormValues) => {
-    if (advisor) {
-      onSave(advisor.id, data);
-      onClose();
+  const onSubmit = async (data: FormValues) => {
+    if (!advisor) return;
+    
+    let imageUrl = advisor.image_url;
+    
+    // Upload new image if provided
+    if (imageFile) {
+      setIsUploading(true);
+      try {
+        const result = await uploadAdvisorPhoto(imageFile);
+        imageUrl = result.url;
+      } catch (error) {
+        setIsUploading(false);
+        if (error instanceof StorageError) {
+          toast.error(error.message);
+        } else {
+          toast.error("Failed to upload image. Please try again.");
+        }
+        return;
+      }
+      setIsUploading(false);
     }
+    
+    onSave(advisor.id, { ...data, image_url: imageUrl });
+    onClose();
   };
 
   if (!advisor) return null;
@@ -417,13 +441,13 @@ const AdvisorEditModal = ({ advisor, open, onClose, onSave }: AdvisorEditModalPr
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t border-accent/20">
-              <Button type="button" variant="outline" onClick={onClose}>
+              <Button type="button" variant="outline" onClick={onClose} disabled={isUploading}>
                 <X className="h-4 w-4 mr-2" />
                 Cancel
               </Button>
-              <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <CheckCircle2 className="h-4 w-4 mr-2" />
-                Save Changes
+              <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isUploading}>
+                {isUploading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
+                {isUploading ? "Uploading..." : "Save Changes"}
               </Button>
             </div>
           </form>
