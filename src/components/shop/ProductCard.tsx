@@ -41,7 +41,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <Card className="glass hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col">
-      <Link to={`/product/${node.handle}`} className="cursor-pointer">
+      <Link to={`/shop/${node.handle}`} className="cursor-pointer">
         <div className="aspect-square overflow-hidden rounded-t-lg bg-secondary/10">
           {imageUrl ? (
             <img 

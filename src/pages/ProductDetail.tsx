@@ -234,7 +234,7 @@ const ProductDetail = () => {
                   <Card
                     key={relatedProduct.node.id}
                     className="group cursor-pointer overflow-hidden bg-white/10 backdrop-blur-xl border-white/20 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--primary),0.3)]"
-                    onClick={() => navigate(`/product/${relatedProduct.node.handle}`)}
+                    onClick={() => navigate(`/shop/${relatedProduct.node.handle}`)}
                   >
                     <div className="aspect-square overflow-hidden bg-secondary/20">
                       {imageUrl ? (
