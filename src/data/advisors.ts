@@ -213,7 +213,8 @@ export const advisors: Advisor[] = [
     specialties: ["Mortgage Financing", "Retirement Planning", "Tax Strategies", "Real Estate", "Kai-Zen Strategy"],
     licenses: ["Loan Originator", "Life & Health (Lic# 0F93770)"],
     image: mariahLorenzenImg,
-    landingPage: "/advisors/mariah-lorenzen"
+    landingPage: "/advisors/mariah-lorenzen",
+    yearsOfExperience: 30
   },
   {
     id: "sean-cagle",
