@@ -14,6 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      dynamic_advisors: {
+        Row: {
+          bio: string
+          city: string
+          created_at: string
+          display_priority: number | null
+          email: string
+          id: string
+          image_url: string | null
+          licenses: string[]
+          name: string
+          passionate_bio: string | null
+          phone: string
+          region: string
+          rejection_reason: string | null
+          scheduling_link: string | null
+          specialties: string[]
+          state: string
+          status: Database["public"]["Enums"]["advisor_status"]
+          title: string
+          type: Database["public"]["Enums"]["advisor_type"]
+          updated_at: string
+          years_of_experience: number
+        }
+        Insert: {
+          bio: string
+          city: string
+          created_at?: string
+          display_priority?: number | null
+          email: string
+          id?: string
+          image_url?: string | null
+          licenses?: string[]
+          name: string
+          passionate_bio?: string | null
+          phone: string
+          region: string
+          rejection_reason?: string | null
+          scheduling_link?: string | null
+          specialties?: string[]
+          state: string
+          status?: Database["public"]["Enums"]["advisor_status"]
+          title: string
+          type?: Database["public"]["Enums"]["advisor_type"]
+          updated_at?: string
+          years_of_experience?: number
+        }
+        Update: {
+          bio?: string
+          city?: string
+          created_at?: string
+          display_priority?: number | null
+          email?: string
+          id?: string
+          image_url?: string | null
+          licenses?: string[]
+          name?: string
+          passionate_bio?: string | null
+          phone?: string
+          region?: string
+          rejection_reason?: string | null
+          scheduling_link?: string | null
+          specialties?: string[]
+          state?: string
+          status?: Database["public"]["Enums"]["advisor_status"]
+          title?: string
+          type?: Database["public"]["Enums"]["advisor_type"]
+          updated_at?: string
+          years_of_experience?: number
+        }
+        Relationships: []
+      }
       form_submissions: {
         Row: {
           advisor: string | null
@@ -100,6 +193,8 @@ export type Database = {
       }
     }
     Enums: {
+      advisor_status: "pending" | "published" | "hidden" | "archived"
+      advisor_type: "Advisor" | "Broker"
       app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
@@ -228,6 +323,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      advisor_status: ["pending", "published", "hidden", "archived"],
+      advisor_type: ["Advisor", "Broker"],
       app_role: ["admin", "moderator", "user"],
     },
   },

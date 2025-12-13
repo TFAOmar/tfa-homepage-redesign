@@ -3,8 +3,8 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Home, User, RotateCcw, GripVertical, Eye, X } from "lucide-react";
-import { useAdvisorStore } from "@/stores/advisorStore";
+import { Home, User, RotateCcw, GripVertical, Eye, X, Loader2 } from "lucide-react";
+import { useHomepageAdvisorSettings } from "@/hooks/useAdminSettings";
 import { advisors as staticAdvisors } from "@/data/advisors";
 import { useMemo } from "react";
 import { toast } from "@/hooks/use-toast";
@@ -18,7 +18,6 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
@@ -94,11 +93,12 @@ const HomepageAdvisorSettings = () => {
   const { 
     homepageAdvisorIds, 
     homepageAdvisorCount, 
+    isLoading,
     setHomepageAdvisorCount, 
     toggleHomepageAdvisor,
     clearHomepageAdvisors,
     reorderHomepageAdvisors,
-  } = useAdvisorStore();
+  } = useHomepageAdvisorSettings();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -155,6 +155,16 @@ const HomepageAdvisorSettings = () => {
     clearHomepageAdvisors();
     toast({ title: "Selection cleared", description: "All advisors have been deselected." });
   };
+
+  if (isLoading) {
+    return (
+      <Card className="glass animate-fade-in">
+        <CardContent className="flex items-center justify-center py-12">
+          <Loader2 className="h-6 w-6 animate-spin text-accent" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="glass animate-fade-in">

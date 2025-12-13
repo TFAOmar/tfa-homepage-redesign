@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { DynamicAdvisor } from "@/stores/advisorStore";
+import { DynamicAdvisor } from "@/hooks/useDynamicAdvisors";
 import { CheckCircle2, XCircle, MapPin, Shield, Clock, Eye } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -43,9 +43,9 @@ const PendingApprovals = ({ advisors, onApprove, onReject, onView }: PendingAppr
           <Card key={advisor.id} className="glass overflow-hidden animate-fade-in">
             <CardContent className="p-6">
               <div className="flex gap-4">
-                {advisor.image ? (
+                {advisor.image_url ? (
                   <img
-                    src={advisor.image}
+                    src={advisor.image_url}
                     alt={advisor.name}
                     className="w-20 h-20 rounded-full object-cover border-2 border-accent"
                   />

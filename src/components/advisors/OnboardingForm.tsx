@@ -8,7 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAdvisorStore } from "@/stores/advisorStore";
+import { useSubmitAdvisor } from "@/hooks/useDynamicAdvisors";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Upload, CheckCircle2 } from "lucide-react";
@@ -81,8 +82,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 const OnboardingForm = () => {
   const navigate = useNavigate();
-  const addAdvisor = useAdvisorStore((state) => state.addAdvisor);
-  const adminApprovalEnabled = useAdvisorStore((state) => state.adminApprovalEnabled);
+  const submitAdvisor = useSubmitAdvisor();
+  const { data: settings } = useAdminSettings();
+  const adminApprovalEnabled = settings?.admin_approval_enabled ?? false;
   const [imagePreview, setImagePreview] = useState<string>();
   const { honeypotProps, isBot } = useHoneypot();
 
@@ -149,7 +151,8 @@ const OnboardingForm = () => {
       console.error("Email notification error:", error);
     }
     
-    addAdvisor({
+    // Submit to Supabase
+    submitAdvisor.mutate({
       name: data.name,
       title: data.title,
       type: data.type,
@@ -159,25 +162,31 @@ const OnboardingForm = () => {
       state: data.state,
       region,
       bio: data.bio,
-      passionateBio: data.passionateBio || undefined,
+      passionate_bio: data.passionateBio || undefined,
       specialties: data.specialties,
       licenses: data.licenses,
-      yearsOfExperience: data.yearsOfExperience,
-      image: data.image,
-      schedulingLink: data.schedulingLink || undefined,
+      years_of_experience: data.yearsOfExperience,
+      image_url: data.image,
+      scheduling_link: data.schedulingLink || undefined,
+    }, {
+      onSuccess: () => {
+        if (adminApprovalEnabled) {
+          toast.success("Profile Submitted!", {
+            description: "Your profile is pending admin approval.",
+          });
+        } else {
+          toast.success("Profile Created!", {
+            description: "Your advisor profile is now live in the directory.",
+          });
+        }
+        navigate("/advisors");
+      },
+      onError: () => {
+        toast.error("Submission Failed", {
+          description: "Please try again later.",
+        });
+      },
     });
-
-    if (adminApprovalEnabled) {
-      toast.success("Profile Submitted!", {
-        description: "Your profile is pending admin approval.",
-      });
-    } else {
-      toast.success("Profile Created!", {
-        description: "Your advisor profile is now live in the directory.",
-      });
-    }
-
-    navigate("/advisors");
   };
 
   return (
