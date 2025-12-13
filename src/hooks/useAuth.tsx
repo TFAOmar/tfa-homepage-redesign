@@ -19,8 +19,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCheckingRole, setIsCheckingRole] = useState(false);
 
   const checkAdminRole = async (userId: string) => {
+    setIsCheckingRole(true);
     try {
       const { data, error } = await supabase.rpc('has_role', {
         _user_id: userId,
@@ -35,6 +37,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       console.error('Error in checkAdminRole:', err);
       setIsAdmin(false);
+    } finally {
+      setIsCheckingRole(false);
     }
   };
 
@@ -90,8 +94,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAdmin(false);
   };
 
+  const effectiveLoading = isLoading || isCheckingRole;
+
   return (
-    <AuthContext.Provider value={{ user, session, isAdmin, isLoading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, session, isAdmin, isLoading: effectiveLoading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );
