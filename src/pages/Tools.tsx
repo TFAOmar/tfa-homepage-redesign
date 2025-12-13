@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { TrendingUp, PiggyBank, Receipt, Target } from "lucide-react";
+import { TrendingUp, PiggyBank, Receipt, Target, Landmark } from "lucide-react";
 import ToolsHero from "@/components/tools/ToolsHero";
 import ToolCard from "@/components/tools/ToolCard";
 import ToolsCTA from "@/components/tools/ToolsCTA";
@@ -28,6 +28,12 @@ const tools = [
     title: "Required Savings Calculator",
     description: "Find out how much you may need to save each month, each year, or as a lump sum today to reach a specific future financial goal.",
     link: "/tools/required-savings-calculator",
+  },
+  {
+    icon: Landmark,
+    title: "Kai-Zen Retirement Calculator",
+    description: "Estimate potential tax-free retirement distributions using the Kai-Zen leveraged life insurance strategy.",
+    link: "/tools/kai-zen-calculator",
   },
 ];
 
