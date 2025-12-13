@@ -2,3 +2,6 @@ project_id = "cstkeblqqyjwlrbppucu"
 
 [functions.send-form-notification]
 verify_jwt = false
+
+[functions.migrate-advisor-images]
+verify_jwt = false
