@@ -43,7 +43,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisor/vanessa-sanchez/living-trust'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -64,7 +64,7 @@ const AppLayout = () => {
           <Route path="/partners" element={<Partners />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/product/:handle" element={<ProductDetail />} />
+          <Route path="/shop/:handle" element={<ProductDetail />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/advisors" element={<Advisors />} />
@@ -85,8 +85,8 @@ const AppLayout = () => {
           <Route path="/careers" element={<Careers />} />
           <Route path="/careers/agent" element={<AgentRecruitment />} />
           <Route path="/careers/franchise" element={<FranchiseRecruitment />} />
-          <Route path="/advisor/vanessa-sanchez" element={<AdvisorVanessaSanchez />} />
-          <Route path="/advisor/vanessa-sanchez/living-trust" element={<VanessaLivingTrust />} />
+          <Route path="/advisors/vanessa-sanchez" element={<AdvisorVanessaSanchez />} />
+          <Route path="/advisors/vanessa-sanchez/living-trust" element={<VanessaLivingTrust />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

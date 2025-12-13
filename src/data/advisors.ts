@@ -239,7 +239,7 @@ export const advisors: Advisor[] = [
     specialties: ["Retirement Planning", "Estate Planning", "Tax Strategies", "Business Planning", "Life Insurance"],
     licenses: ["Life & Health"],
     image: vanessaSanchezImg,
-    landingPage: "/advisor/vanessa-sanchez"
+    landingPage: "/advisors/vanessa-sanchez"
   },
   {
     id: "ruth-pacheco",

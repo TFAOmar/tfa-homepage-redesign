@@ -88,7 +88,7 @@ const AdvisorVanessaSanchez = () => {
                     Contact Me
                   </Button>
                 </Link>
-                <Link to="/advisor/vanessa-sanchez/living-trust">
+                <Link to="/advisors/vanessa-sanchez/living-trust">
                   <Button size="lg" variant="outline" className="border-accent/50 hover:bg-accent/20 text-lg px-8 py-6 w-full sm:w-auto text-accent">
                     <Shield className="mr-2 h-5 w-5" />
                     Living Trust Planning
@@ -181,7 +181,7 @@ const AdvisorVanessaSanchez = () => {
                 <p className="text-muted-foreground">{service.description}</p>
                 {service.title === "Estate Planning" && (
                   <Link 
-                    to="/advisor/vanessa-sanchez/living-trust" 
+                    to="/advisors/vanessa-sanchez/living-trust" 
                     className="inline-flex items-center text-accent hover:text-accent/80 mt-4 font-medium transition-colors"
                   >
                     Learn about Living Trusts
