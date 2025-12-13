@@ -35,6 +35,7 @@ const servicesMenu = [
       { name: "Investment Management", icon: LineChart, href: "/services#investment", description: "Grow your wealth strategically" },
       { name: "401(k) Rollovers", icon: Repeat, href: "/services#401k", description: "Optimize your retirement accounts" },
       { name: "Annuities", icon: DollarSign, href: "/services#annuities", description: "Guaranteed income solutions" },
+      { name: "Kai-Zen Strategy", icon: Landmark, href: "/services/kai-zen", description: "Leveraged retirement growth" },
     ]
   },
   {
