@@ -20,10 +20,53 @@ serve(async (req) => {
   }
 
   try {
-    // Use service role key for admin operations
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     
+    // First, verify the user is authenticated and is an admin
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      console.error("No authorization header provided");
+      return new Response(
+        JSON.stringify({ success: false, error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Create a client with the user's token to verify their identity
+    const userSupabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: { Authorization: authHeader },
+      },
+    });
+
+    const { data: { user }, error: userError } = await userSupabase.auth.getUser();
+    if (userError || !user) {
+      console.error("Failed to get user:", userError?.message);
+      return new Response(
+        JSON.stringify({ success: false, error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Verify the user has admin role using the has_role function
+    const { data: isAdmin, error: roleError } = await userSupabase.rpc("has_role", {
+      _user_id: user.id,
+      _role: "admin",
+    });
+
+    if (roleError || !isAdmin) {
+      console.error("User is not an admin:", roleError?.message);
+      return new Response(
+        JSON.stringify({ success: false, error: "Forbidden - Admin access required" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    console.log(`Admin user ${user.id} authorized for migration`);
+
+    // Use service role key for admin operations (after verifying user is admin)
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     console.log("Starting base64 to Storage migration...");
