@@ -162,10 +162,10 @@ const AdvisorMariahLorenzen = () => {
             
             <Card className="bg-white/10 backdrop-blur-xl border-white/15 p-8 md:p-12 rounded-2xl">
               <p className="text-lg md:text-xl text-foreground/80 leading-relaxed mb-8">
-                Mariah has extensive experience in financial services, serving as Head of Franchise Operations at TFA since 2019. Her career spans roles at New American Funding, Finance of America Commercial, CrossCountry Mortgage, Carrington Mortgage Services, and Green Tree Servicing.
+                With a career in financial services spanning nearly three decades, Mariah Lorenzen brings deep industry experience and a heart for long-term planning. She began her career in 1995 and spent many years in real estate and mortgage lending before becoming a licensed Life & Health insurance professional in 2008.
               </p>
               <p className="text-lg md:text-xl text-foreground/80 leading-relaxed">
-                A licensed loan originator focused on purchase and refinance transactions, Mariah brings deep mortgage expertise to help clients achieve their financial goals. Her unique background in both mortgage financing and retirement planning makes her ideally suited to guide clients through the Kai-Zen strategy.
+                Seeing firsthand how unstable markets and lack of proper guidance can impact families, she committed her career to helping individuals and business owners protect their income, plan for retirement, and build lasting financial security. Her approach is rooted in education, strategy, and long-term relationships—helping clients make confident decisions today that support their future and their families.
               </p>
             </Card>
 

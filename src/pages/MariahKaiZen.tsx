@@ -248,7 +248,7 @@ const MariahKaiZen = () => {
                   Chino Hills, CA
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Licensed financial professional with extensive experience in mortgage financing and retirement planning strategies.
+                  Licensed financial professional with nearly 30 years of experience in real estate, mortgage lending, and retirement planning strategies.
                 </p>
               </Card>
             </div>
