@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
@@ -10,12 +11,30 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface FormNotificationRequest {
-  formType: string;
-  formData: Record<string, unknown>;
-  recipientEmail?: string;
-  additionalRecipients?: string[];
-}
+// Allowed form types for validation
+const ALLOWED_FORM_TYPES = [
+  "contact",
+  "business-insurance",
+  "agent-application",
+  "careers-inquiry",
+  "franchise-application",
+  "living-trust",
+  "advisor-onboarding",
+  "consultation",
+] as const;
+
+// Zod schema for request validation
+const requestSchema = z.object({
+  formType: z.string().min(1).max(50).refine(
+    (val) => ALLOWED_FORM_TYPES.includes(val as typeof ALLOWED_FORM_TYPES[number]),
+    { message: "Invalid form type" }
+  ),
+  formData: z.record(z.unknown()),
+  recipientEmail: z.string().email().max(255).optional(),
+  additionalRecipients: z.array(z.string().email().max(255)).max(5).optional(),
+});
+
+type FormNotificationRequest = z.infer<typeof requestSchema>;
 
 // HTML escape function to prevent XSS in email content
 const escapeHtml = (str: string): string => {
@@ -57,6 +76,7 @@ const getFormSubject = (formType: string, formData: Record<string, unknown>): st
     "franchise-application": `New Franchise Application from ${name}`,
     "living-trust": `New Living Trust Consultation Request from ${name}`,
     "advisor-onboarding": `New Advisor Onboarding Submission from ${name}`,
+    "consultation": `New Consultation Request from ${name}`,
   };
   
   return subjects[formType] || `New Form Submission: ${formType}`;
@@ -92,7 +112,26 @@ serve(async (req: Request): Promise<Response> => {
       throw new Error("Supabase configuration is missing");
     }
 
-    const { formType, formData, recipientEmail, additionalRecipients }: FormNotificationRequest = await req.json();
+    // Parse and validate request body
+    const rawBody = await req.json();
+    const parseResult = requestSchema.safeParse(rawBody);
+    
+    if (!parseResult.success) {
+      console.error("Validation error:", parseResult.error.flatten());
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: "Invalid request data",
+          details: parseResult.error.flatten().fieldErrors 
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    const { formType, formData, recipientEmail, additionalRecipients } = parseResult.data;
 
     console.log(`Processing ${formType} form submission:`, JSON.stringify(formData));
 
