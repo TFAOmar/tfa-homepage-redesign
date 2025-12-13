@@ -243,16 +243,16 @@ const KaiZen = () => {
             </p>
           </div>
           
-          {/* Video Placeholder */}
+          {/* YouTube Video Embed */}
           <div className="max-w-4xl mx-auto">
-            <div className="aspect-video bg-navy/50 rounded-2xl border border-white/10 flex items-center justify-center relative overflow-hidden group cursor-pointer hover:border-accent/30 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="text-center z-10">
-                <div className="w-20 h-20 rounded-full bg-accent/20 flex items-center justify-center mb-4 mx-auto group-hover:bg-accent/30 transition-colors duration-300">
-                  <Play className="h-10 w-10 text-accent" />
-                </div>
-                <p className="text-muted-foreground">Video Coming Soon</p>
-              </div>
+            <div className="aspect-video rounded-2xl border border-white/10 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.3)]">
+              <iframe
+                src="https://www.youtube.com/embed/I5sTuxJXFDM?rel=0"
+                title="Kai-Zen Strategy Explained"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full"
+              />
             </div>
           </div>
         </div>
