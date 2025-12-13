@@ -10,6 +10,7 @@ import AdvisorEditModal from "@/components/admin/AdvisorEditModal";
 import BulkActionsBar from "@/components/admin/BulkActionsBar";
 import PendingApprovals from "@/components/admin/PendingApprovals";
 import HomepageAdvisorSettings from "@/components/admin/HomepageAdvisorSettings";
+import ImageMigrationCard from "@/components/admin/ImageMigrationCard";
 import { 
   useAdminAdvisors, 
   useUpdateAdvisor, 
@@ -172,7 +173,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Settings Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Workflow Settings Card */}
           <Card className="glass animate-fade-in">
             <CardHeader className="pb-4">
@@ -198,6 +199,9 @@ const AdminDashboard = () => {
 
           {/* Homepage Advisor Settings */}
           <HomepageAdvisorSettings />
+
+          {/* Image Migration Tools */}
+          <ImageMigrationCard />
         </div>
 
         {/* Bulk Actions */}
