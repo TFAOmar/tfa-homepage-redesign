@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useHoneypot } from "@/hooks/useHoneypot";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { Loader2, Send } from "lucide-react";
 
 const KaiZenForm = () => {
@@ -101,7 +101,7 @@ const KaiZenForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <input {...honeypotProps} />
+      <input {...honeypotProps} className={honeypotClassName} />
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
