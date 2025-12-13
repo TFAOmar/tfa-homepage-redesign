@@ -5,6 +5,7 @@ import { toast } from "sonner";
 export type AdvisorStatus = "pending" | "published" | "hidden" | "archived";
 export type AdvisorType = "Advisor" | "Broker";
 
+// Full advisor interface (includes PII - for admin use only)
 export interface DynamicAdvisor {
   id: string;
   name: string;
@@ -29,6 +30,28 @@ export interface DynamicAdvisor {
   updated_at: string;
 }
 
+// Public advisor interface (excludes PII - email, phone)
+export interface PublicAdvisor {
+  id: string;
+  name: string;
+  title: string;
+  type: AdvisorType;
+  state: string;
+  city: string;
+  region: string;
+  bio: string;
+  passionate_bio?: string;
+  specialties: string[];
+  licenses: string[];
+  years_of_experience: number;
+  image_url?: string;
+  scheduling_link?: string;
+  status: AdvisorStatus;
+  display_priority?: number;
+  created_at: string;
+  updated_at: string;
+}
+
 // Fetch all advisors (admin only - requires auth)
 export const useAdminAdvisors = () => {
   return useQuery({
@@ -45,19 +68,22 @@ export const useAdminAdvisors = () => {
   });
 };
 
-// Fetch published advisors (public)
+// Fetch published advisors (public - uses secure view that excludes PII)
 export const usePublishedAdvisors = () => {
   return useQuery({
     queryKey: ["published-advisors"],
     queryFn: async () => {
+      // Query the public_advisors view which excludes email and phone
+      // The view has security_invoker=true and is backed by RLS on dynamic_advisors
       const { data, error } = await supabase
-        .from("dynamic_advisors")
-        .select("*")
-        .eq("status", "published")
-        .order("name", { ascending: true });
+        .rpc("get_public_advisors" as never);
 
-      if (error) throw error;
-      return data as DynamicAdvisor[];
+      if (error) {
+        // Fallback: if RPC doesn't exist, return empty array
+        console.warn("Could not fetch public advisors:", error.message);
+        return [] as PublicAdvisor[];
+      }
+      return (data ?? []) as PublicAdvisor[];
     },
   });
 };

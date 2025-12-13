@@ -21,6 +21,7 @@ const Advisors = () => {
   // Combine static and dynamic advisors
   const allAdvisors = useMemo(() => {
     // Map dynamic advisors to match static advisor interface
+    // Note: email and phone are not included in PublicAdvisor (excluded for security)
     const mappedDynamic = dynamicAdvisors.map((da) => ({
       id: da.id,
       name: da.name,
@@ -34,8 +35,6 @@ const Advisors = () => {
       licenses: da.licenses,
       yearsOfExperience: da.years_of_experience,
       image: da.image_url,
-      email: da.email,
-      phone: da.phone,
       schedulingLink: da.scheduling_link,
     }));
     

@@ -181,9 +181,94 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_advisors: {
+        Row: {
+          bio: string | null
+          city: string | null
+          created_at: string | null
+          display_priority: number | null
+          id: string | null
+          image_url: string | null
+          licenses: string[] | null
+          name: string | null
+          passionate_bio: string | null
+          region: string | null
+          scheduling_link: string | null
+          specialties: string[] | null
+          state: string | null
+          status: Database["public"]["Enums"]["advisor_status"] | null
+          title: string | null
+          type: Database["public"]["Enums"]["advisor_type"] | null
+          updated_at: string | null
+          years_of_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          display_priority?: number | null
+          id?: string | null
+          image_url?: string | null
+          licenses?: string[] | null
+          name?: string | null
+          passionate_bio?: string | null
+          region?: string | null
+          scheduling_link?: string | null
+          specialties?: string[] | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["advisor_status"] | null
+          title?: string | null
+          type?: Database["public"]["Enums"]["advisor_type"] | null
+          updated_at?: string | null
+          years_of_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          display_priority?: number | null
+          id?: string | null
+          image_url?: string | null
+          licenses?: string[] | null
+          name?: string | null
+          passionate_bio?: string | null
+          region?: string | null
+          scheduling_link?: string | null
+          specialties?: string[] | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["advisor_status"] | null
+          title?: string | null
+          type?: Database["public"]["Enums"]["advisor_type"] | null
+          updated_at?: string | null
+          years_of_experience?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      get_public_advisors: {
+        Args: never
+        Returns: {
+          bio: string
+          city: string
+          created_at: string
+          display_priority: number
+          id: string
+          image_url: string
+          licenses: string[]
+          name: string
+          passionate_bio: string
+          region: string
+          scheduling_link: string
+          specialties: string[]
+          state: string
+          status: Database["public"]["Enums"]["advisor_status"]
+          title: string
+          type: Database["public"]["Enums"]["advisor_type"]
+          updated_at: string
+          years_of_experience: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
