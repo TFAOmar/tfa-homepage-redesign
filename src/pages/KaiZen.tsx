@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/accordion";
 import tfaLogo from "@/assets/tfa-logo.png";
 import KaiZenForm from "@/components/kaizen/KaiZenForm";
+import KaiZenCalculator from "@/components/kaizen/KaiZenCalculator";
 
 const scrollToForm = () => {
   document.getElementById('kai-zen-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -102,14 +103,6 @@ const faqs = [
   }
 ];
 
-const exampleScenario = {
-  age: 45,
-  contribution: "$20,000/year for 5 years",
-  totalContributed: "$100,000",
-  projectedDistributions: "$45,000/year for 20 years",
-  totalDistributions: "$900,000",
-  deathBenefit: "$1,000,000+"
-};
 
 const KaiZen = () => {
   return (
@@ -242,7 +235,7 @@ const KaiZen = () => {
         </div>
       </section>
 
-      {/* Example Scenario Section */}
+      {/* Interactive Calculator Section */}
       <section className="py-20 md:py-32 bg-secondary/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
@@ -250,60 +243,12 @@ const KaiZen = () => {
               What Could Kai-Zen Mean for You?
             </h2>
             <p className="text-lg text-muted-foreground">
-              Here's an example of how Kai-Zen could work for a {exampleScenario.age}-year-old in good health.
+              Adjust the sliders below to see potential outcomes based on your age and contribution amount.
             </p>
           </div>
           
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8 md:p-12">
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-accent mb-4">Your Contribution</h3>
-                  <div className="flex justify-between items-center py-3 border-b border-white/10">
-                    <span className="text-muted-foreground">Annual contribution</span>
-                    <span className="text-foreground font-medium">$20,000/year</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3 border-b border-white/10">
-                    <span className="text-muted-foreground">Contribution period</span>
-                    <span className="text-foreground font-medium">5 years</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3">
-                    <span className="text-muted-foreground">Total contributed</span>
-                    <span className="text-foreground font-bold text-lg">{exampleScenario.totalContributed}</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-accent mb-4">Potential Benefits*</h3>
-                  <div className="flex justify-between items-center py-3 border-b border-white/10">
-                    <span className="text-muted-foreground">Tax-free distributions</span>
-                    <span className="text-foreground font-medium">{exampleScenario.projectedDistributions}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3 border-b border-white/10">
-                    <span className="text-muted-foreground">Total distributions</span>
-                    <span className="text-accent font-bold text-lg">{exampleScenario.totalDistributions}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3">
-                    <span className="text-muted-foreground">Death benefit</span>
-                    <span className="text-foreground font-bold text-lg">{exampleScenario.deathBenefit}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-center pt-6 border-t border-white/10">
-                <Button 
-                  onClick={scrollToForm}
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-6 text-lg rounded-full shadow-[0_0_20px_rgba(228,181,72,0.3)] hover:shadow-[0_0_30px_rgba(228,181,72,0.5)] transition-all duration-300"
-                >
-                  Get Your Personalized Analysis
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-            
-            <p className="text-xs text-muted-foreground text-center mt-4">
-              *This is a hypothetical illustration. Actual results will vary based on individual circumstances, policy performance, and other factors.
-            </p>
+            <KaiZenCalculator />
           </div>
         </div>
       </section>

@@ -29,6 +29,7 @@ import CompoundGrowthCalculator from "./pages/CompoundGrowthCalculator";
 import RetirementIncomeCalculator from "./pages/RetirementIncomeCalculator";
 import TaxImpactCalculator from "./pages/TaxImpactCalculator";
 import RequiredSavingsCalculator from "./pages/RequiredSavingsCalculator";
+import KaiZenCalculatorPage from "./pages/KaiZenCalculatorPage";
 import Tools from "./pages/Tools";
 import BusinessInsurance from "./pages/BusinessInsurance";
 import BookConsultation from "./pages/BookConsultation";
@@ -80,6 +81,7 @@ const AppLayout = () => {
           <Route path="/tools/retirement-income-calculator" element={<RetirementIncomeCalculator />} />
           <Route path="/tools/tax-impact-calculator" element={<TaxImpactCalculator />} />
           <Route path="/tools/required-savings-calculator" element={<RequiredSavingsCalculator />} />
+          <Route path="/tools/kai-zen-calculator" element={<KaiZenCalculatorPage />} />
           <Route path="/business-insurance" element={<BusinessInsurance />} />
           <Route path="/book-consultation" element={<BookConsultation />} />
           <Route path="/thank-you" element={<ThankYou />} />
