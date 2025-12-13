@@ -210,9 +210,10 @@ export const advisors: Advisor[] = [
     city: "Chino Hills",
     region: "West",
     bio: "Mariah has extensive experience in financial services, serving as Head of Franchise Operations at TFA since 2019. Her career spans roles at New American Funding, Finance of America Commercial, CrossCountry Mortgage, Carrington Mortgage Services, and Green Tree Servicing. A licensed loan originator focused on purchase and refinance transactions, Mariah brings deep mortgage expertise to help clients achieve their financial goals.",
-    specialties: ["Mortgage Financing", "Retirement Planning", "Tax Strategies", "Real Estate"],
+    specialties: ["Mortgage Financing", "Retirement Planning", "Tax Strategies", "Real Estate", "Kai-Zen Strategy"],
     licenses: ["Loan Originator", "Life & Health (Lic# 0F93770)"],
-    image: mariahLorenzenImg
+    image: mariahLorenzenImg,
+    landingPage: "/advisors/mariah-lorenzen"
   },
   {
     id: "sean-cagle",
