@@ -11,7 +11,9 @@ import {
   Lock,
   ArrowRight,
   Phone,
-  Mail
+  Mail,
+  XCircle,
+  Minus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -100,6 +102,64 @@ const faqs = [
   {
     question: "What are the risks?",
     answer: "Like any financial strategy, Kai-Zen has considerations. Policy performance depends on the insurance carrier's indexed crediting, and early termination may result in surrender charges. That's why it's designed for those with a long-term commitment to their retirement goals."
+  }
+];
+
+const comparisonData = [
+  {
+    feature: "Contribution Limits",
+    traditional: { value: "$23,000/year limit ($30,500 if 50+)", isAdvantage: false },
+    kaizen: { value: "No IRS limits—contribute more", isAdvantage: true }
+  },
+  {
+    feature: "Tax on Contributions",
+    traditional: { value: "Pre-tax (reduces current income)", isAdvantage: true },
+    kaizen: { value: "After-tax contributions", isAdvantage: false }
+  },
+  {
+    feature: "Tax on Growth",
+    traditional: { value: "Tax-deferred", isAdvantage: true },
+    kaizen: { value: "Tax-deferred", isAdvantage: true }
+  },
+  {
+    feature: "Tax on Distributions",
+    traditional: { value: "Fully taxable as ordinary income", isAdvantage: false },
+    kaizen: { value: "Tax-free policy loans", isAdvantage: true }
+  },
+  {
+    feature: "Required Minimum Distributions",
+    traditional: { value: "Yes, starting at age 73", isAdvantage: false },
+    kaizen: { value: "No RMDs—access on your terms", isAdvantage: true }
+  },
+  {
+    feature: "Market Downside Risk",
+    traditional: { value: "Full exposure to market losses", isAdvantage: false },
+    kaizen: { value: "0% floor—protected from losses", isAdvantage: true }
+  },
+  {
+    feature: "Death Benefit",
+    traditional: { value: "Account balance only (taxable)", isAdvantage: false },
+    kaizen: { value: "Income tax-free death benefit", isAdvantage: true }
+  },
+  {
+    feature: "Living Benefits",
+    traditional: { value: "None", isAdvantage: false },
+    kaizen: { value: "Chronic & terminal illness riders", isAdvantage: true }
+  },
+  {
+    feature: "Leverage / Matching",
+    traditional: { value: "Employer match (if offered)", isAdvantage: null },
+    kaizen: { value: "Bank-financed ~3:1 leverage", isAdvantage: true }
+  },
+  {
+    feature: "Creditor Protection",
+    traditional: { value: "Varies by state", isAdvantage: null },
+    kaizen: { value: "Generally protected from creditors", isAdvantage: true }
+  },
+  {
+    feature: "Early Access (Before 59½)",
+    traditional: { value: "10% penalty + taxes", isAdvantage: false },
+    kaizen: { value: "Penalty-free policy loans", isAdvantage: true }
   }
 ];
 
@@ -235,8 +295,120 @@ const KaiZen = () => {
         </div>
       </section>
 
-      {/* Interactive Calculator Section */}
+      {/* Comparison Table Section */}
       <section className="py-20 md:py-32 bg-secondary/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              401(k) vs. Kai-Zen: Side-by-Side
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              See how Kai-Zen compares to traditional retirement savings strategies.
+            </p>
+          </div>
+          
+          <div className="max-w-5xl mx-auto">
+            {/* Desktop Table */}
+            <div className="hidden md:block bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-accent/10 border-b border-white/10">
+                    <th className="text-left py-4 px-6 text-foreground font-semibold">Feature</th>
+                    <th className="text-left py-4 px-6 text-foreground font-semibold">Traditional 401(k)</th>
+                    <th className="text-left py-4 px-6 text-accent font-semibold bg-accent/5">Kai-Zen Strategy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisonData.map((row, index) => (
+                    <tr 
+                      key={index} 
+                      className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                    >
+                      <td className="py-4 px-6 text-foreground font-medium">{row.feature}</td>
+                      <td className="py-4 px-6">
+                        <div className="flex items-start gap-2">
+                          {row.traditional.isAdvantage === true ? (
+                            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                          ) : row.traditional.isAdvantage === false ? (
+                            <XCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+                          ) : (
+                            <Minus className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                          )}
+                          <span className="text-muted-foreground">{row.traditional.value}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6 bg-accent/5">
+                        <div className="flex items-start gap-2">
+                          {row.kaizen.isAdvantage === true ? (
+                            <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                          ) : row.kaizen.isAdvantage === false ? (
+                            <XCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+                          ) : (
+                            <Minus className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                          )}
+                          <span className="text-foreground">{row.kaizen.value}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden space-y-4">
+              {comparisonData.map((row, index) => (
+                <div 
+                  key={index}
+                  className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-4"
+                >
+                  <h3 className="text-foreground font-semibold mb-3 text-center border-b border-white/10 pb-2">
+                    {row.feature}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide">401(k)</p>
+                      <div className="flex items-start gap-2">
+                        {row.traditional.isAdvantage === true ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
+                        ) : row.traditional.isAdvantage === false ? (
+                          <XCircle className="h-4 w-4 text-red-400 flex-shrink-0 mt-0.5" />
+                        ) : (
+                          <Minus className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                        )}
+                        <span className="text-sm text-muted-foreground">{row.traditional.value}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-1 bg-accent/5 -m-4 mt-0 p-4 pt-0 rounded-b-xl">
+                      <p className="text-xs text-accent uppercase tracking-wide">Kai-Zen</p>
+                      <div className="flex items-start gap-2">
+                        {row.kaizen.isAdvantage === true ? (
+                          <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                        ) : row.kaizen.isAdvantage === false ? (
+                          <XCircle className="h-4 w-4 text-red-400 flex-shrink-0 mt-0.5" />
+                        ) : (
+                          <Minus className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                        )}
+                        <span className="text-sm text-foreground">{row.kaizen.value}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Summary */}
+            <div className="mt-8 text-center">
+              <p className="text-muted-foreground text-sm">
+                *401(k) plans offer employer matching (if available) and immediate tax deductions. Kai-Zen is designed to complement—not replace—existing retirement savings.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Calculator Section */}
+      <section className="py-20 md:py-32">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
