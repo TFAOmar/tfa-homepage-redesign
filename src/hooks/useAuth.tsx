@@ -22,7 +22,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isCheckingRole, setIsCheckingRole] = useState(false);
 
   const checkAdminRole = async (userId: string) => {
-    setIsCheckingRole(true);
     try {
       const { data, error } = await supabase.rpc('has_role', {
         _user_id: userId,
@@ -50,11 +49,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Defer role check to prevent deadlock
       if (session?.user) {
+        setIsCheckingRole(true);  // Set BEFORE setTimeout so effectiveLoading stays true
         setTimeout(() => {
           checkAdminRole(session.user.id);
         }, 0);
       } else {
         setIsAdmin(false);
+        setIsCheckingRole(false);
       }
       setIsLoading(false);
     });
@@ -64,7 +65,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
+        setIsCheckingRole(true);  // Set BEFORE calling checkAdminRole
         checkAdminRole(session.user.id);
+      } else {
+        setIsCheckingRole(false);
       }
       setIsLoading(false);
     });
