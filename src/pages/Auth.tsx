@@ -33,13 +33,19 @@ const Auth = () => {
     }
   });
 
+  // Only redirect after login when we're sure the role check is complete
+  // isLoading includes isCheckingRole from useAuth, so we wait for both
   useEffect(() => {
     if (!isLoading && user) {
-      if (isAdmin) {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
+      // Small delay to ensure state has fully settled after role check
+      const timer = setTimeout(() => {
+        if (isAdmin) {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [user, isAdmin, isLoading, navigate]);
 
