@@ -154,7 +154,7 @@ const comparisonData = [
   {
     feature: "Creditor Protection",
     traditional: { value: "Varies by state", isAdvantage: null },
-    kaizen: { value: "Generally protected from creditors", isAdvantage: true }
+    kaizen: { value: "Protected from creditors", isAdvantage: true }
   },
   {
     feature: "Early Access (Before 59½)",
