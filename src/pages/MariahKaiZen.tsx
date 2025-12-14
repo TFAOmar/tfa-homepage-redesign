@@ -77,7 +77,7 @@ const howItWorks = [
 ];
 
 const qualifications = [
-  "Ages 25-60",
+  "Ages 18-60",
   "Household income of $100,000+",
   "Good health (insurable)",
   "5-year contribution commitment",
@@ -130,7 +130,7 @@ const comparisonData = [
   },
   {
     feature: "Required Minimum Distributions",
-    traditional: { value: "Yes, starting at age 73", isAdvantage: false },
+    traditional: { value: "Yes, starting at age 75", isAdvantage: false },
     kaizen: { value: "No RMDs—access on your terms", isAdvantage: true }
   },
   {
