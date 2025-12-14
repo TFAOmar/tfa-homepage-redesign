@@ -48,6 +48,7 @@ const services = [
       "Establish beneficiary designations correctly",
       "Plan for charitable giving and family values",
     ],
+    link: "/services/estate-planning",
   },
   {
     icon: Calculator,
