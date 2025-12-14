@@ -385,7 +385,7 @@ const MariahKaiZen = () => {
                       <td className="py-4 px-6 bg-accent/5">
                         <div className="flex items-start gap-2">
                           {row.kaizen.isAdvantage === true ? (
-                            <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
                           ) : row.kaizen.isAdvantage === false ? (
                             <XCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
                           ) : (
@@ -428,7 +428,7 @@ const MariahKaiZen = () => {
                       <p className="text-xs text-accent uppercase tracking-wide">Kai-Zen</p>
                       <div className="flex items-start gap-2">
                         {row.kaizen.isAdvantage === true ? (
-                          <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                          <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
                         ) : row.kaizen.isAdvantage === false ? (
                           <XCircle className="h-4 w-4 text-red-400 flex-shrink-0 mt-0.5" />
                         ) : (
