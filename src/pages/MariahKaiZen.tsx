@@ -156,7 +156,7 @@ const comparisonData = [
   {
     feature: "Early Access (Before 59½)",
     traditional: { value: "10% penalty + taxes", isAdvantage: false },
-    kaizen: { value: "Penalty-free policy loans", isAdvantage: true }
+    kaizen: { value: "Penalty-free", isAdvantage: true }
   }
 ];
 
