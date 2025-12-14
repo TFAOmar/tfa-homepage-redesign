@@ -197,12 +197,12 @@ const MariahKaiZen = () => {
                 Leveraged Life Insurance Strategy
               </div>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight tracking-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
                 Supercharge Your Retirement<br />
                 <span className="text-accent">with Kai-Zen®</span>
               </h1>
               
-              <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl">
+              <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-2xl">
                 Your dedicated Kai-Zen specialist, Mariah Lorenzen, will guide you through this innovative leveraged retirement strategy.
               </p>
               
@@ -218,7 +218,7 @@ const MariahKaiZen = () => {
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="border-white/30 hover:bg-white/10 px-8 py-6 text-lg rounded-full"
+                  className="border-white/30 hover:bg-white/10 text-white px-8 py-6 text-lg rounded-full"
                   onClick={() => document.getElementById('video-section')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Play className="mr-2 h-5 w-5" />
@@ -241,13 +241,13 @@ const MariahKaiZen = () => {
                     Kai-Zen Specialist
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-1">Mariah Lorenzen</h3>
+                <h3 className="text-xl font-bold text-white mb-1">Mariah Lorenzen</h3>
                 <p className="text-accent text-sm mb-2">Head of Franchise Operations</p>
-                <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4">
+                <div className="flex items-center gap-2 text-white/70 text-sm mb-4">
                   <MapPin className="h-4 w-4" />
                   Chino Hills, CA
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-white/70">
                   Licensed financial professional with nearly 30 years of experience in real estate, mortgage lending, and retirement planning strategies.
                 </p>
               </Card>
@@ -257,7 +257,7 @@ const MariahKaiZen = () => {
         
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ChevronDown className="h-8 w-8 text-muted-foreground/50" />
+          <ChevronDown className="h-8 w-8 text-white/50" />
         </div>
       </section>
 
