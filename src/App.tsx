@@ -47,12 +47,16 @@ import IncomePlanning from "./pages/IncomePlanning";
 import InvestmentManagement from "./pages/InvestmentManagement";
 import TaxPlanning from "./pages/TaxPlanning";
 import HealthcarePlanning from "./pages/HealthcarePlanning";
+import Annuities from "./pages/Annuities";
+import Rollovers401k from "./pages/Rollovers401k";
+import InsuranceServices from "./pages/InsuranceServices";
+import GroupRetirement from "./pages/GroupRetirement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning', '/services/annuities', '/services/401k-rollovers', '/services/insurance', '/services/group-retirement'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -105,6 +109,10 @@ const AppLayout = () => {
           <Route path="/services/investment-management" element={<InvestmentManagement />} />
           <Route path="/services/tax-planning" element={<TaxPlanning />} />
           <Route path="/services/healthcare-planning" element={<HealthcarePlanning />} />
+          <Route path="/services/annuities" element={<Annuities />} />
+          <Route path="/services/401k-rollovers" element={<Rollovers401k />} />
+          <Route path="/services/insurance" element={<InsuranceServices />} />
+          <Route path="/services/group-retirement" element={<GroupRetirement />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

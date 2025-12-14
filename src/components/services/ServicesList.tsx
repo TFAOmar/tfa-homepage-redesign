@@ -24,6 +24,7 @@ const services = [
       "Create sustainable income for 20-30+ years",
       "Plan for inflation and healthcare costs",
     ],
+    link: "/services/income-planning",
   },
   {
     icon: PiggyBank,
@@ -36,6 +37,7 @@ const services = [
       "Tax-loss harvesting opportunities",
       "Transparent fee structures with no hidden costs",
     ],
+    link: "/services/investment-management",
   },
   {
     icon: FileText,
@@ -61,6 +63,7 @@ const services = [
       "Coordinate with CPAs for comprehensive approach",
       "Plan for IRMAA Medicare surcharge avoidance",
     ],
+    link: "/services/tax-planning",
   },
   {
     icon: Heart,
@@ -73,6 +76,7 @@ const services = [
       "Healthcare expense projections and budgeting",
       "HSA optimization strategies",
     ],
+    link: "/services/healthcare-planning",
   },
   {
     icon: Shield,
@@ -85,6 +89,7 @@ const services = [
       "Death benefit options for beneficiaries",
       "Unbiased product recommendations",
     ],
+    link: "/services/annuities",
   },
   {
     icon: RefreshCw,
@@ -97,6 +102,7 @@ const services = [
       "Consolidate accounts for easier management",
       "Maintain tax-deferred growth potential",
     ],
+    link: "/services/401k-rollovers",
   },
   {
     icon: Umbrella,
@@ -109,6 +115,7 @@ const services = [
       "Protect business continuity and succession",
       "Objective needs analysis without sales pressure",
     ],
+    link: "/services/insurance",
   },
   {
     icon: Users,
@@ -121,6 +128,7 @@ const services = [
       "Plan design and vendor selection",
       "Ongoing administration and benchmarking",
     ],
+    link: "/services/group-retirement",
   },
   {
     icon: Building2,
