@@ -557,19 +557,19 @@ const MariahKaiZen = () => {
       </section>
 
       {/* Form Section */}
-      <section id="kai-zen-form" className="py-20 md:py-32">
+      <section id="kai-zen-form" className="py-20 md:py-32 bg-gradient-to-b from-[#0A0F1F] to-primary">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 Ready to Learn More?
               </h2>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-lg text-white/70">
                 Complete this quick form and Mariah will reach out to discuss your Kai-Zen options.
               </p>
             </div>
             
-            <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-8 rounded-2xl">
+            <Card className="bg-white/10 backdrop-blur-xl border-white/15 p-8 rounded-2xl">
               <MariahKaiZenForm />
             </Card>
           </div>
@@ -577,10 +577,10 @@ const MariahKaiZen = () => {
       </section>
 
       {/* Disclaimer */}
-      <section className="py-12 border-t border-white/10">
+      <section className="py-12 border-t border-white/10 bg-[#0A0F1F]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className="text-xs text-white/60 leading-relaxed">
               Kai-Zen® is a registered trademark. This is a hypothetical illustration and not a guarantee of future performance. Actual results will vary based on policy performance, contributions, and other factors. Life insurance products are issued by insurance companies and are subject to underwriting approval. Policy loans accrue interest and reduce the death benefit and cash value. Consult with a qualified financial professional to determine if Kai-Zen is appropriate for your situation.
             </p>
           </div>
