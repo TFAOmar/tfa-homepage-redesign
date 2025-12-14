@@ -541,15 +541,15 @@ const KaiZen = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-xl mx-auto">
             <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 Ready to Learn More?
               </h2>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-lg text-white/70">
                 Complete the form below and a Kai-Zen specialist will contact you to discuss your eligibility and answer any questions.
               </p>
             </div>
             
-            <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+            <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/15 p-8">
               <KaiZenForm />
             </div>
           </div>
