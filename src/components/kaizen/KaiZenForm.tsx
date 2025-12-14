@@ -112,7 +112,7 @@ const KaiZenForm = () => {
             value={formData.firstName}
             onChange={handleInputChange}
             required
-            className="bg-white/10 border-white/20 focus:border-accent"
+            className="bg-white/5 border-white/20 text-foreground placeholder:text-muted-foreground focus:border-accent"
             placeholder="John"
           />
         </div>
@@ -124,7 +124,7 @@ const KaiZenForm = () => {
             value={formData.lastName}
             onChange={handleInputChange}
             required
-            className="bg-white/10 border-white/20 focus:border-accent"
+            className="bg-white/5 border-white/20 text-foreground placeholder:text-muted-foreground focus:border-accent"
             placeholder="Doe"
           />
         </div>
@@ -139,7 +139,7 @@ const KaiZenForm = () => {
           value={formData.email}
           onChange={handleInputChange}
           required
-          className="bg-white/10 border-white/20 focus:border-accent"
+          className="bg-white/5 border-white/20 text-foreground placeholder:text-muted-foreground focus:border-accent"
           placeholder="john@example.com"
         />
       </div>
@@ -153,7 +153,7 @@ const KaiZenForm = () => {
           value={formData.phone}
           onChange={handleInputChange}
           required
-          className="bg-white/10 border-white/20 focus:border-accent"
+          className="bg-white/5 border-white/20 text-foreground placeholder:text-muted-foreground focus:border-accent"
           placeholder="(555) 123-4567"
         />
       </div>
@@ -162,10 +162,11 @@ const KaiZenForm = () => {
         <div className="space-y-2">
           <Label htmlFor="age" className="text-foreground/90">Your Age *</Label>
           <Select onValueChange={(value) => handleSelectChange("age", value)} value={formData.age}>
-            <SelectTrigger className="bg-white/10 border-white/20 focus:border-accent">
+            <SelectTrigger className="bg-white/5 border-white/20 text-foreground focus:border-accent">
               <SelectValue placeholder="Select age range" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-popover border-border">
+              <SelectItem value="18-24">18-24</SelectItem>
               <SelectItem value="25-34">25-34</SelectItem>
               <SelectItem value="35-44">35-44</SelectItem>
               <SelectItem value="45-54">45-54</SelectItem>
@@ -176,10 +177,10 @@ const KaiZenForm = () => {
         <div className="space-y-2">
           <Label htmlFor="householdIncome" className="text-foreground/90">Household Income *</Label>
           <Select onValueChange={(value) => handleSelectChange("householdIncome", value)} value={formData.householdIncome}>
-            <SelectTrigger className="bg-white/10 border-white/20 focus:border-accent">
+            <SelectTrigger className="bg-white/5 border-white/20 text-foreground focus:border-accent">
               <SelectValue placeholder="Select income range" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-popover border-border">
               <SelectItem value="100k-150k">$100,000 - $150,000</SelectItem>
               <SelectItem value="150k-250k">$150,000 - $250,000</SelectItem>
               <SelectItem value="250k-500k">$250,000 - $500,000</SelectItem>
