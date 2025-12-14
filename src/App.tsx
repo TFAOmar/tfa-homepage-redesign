@@ -42,12 +42,13 @@ import VanessaLivingTrust from "./pages/VanessaLivingTrust";
 import KaiZen from "./pages/KaiZen";
 import AdvisorMariahLorenzen from "./pages/AdvisorMariahLorenzen";
 import MariahKaiZen from "./pages/MariahKaiZen";
+import EstatePlanning from "./pages/EstatePlanning";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/services/estate-planning'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -95,6 +96,7 @@ const AppLayout = () => {
           <Route path="/advisors/mariah-lorenzen" element={<AdvisorMariahLorenzen />} />
           <Route path="/advisors/mariah-lorenzen/kai-zen" element={<MariahKaiZen />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
+          <Route path="/services/estate-planning" element={<EstatePlanning />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

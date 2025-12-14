@@ -50,7 +50,7 @@ const servicesMenu = [
   {
     title: "Legacy & Tax",
     items: [
-      { name: "Estate Planning", icon: Landmark, href: "/services#estate", description: "Preserve your legacy" },
+      { name: "Estate Planning", icon: Landmark, href: "/services/estate-planning", description: "Preserve your legacy" },
       { name: "Tax Planning", icon: Scale, href: "/services#tax", description: "Minimize tax burden" },
     ]
   }
