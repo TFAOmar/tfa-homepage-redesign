@@ -43,12 +43,16 @@ import KaiZen from "./pages/KaiZen";
 import AdvisorMariahLorenzen from "./pages/AdvisorMariahLorenzen";
 import MariahKaiZen from "./pages/MariahKaiZen";
 import EstatePlanning from "./pages/EstatePlanning";
+import IncomePlanning from "./pages/IncomePlanning";
+import InvestmentManagement from "./pages/InvestmentManagement";
+import TaxPlanning from "./pages/TaxPlanning";
+import HealthcarePlanning from "./pages/HealthcarePlanning";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/services/estate-planning'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -97,6 +101,10 @@ const AppLayout = () => {
           <Route path="/advisors/mariah-lorenzen/kai-zen" element={<MariahKaiZen />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
           <Route path="/services/estate-planning" element={<EstatePlanning />} />
+          <Route path="/services/income-planning" element={<IncomePlanning />} />
+          <Route path="/services/investment-management" element={<InvestmentManagement />} />
+          <Route path="/services/tax-planning" element={<TaxPlanning />} />
+          <Route path="/services/healthcare-planning" element={<HealthcarePlanning />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
