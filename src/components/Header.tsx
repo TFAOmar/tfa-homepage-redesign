@@ -31,27 +31,27 @@ const servicesMenu = [
   {
     title: "Retirement & Wealth",
     items: [
-      { name: "Income Planning", icon: PiggyBank, href: "/services#income-planning", description: "Secure your retirement income" },
-      { name: "Investment Management", icon: LineChart, href: "/services#investment", description: "Grow your wealth strategically" },
-      { name: "401(k) Rollovers", icon: Repeat, href: "/services#401k", description: "Optimize your retirement accounts" },
-      { name: "Annuities", icon: DollarSign, href: "/services#annuities", description: "Guaranteed income solutions" },
+      { name: "Income Planning", icon: PiggyBank, href: "/services/income-planning", description: "Secure your retirement income" },
+      { name: "Investment Management", icon: LineChart, href: "/services/investment-management", description: "Grow your wealth strategically" },
+      { name: "401(k) Rollovers", icon: Repeat, href: "/services/401k-rollovers", description: "Optimize your retirement accounts" },
+      { name: "Annuities", icon: DollarSign, href: "/services/annuities", description: "Guaranteed income solutions" },
       { name: "Kai-Zen Strategy", icon: Landmark, href: "/services/kai-zen", description: "Leveraged retirement growth" },
     ]
   },
   {
     title: "Protection",
     items: [
-      { name: "Life Insurance", icon: Shield, href: "/services#life-insurance", description: "Protect your family's future" },
-      { name: "Health Care Planning", icon: Stethoscope, href: "/services#healthcare", description: "Plan for medical expenses" },
+      { name: "Insurance Services", icon: Shield, href: "/services/insurance", description: "Protect your family's future" },
+      { name: "Health Care Planning", icon: Stethoscope, href: "/services/healthcare-planning", description: "Plan for medical expenses" },
       { name: "Business Insurance", icon: Building2, href: "/business-insurance", description: "Protect your business" },
-      { name: "Group Retirement Plans", icon: Building2, href: "/services#group-plans", description: "Employee benefit solutions" },
+      { name: "Group Retirement Plans", icon: Building2, href: "/services/group-retirement", description: "Employee benefit solutions" },
     ]
   },
   {
     title: "Legacy & Tax",
     items: [
       { name: "Estate Planning", icon: Landmark, href: "/services/estate-planning", description: "Preserve your legacy" },
-      { name: "Tax Planning", icon: Scale, href: "/services#tax", description: "Minimize tax burden" },
+      { name: "Tax Planning", icon: Scale, href: "/services/tax-planning", description: "Minimize tax burden" },
     ]
   }
 ];
