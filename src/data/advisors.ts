@@ -241,6 +241,7 @@ export const advisors: Advisor[] = [
     specialties: ["Retirement Planning", "Estate Planning", "Tax Strategies", "Business Planning", "Life Insurance"],
     licenses: ["Life & Health"],
     image: vanessaSanchezImg,
+    email: "vsanchez@tfainsuranceadvisors.com",
     landingPage: "/advisors/vanessa-sanchez"
   },
   {
