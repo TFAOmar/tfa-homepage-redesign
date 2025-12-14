@@ -23,6 +23,7 @@ const LIVING_BENEFITS_MAX = 1500000; // Up to $1.5M living benefits
 
 // Age adjustment factors calibrated to official illustrations
 const getAgeFactor = (age: number): number => {
+  if (age <= 24) return 1.60;
   if (age <= 30) return 1.50;
   if (age <= 35) return 1.35;
   if (age <= 40) return 1.18;
@@ -138,13 +139,13 @@ const KaiZenCalculator = () => {
           <Slider
             value={[age]}
             onValueChange={(value) => setAge(value[0])}
-            min={25}
+            min={18}
             max={60}
             step={1}
             className="w-full"
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-2">
-            <span>25</span>
+            <span>18</span>
             <span>60</span>
           </div>
         </div>
