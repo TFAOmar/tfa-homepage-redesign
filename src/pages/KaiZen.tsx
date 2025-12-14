@@ -128,7 +128,7 @@ const comparisonData = [
   },
   {
     feature: "Required Minimum Distributions",
-    traditional: { value: "Yes, starting at age 73", isAdvantage: false },
+    traditional: { value: "Yes, starting at age 75", isAdvantage: false },
     kaizen: { value: "No RMDs—access on your terms", isAdvantage: true }
   },
   {
