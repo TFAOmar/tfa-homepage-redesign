@@ -123,7 +123,7 @@ const comparisonData = [
   },
   {
     feature: "Tax on Distributions",
-    traditional: { value: "Fully taxable as ordinary income", isAdvantage: false },
+    traditional: { value: "Tax-deferred distributions", isAdvantage: false },
     kaizen: { value: "Tax-free", isAdvantage: true }
   },
   {
