@@ -210,9 +210,9 @@ export default function VanessaLivingTrust() {
               <span>Contact Vanessa</span>
             </a>
             <span className="hidden md:inline text-white/30">|</span>
-            <a href="mailto:vanessa@tfainsuranceadvisors.com" className="flex items-center gap-2 hover:text-accent transition-colors">
+            <a href="mailto:vsanchez@tfainsuranceadvisors.com" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Mail className="w-5 h-5" />
-              <span>vanessa@tfainsuranceadvisors.com</span>
+              <span>vsanchez@tfainsuranceadvisors.com</span>
             </a>
           </div>
         </div>
