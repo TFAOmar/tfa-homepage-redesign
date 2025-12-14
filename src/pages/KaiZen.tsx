@@ -124,7 +124,7 @@ const comparisonData = [
   {
     feature: "Tax on Distributions",
     traditional: { value: "Tax-deferred distributions", isAdvantage: false },
-    kaizen: { value: "Tax-free", isAdvantage: true }
+    kaizen: { value: "Tax-free distributions", isAdvantage: true }
   },
   {
     feature: "Required Minimum Distributions",
