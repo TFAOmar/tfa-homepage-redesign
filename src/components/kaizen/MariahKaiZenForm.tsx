@@ -73,7 +73,8 @@ const MariahKaiZenForm = () => {
             name: `${formData.firstName} ${formData.lastName}`,
             advisor: 'Mariah Lorenzen',
             source: '/advisors/mariah-lorenzen/kai-zen'
-          }
+          },
+          additionalRecipients: ['mariah@tfainsuranceadvisors.com']
         }
       });
 
