@@ -115,35 +115,35 @@ const MariahKaiZenForm = () => {
         className={honeypotClassName}
         {...honeypotProps}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="firstName" className="text-foreground">First Name *</Label>
+          <Label htmlFor="firstName" className="text-foreground/90">First Name *</Label>
           <Input
             id="firstName"
             name="firstName"
             value={formData.firstName}
             onChange={handleInputChange}
             required
-            className="bg-white/10 border-white/20 focus:border-accent text-foreground"
+            className="bg-white/5 border-white/20 text-foreground placeholder:text-muted-foreground focus:border-accent"
             placeholder="John"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastName" className="text-foreground">Last Name *</Label>
+          <Label htmlFor="lastName" className="text-foreground/90">Last Name *</Label>
           <Input
             id="lastName"
             name="lastName"
             value={formData.lastName}
             onChange={handleInputChange}
             required
-            className="bg-white/10 border-white/20 focus:border-accent text-foreground"
-            placeholder="Smith"
+            className="bg-white/5 border-white/20 text-foreground placeholder:text-muted-foreground focus:border-accent"
+            placeholder="Doe"
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email" className="text-foreground">Email Address *</Label>
+        <Label htmlFor="email" className="text-foreground/90">Email Address *</Label>
         <Input
           id="email"
           name="email"
@@ -151,13 +151,13 @@ const MariahKaiZenForm = () => {
           value={formData.email}
           onChange={handleInputChange}
           required
-          className="bg-white/10 border-white/20 focus:border-accent text-foreground"
+          className="bg-white/5 border-white/20 text-foreground placeholder:text-muted-foreground focus:border-accent"
           placeholder="john@example.com"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="phone" className="text-foreground">Phone Number *</Label>
+        <Label htmlFor="phone" className="text-foreground/90">Phone Number *</Label>
         <Input
           id="phone"
           name="phone"
@@ -165,43 +165,43 @@ const MariahKaiZenForm = () => {
           value={formData.phone}
           onChange={handleInputChange}
           required
-          className="bg-white/10 border-white/20 focus:border-accent text-foreground"
+          className="bg-white/5 border-white/20 text-foreground placeholder:text-muted-foreground focus:border-accent"
           placeholder="(555) 123-4567"
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label className="text-foreground">Your Age Range *</Label>
+          <Label className="text-foreground/90">Your Age Range *</Label>
           <Select
             value={formData.ageRange}
             onValueChange={(value) => handleSelectChange("ageRange", value)}
             required
           >
-            <SelectTrigger className="bg-white/10 border-white/20 focus:border-accent text-foreground">
+            <SelectTrigger className="bg-white/5 border-white/20 text-foreground focus:border-accent">
               <SelectValue placeholder="Select age range" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="25-35">25-35</SelectItem>
-              <SelectItem value="36-45">36-45</SelectItem>
-              <SelectItem value="46-55">46-55</SelectItem>
-              <SelectItem value="56-60">56-60</SelectItem>
-              <SelectItem value="60+">60+</SelectItem>
+            <SelectContent className="bg-popover border-border">
+              <SelectItem value="18-24">18-24</SelectItem>
+              <SelectItem value="25-34">25-34</SelectItem>
+              <SelectItem value="35-44">35-44</SelectItem>
+              <SelectItem value="45-54">45-54</SelectItem>
+              <SelectItem value="55-60">55-60</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <Label className="text-foreground">Household Income *</Label>
+          <Label className="text-foreground/90">Household Income *</Label>
           <Select
             value={formData.householdIncome}
             onValueChange={(value) => handleSelectChange("householdIncome", value)}
             required
           >
-            <SelectTrigger className="bg-white/10 border-white/20 focus:border-accent text-foreground">
+            <SelectTrigger className="bg-white/5 border-white/20 text-foreground focus:border-accent">
               <SelectValue placeholder="Select income range" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-popover border-border">
               <SelectItem value="100k-150k">$100,000 - $150,000</SelectItem>
               <SelectItem value="150k-250k">$150,000 - $250,000</SelectItem>
               <SelectItem value="250k-500k">$250,000 - $500,000</SelectItem>
