@@ -121,7 +121,7 @@ const comparisonData = [
   {
     feature: "Tax on Growth",
     traditional: { value: "Tax-deferred", isAdvantage: true },
-    kaizen: { value: "Tax free distributions", isAdvantage: true }
+    kaizen: { value: "Tax free", isAdvantage: true }
   },
   {
     feature: "Tax on Distributions",
