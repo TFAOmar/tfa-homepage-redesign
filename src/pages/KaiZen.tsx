@@ -75,7 +75,7 @@ const howItWorks = [
 ];
 
 const qualifications = [
-  "Ages 25-60",
+  "Ages 18-60",
   "Household income of $100,000+",
   "Good health (insurable)",
   "5-year contribution commitment",
