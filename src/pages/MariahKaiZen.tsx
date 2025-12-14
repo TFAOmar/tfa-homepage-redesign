@@ -126,7 +126,7 @@ const comparisonData = [
   {
     feature: "Tax on Distributions",
     traditional: { value: "Fully taxable as ordinary income", isAdvantage: false },
-    kaizen: { value: "Tax-free policy loans", isAdvantage: true }
+    kaizen: { value: "Tax-free distributions", isAdvantage: true }
   },
   {
     feature: "Required Minimum Distributions",
