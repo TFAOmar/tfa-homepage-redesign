@@ -15,6 +15,7 @@ import mariahLorenzenImg from "@/assets/advisors/mariah-lorenzen.jpg";
 import seanCagleImg from "@/assets/advisors/sean-cagle.jpg";
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
 import ruthPachecoImg from "@/assets/advisors/ruth-pacheco.jpg";
+import tamaraLeeImg from "@/assets/advisors/tamara-lee.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -268,6 +269,21 @@ export const advisors: Advisor[] = [
     image: ruthPachecoImg,
     email: "ruth@tfainsuranceadvisors.com",
     yearsOfExperience: 36
+  },
+  {
+    id: "tamara-lee",
+    name: "Tamara Lee",
+    title: "Medicare Specialist",
+    type: "Advisor",
+    state: "California",
+    city: "Claremont",
+    region: "West",
+    bio: "Tamara is a dedicated professional with over 11 years of experience in the healthcare field, specializing in Medicare, retirement planning, and business-to-business employer and employee relationships. Her extensive knowledge allows her to help clients navigate the complexities of retirement healthcare while aligning their long-term financial strategies. She is committed to empowering her clients with the information they need to make informed decisions about their health and financial futures. She is a valuable resource for both individuals and businesses, fostering an environment of accessible support and informed decision-making.",
+    specialties: ["Medicare Planning", "Retirement Planning", "Business Planning"],
+    licenses: ["Life & Health"],
+    image: tamaraLeeImg,
+    email: "tlee@tfainsuranceadvisors.com",
+    yearsOfExperience: 11
   }
 ];
 
