@@ -138,6 +138,16 @@ const AdvisorTamaraLee = () => {
                 </Button>
                 <Button 
                   size="lg" 
+                  className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                  asChild
+                >
+                  <Link to="/advisors/tamara-lee/medicare">
+                    <Shield className="mr-2 h-5 w-5" />
+                    View Medicare Services
+                  </Link>
+                </Button>
+                <Button 
+                  size="lg" 
                   variant="outline" 
                   className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
                   asChild
@@ -209,6 +219,13 @@ const AdvisorTamaraLee = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Comprehensive healthcare and retirement planning services tailored to your unique needs.
             </p>
+            <Link 
+              to="/advisors/tamara-lee/medicare" 
+              className="inline-flex items-center gap-2 text-accent hover:text-accent/80 mt-4 font-medium"
+            >
+              Learn more about my Medicare services
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
