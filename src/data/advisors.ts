@@ -283,7 +283,8 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health"],
     image: tamaraLeeImg,
     email: "tlee@tfainsuranceadvisors.com",
-    yearsOfExperience: 11
+    yearsOfExperience: 11,
+    landingPage: "/advisors/tamara-lee"
   }
 ];
 
