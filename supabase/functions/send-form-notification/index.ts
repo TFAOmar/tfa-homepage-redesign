@@ -21,6 +21,7 @@ const ALLOWED_FORM_TYPES = [
   "living-trust",
   "advisor-onboarding",
   "consultation",
+  "schedule-inquiry",
 ] as const;
 
 // Zod schema for request validation
@@ -65,6 +66,7 @@ const getFormSubject = (formType: string, formData: Record<string, unknown>): st
   const lastName = formData.lastName as string || "";
   const fullName = formData.fullName as string || formData.name as string || "";
   const businessName = formData.businessName as string || "";
+  const advisorName = formData.advisorName as string || "";
   
   const name = fullName || `${firstName} ${lastName}`.trim() || "Unknown";
   
@@ -77,6 +79,7 @@ const getFormSubject = (formType: string, formData: Record<string, unknown>): st
     "living-trust": `New Living Trust Consultation Request from ${name}`,
     "advisor-onboarding": `New Advisor Onboarding Submission from ${name}`,
     "consultation": `New Consultation Request from ${name}`,
+    "schedule-inquiry": `New Scheduling Request for ${advisorName || "Advisor"} from ${name}`,
   };
   
   return subjects[formType] || `New Form Submission: ${formType}`;
