@@ -46,7 +46,8 @@ export const advisors: Advisor[] = [
     bio: "Founder of TFA Insurance Advisors, dedicated to helping families achieve financial security and build lasting legacies.",
     specialties: ["Retirement Planning", "Tax Strategies", "Estate Planning", "Business Planning"],
     licenses: ["Life & Health (Lic# 0D87636)"],
-    image: manuelSotoImg
+    image: manuelSotoImg,
+    email: "manuel@tfainsuranceadvisors.com"
   },
   {
     id: "israel-castaneda",
@@ -59,7 +60,8 @@ export const advisors: Advisor[] = [
     bio: "Israel helps families build generational security and long-term financial peace of mind. Specializing in life insurance, retirement planning, living trusts, and estate-protection strategies, he makes complex financial decisions easy to understand. Known for his clear communication and genuine care, Israel focuses on the 'why' behind every financial move, helping families protect what matters most and build a legacy for the next generation.",
     specialties: ["Life Insurance", "Retirement Planning", "Estate Planning", "Tax Strategies"],
     licenses: ["Life & Health (Lic# 0I35205)"],
-    image: israelCastanedaImg
+    image: israelCastanedaImg,
+    email: "israel@tfainsuranceadvisors.com"
   },
   {
     id: "elena-esquivel",
@@ -104,6 +106,7 @@ export const advisors: Advisor[] = [
     specialties: ["Retirement Planning", "Life Insurance", "Estate Planning"],
     licenses: ["Life & Health (Lic# 4418658)"],
     image: ronaldBrownImg,
+    email: "rbrown@tfainsuranceadvisors.com",
     yearsOfExperience: 30
   },
   {
@@ -117,7 +120,8 @@ export const advisors: Advisor[] = [
     bio: "Erika prides herself in financial education that helps individuals, families, and business owners align their financial decisions with their faith. Through personalized coaching, workshops, and educational resources, she fosters both financial health and spiritual growth while supporting clients' beliefs and long-term goals.",
     specialties: ["Retirement Planning", "Tax Strategies", "Investment Management", "Business Planning"],
     licenses: ["Life & Health (Lic# 0L33842)"],
-    image: erikaManzanoImg
+    image: erikaManzanoImg,
+    email: "erika@tfainsuranceadvisors.com"
   },
   {
     id: "celeste-sierra",
@@ -158,7 +162,8 @@ export const advisors: Advisor[] = [
     bio: "A dynamic duo dedicated to helping families build generational wealth and financial security.",
     specialties: ["Retirement Planning", "Estate Planning", "Life Insurance"],
     licenses: ["Life & Health"],
-    image: joeJessieNietoImg
+    image: joeJessieNietoImg,
+    email: "joe@tfainsuranceadvisors.com"
   },
   {
     id: "jennifer-ramos",
@@ -172,6 +177,7 @@ export const advisors: Advisor[] = [
     specialties: ["Retirement Planning", "Tax Strategies", "Investment Management"],
     licenses: ["Life & Health"],
     image: jenniferRamosImg,
+    email: "jramos@tfainsuranceadvisors.com",
     yearsOfExperience: 20
   },
   {
@@ -186,6 +192,7 @@ export const advisors: Advisor[] = [
     specialties: ["Retirement Planning", "Tax Strategies", "Life Insurance"],
     licenses: ["Life & Health (Lic# 4379309)"],
     image: hamletOhandjanianImg,
+    email: "hamleto@tfainsuranceadvisors.com",
     yearsOfExperience: 28
   },
   {
@@ -199,7 +206,8 @@ export const advisors: Advisor[] = [
     bio: "Born to parents who migrated from Guadalajara, Mexico, Delia has always been fueled by the immigrant spirit. A mother of two incredible children, she co-owned a staffing agency in the Inland Empire before launching an interior design firm in 2016. In 2020, she co-launched a podcast on relationships and faith. Today, she and her sister own a TFA franchise, helping families with financial planning—guided by her faith, resilience, and pursuit of meaningful connections.",
     specialties: ["Life Insurance", "Estate Planning", "Retirement Planning"],
     licenses: ["Life & Health (Lic# 4222120)"],
-    image: deliaPlascenciaImg
+    image: deliaPlascenciaImg,
+    email: "delia@tfainsuranceadvisors.com"
   },
   {
     id: "mariah-lorenzen",
@@ -213,6 +221,7 @@ export const advisors: Advisor[] = [
     specialties: ["Mortgage Financing", "Retirement Planning", "Tax Strategies", "Real Estate", "Kai-Zen Strategy"],
     licenses: ["Loan Originator", "Life & Health (Lic# 0F93770)"],
     image: mariahLorenzenImg,
+    email: "mariah@tfainsuranceadvisors.com",
     landingPage: "/advisors/mariah-lorenzen",
     yearsOfExperience: 30
   },
@@ -227,7 +236,8 @@ export const advisors: Advisor[] = [
     bio: "Sean specializes in all aspects of estate planning, creating customized strategies that safeguard assets and preserve family legacies. He is dedicated to helping clients design plans that reflect their values while providing peace of mind for generations to come.",
     specialties: ["Estate Planning", "Tax Strategies", "Retirement Planning", "Life Insurance"],
     licenses: ["Life & Health"],
-    image: seanCagleImg
+    image: seanCagleImg,
+    email: "scagle@tfainsuranceadvisors.com"
   },
   {
     id: "vanessa-sanchez",
@@ -256,6 +266,7 @@ export const advisors: Advisor[] = [
     specialties: ["Mortgage Financing", "Retirement Planning", "Real Estate"],
     licenses: ["NMLS# 252846", "Reverse Mortgage Certified"],
     image: ruthPachecoImg,
+    email: "ruth@tfainsuranceadvisors.com",
     yearsOfExperience: 36
   }
 ];
