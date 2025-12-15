@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Calendar, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -31,11 +32,12 @@ const ScheduleModal = ({
     lastName: "",
     email: "",
     phone: "",
+    message: "",
   });
   const { toast } = useToast();
   const { honeypotProps, isBot } = useHoneypot();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
@@ -68,6 +70,7 @@ const ScheduleModal = ({
           lastName: formData.lastName,
           email: formData.email,
           phone: formData.phone,
+          message: formData.message,
           advisorName: advisorName,
           hasSchedulingLink: !!schedulingLink,
           submittedAt: new Date().toISOString(),
@@ -88,7 +91,7 @@ const ScheduleModal = ({
       });
 
       // Reset form
-      setFormData({ firstName: "", lastName: "", email: "", phone: "" });
+      setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "" });
       onOpenChange(false);
 
       // Open scheduling link if available
@@ -190,7 +193,22 @@ const ScheduleModal = ({
             />
           </div>
 
-          <Button 
+          <div className="space-y-2">
+            <Label htmlFor="message">
+              What would you like to discuss? <span className="text-muted-foreground">(optional)</span>
+            </Label>
+            <Textarea
+              id="message"
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              placeholder="E.g., retirement planning, life insurance, estate planning..."
+              rows={3}
+              className="resize-none"
+            />
+          </div>
+
+          <Button
             type="submit" 
             className="w-full bg-accent hover:bg-accent/90 text-accent-foreground neuro-button"
             disabled={isSubmitting}
