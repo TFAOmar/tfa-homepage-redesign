@@ -58,6 +58,10 @@ const BusinessContactForm = () => {
         body: {
           formType: "business-insurance",
           formData,
+          additionalRecipients: [
+            "rrecinos@tfainsuranceadvisors.com",
+            "srecinos@tfainsuranceadvisors.com"
+          ],
         },
       });
 
