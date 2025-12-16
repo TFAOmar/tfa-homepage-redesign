@@ -285,6 +285,32 @@ export const advisors: Advisor[] = [
     email: "tlee@tfainsuranceadvisors.com",
     yearsOfExperience: 11,
     landingPage: "/advisors/tamara-lee"
+  },
+  {
+    id: "rolando-recinos",
+    name: "Rolando Recinos",
+    title: "Business Insurance Specialist",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Rolando specializes in commercial insurance solutions, helping business owners protect their operations, employees, and assets. With expertise in business liability, workers' compensation, and comprehensive commercial coverage, he guides businesses of all sizes through the complexities of commercial insurance.",
+    specialties: ["Business Insurance", "Business Planning"],
+    licenses: ["Life & Health"],
+    email: "rrecinos@tfainsuranceadvisors.com"
+  },
+  {
+    id: "savannah-recinos",
+    name: "Savannah Recinos",
+    title: "Business Insurance Specialist",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Savannah is dedicated to helping businesses secure comprehensive commercial insurance coverage. She specializes in business liability, property insurance, workers' compensation, and tailored commercial policies that protect what business owners have worked hard to build.",
+    specialties: ["Business Insurance", "Business Planning"],
+    licenses: ["Life & Health"],
+    email: "srecinos@tfainsuranceadvisors.com"
   }
 ];
 
@@ -301,6 +327,7 @@ export const specialties = [
   "Life Insurance",
   "Annuities",
   "Business Planning",
+  "Business Insurance",
   "401(k) Guidance",
   "Investment Management",
   "Mortgage Financing",
