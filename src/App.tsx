@@ -44,6 +44,7 @@ import AdvisorMariahLorenzen from "./pages/AdvisorMariahLorenzen";
 import AdvisorTamaraLee from "./pages/AdvisorTamaraLee";
 import TamaraLeeMedicare from "./pages/TamaraLeeMedicare";
 import MariahKaiZen from "./pages/MariahKaiZen";
+import RecinosBusinessInsurance from "./pages/RecinosBusinessInsurance";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
 import InvestmentManagement from "./pages/InvestmentManagement";
@@ -58,7 +59,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning', '/services/annuities', '/services/401k-rollovers', '/services/insurance', '/services/group-retirement'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning', '/services/annuities', '/services/401k-rollovers', '/services/insurance', '/services/group-retirement', '/advisors/recinos'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -107,6 +108,7 @@ const AppLayout = () => {
           <Route path="/advisors/mariah-lorenzen/kai-zen" element={<MariahKaiZen />} />
           <Route path="/advisors/tamara-lee" element={<AdvisorTamaraLee />} />
           <Route path="/advisors/tamara-lee/medicare" element={<TamaraLeeMedicare />} />
+          <Route path="/advisors/recinos" element={<RecinosBusinessInsurance />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
           <Route path="/services/estate-planning" element={<EstatePlanning />} />
           <Route path="/services/income-planning" element={<IncomePlanning />} />

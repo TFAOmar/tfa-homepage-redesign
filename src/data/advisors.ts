@@ -297,7 +297,8 @@ export const advisors: Advisor[] = [
     bio: "Rolando specializes in commercial insurance solutions, helping business owners protect their operations, employees, and assets. With expertise in business liability, workers' compensation, and comprehensive commercial coverage, he guides businesses of all sizes through the complexities of commercial insurance.",
     specialties: ["Business Insurance", "Business Planning"],
     licenses: ["Life & Health"],
-    email: "rrecinos@tfainsuranceadvisors.com"
+    email: "rrecinos@tfainsuranceadvisors.com",
+    landingPage: "/advisors/recinos"
   },
   {
     id: "savannah-recinos",
@@ -310,7 +311,8 @@ export const advisors: Advisor[] = [
     bio: "Savannah is dedicated to helping businesses secure comprehensive commercial insurance coverage. She specializes in business liability, property insurance, workers' compensation, and tailored commercial policies that protect what business owners have worked hard to build.",
     specialties: ["Business Insurance", "Business Planning"],
     licenses: ["Life & Health"],
-    email: "srecinos@tfainsuranceadvisors.com"
+    email: "srecinos@tfainsuranceadvisors.com",
+    landingPage: "/advisors/recinos"
   }
 ];
 
