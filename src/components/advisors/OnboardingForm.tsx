@@ -164,6 +164,7 @@ const OnboardingForm = () => {
           formType: "advisor-onboarding",
           formData: {
             ...data,
+            firstName: data.name.split(" ")[0],
             region,
             image: imageUrl ? "[Image uploaded]" : "No image",
           },

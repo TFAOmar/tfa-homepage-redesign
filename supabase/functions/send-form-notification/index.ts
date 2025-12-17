@@ -61,6 +61,14 @@ const ALLOWED_FORM_TYPES = [
   "consultation",
   "schedule-inquiry",
   "kai-zen-inquiry",
+  "income-planning",
+  "investment-management",
+  "tax-planning",
+  "healthcare-planning",
+  "annuities",
+  "401k-rollover",
+  "insurance",
+  "group-retirement",
 ] as const;
 
 // Form type specific confirmation email config
@@ -170,6 +178,96 @@ const getConfirmationEmailConfig = (formType: string, advisorName?: string): Con
         "We'll discuss territory availability, investment details, and the FDD"
       ],
       signOff: "The TFA Franchise Development Team"
+    },
+    "advisor-onboarding": {
+      subject: "Your Advisor Profile Application Has Been Received",
+      bodyIntro: "Thank you for applying to join The Financial Architects team.",
+      nextSteps: [
+        "Our team will review your profile and credentials",
+        "You can expect to hear back within 48-72 hours",
+        "If approved, your profile will be published to our advisor directory"
+      ],
+      signOff: "The TFA Team"
+    },
+    "income-planning": {
+      subject: "Your Income Planning Consultation Request",
+      bodyIntro: "Thank you for your interest in creating a reliable income strategy for retirement.",
+      nextSteps: [
+        "A TFA income planning specialist will review your information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary consultation"
+      ],
+      signOff: "The Financial Architects Team"
+    },
+    "investment-management": {
+      subject: "Your Investment Management Consultation Request",
+      bodyIntro: "Thank you for your interest in professional investment management.",
+      nextSteps: [
+        "A TFA investment specialist will review your information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary consultation"
+      ],
+      signOff: "The Financial Architects Team"
+    },
+    "tax-planning": {
+      subject: "Your Tax Planning Consultation Request",
+      bodyIntro: "Thank you for your interest in tax-efficient financial strategies.",
+      nextSteps: [
+        "A TFA tax planning specialist will review your information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary consultation"
+      ],
+      signOff: "The Financial Architects Team"
+    },
+    "healthcare-planning": {
+      subject: "Your Healthcare Planning Consultation Request",
+      bodyIntro: "Thank you for your interest in planning for healthcare costs in retirement.",
+      nextSteps: [
+        "A TFA healthcare planning specialist will review your information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary consultation"
+      ],
+      signOff: "The Financial Architects Team"
+    },
+    "annuities": {
+      subject: "Your Annuity Consultation Request",
+      bodyIntro: "Thank you for your interest in guaranteed income solutions.",
+      nextSteps: [
+        "A TFA annuity specialist will review your information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary consultation"
+      ],
+      signOff: "The Financial Architects Team"
+    },
+    "401k-rollover": {
+      subject: "Your 401(k) Rollover Consultation Request",
+      bodyIntro: "Thank you for your interest in rolling over your retirement savings.",
+      nextSteps: [
+        "A TFA rollover specialist will review your information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary consultation"
+      ],
+      signOff: "The Financial Architects Team"
+    },
+    "insurance": {
+      subject: "Your Insurance Consultation Request",
+      bodyIntro: "Thank you for your interest in protecting your family's financial future.",
+      nextSteps: [
+        "A TFA insurance specialist will review your information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary consultation"
+      ],
+      signOff: "The Financial Architects Team"
+    },
+    "group-retirement": {
+      subject: "Your Group Retirement Plan Consultation Request",
+      bodyIntro: "Thank you for your interest in retirement benefits for your employees.",
+      nextSteps: [
+        "A TFA group retirement specialist will review your business information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary consultation"
+      ],
+      signOff: "The Financial Architects Team"
     }
   };
 
@@ -532,7 +630,16 @@ serve(async (req: Request): Promise<Response> => {
       "business-insurance-recinos",
       "careers-inquiry",
       "agent-application",
-      "franchise-application"
+      "franchise-application",
+      "advisor-onboarding",
+      "income-planning",
+      "investment-management",
+      "tax-planning",
+      "healthcare-planning",
+      "annuities",
+      "401k-rollover",
+      "insurance",
+      "group-retirement"
     ];
     
     // Extract prospect info - handle different field naming conventions
