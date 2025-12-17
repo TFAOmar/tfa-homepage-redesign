@@ -52,6 +52,7 @@ const ALLOWED_FORM_TYPES = [
   "contact",
   "contact-inquiry",
   "business-insurance",
+  "business-insurance-recinos",
   "agent-application",
   "careers-inquiry",
   "franchise-application",
@@ -59,16 +60,109 @@ const ALLOWED_FORM_TYPES = [
   "advisor-onboarding",
   "consultation",
   "schedule-inquiry",
+  "kai-zen-inquiry",
 ] as const;
+
+// Form type specific confirmation email config
+interface ConfirmationEmailConfig {
+  subject: string;
+  bodyIntro: string;
+  nextSteps: string[];
+  signOff: string;
+}
+
+const getConfirmationEmailConfig = (formType: string, advisorName?: string): ConfirmationEmailConfig => {
+  const advisorFirstName = advisorName?.split(" ")[0] || "An advisor";
+  
+  const configs: Record<string, ConfirmationEmailConfig> = {
+    "contact-inquiry": {
+      subject: "We've Received Your Message",
+      bodyIntro: advisorName 
+        ? `Your message to ${advisorFirstName} has been received.`
+        : "Your message has been received.",
+      nextSteps: [
+        `${advisorFirstName} will review your information`,
+        "You can expect to hear back within 1-2 business days",
+        "If you have urgent questions, call us at (888) 350-5396"
+      ],
+      signOff: advisorName || "The Financial Architects Team"
+    },
+    "schedule-inquiry": {
+      subject: "Your Consultation Request Has Been Received",
+      bodyIntro: advisorName 
+        ? `Your consultation request with ${advisorFirstName} has been received.`
+        : "Your consultation request has been received.",
+      nextSteps: [
+        `${advisorFirstName} will review your availability`,
+        "You can expect a scheduling confirmation within 1 business day",
+        "If you have urgent questions, call us at (888) 350-5396"
+      ],
+      signOff: advisorName || "The Financial Architects Team"
+    },
+    "living-trust": {
+      subject: "Your Living Trust Consultation Request",
+      bodyIntro: "Thank you for your interest in protecting your family's future with a Living Trust.",
+      nextSteps: [
+        "Vanessa will review your questionnaire",
+        "You'll receive a call within 24-48 hours to schedule your free consultation",
+        "Prepare any questions you have about estate planning"
+      ],
+      signOff: "Vanessa Sanchez"
+    },
+    "kai-zen-inquiry": {
+      subject: "Your Kai-Zen Strategy Interest Has Been Received",
+      bodyIntro: "Thank you for your interest in the Kai-Zen leveraged retirement strategy.",
+      nextSteps: [
+        advisorName 
+          ? `${advisorFirstName} will review your qualification profile`
+          : "A Kai-Zen specialist will review your qualification profile",
+        "You'll be contacted within 24 hours to discuss your options",
+        "No commitment required - this is a complimentary analysis"
+      ],
+      signOff: advisorName || "The Kai-Zen Team"
+    },
+    "business-insurance": {
+      subject: "Your Business Insurance Quote Request",
+      bodyIntro: "Thank you for requesting a business insurance quote.",
+      nextSteps: [
+        "Our commercial insurance specialists will review your business details",
+        "You'll receive a personalized quote within 24-48 hours",
+        "Have your current policy documents ready for comparison"
+      ],
+      signOff: "The Recinos Team"
+    },
+    "business-insurance-recinos": {
+      subject: "Your Business Insurance Quote Request",
+      bodyIntro: "Thank you for requesting a business insurance quote from Rolando and Savannah.",
+      nextSteps: [
+        "Rolando and Savannah will review your business details",
+        "You'll be contacted within 24 hours with quote options",
+        "Have your current policy documents ready for comparison"
+      ],
+      signOff: "Rolando & Savannah Recinos"
+    }
+  };
+
+  return configs[formType] || {
+    subject: "We've Received Your Request",
+    bodyIntro: "Thank you for reaching out to The Financial Architects.",
+    nextSteps: [
+      "An advisor will review your information",
+      "You can expect to hear back within 1-2 business days",
+      "If you have urgent questions, call us at (888) 350-5396"
+    ],
+    signOff: "The Financial Architects Team"
+  };
+};
 
 // Generate prospect confirmation email HTML
 const getProspectConfirmationEmail = (
   firstName: string, 
-  advisorName: string, 
-  formType: string
+  formType: string,
+  advisorName?: string
 ): string => {
-  const advisorFirstName = advisorName.split(" ")[0];
-  const isScheduleRequest = formType === "schedule-inquiry";
+  const config = getConfirmationEmailConfig(formType, advisorName);
+  const nextStepsHtml = config.nextSteps.map(step => `<li>${step}</li>`).join("");
   
   return `
     <!DOCTYPE html>
@@ -92,17 +186,15 @@ const getProspectConfirmationEmail = (
           </div>
           <div class="content">
             <h2 style="color: #0A0F1F; margin-top: 0;">Hi ${firstName},</h2>
-            <p>Thank you for reaching out! ${isScheduleRequest ? `Your consultation request with ${advisorFirstName} has been received.` : `Your message to ${advisorFirstName} has been received.`}</p>
+            <p>Thank you for reaching out! ${config.bodyIntro}</p>
             <p><strong>What happens next?</strong></p>
             <ul>
-              <li>${advisorFirstName} will review your information</li>
-              <li>You can expect to hear back within 1-2 business days</li>
-              <li>If you have any urgent questions, call us at (888) 350-5396</li>
+              ${nextStepsHtml}
             </ul>
             <p>We look forward to helping you achieve your financial goals.</p>
             <p style="margin-top: 30px;">
               Warm regards,<br>
-              <strong>${advisorFirstName}</strong><br>
+              <strong>${config.signOff}</strong><br>
               The Financial Architects
             </p>
           </div>
@@ -167,6 +259,7 @@ const getFormSubject = (formType: string, formData: Record<string, unknown>): st
     contact: `New Contact Inquiry from ${name}`,
     "contact-inquiry": `New Contact Message for ${advisorName || "Advisor"} from ${name}`,
     "business-insurance": `New Business Insurance Request from ${businessName || name}`,
+    "business-insurance-recinos": `New Business Insurance Request (Recinos) from ${businessName || name}`,
     "agent-application": `New Agent Application from ${name}`,
     "careers-inquiry": `New Career Inquiry from ${name}`,
     "franchise-application": `New Franchise Application from ${name}`,
@@ -174,6 +267,7 @@ const getFormSubject = (formType: string, formData: Record<string, unknown>): st
     "advisor-onboarding": `New Advisor Onboarding Submission from ${name}`,
     "consultation": `New Consultation Request from ${name}`,
     "schedule-inquiry": `New Scheduling Request for ${advisorName || "Advisor"} from ${name}`,
+    "kai-zen-inquiry": `New Kai-Zen Strategy Inquiry from ${name}`,
   };
   
   return subjects[formType] || `New Form Submission: ${formType}`;
@@ -398,19 +492,32 @@ serve(async (req: Request): Promise<Response> => {
         .eq("id", submissionData.id);
     }
 
-    // Send confirmation email to prospect for contact/schedule inquiries on advisor pages
-    const confirmationFormTypes = ["contact-inquiry", "schedule-inquiry"];
-    const prospectEmail = formData.email as string;
-    const advisorName = formData.advisorName as string;
-    const prospectFirstName = formData.firstName as string;
+    // Send confirmation email to prospect for supported form types
+    const confirmationFormTypes = [
+      "contact-inquiry", 
+      "schedule-inquiry",
+      "living-trust",
+      "kai-zen-inquiry",
+      "business-insurance",
+      "business-insurance-recinos"
+    ];
+    
+    // Extract prospect info - handle different field naming conventions
+    const prospectEmail = (formData.email as string) || null;
+    const prospectFirstName = (formData.firstName as string) 
+      || (formData.fullName as string)?.split(" ")[0]
+      || (formData.contactName as string)?.split(" ")[0]
+      || (formData.name as string)?.split(" ")[0]
+      || null;
+    const prospectAdvisorName = (formData.advisorName as string) 
+      || (formData.advisor as string)
+      || null;
 
-    if (confirmationFormTypes.includes(formType) && prospectEmail && advisorName && prospectFirstName) {
-      console.log(`Sending confirmation email to prospect: ${prospectEmail}`);
+    if (confirmationFormTypes.includes(formType) && prospectEmail && prospectFirstName) {
+      console.log(`Sending confirmation email to prospect: ${prospectEmail} for form type: ${formType}`);
       
-      const confirmationHtml = getProspectConfirmationEmail(prospectFirstName, advisorName, formType);
-      const confirmationSubject = formType === "schedule-inquiry" 
-        ? "Your Consultation Request Has Been Received" 
-        : "We've Received Your Message";
+      const config = getConfirmationEmailConfig(formType, prospectAdvisorName || undefined);
+      const confirmationHtml = getProspectConfirmationEmail(prospectFirstName, formType, prospectAdvisorName || undefined);
       
       const confirmationRes = await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -421,7 +528,7 @@ serve(async (req: Request): Promise<Response> => {
         body: JSON.stringify({
           from: "The Financial Architects <noreply@tfainsuranceadvisors.com>",
           to: [prospectEmail],
-          subject: confirmationSubject,
+          subject: config.subject,
           html: confirmationHtml,
         }),
       });

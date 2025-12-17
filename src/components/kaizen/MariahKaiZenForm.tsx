@@ -60,11 +60,12 @@ const MariahKaiZenForm = () => {
       // Send email notification
       const { error: emailError } = await supabase.functions.invoke('send-form-notification', {
         body: {
-          formType: 'Kai-Zen Inquiry (Mariah Lorenzen)',
+          formType: 'kai-zen-inquiry',
           formData: {
             ...formData,
             name: `${formData.firstName} ${formData.lastName}`,
-            advisor: 'Mariah Lorenzen',
+            advisorName: 'Mariah Lorenzen',
+            advisor: 'mariah-lorenzen',
             source: '/advisors/mariah-lorenzen/kai-zen'
           },
           additionalRecipients: ['mariah@tfainsuranceadvisors.com']

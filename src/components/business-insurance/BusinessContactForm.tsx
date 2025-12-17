@@ -57,7 +57,11 @@ const BusinessContactForm = () => {
       const { error } = await supabase.functions.invoke("send-form-notification", {
         body: {
           formType: "business-insurance",
-          formData,
+          formData: {
+            ...formData,
+            firstName: formData.fullName.split(" ")[0],
+            advisorName: "The Recinos Team",
+          },
           additionalRecipients: [
             "rrecinos@tfainsuranceadvisors.com",
             "srecinos@tfainsuranceadvisors.com"

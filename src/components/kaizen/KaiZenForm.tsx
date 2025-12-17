@@ -60,13 +60,16 @@ const KaiZenForm = () => {
       // Send email notification
       const { error: emailError } = await supabase.functions.invoke('send-form-notification', {
         body: {
-          formType: 'Kai-Zen Strategy Inquiry',
+          formType: 'kai-zen-inquiry',
           formData: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            ageRange: formData.ageRange,
+            householdIncome: formData.householdIncome,
             Name: `${formData.firstName} ${formData.lastName}`,
-            Email: formData.email,
-            Phone: formData.phone,
-            'Age Range': formData.ageRange,
-            'Household Income': formData.householdIncome,
+            source: '/services/kai-zen',
           },
         },
       });

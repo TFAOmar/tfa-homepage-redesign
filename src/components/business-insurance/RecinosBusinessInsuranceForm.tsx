@@ -92,6 +92,8 @@ const RecinosBusinessInsuranceForm = () => {
           formType: "business-insurance-recinos",
           formData: {
             ...data,
+            firstName: data.contactName.split(" ")[0],
+            advisorName: "Rolando and Savannah Recinos",
             coverageInterests: data.coverageInterests.map(id => 
               coverageOptions.find(opt => opt.id === id)?.label || id
             ),
