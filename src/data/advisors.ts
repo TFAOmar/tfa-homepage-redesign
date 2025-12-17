@@ -318,7 +318,7 @@ export const advisors: Advisor[] = [
     image: anthonyBottleyImg,
     email: "info@awhealthllc.com",
     yearsOfExperience: 4,
-    landingPage: "/health-insurance/american-way-health"
+    landingPage: "/advisors/anthony-bottley"
   }
 ];
 
