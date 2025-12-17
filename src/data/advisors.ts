@@ -3,12 +3,10 @@ import manuelSotoImg from "@/assets/advisors/manuel-soto.jpg";
 import israelCastanedaImg from "@/assets/advisors/israel-castaneda.jpg";
 import elenaEsquivelImg from "@/assets/advisors/elena-esquivel.jpg";
 import joseEstradaImg from "@/assets/advisors/jose-estrada.jpg";
-import ronaldBrownImg from "@/assets/advisors/ronald-brown.jpg";
 import erikaManzanoImg from "@/assets/advisors/erika-manzano.jpg";
 import celesteSierraImg from "@/assets/advisors/celeste-sierra.jpg";
 import jorgeHernandezImg from "@/assets/advisors/jorge-hernandez.jpg";
 import joeJessieNietoImg from "@/assets/advisors/joe-jessie-nieto.jpg";
-import jenniferRamosImg from "@/assets/advisors/jennifer-ramos.jpg";
 import hamletOhandjanianImg from "@/assets/advisors/hamlet-ohandjanian.jpg";
 import deliaPlascenciaImg from "@/assets/advisors/delia-plascencia.jpg";
 import mariahLorenzenImg from "@/assets/advisors/mariah-lorenzen.jpg";
@@ -96,21 +94,6 @@ export const advisors: Advisor[] = [
     phone: "(909) 592-5481"
   },
   {
-    id: "ronald-brown",
-    name: "Ronald Brown",
-    title: "Managing Partner",
-    type: "Advisor",
-    state: "California",
-    city: "Rancho Cucamonga",
-    region: "West",
-    bio: "Ron retired from his first career of over 30 years in the automotive industry, working with top dealers including 18 years with the Penske organization where he grew from general sales manager to president of a region. With a love of helping people and seeing the need for sound financial education, Ron joined his life partner Jennifer Ramos in business to help families achieve financial security.",
-    specialties: ["Retirement Planning", "Life Insurance", "Estate Planning"],
-    licenses: ["Life & Health (Lic# 4418658)"],
-    image: ronaldBrownImg,
-    email: "rbrown@tfainsuranceadvisors.com",
-    yearsOfExperience: 30
-  },
-  {
     id: "erika-manzano",
     name: "Erika Manzano",
     title: "Financial Educator",
@@ -165,21 +148,6 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health"],
     image: joeJessieNietoImg,
     email: "joe@tfainsuranceadvisors.com"
-  },
-  {
-    id: "jennifer-ramos",
-    name: "Jennifer Ramos",
-    title: "Managing Partner",
-    type: "Advisor",
-    state: "California",
-    city: "Rancho Cucamonga",
-    region: "West",
-    bio: "Jennifer has been licensed in the financial services industry for over 20 years. Known as the 'trainer of the trainers,' she has coached hundreds of new financial advisors. A Sales Hall of Fame inductee for the number of clients she helped, Jennifer expanded TFA's footprint by opening an office in Rancho Cucamonga to serve her neighbors and community.",
-    specialties: ["Retirement Planning", "Tax Strategies", "Investment Management"],
-    licenses: ["Life & Health"],
-    image: jenniferRamosImg,
-    email: "jramos@tfainsuranceadvisors.com",
-    yearsOfExperience: 20
   },
   {
     id: "hamlet-ohandjanian",
