@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface HealthPartnerCardProps {
@@ -12,24 +12,30 @@ interface HealthPartnerCardProps {
 
 const HealthPartnerCard = ({ name, logo, tagline, description, linkUrl }: HealthPartnerCardProps) => {
   return (
-    <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 group">
-      <div className="flex flex-col items-center text-center">
-        <div className="h-24 w-full flex items-center justify-center mb-4">
+    <div className="glass p-6 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group cursor-pointer">
+      <div className="flex flex-col items-center text-center space-y-4">
+        <div className="h-24 flex items-center justify-center w-full">
           <img 
             src={logo} 
             alt={`${name} logo`} 
-            className="max-h-full max-w-full object-contain"
+            className="max-h-20 w-auto object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
           />
         </div>
         
-        <h3 className="text-xl font-semibold text-foreground mb-1">{name}</h3>
-        <p className="text-sm text-accent font-medium mb-3">{tagline}</p>
-        <p className="text-muted-foreground text-sm mb-6">{description}</p>
-        
-        <Button asChild className="w-full group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+        <div className="space-y-2 flex-1">
+          <h3 className="text-xl font-bold text-foreground">{name}</h3>
+          <p className="text-sm text-accent font-medium">{tagline}</p>
+          <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+        </div>
+
+        <Button 
+          asChild
+          variant="outline" 
+          className="w-full group-hover:bg-accent group-hover:text-accent-foreground group-hover:border-accent transition-all"
+        >
           <Link to={linkUrl}>
-            Learn More & Get Quote
-            <ArrowRight className="ml-2 h-4 w-4" />
+            View Partner Details
+            <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </Button>
       </div>

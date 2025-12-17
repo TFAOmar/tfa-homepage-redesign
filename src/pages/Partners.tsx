@@ -41,30 +41,6 @@ const Partners = () => {
     <div className="min-h-screen">
       <PartnersHero />
       
-      {/* Health Insurance Partners Section */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Health Insurance Partners
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              We've partnered with trusted health insurance specialists to provide comprehensive coverage options for individuals, families, and businesses.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <HealthPartnerCard
-              name="American Way Health"
-              logo={americanWayHealthLogo}
-              tagline="Your Health. Your Way."
-              description="Comprehensive health insurance solutions for individuals, families, and businesses across the nation."
-              linkUrl="/health-insurance/american-way-health"
-            />
-          </div>
-        </div>
-      </section>
-      
       {/* Life Insurance & Annuity Partners Grid */}
       <section className="py-16 bg-gradient-to-b from-background to-secondary/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -88,6 +64,30 @@ const Partners = () => {
                 onClick={() => handleCarrierSelect(carrier.id)}
               />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Health Insurance Partners Section */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Health Insurance Partners
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Click on any partner below to learn more about their services and get a personalized health insurance quote.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <HealthPartnerCard
+              name="American Way Health"
+              logo={americanWayHealthLogo}
+              tagline="Your Health. Your Way."
+              description="Comprehensive health insurance solutions for individuals, families, and businesses across the nation."
+              linkUrl="/health-insurance/american-way-health"
+            />
           </div>
         </div>
       </section>
