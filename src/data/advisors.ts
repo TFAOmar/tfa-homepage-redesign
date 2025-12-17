@@ -15,6 +15,7 @@ import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
 import ruthPachecoImg from "@/assets/advisors/ruth-pacheco.jpg";
 import tamaraLeeImg from "@/assets/advisors/tamara-lee.jpg";
 import ismaelVerveraImg from "@/assets/advisors/ismael-ververa.jpg";
+import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -302,6 +303,22 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health"],
     email: "srecinos@tfainsuranceadvisors.com",
     landingPage: "/advisors/recinos"
+  },
+  {
+    id: "anthony-bottley",
+    name: "Anthony Bottley",
+    title: "President, American Way Health",
+    type: "Advisor",
+    state: "Florida",
+    city: "West Palm Beach",
+    region: "Southeast",
+    bio: "Anthony is the owner and founder of American Way Health, an insurance agency specializing in healthcare and insurance solutions. With a background in executive recruiting and a passion for developing and guiding others to their full potential, he helps individuals and families navigate the complexities of health insurance and Medicare. A graduate of Florida Atlantic University, Anthony brings entrepreneurial vision and a client-first approach to health insurance planning.",
+    specialties: ["Health Insurance", "Medicare Planning"],
+    licenses: ["Life & Health"],
+    image: anthonyBottleyImg,
+    email: "info@awhealthllc.com",
+    yearsOfExperience: 4,
+    landingPage: "/health-insurance/american-way-health"
   }
 ];
 
@@ -319,6 +336,7 @@ export const specialties = [
   "Annuities",
   "Business Planning",
   "Business Insurance",
+  "Health Insurance",
   "401(k) Guidance",
   "Investment Management",
   "Mortgage Financing",
