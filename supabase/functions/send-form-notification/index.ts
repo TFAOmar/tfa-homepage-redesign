@@ -140,6 +140,36 @@ const getConfirmationEmailConfig = (formType: string, advisorName?: string): Con
         "Have your current policy documents ready for comparison"
       ],
       signOff: "Rolando & Savannah Recinos"
+    },
+    "careers-inquiry": {
+      subject: "Thank You for Your Interest in Joining TFA",
+      bodyIntro: "Thank you for your interest in a career with The Financial Architects.",
+      nextSteps: [
+        "Our recruitment team will review your inquiry",
+        "You can expect to hear back within 24-48 hours",
+        "In the meantime, learn more about our culture at tfainsuranceadvisors.com"
+      ],
+      signOff: "The TFA Recruitment Team"
+    },
+    "agent-application": {
+      subject: "Your Agent Application Has Been Received",
+      bodyIntro: "Thank you for applying to become a licensed agent with The Financial Architects.",
+      nextSteps: [
+        "Our recruitment team will review your application",
+        "Qualified candidates will be contacted within 48 hours",
+        "We'll discuss licensing, training, and next steps"
+      ],
+      signOff: "The TFA Recruitment Team"
+    },
+    "franchise-application": {
+      subject: "Your Franchise Application Has Been Received",
+      bodyIntro: "Thank you for your interest in owning a TFA franchise.",
+      nextSteps: [
+        "Our franchise development team will review your application",
+        "Qualified candidates will be contacted within 48 hours for a discovery call",
+        "We'll discuss territory availability, investment details, and the FDD"
+      ],
+      signOff: "The TFA Franchise Development Team"
     }
   };
 
@@ -499,7 +529,10 @@ serve(async (req: Request): Promise<Response> => {
       "living-trust",
       "kai-zen-inquiry",
       "business-insurance",
-      "business-insurance-recinos"
+      "business-insurance-recinos",
+      "careers-inquiry",
+      "agent-application",
+      "franchise-application"
     ];
     
     // Extract prospect info - handle different field naming conventions
