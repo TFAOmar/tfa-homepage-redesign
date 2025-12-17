@@ -4,7 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
-import { ArrowRight, TrendingUp, DollarSign, Calendar } from "lucide-react";
+import { ArrowRight, TrendingUp, DollarSign, Calendar, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import EmailResultsModal from "./EmailResultsModal";
+import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
 
 interface CalculationResults {
   savingsAtRetirement: number;
@@ -41,6 +45,8 @@ export default function TFARetirementIncomeCalculator() {
 
   const [results, setResults] = useState<CalculationResults | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
 
   const validateInputs = () => {
     const newErrors: Record<string, string> = {};
@@ -145,6 +151,58 @@ export default function TFARetirementIncomeCalculator() {
     setDesiredIncome(6000);
     setResults(null);
     setErrors({});
+  };
+
+  const handleEmailResults = async (email: string, firstName: string) => {
+    if (!results) return;
+
+    setEmailLoading(true);
+    try {
+      const pdfInputs = [
+        { label: "Current Age", value: `${currentAge} years` },
+        { label: "Retirement Age", value: `${retirementAge} years` },
+        { label: "Current Savings", value: formatCurrency(currentSavings) },
+        { label: "Monthly Contribution", value: formatCurrency(monthlyContribution) },
+        { label: "Expected Return (Before)", value: `${returnBeforeRetirement}%` },
+      ];
+
+      const pdfResults = [
+        { label: "TOTAL MONTHLY INCOME", value: formatCurrency(results.totalMonthlyIncome), highlight: true },
+        { label: "Savings at Retirement", value: formatCurrency(results.savingsAtRetirement) },
+        { label: "Monthly from Savings", value: formatCurrency(results.monthlyFromSavings) },
+        { label: "Social Security", value: formatCurrency(results.socialSecurity) },
+        { label: "Income Gap", value: formatCurrency(results.gap) },
+      ];
+
+      const pdfBase64 = generateCalculatorPdf({
+        calculatorName: "Retirement Income Calculator",
+        inputs: pdfInputs,
+        results: pdfResults,
+        insights: [
+          "Starting early and contributing consistently can significantly boost your retirement savings.",
+          "Social Security and pensions provide a foundation, but savings fill the gap.",
+        ],
+      });
+
+      const { error } = await supabase.functions.invoke("send-calculator-results", {
+        body: {
+          email,
+          firstName,
+          calculatorName: "Retirement Income Calculator",
+          pdfBase64,
+          resultsSummary: pdfResults.map(r => ({ label: r.label, value: r.value })),
+        },
+      });
+
+      if (error) throw error;
+      toast.success("Results sent to your email!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("Failed to send email. Please try again.");
+      throw error;
+    } finally {
+      setEmailLoading(false);
+    }
   };
 
   const formatCurrency = (value: number) => {
@@ -389,6 +447,11 @@ export default function TFARetirementIncomeCalculator() {
             <Button onClick={handleReset} variant="outline" size="lg">
               Reset
             </Button>
+            {results && (
+              <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg">
+                <Mail className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </div>
 
@@ -581,6 +644,14 @@ export default function TFARetirementIncomeCalculator() {
           licensed advisor before making financial decisions.
         </p>
       </div>
+
+      <EmailResultsModal
+        open={emailModalOpen}
+        onOpenChange={setEmailModalOpen}
+        calculatorName="Retirement Income Calculator"
+        onSendEmail={handleEmailResults}
+        isLoading={emailLoading}
+      />
     </div>
   );
 }

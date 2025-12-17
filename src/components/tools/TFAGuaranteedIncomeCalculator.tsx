@@ -4,7 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Check, DollarSign, Shield, TrendingUp, Calendar, Users } from "lucide-react";
+import { Check, DollarSign, Shield, TrendingUp, Calendar, Users, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import EmailResultsModal from "./EmailResultsModal";
+import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
 
 type SolveMode = "premium" | "income";
 type CoverageType = "single" | "joint";
@@ -44,6 +48,8 @@ export default function TFAGuaranteedIncomeCalculator() {
   
   const [results, setResults] = useState<CalculationResults | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
 
   const ROLL_UP_RATE = 0.08; // 8% roll-up rate
   const RIDER_CHARGE = 0.0115; // 1.15% annual rider charge
@@ -135,6 +141,57 @@ export default function TFAGuaranteedIncomeCalculator() {
     setDesiredIncome(10000);
     setResults(null);
     setErrors({});
+  };
+
+  const handleEmailResults = async (email: string, firstName: string) => {
+    if (!results) return;
+
+    setEmailLoading(true);
+    try {
+      const pdfInputs = [
+        { label: "Calculation Mode", value: solveMode === "income" ? "Solve for Income" : "Solve for Premium" },
+        { label: "Coverage Type", value: coverageType === "single" ? "Single Owner" : "Joint Owners" },
+        { label: "Current Age", value: `${currentAge} years` },
+        { label: "Income Start Age", value: `${incomeStartAge} years` },
+        { label: solveMode === "income" ? "Premium Amount" : "Desired Income", value: formatCurrency(solveMode === "income" ? premium : desiredIncome) },
+      ];
+
+      const pdfResults = [
+        { label: solveMode === "income" ? "ESTIMATED YEARLY INCOME" : "ESTIMATED PREMIUM REQUIRED", value: formatCurrency(results.result), highlight: true },
+        { label: "Deferral Period", value: `${results.deferralYears} years` },
+        { label: "Accumulation Value", value: formatCurrency(results.accumulationValue) },
+        { label: "Roll-Up Growth", value: formatCurrency(results.rollUpGrowth) },
+      ];
+
+      const pdfBase64 = generateCalculatorPdf({
+        calculatorName: "Guaranteed Income Calculator",
+        inputs: pdfInputs,
+        results: pdfResults,
+        insights: [
+          "Guaranteed income provides lifetime financial security.",
+          "The 8% roll-up rate compounds during your deferral period.",
+        ],
+      });
+
+      const { error } = await supabase.functions.invoke("send-calculator-results", {
+        body: {
+          email,
+          firstName,
+          calculatorName: "Guaranteed Income Calculator",
+          pdfBase64,
+          resultsSummary: pdfResults.map(r => ({ label: r.label, value: r.value })),
+        },
+      });
+
+      if (error) throw error;
+      toast.success("Results sent to your email!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("Failed to send email. Please try again.");
+      throw error;
+    } finally {
+      setEmailLoading(false);
+    }
   };
 
   const formatCurrency = (value: number) => {
@@ -368,6 +425,15 @@ export default function TFAGuaranteedIncomeCalculator() {
               >
                 Reset
               </Button>
+              {results && (
+                <Button
+                  onClick={() => setEmailModalOpen(true)}
+                  variant="outline"
+                  className="bg-white/10 border-white/20 text-foreground hover:bg-white/20 rounded-xl py-3 px-4"
+                >
+                  <Mail className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           </Card>
         </div>
@@ -491,6 +557,14 @@ export default function TFAGuaranteedIncomeCalculator() {
           </Card>
         </div>
       </div>
+
+      <EmailResultsModal
+        open={emailModalOpen}
+        onOpenChange={setEmailModalOpen}
+        calculatorName="Guaranteed Income Calculator"
+        onSendEmail={handleEmailResults}
+        isLoading={emailLoading}
+      />
     </div>
   );
 }
