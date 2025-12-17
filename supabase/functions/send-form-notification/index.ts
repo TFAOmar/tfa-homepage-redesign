@@ -11,6 +11,42 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Rate limiting configuration
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
+const MAX_REQUESTS_PER_WINDOW = 5; // Max 5 requests per minute per IP
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+// Clean up old entries periodically
+const cleanupRateLimitStore = () => {
+  const now = Date.now();
+  for (const [ip, data] of rateLimitStore.entries()) {
+    if (now > data.resetTime) {
+      rateLimitStore.delete(ip);
+    }
+  }
+};
+
+// Check rate limit for an IP
+const checkRateLimit = (ip: string): { allowed: boolean; remaining: number; resetIn: number } => {
+  cleanupRateLimitStore();
+  
+  const now = Date.now();
+  const record = rateLimitStore.get(ip);
+  
+  if (!record || now > record.resetTime) {
+    // New window
+    rateLimitStore.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - 1, resetIn: RATE_LIMIT_WINDOW_MS };
+  }
+  
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
+    return { allowed: false, remaining: 0, resetIn: record.resetTime - now };
+  }
+  
+  record.count++;
+  return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - record.count, resetIn: record.resetTime - now };
+};
+
 // Allowed form types for validation
 const ALLOWED_FORM_TYPES = [
   "contact",
@@ -100,10 +136,66 @@ const extractCommonFields = (formData: Record<string, unknown>) => {
   };
 };
 
+// Extract client IP from request headers
+const getClientIP = (req: Request): string => {
+  // Check common proxy headers
+  const forwardedFor = req.headers.get("x-forwarded-for");
+  if (forwardedFor) {
+    // x-forwarded-for can contain multiple IPs, take the first one
+    return forwardedFor.split(",")[0].trim();
+  }
+  
+  const realIP = req.headers.get("x-real-ip");
+  if (realIP) {
+    return realIP.trim();
+  }
+  
+  const cfConnectingIP = req.headers.get("cf-connecting-ip");
+  if (cfConnectingIP) {
+    return cfConnectingIP.trim();
+  }
+  
+  // Fallback to a hash of other identifying info if no IP available
+  return "unknown";
+};
+
 serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Get client IP for rate limiting
+  const clientIP = getClientIP(req);
+  
+  // Check rate limit
+  const rateLimit = checkRateLimit(clientIP);
+  
+  // Add rate limit headers to all responses
+  const rateLimitHeaders = {
+    "X-RateLimit-Limit": String(MAX_REQUESTS_PER_WINDOW),
+    "X-RateLimit-Remaining": String(rateLimit.remaining),
+    "X-RateLimit-Reset": String(Math.ceil(rateLimit.resetIn / 1000)),
+  };
+
+  if (!rateLimit.allowed) {
+    console.log(`Rate limit exceeded for IP: ${clientIP}`);
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: "Too many requests. Please try again later.",
+        retryAfter: Math.ceil(rateLimit.resetIn / 1000)
+      }),
+      {
+        status: 429,
+        headers: { 
+          "Content-Type": "application/json", 
+          "Retry-After": String(Math.ceil(rateLimit.resetIn / 1000)),
+          ...rateLimitHeaders,
+          ...corsHeaders 
+        },
+      }
+    );
   }
 
   try {
@@ -129,14 +221,14 @@ serve(async (req: Request): Promise<Response> => {
         }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
+          headers: { "Content-Type": "application/json", ...rateLimitHeaders, ...corsHeaders },
         }
       );
     }
 
     const { formType, formData, recipientEmail, additionalRecipients } = parseResult.data;
 
-    console.log(`Processing ${formType} form submission:`, JSON.stringify(formData));
+    console.log(`Processing ${formType} form submission from IP ${clientIP}:`, JSON.stringify(formData));
 
     // Create Supabase client with service role for database insert
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -250,7 +342,7 @@ serve(async (req: Request): Promise<Response> => {
 
     return new Response(JSON.stringify({ success: true, data, submissionId: submissionData?.id }), {
       status: 200,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
+      headers: { "Content-Type": "application/json", ...rateLimitHeaders, ...corsHeaders },
     });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
@@ -259,7 +351,7 @@ serve(async (req: Request): Promise<Response> => {
       JSON.stringify({ success: false, error: errorMessage }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        headers: { "Content-Type": "application/json", ...rateLimitHeaders, ...corsHeaders },
       }
     );
   }
