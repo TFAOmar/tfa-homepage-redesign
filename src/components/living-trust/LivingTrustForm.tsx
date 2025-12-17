@@ -87,6 +87,7 @@ export default function LivingTrustForm() {
           formType: "living-trust",
           formData: {
             ...data,
+            advisorName: "Vanessa Sanchez",
             source: "living-trust-landing-page",
             partner: "the-brandon-group",
             advisor: "vanessa-sanchez",
