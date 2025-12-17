@@ -51,6 +51,7 @@ const checkRateLimit = (ip: string): { allowed: boolean; remaining: number; rese
 const ALLOWED_FORM_TYPES = [
   "contact",
   "contact-inquiry",
+  "book-consultation",
   "business-insurance",
   "business-insurance-recinos",
   "agent-application",
@@ -97,6 +98,16 @@ const getConfirmationEmailConfig = (formType: string, advisorName?: string): Con
         "If you have urgent questions, call us at (888) 350-5396"
       ],
       signOff: advisorName || "The Financial Architects Team"
+    },
+    "book-consultation": {
+      subject: "Your Consultation Request Has Been Received",
+      bodyIntro: "Thank you for booking a consultation with The Financial Architects.",
+      nextSteps: [
+        "An advisor will review your information and availability",
+        "You can expect to be contacted within 1 business day to confirm your appointment",
+        "If you have urgent questions, call us at (888) 350-5396"
+      ],
+      signOff: "The Financial Architects Team"
     },
     "schedule-inquiry": {
       subject: "Your Consultation Request Has Been Received",
@@ -421,6 +432,7 @@ const getFormSubject = (formType: string, formData: Record<string, unknown>): st
   const subjects: Record<string, string> = {
     contact: `New Contact Inquiry from ${name}`,
     "contact-inquiry": `New Contact Message for ${advisorName || "Advisor"} from ${name}`,
+    "book-consultation": `New Consultation Request from ${name}`,
     "business-insurance": `New Business Insurance Request from ${businessName || name}`,
     "business-insurance-recinos": `New Business Insurance Request (Recinos) from ${businessName || name}`,
     "agent-application": `New Agent Application from ${name}`,
