@@ -69,6 +69,8 @@ const ALLOWED_FORM_TYPES = [
   "401k-rollover",
   "insurance",
   "group-retirement",
+  "estate-planning",
+  "medicare-inquiry",
 ] as const;
 
 // Form type specific confirmation email config
@@ -268,6 +270,28 @@ const getConfirmationEmailConfig = (formType: string, advisorName?: string): Con
         "No commitment required - this is a complimentary consultation"
       ],
       signOff: "The Financial Architects Team"
+    },
+    "estate-planning": {
+      subject: "Your Estate Planning Consultation Request",
+      bodyIntro: "Thank you for your interest in protecting your family's future through estate planning.",
+      nextSteps: [
+        "An estate planning specialist will review your questionnaire",
+        "You can expect to be contacted within 24-48 hours",
+        "Prepare any questions you have about trusts, wills, and asset protection"
+      ],
+      signOff: "The Financial Architects Team"
+    },
+    "medicare-inquiry": {
+      subject: "Your Medicare Consultation Request Has Been Received",
+      bodyIntro: advisorName 
+        ? `Thank you for reaching out to ${advisorFirstName} for Medicare guidance.`
+        : "Thank you for your interest in Medicare planning.",
+      nextSteps: [
+        advisorName ? `${advisorFirstName} will review your Medicare needs` : "A Medicare specialist will review your information",
+        "You can expect to be contacted within 24 hours",
+        "Have your current coverage details ready for the consultation"
+      ],
+      signOff: advisorName || "The Financial Architects Team"
     }
   };
 
@@ -639,7 +663,9 @@ serve(async (req: Request): Promise<Response> => {
       "annuities",
       "401k-rollover",
       "insurance",
-      "group-retirement"
+      "group-retirement",
+      "estate-planning",
+      "medicare-inquiry"
     ];
     
     // Extract prospect info - handle different field naming conventions

@@ -97,14 +97,18 @@ export function TamaraLeeMedicareForm() {
         "send-form-notification",
         {
           body: {
-            formType: "Medicare Inquiry - Tamara Lee",
+            formType: "medicare-inquiry",
             formData: {
+              firstName: data.firstName,
+              lastName: data.lastName,
               name: `${data.firstName} ${data.lastName}`,
               email: data.email,
               phone: data.phone,
               ageRange: data.ageRange,
               currentCoverage: data.currentCoverage,
               interest: data.interest,
+              advisorName: "Tamara Lee",
+              source: "/advisors/tamara-lee/medicare",
             },
             additionalRecipients: ["tlee@tfainsuranceadvisors.com"],
           },
