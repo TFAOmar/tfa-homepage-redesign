@@ -5,6 +5,7 @@ import AdvisorsCTA from "@/components/advisors/AdvisorsCTA";
 import { useState, useEffect, useMemo } from "react";
 import { advisors, Advisor } from "@/data/advisors";
 import { usePublishedAdvisors } from "@/hooks/useDynamicAdvisors";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 
 const Advisors = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,15 +14,15 @@ const Advisors = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState("All Specialties");
   
   const { data: dynamicAdvisors = [] } = usePublishedAdvisors();
+  const { data: settings } = useAdminSettings();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Combine static and dynamic advisors
+  // Combine static and dynamic advisors, then apply visibility and ordering
   const allAdvisors = useMemo(() => {
     // Map dynamic advisors to match static advisor interface
-    // Note: email and phone are not included in PublicAdvisor (excluded for security)
     const mappedDynamic = dynamicAdvisors.map((da) => ({
       id: da.id,
       name: da.name,
@@ -39,9 +40,28 @@ const Advisors = () => {
     }));
     
     const combined = [...advisors, ...mappedDynamic];
-    // Sort alphabetically by name
-    return combined.sort((a, b) => a.name.localeCompare(b.name));
-  }, [dynamicAdvisors]);
+    
+    // Filter out hidden advisors
+    const hiddenIds = settings?.directory_hidden_ids ?? [];
+    const visible = combined.filter((a) => !hiddenIds.includes(a.id));
+    
+    // Apply custom ordering if set, otherwise alphabetical
+    const orderIds = settings?.directory_advisor_order ?? [];
+    if (orderIds.length > 0) {
+      const orderMap = new Map(orderIds.map((id, idx) => [String(id), idx]));
+      return visible.sort((a, b) => {
+        const aIdx = orderMap.get(String(a.id));
+        const bIdx = orderMap.get(String(b.id));
+        if (aIdx !== undefined && bIdx !== undefined) return aIdx - bIdx;
+        if (aIdx !== undefined) return -1;
+        if (bIdx !== undefined) return 1;
+        return a.name.localeCompare(b.name);
+      });
+    }
+    
+    // Default alphabetical sort
+    return visible.sort((a, b) => a.name.localeCompare(b.name));
+  }, [dynamicAdvisors, settings?.directory_hidden_ids, settings?.directory_advisor_order]);
 
   const filteredAdvisors = useMemo(() => {
     let filtered = allAdvisors;
