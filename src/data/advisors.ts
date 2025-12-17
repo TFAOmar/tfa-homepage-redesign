@@ -148,6 +148,7 @@ export const advisors: Advisor[] = [
     specialties: ["Real Estate", "Retirement Planning", "Investment Management", "Estate Planning"],
     licenses: ["Life & Health (Lic# 4152322)"],
     image: ismaelVerveraImg,
+    email: "ismael@tfainsuranceadvisors.com",
     yearsOfExperience: 25
   },
   {
