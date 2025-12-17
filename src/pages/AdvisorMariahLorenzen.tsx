@@ -1,12 +1,17 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRight, Building2, TrendingUp, Home } from "lucide-react";
 import mariahLorenzenImg from "@/assets/advisors/mariah-lorenzen.jpg";
+import ScheduleModal from "@/components/advisors/ScheduleModal";
+import ContactModal from "@/components/advisors/ContactModal";
 
 const AdvisorMariahLorenzen = () => {
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -95,18 +100,23 @@ const AdvisorMariahLorenzen = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start mb-8">
-                <Link to="/book-consultation">
-                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-8 py-6 w-full sm:w-auto">
-                    <Calendar className="mr-2 h-5 w-5" />
-                    Book a Consultation
-                  </Button>
-                </Link>
-                <Link to="/contact">
-                  <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-secondary-foreground">
-                    <Phone className="mr-2 h-5 w-5" />
-                    Contact Me
-                  </Button>
-                </Link>
+                <Button 
+                  size="lg" 
+                  className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-8 py-6 w-full sm:w-auto"
+                  onClick={() => setScheduleModalOpen(true)}
+                >
+                  <Calendar className="mr-2 h-5 w-5" />
+                  Book a Consultation
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-white"
+                  onClick={() => setContactModalOpen(true)}
+                >
+                  <Mail className="mr-2 h-5 w-5" />
+                  Contact Me
+                </Button>
                 <Link to="/advisors/mariah-lorenzen/kai-zen">
                   <Button size="lg" variant="outline" className="border-accent/50 hover:bg-accent/20 text-lg px-8 py-6 w-full sm:w-auto text-accent">
                     <TrendingUp className="mr-2 h-5 w-5" />
@@ -283,12 +293,15 @@ const AdvisorMariahLorenzen = () => {
                   Explore Kai-Zen Strategy
                 </Button>
               </Link>
-              <Link to="/book-consultation">
-                <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-secondary-foreground">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Book Consultation
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-white"
+                onClick={() => setScheduleModalOpen(true)}
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Book Consultation
+              </Button>
             </div>
 
             <p className="text-white/60 mt-6 text-sm">
@@ -297,6 +310,22 @@ const AdvisorMariahLorenzen = () => {
           </div>
         </div>
       </section>
+
+      {/* Modals */}
+      <ScheduleModal
+        open={scheduleModalOpen}
+        onOpenChange={setScheduleModalOpen}
+        advisorName="Mariah Lorenzen"
+        advisorEmail="mariah@tfainsuranceadvisors.com"
+        advisorImage={mariahLorenzenImg}
+      />
+      <ContactModal
+        open={contactModalOpen}
+        onOpenChange={setContactModalOpen}
+        advisorName="Mariah Lorenzen"
+        advisorEmail="mariah@tfainsuranceadvisors.com"
+        advisorImage={mariahLorenzenImg}
+      />
     </div>
   );
 };
