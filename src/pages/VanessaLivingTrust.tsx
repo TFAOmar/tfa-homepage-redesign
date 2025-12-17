@@ -54,13 +54,13 @@ export default function VanessaLivingTrust() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary via-primary-dark to-primary">
       {/* Co-Branded Header */}
-      <header className="py-6 px-4 border-b border-white/10">
+      <header className="py-6 px-4 bg-white border-b border-gray-100">
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-6 md:gap-10">
-          <img src={tfaLogo} alt="The Financial Architects" className="h-12 md:h-16 object-contain [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.9))_drop-shadow(0_0_4px_rgba(255,255,255,0.8))]" />
-          <div className="h-10 w-px bg-accent/50" />
-          <img src={brandonGroupLogo} alt="THE BRANDON DREW GROUP" className="h-14 md:h-16 object-contain [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.9))_drop-shadow(0_0_4px_rgba(255,255,255,0.8))]" />
+          <img src={tfaLogo} alt="The Financial Architects" className="h-12 md:h-16 object-contain" />
+          <div className="h-10 w-px bg-gray-200" />
+          <img src={brandonGroupLogo} alt="THE BRANDON DREW GROUP" className="h-14 md:h-16 object-contain" />
         </div>
-        <p className="text-center text-white/60 text-sm mt-3 tracking-wide">
+        <p className="text-center text-muted-foreground text-sm mt-3 tracking-wide">
           A Trusted Partnership for Your Family's Future
         </p>
       </header>
@@ -148,9 +148,9 @@ export default function VanessaLivingTrust() {
               expert guidance tailored to your family's unique needs.
             </p>
             <div className="flex items-center justify-center gap-6">
-              <img src={brandonGroupLogo} alt="THE BRANDON DREW GROUP" className="h-12 object-contain [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.9))_drop-shadow(0_0_4px_rgba(255,255,255,0.8))]" />
+              <img src={brandonGroupLogo} alt="THE BRANDON DREW GROUP" className="h-12 object-contain" />
               <span className="text-accent font-medium">×</span>
-              <img src={tfaLogo} alt="The Financial Architects" className="h-10 object-contain [filter:drop-shadow(0_0_12px_rgba(255,255,255,0.9))_drop-shadow(0_0_4px_rgba(255,255,255,0.8))]" />
+              <img src={tfaLogo} alt="The Financial Architects" className="h-10 object-contain" />
             </div>
           </div>
         </div>
@@ -219,17 +219,17 @@ export default function VanessaLivingTrust() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 border-t border-white/10">
+      <footer className="py-8 px-4 bg-white border-t border-gray-100">
         <div className="max-w-6xl mx-auto text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
-            <img src={tfaLogo} alt="The Financial Architects" className="h-8 object-contain [filter:drop-shadow(0_0_10px_rgba(255,255,255,0.9))_drop-shadow(0_0_3px_rgba(255,255,255,0.8))]" />
-            <span className="text-white/30">×</span>
-            <img src={brandonGroupLogo} alt="THE BRANDON DREW GROUP" className="h-10 object-contain [filter:drop-shadow(0_0_10px_rgba(255,255,255,0.9))_drop-shadow(0_0_3px_rgba(255,255,255,0.8))]" />
+            <img src={tfaLogo} alt="The Financial Architects" className="h-8 object-contain" />
+            <span className="text-gray-400">×</span>
+            <img src={brandonGroupLogo} alt="THE BRANDON DREW GROUP" className="h-10 object-contain" />
           </div>
-          <p className="text-white/40 text-sm">
+          <p className="text-muted-foreground text-sm">
             © {new Date().getFullYear()} The Financial Architects. All rights reserved.
           </p>
-          <p className="text-white/30 text-xs mt-2">
+          <p className="text-gray-500 text-xs mt-2">
             This is not legal advice. Please consult with a licensed attorney for specific legal matters.
           </p>
         </div>

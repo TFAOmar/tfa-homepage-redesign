@@ -168,7 +168,7 @@ const MariahKaiZen = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/">
             <img src={tfaLogo} alt="The Financial Architects" className="h-10" />
@@ -588,7 +588,7 @@ const MariahKaiZen = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-primary border-t border-white/10">
+      <footer className="py-8 bg-white border-t border-gray-100">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <Link to="/">
