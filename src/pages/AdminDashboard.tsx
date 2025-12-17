@@ -1,17 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Shield, Users, Clock, EyeOff, Archive, Settings, Loader2 } from "lucide-react";
+import { Shield, Users, Clock, EyeOff, Archive, Loader2 } from "lucide-react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdvisorTable from "@/components/admin/AdvisorTable";
 import AdvisorEditModal from "@/components/admin/AdvisorEditModal";
 import BulkActionsBar from "@/components/admin/BulkActionsBar";
 import PendingApprovals from "@/components/admin/PendingApprovals";
-import HomepageAdvisorSettings from "@/components/admin/HomepageAdvisorSettings";
-import DirectoryAdvisorSettings from "@/components/admin/DirectoryAdvisorSettings";
-import ImageMigrationCard from "@/components/admin/ImageMigrationCard";
+import AdvisorSettingsPanel from "@/components/admin/AdvisorSettingsPanel";
 import { 
   useAdminAdvisors, 
   useUpdateAdvisor, 
@@ -148,19 +145,32 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        {/* Header */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="flex items-center justify-center gap-3 mb-4">
+        {/* Header with Inline Workflow Toggle */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 animate-fade-in">
+          <div className="flex items-center gap-3">
             <Shield className="h-10 w-10 text-accent" />
-            <h1 className="text-4xl md:text-5xl font-bold text-navy">Admin Dashboard</h1>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-navy">Admin Dashboard</h1>
+              <p className="text-muted-foreground">Manage advisor profiles and visibility</p>
+            </div>
           </div>
-          <p className="text-xl text-muted-foreground">
-            Manage advisor profiles and approval workflows
-          </p>
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-card border shadow-sm">
+            <div className="text-right hidden sm:block">
+              <p className="text-sm font-medium text-foreground">Admin Approval</p>
+              <p className="text-xs text-muted-foreground">
+                {adminApprovalEnabled ? "Required for new profiles" : "Auto-publish enabled"}
+              </p>
+            </div>
+            <span className="text-sm font-medium sm:hidden">Approval</span>
+            <Switch 
+              checked={adminApprovalEnabled} 
+              onCheckedChange={toggleAdminApproval}
+            />
+          </div>
         </div>
 
-        {/* Stats & Filters */}
-        <div className="mb-8">
+        {/* Search & Filters */}
+        <div className="mb-6">
           <AdminHeader
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
@@ -173,41 +183,9 @@ const AdminDashboard = () => {
           />
         </div>
 
-        {/* Settings Cards Row 1 */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          {/* Workflow Settings Card */}
-          <Card className="glass animate-fade-in">
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <Settings className="h-5 w-5 text-accent" />
-                <CardTitle className="text-navy">Workflow Settings</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-foreground">Admin Approval Required</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {adminApprovalEnabled
-                      ? "New profiles must be approved before appearing in directory"
-                      : "New profiles are automatically published to directory"}
-                  </p>
-                </div>
-                <Switch checked={adminApprovalEnabled} onCheckedChange={toggleAdminApproval} />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Homepage Advisor Settings */}
-          <HomepageAdvisorSettings />
-
-          {/* Image Migration Tools */}
-          <ImageMigrationCard />
-        </div>
-
-        {/* Directory Advisor Settings - Full Width */}
+        {/* Advisor Settings Panel - Full Width */}
         <div className="mb-8">
-          <DirectoryAdvisorSettings />
+          <AdvisorSettingsPanel />
         </div>
 
         {/* Bulk Actions */}
@@ -221,7 +199,7 @@ const AdminDashboard = () => {
           />
         </div>
 
-        {/* Tabs */}
+        {/* Advisor Management Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="glass p-1">
             <TabsTrigger value="all" className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
