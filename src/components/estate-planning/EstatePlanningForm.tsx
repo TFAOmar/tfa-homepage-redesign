@@ -58,9 +58,10 @@ export const EstatePlanningForm = () => {
     try {
       const { error } = await supabase.functions.invoke("send-form-notification", {
         body: {
-          formType: "Estate Planning Consultation",
+          formType: "estate-planning",
           formData: {
             ...data,
+            firstName: data.firstName,
             fullName: `${data.firstName} ${data.lastName}`,
             source: window.location.pathname,
           },
