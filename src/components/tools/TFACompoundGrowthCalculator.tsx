@@ -7,8 +7,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { TrendingUp, DollarSign, PiggyBank, GitCompare, ChevronDown, ChevronUp } from "lucide-react";
+import { TrendingUp, DollarSign, PiggyBank, GitCompare, ChevronDown, ChevronUp, Mail } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import EmailResultsModal from "./EmailResultsModal";
+import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
 
 interface CalculatorInputs {
   initialInvestment: number;
@@ -59,6 +63,8 @@ const TFACompoundGrowthCalculator = () => {
   const [results, setResults] = useState<CalculationResults | null>(null);
   const [comparisonResults, setComparisonResults] = useState<ComparisonResults | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
 
   const validateInputs = () => {
     const newErrors: Record<string, string> = {};
@@ -170,6 +176,56 @@ const TFACompoundGrowthCalculator = () => {
     setErrors({});
     setCompareMode(false);
     setScenarioBMode("none");
+  };
+
+  const handleEmailResults = async (email: string, firstName: string) => {
+    const currentResults = results || comparisonResults?.scenarioA;
+    if (!currentResults) return;
+
+    setEmailLoading(true);
+    try {
+      const pdfInputs = [
+        { label: "Initial Investment", value: formatCurrency(inputs.initialInvestment) },
+        { label: "Monthly Contribution", value: formatCurrency(inputs.monthlyContribution) },
+        { label: "Time Horizon", value: `${inputs.years} years` },
+        { label: "Annual Return Rate", value: `${inputs.annualRate}%` },
+      ];
+
+      const pdfResults = [
+        { label: "PROJECTED BALANCE", value: formatCurrency(currentResults.finalBalance), highlight: true },
+        { label: "Total Contributions", value: formatCurrency(currentResults.totalContributions) },
+        { label: "Total Growth", value: formatCurrency(currentResults.totalGrowth) },
+      ];
+
+      const pdfBase64 = generateCalculatorPdf({
+        calculatorName: "Compound Growth Calculator",
+        inputs: pdfInputs,
+        results: pdfResults,
+        insights: [
+          "Compound growth accelerates over time - the earlier you start, the more you benefit.",
+          "Consistent monthly contributions can significantly boost your final balance.",
+        ],
+      });
+
+      const { error } = await supabase.functions.invoke("send-calculator-results", {
+        body: {
+          email,
+          firstName,
+          calculatorName: "Compound Growth Calculator",
+          pdfBase64,
+          resultsSummary: pdfResults.map(r => ({ label: r.label, value: r.value })),
+        },
+      });
+
+      if (error) throw error;
+      toast.success("Results sent to your email!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("Failed to send email. Please try again.");
+      throw error;
+    } finally {
+      setEmailLoading(false);
+    }
   };
 
   const handleScenarioBModeChange = (mode: "none" | "no-interest" | "custom") => {
@@ -434,6 +490,15 @@ const TFACompoundGrowthCalculator = () => {
               >
                 Reset
               </Button>
+              {(results || comparisonResults) && (
+                <Button
+                  onClick={() => setEmailModalOpen(true)}
+                  variant="outline"
+                  className="h-12 px-4"
+                >
+                  <Mail className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           </div>
           </Card>
@@ -988,6 +1053,14 @@ const TFACompoundGrowthCalculator = () => {
           )}
         </div>
       </div>
+
+      <EmailResultsModal
+        open={emailModalOpen}
+        onOpenChange={setEmailModalOpen}
+        calculatorName="Compound Growth Calculator"
+        onSendEmail={handleEmailResults}
+        isLoading={emailLoading}
+      />
     </div>
   );
 };

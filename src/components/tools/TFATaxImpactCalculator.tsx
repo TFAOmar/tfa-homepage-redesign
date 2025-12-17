@@ -5,7 +5,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { DollarSign, FileText, Calculator, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { DollarSign, FileText, Calculator, ArrowRight, ChevronDown, ChevronUp, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import EmailResultsModal from "./EmailResultsModal";
+import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
 
 type FilingStatus = "single" | "married-joint" | "married-separate" | "head-of-household";
 
@@ -171,6 +175,8 @@ export default function TFATaxImpactCalculator() {
   });
 
   const [results, setResults] = useState<TaxResults | null>(null);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
 
   const calculateFederalTax = (taxableIncome: number, status: FilingStatus): number => {
     if (!isFinite(taxableIncome) || taxableIncome <= 0) return 0;
@@ -290,6 +296,57 @@ export default function TFATaxImpactCalculator() {
       otherIncome: 0,
     });
     setResults(null);
+  };
+
+  const handleEmailResults = async (email: string, firstName: string) => {
+    if (!results) return;
+
+    setEmailLoading(true);
+    try {
+      const stateName = states.find(s => s.code === stateCode)?.name || stateCode;
+      const pdfInputs = [
+        { label: "Filing Status", value: filingStatus.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase()) },
+        { label: "State", value: stateName },
+        { label: "Total Annual Income", value: formatCurrency(totalAnnualIncome) },
+      ];
+
+      const pdfResults = [
+        { label: "AFTER-TAX MONTHLY INCOME", value: formatCurrency(results.afterTaxMonthly), highlight: true },
+        { label: "Federal Tax", value: formatCurrency(results.federalTax) },
+        { label: "State Tax", value: formatCurrency(results.stateTax) },
+        { label: "Total Tax", value: formatCurrency(results.totalTax) },
+        { label: "Effective Tax Rate", value: formatPercent(results.combinedEffectiveRate) },
+      ];
+
+      const pdfBase64 = generateCalculatorPdf({
+        calculatorName: "Tax Impact Calculator",
+        inputs: pdfInputs,
+        results: pdfResults,
+        insights: [
+          "Tax-efficient withdrawal strategies can help maximize your after-tax income.",
+          "Consider the tax implications of different retirement account types.",
+        ],
+      });
+
+      const { error } = await supabase.functions.invoke("send-calculator-results", {
+        body: {
+          email,
+          firstName,
+          calculatorName: "Tax Impact Calculator",
+          pdfBase64,
+          resultsSummary: pdfResults.map(r => ({ label: r.label, value: r.value })),
+        },
+      });
+
+      if (error) throw error;
+      toast.success("Results sent to your email!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("Failed to send email. Please try again.");
+      throw error;
+    } finally {
+      setEmailLoading(false);
+    }
   };
 
   const formatCurrency = (value: number) => {
@@ -540,6 +597,11 @@ export default function TFATaxImpactCalculator() {
             <Button onClick={handleReset} variant="outline" size="lg">
               Reset
             </Button>
+            {results && (
+              <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg">
+                <Mail className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </div>
 
@@ -753,6 +815,14 @@ export default function TFATaxImpactCalculator() {
           qualified tax professional or advisor before making decisions.
         </p>
       </div>
+
+      <EmailResultsModal
+        open={emailModalOpen}
+        onOpenChange={setEmailModalOpen}
+        calculatorName="Tax Impact Calculator"
+        onSendEmail={handleEmailResults}
+        isLoading={emailLoading}
+      />
     </div>
   );
 }

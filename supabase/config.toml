@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.migrate-advisor-images]
 verify_jwt = true
+
+[functions.send-calculator-results]
+verify_jwt = false

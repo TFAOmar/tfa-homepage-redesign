@@ -12,7 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router-dom";
-import { Target } from "lucide-react";
+import { Target, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import EmailResultsModal from "./EmailResultsModal";
+import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
 
 type SavingsMode = "monthly" | "annual" | "lumpsum";
 
@@ -34,6 +38,8 @@ export default function TFARequiredSavingsCalculator() {
   const [returnRate, setReturnRate] = useState("7");
   const [savingsMode, setSavingsMode] = useState<SavingsMode>("monthly");
   const [result, setResult] = useState<CalculationResult | null>(null);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
 
   const formatCurrency = (value: number) => {
     if (!isFinite(value)) return "$0";
@@ -136,6 +142,58 @@ export default function TFARequiredSavingsCalculator() {
     setReturnRate("7");
     setSavingsMode("monthly");
     setResult(null);
+  };
+
+  const handleEmailResults = async (email: string, firstName: string) => {
+    if (!result) return;
+
+    setEmailLoading(true);
+    try {
+      const pdfInputs = [
+        { label: "Goal Type", value: goalType.charAt(0).toUpperCase() + goalType.slice(1) },
+        { label: "Target Amount", value: formatCurrency(result.targetGoal) },
+        { label: "Time Horizon", value: `${result.timeframe} years` },
+        { label: "Current Savings", value: formatCurrency(result.currentSavings) },
+        { label: "Expected Return", value: `${result.returnRate}%` },
+      ];
+
+      const modeLabel = savingsMode === "monthly" ? "per month" : savingsMode === "annual" ? "per year" : "lump sum today";
+      const pdfResults = [
+        { label: `REQUIRED SAVINGS (${modeLabel})`, value: formatCurrency(result.requiredAmount), highlight: true },
+        { label: "Target Goal", value: formatCurrency(result.targetGoal) },
+        { label: "Timeframe", value: `${result.timeframe} years` },
+        { label: "Status", value: result.isOnTrack ? "On Track" : "Action Needed" },
+      ];
+
+      const pdfBase64 = generateCalculatorPdf({
+        calculatorName: "Required Savings Calculator",
+        inputs: pdfInputs,
+        results: pdfResults,
+        insights: [
+          "Small, consistent contributions compound significantly over time.",
+          "Review and adjust your savings plan annually to stay on track.",
+        ],
+      });
+
+      const { error } = await supabase.functions.invoke("send-calculator-results", {
+        body: {
+          email,
+          firstName,
+          calculatorName: "Required Savings Calculator",
+          pdfBase64,
+          resultsSummary: pdfResults.map(r => ({ label: r.label, value: r.value })),
+        },
+      });
+
+      if (error) throw error;
+      toast.success("Results sent to your email!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("Failed to send email. Please try again.");
+      throw error;
+    } finally {
+      setEmailLoading(false);
+    }
   };
 
   const getModeLabel = () => {
@@ -310,6 +368,16 @@ export default function TFARequiredSavingsCalculator() {
             >
               Reset
             </Button>
+            {result && (
+              <Button
+                onClick={() => setEmailModalOpen(true)}
+                variant="outline"
+                className="flex-1 sm:flex-initial border-white/20 hover:bg-white/5 rounded-full py-6"
+              >
+                <Mail className="h-4 w-4 mr-2" />
+                Email
+              </Button>
+            )}
           </div>
         </div>
 
@@ -420,6 +488,14 @@ export default function TFARequiredSavingsCalculator() {
           This calculator is for educational purposes only and does not guarantee future results. Actual outcomes may vary based on market performance, contributions, fees, taxes, and other factors. Consider speaking with a licensed advisor before making investment decisions.
         </p>
       </div>
+
+      <EmailResultsModal
+        open={emailModalOpen}
+        onOpenChange={setEmailModalOpen}
+        calculatorName="Required Savings Calculator"
+        onSendEmail={handleEmailResults}
+        isLoading={emailLoading}
+      />
     </div>
   );
 }
