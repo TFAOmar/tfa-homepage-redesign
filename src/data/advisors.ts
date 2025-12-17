@@ -47,7 +47,8 @@ export const advisors: Advisor[] = [
     specialties: ["Retirement Planning", "Tax Strategies", "Estate Planning", "Business Planning"],
     licenses: ["Life & Health (Lic# 0D87636)"],
     image: manuelSotoImg,
-    email: "manuel@tfainsuranceadvisors.com"
+    email: "manuel@tfainsuranceadvisors.com",
+    landingPage: "/advisors/manuel-soto"
   },
   {
     id: "israel-castaneda",
@@ -179,7 +180,8 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health (Lic# 4379309)"],
     image: hamletOhandjanianImg,
     email: "hamleto@tfainsuranceadvisors.com",
-    yearsOfExperience: 28
+    yearsOfExperience: 28,
+    landingPage: "/advisors/hamlet-ohandjanian"
   },
   {
     id: "delia-plascencia",
@@ -223,7 +225,8 @@ export const advisors: Advisor[] = [
     specialties: ["Estate Planning", "Tax Strategies", "Retirement Planning", "Life Insurance"],
     licenses: ["Life & Health"],
     image: seanCagleImg,
-    email: "scagle@tfainsuranceadvisors.com"
+    email: "scagle@tfainsuranceadvisors.com",
+    landingPage: "/advisors/sean-cagle"
   },
   {
     id: "vanessa-sanchez",
@@ -253,7 +256,8 @@ export const advisors: Advisor[] = [
     licenses: ["NMLS# 252846", "Reverse Mortgage Certified"],
     image: ruthPachecoImg,
     email: "ruth@tfainsuranceadvisors.com",
-    yearsOfExperience: 36
+    yearsOfExperience: 36,
+    landingPage: "/advisors/ruth-pacheco"
   },
   {
     id: "tamara-lee",

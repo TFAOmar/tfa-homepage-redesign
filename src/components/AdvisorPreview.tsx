@@ -69,7 +69,7 @@ const AdvisorPreview = () => {
                   {advisor?.bio}
                 </p>
                 
-                <Link to={`/contact?advisor=${advisor?.id}`}>
+                <Link to={advisor?.landingPage || `/contact?advisor=${advisor?.id}`}>
                   <Button
                     variant="outline"
                     className="w-full group-hover:bg-accent group-hover:text-accent-foreground group-hover:border-accent transition-all text-base py-6"
