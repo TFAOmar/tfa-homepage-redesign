@@ -59,12 +59,13 @@ import Annuities from "./pages/Annuities";
 import Rollovers401k from "./pages/Rollovers401k";
 import InsuranceServices from "./pages/InsuranceServices";
 import GroupRetirement from "./pages/GroupRetirement";
+import AmericanWayHealth from "./pages/AmericanWayHealth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning', '/services/annuities', '/services/401k-rollovers', '/services/insurance', '/services/group-retirement', '/advisors/recinos'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning', '/services/annuities', '/services/401k-rollovers', '/services/insurance', '/services/group-retirement', '/advisors/recinos', '/health-insurance/american-way-health'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -129,6 +130,7 @@ const AppLayout = () => {
           <Route path="/services/401k-rollovers" element={<Rollovers401k />} />
           <Route path="/services/insurance" element={<InsuranceServices />} />
           <Route path="/services/group-retirement" element={<GroupRetirement />} />
+          <Route path="/health-insurance/american-way-health" element={<AmericanWayHealth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

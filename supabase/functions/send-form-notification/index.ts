@@ -71,6 +71,7 @@ const ALLOWED_FORM_TYPES = [
   "group-retirement",
   "estate-planning",
   "medicare-inquiry",
+  "health-insurance-inquiry",
 ] as const;
 
 // Form type specific confirmation email config
@@ -292,6 +293,16 @@ const getConfirmationEmailConfig = (formType: string, advisorName?: string): Con
         "Have your current coverage details ready for the consultation"
       ],
       signOff: advisorName || "The Financial Architects Team"
+    },
+    "health-insurance-inquiry": {
+      subject: "Your Health Insurance Quote Request Has Been Received",
+      bodyIntro: "Thank you for your interest in finding the right health coverage for you and your family.",
+      nextSteps: [
+        "A licensed health insurance specialist from American Way Health will review your information",
+        "You can expect to be contacted within 24 hours",
+        "No commitment required - this is a complimentary quote"
+      ],
+      signOff: "American Way Health & The Financial Architects"
     }
   };
 
@@ -665,7 +676,8 @@ serve(async (req: Request): Promise<Response> => {
       "insurance",
       "group-retirement",
       "estate-planning",
-      "medicare-inquiry"
+      "medicare-inquiry",
+      "health-insurance-inquiry"
     ];
     
     // Extract prospect info - handle different field naming conventions
