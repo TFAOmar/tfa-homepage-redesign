@@ -2,6 +2,7 @@ import { Shield, Users, Heart, Phone, CheckCircle, Building2, UserCheck, FileTex
 import { Button } from "@/components/ui/button";
 import tfaLogo from "@/assets/tfa-logo.png";
 import awhLogo from "@/assets/partners/american-way-health.png";
+import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
 import AmericanWayHealthForm from "@/components/health-insurance/AmericanWayHealthForm";
 
 const scrollToForm = () => {
@@ -87,7 +88,17 @@ const AmericanWayHealth = () => {
             <div className="h-8 w-px bg-gray-200" />
             <img src={awhLogo} alt="American Way Health" className="h-10 md:h-12" />
           </div>
-          <span className="hidden md:block text-muted-foreground text-sm">A Trusted Partnership</span>
+          <div className="hidden md:flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-sm font-semibold text-foreground">Anthony Bottley</p>
+              <p className="text-xs text-muted-foreground">President, American Way Health</p>
+            </div>
+            <img 
+              src={anthonyBottleyImg} 
+              alt="Anthony Bottley" 
+              className="w-12 h-12 rounded-full object-cover border-2 border-accent/20"
+            />
+          </div>
         </div>
       </header>
 
