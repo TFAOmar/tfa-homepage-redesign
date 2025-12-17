@@ -50,6 +50,7 @@ const checkRateLimit = (ip: string): { allowed: boolean; remaining: number; rese
 // Allowed form types for validation
 const ALLOWED_FORM_TYPES = [
   "contact",
+  "contact-inquiry",
   "business-insurance",
   "agent-application",
   "careers-inquiry",
@@ -59,6 +60,62 @@ const ALLOWED_FORM_TYPES = [
   "consultation",
   "schedule-inquiry",
 ] as const;
+
+// Generate prospect confirmation email HTML
+const getProspectConfirmationEmail = (
+  firstName: string, 
+  advisorName: string, 
+  formType: string
+): string => {
+  const advisorFirstName = advisorName.split(" ")[0];
+  const isScheduleRequest = formType === "schedule-inquiry";
+  
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #0A0F1F 0%, #131A2A 100%); color: #E4B548; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+          .content { background: #fff; padding: 30px; border: 1px solid #e5e5e5; border-top: none; border-radius: 0 0 8px 8px; }
+          .cta-button { display: inline-block; background: #E4B548; color: #0A0F1F; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; margin-top: 20px; }
+          .footer { text-align: center; margin-top: 20px; padding: 20px; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1 style="margin: 0; font-size: 24px;">The Financial Architects</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">We've Received Your Request</p>
+          </div>
+          <div class="content">
+            <h2 style="color: #0A0F1F; margin-top: 0;">Hi ${firstName},</h2>
+            <p>Thank you for reaching out! ${isScheduleRequest ? `Your consultation request with ${advisorFirstName} has been received.` : `Your message to ${advisorFirstName} has been received.`}</p>
+            <p><strong>What happens next?</strong></p>
+            <ul>
+              <li>${advisorFirstName} will review your information</li>
+              <li>You can expect to hear back within 1-2 business days</li>
+              <li>If you have any urgent questions, call us at (888) 350-5396</li>
+            </ul>
+            <p>We look forward to helping you achieve your financial goals.</p>
+            <p style="margin-top: 30px;">
+              Warm regards,<br>
+              <strong>${advisorFirstName}</strong><br>
+              The Financial Architects
+            </p>
+          </div>
+          <div class="footer">
+            <p>The Financial Architects | (888) 350-5396</p>
+            <p>13890 Peyton Dr, Chino Hills, CA 91709</p>
+            <p>© ${new Date().getFullYear()} The Financial Architects. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+};
 
 // Zod schema for request validation
 const requestSchema = z.object({
@@ -108,6 +165,7 @@ const getFormSubject = (formType: string, formData: Record<string, unknown>): st
   
   const subjects: Record<string, string> = {
     contact: `New Contact Inquiry from ${name}`,
+    "contact-inquiry": `New Contact Message for ${advisorName || "Advisor"} from ${name}`,
     "business-insurance": `New Business Insurance Request from ${businessName || name}`,
     "agent-application": `New Agent Application from ${name}`,
     "careers-inquiry": `New Career Inquiry from ${name}`,
@@ -338,6 +396,43 @@ serve(async (req: Request): Promise<Response> => {
         .from("form_submissions")
         .update({ email_sent: true })
         .eq("id", submissionData.id);
+    }
+
+    // Send confirmation email to prospect for contact/schedule inquiries on advisor pages
+    const confirmationFormTypes = ["contact-inquiry", "schedule-inquiry"];
+    const prospectEmail = formData.email as string;
+    const advisorName = formData.advisorName as string;
+    const prospectFirstName = formData.firstName as string;
+
+    if (confirmationFormTypes.includes(formType) && prospectEmail && advisorName && prospectFirstName) {
+      console.log(`Sending confirmation email to prospect: ${prospectEmail}`);
+      
+      const confirmationHtml = getProspectConfirmationEmail(prospectFirstName, advisorName, formType);
+      const confirmationSubject = formType === "schedule-inquiry" 
+        ? "Your Consultation Request Has Been Received" 
+        : "We've Received Your Message";
+      
+      const confirmationRes = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: "The Financial Architects <noreply@tfainsuranceadvisors.com>",
+          to: [prospectEmail],
+          subject: confirmationSubject,
+          html: confirmationHtml,
+        }),
+      });
+
+      if (!confirmationRes.ok) {
+        const confirmationError = await confirmationRes.json();
+        console.error("Failed to send confirmation email to prospect:", confirmationError);
+        // Don't throw - main email was sent successfully
+      } else {
+        console.log("Confirmation email sent to prospect successfully");
+      }
     }
 
     return new Response(JSON.stringify({ success: true, data, submissionId: submissionData?.id }), {
