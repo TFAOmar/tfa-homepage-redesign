@@ -154,12 +154,12 @@ const TamaraLeeMedicare = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img src={tfaLogo} alt="The Financial Architects" className="h-10" />
           </Link>
-          <div className="hidden md:flex items-center gap-2 text-white/80">
+          <div className="hidden md:flex items-center gap-2 text-muted-foreground">
             <Phone className="h-4 w-4" />
             <span className="text-sm">Your Medicare Specialist: Tamara Lee</span>
           </div>
@@ -482,26 +482,26 @@ const TamaraLeeMedicare = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-primary border-t border-white/10">
+      <footer className="py-12 bg-white border-t border-gray-100">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <img src={tfaLogo} alt="The Financial Architects" className="h-8" />
-              <span className="text-white/60 text-sm">
+              <span className="text-muted-foreground text-sm">
                 © {new Date().getFullYear()} The Financial Architects
               </span>
             </div>
             <div className="flex items-center gap-6">
               <a
                 href="tel:+18883505396"
-                className="text-white/80 hover:text-accent transition-colors flex items-center gap-2"
+                className="text-foreground hover:text-accent transition-colors flex items-center gap-2"
               >
                 <Phone className="h-4 w-4" />
                 (888) 350-5396
               </a>
             </div>
           </div>
-          <div className="mt-8 text-center text-white/40 text-xs max-w-3xl mx-auto">
+          <div className="mt-8 text-center text-gray-500 text-xs max-w-3xl mx-auto">
             <p className="mb-2">
               This is a solicitation for insurance. Tamara Lee is a licensed insurance
               agent. Medicare has neither reviewed nor endorsed this information.

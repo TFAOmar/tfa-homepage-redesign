@@ -80,14 +80,14 @@ const AmericanWayHealth = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary via-navy to-primary">
       {/* Co-Branded Header */}
-      <header className="py-4 px-6 border-b border-white/10">
+      <header className="py-4 px-6 bg-white border-b border-gray-100">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4 md:gap-8">
             <img src={tfaLogo} alt="The Financial Architects" className="h-10 md:h-12" />
-            <div className="h-8 w-px bg-white/20" />
+            <div className="h-8 w-px bg-gray-200" />
             <img src={awhLogo} alt="American Way Health" className="h-10 md:h-12" />
           </div>
-          <span className="hidden md:block text-white/60 text-sm">A Trusted Partnership</span>
+          <span className="hidden md:block text-muted-foreground text-sm">A Trusted Partnership</span>
         </div>
       </header>
 
@@ -233,19 +233,19 @@ const AmericanWayHealth = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-white/10">
+      <footer className="py-8 px-6 bg-white border-t border-gray-100">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <img src={awhLogo} alt="American Way Health" className="h-8" />
-              <span className="text-white/40">×</span>
+              <span className="text-gray-400">×</span>
               <img src={tfaLogo} alt="The Financial Architects" className="h-8" />
             </div>
-            <p className="text-white/50 text-sm text-center md:text-right">
+            <p className="text-muted-foreground text-sm text-center md:text-right">
               © {new Date().getFullYear()} American Way Health & The Financial Architects. All rights reserved.
             </p>
           </div>
-          <p className="text-white/40 text-xs text-center mt-4">
+          <p className="text-gray-500 text-xs text-center mt-4">
             Health insurance products are offered through licensed agents. Coverage and availability may vary by state.
           </p>
         </div>
