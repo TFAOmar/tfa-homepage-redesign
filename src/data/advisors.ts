@@ -149,7 +149,8 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health (Lic# 4152322)"],
     image: ismaelVerveraImg,
     email: "ismael@tfainsuranceadvisors.com",
-    yearsOfExperience: 25
+    yearsOfExperience: 25,
+    landingPage: "/advisors/ismael-ververa"
   },
   {
     id: "joe-jessie-nieto",
