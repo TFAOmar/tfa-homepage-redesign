@@ -1,14 +1,21 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRight, Building2, Heart, Briefcase } from "lucide-react";
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
+import ScheduleModal from "@/components/advisors/ScheduleModal";
+import ContactModal from "@/components/advisors/ContactModal";
+
 const AdvisorVanessaSanchez = () => {
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   const specialties = ["Retirement Planning", "Estate Planning", "Tax Strategies", "Business Planning", "Life Insurance"];
   const services = [{
     icon: Target,
@@ -52,7 +59,9 @@ const AdvisorVanessaSanchez = () => {
     title: "Implementation",
     description: "Guided execution of your plan with ongoing support and adjustments as your life evolves."
   }];
-  return <div className="min-h-screen bg-background">
+
+  return (
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary/90" />
@@ -76,18 +85,23 @@ const AdvisorVanessaSanchez = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start mb-8">
-                <Link to="/book-consultation">
-                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-8 py-6 w-full sm:w-auto">
-                    <Calendar className="mr-2 h-5 w-5" />
-                    Book a Consultation
-                  </Button>
-                </Link>
-                <Link to="/contact">
-                  <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-secondary-foreground">
-                    <Phone className="mr-2 h-5 w-5" />
-                    Contact Me
-                  </Button>
-                </Link>
+                <Button 
+                  size="lg" 
+                  className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-8 py-6 w-full sm:w-auto"
+                  onClick={() => setScheduleModalOpen(true)}
+                >
+                  <Calendar className="mr-2 h-5 w-5" />
+                  Book a Consultation
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-white"
+                  onClick={() => setContactModalOpen(true)}
+                >
+                  <Mail className="mr-2 h-5 w-5" />
+                  Contact Me
+                </Button>
                 <Link to="/advisors/vanessa-sanchez/living-trust">
                   <Button size="lg" variant="outline" className="border-accent/50 hover:bg-accent/20 text-lg px-8 py-6 w-full sm:w-auto text-accent">
                     <Shield className="mr-2 h-5 w-5" />
@@ -150,9 +164,11 @@ const AdvisorVanessaSanchez = () => {
             <div className="mt-12 text-center">
               <h3 className="text-xl font-semibold text-foreground mb-6">Areas of Expertise</h3>
               <div className="flex flex-wrap gap-3 justify-center">
-                {specialties.map(specialty => <Badge key={specialty} className="bg-accent/10 text-accent border-accent/30 px-4 py-2 text-sm">
+                {specialties.map(specialty => (
+                  <Badge key={specialty} className="bg-accent/10 text-accent border-accent/30 px-4 py-2 text-sm">
                     {specialty}
-                  </Badge>)}
+                  </Badge>
+                ))}
               </div>
             </div>
           </div>
@@ -173,7 +189,8 @@ const AdvisorVanessaSanchez = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {services.map((service, index) => <Card key={index} className="bg-white/5 backdrop-blur-xl border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 group">
+            {services.map((service, index) => (
+              <Card key={index} className="bg-white/5 backdrop-blur-xl border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 group">
                 <div className="w-14 h-14 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent/30 transition-colors">
                   <service.icon className="h-7 w-7 text-accent" />
                 </div>
@@ -188,7 +205,8 @@ const AdvisorVanessaSanchez = () => {
                     <ChevronRight className="h-4 w-4 ml-1" />
                   </Link>
                 )}
-              </Card>)}
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -207,14 +225,18 @@ const AdvisorVanessaSanchez = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {processSteps.map((step, index) => <div key={index} className="relative">
+            {processSteps.map((step, index) => (
+              <div key={index} className="relative">
                 <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-6 rounded-2xl h-full">
                   <div className="text-5xl font-bold text-accent/20 mb-4">{step.step}</div>
                   <h3 className="text-xl font-semibold text-foreground mb-3">{step.title}</h3>
                   <p className="text-muted-foreground">{step.description}</p>
                 </Card>
-                {index < processSteps.length - 1 && <ChevronRight className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-accent/40 h-8 w-8" />}
-              </div>)}
+                {index < processSteps.length - 1 && (
+                  <ChevronRight className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-accent/40 h-8 w-8" />
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -234,12 +256,14 @@ const AdvisorVanessaSanchez = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/book-consultation">
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-8 py-6 w-full sm:w-auto">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Book Your Free Consultation
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-8 py-6 w-full sm:w-auto"
+                onClick={() => setScheduleModalOpen(true)}
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Book Your Free Consultation
+              </Button>
             </div>
 
             <p className="text-white/60 mt-6 text-sm">
@@ -248,6 +272,24 @@ const AdvisorVanessaSanchez = () => {
           </div>
         </div>
       </section>
-    </div>;
+
+      {/* Modals */}
+      <ScheduleModal
+        open={scheduleModalOpen}
+        onOpenChange={setScheduleModalOpen}
+        advisorName="Vanessa Sanchez"
+        advisorEmail="vsanchez@tfainsuranceadvisors.com"
+        advisorImage={vanessaSanchezImg}
+      />
+      <ContactModal
+        open={contactModalOpen}
+        onOpenChange={setContactModalOpen}
+        advisorName="Vanessa Sanchez"
+        advisorEmail="vsanchez@tfainsuranceadvisors.com"
+        advisorImage={vanessaSanchezImg}
+      />
+    </div>
+  );
 };
+
 export default AdvisorVanessaSanchez;

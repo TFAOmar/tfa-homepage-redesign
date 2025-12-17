@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,6 +19,8 @@ import {
   CheckCircle2
 } from "lucide-react";
 import tamaraLeeImg from "@/assets/advisors/tamara-lee.jpg";
+import ScheduleModal from "@/components/advisors/ScheduleModal";
+import ContactModal from "@/components/advisors/ContactModal";
 
 const specialties = [
   "Medicare Planning",
@@ -84,6 +86,9 @@ const processSteps = [
 ];
 
 const AdvisorTamaraLee = () => {
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -129,12 +134,10 @@ const AdvisorTamaraLee = () => {
                 <Button 
                   size="lg" 
                   className="bg-accent hover:bg-accent/90 text-accent-foreground"
-                  asChild
+                  onClick={() => setScheduleModalOpen(true)}
                 >
-                  <Link to="/book-consultation">
-                    <Calendar className="mr-2 h-5 w-5" />
-                    Book a Consultation
-                  </Link>
+                  <Calendar className="mr-2 h-5 w-5" />
+                  Book a Consultation
                 </Button>
                 <Button 
                   size="lg" 
@@ -150,12 +153,10 @@ const AdvisorTamaraLee = () => {
                   size="lg" 
                   variant="outline" 
                   className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
-                  asChild
+                  onClick={() => setContactModalOpen(true)}
                 >
-                  <a href="mailto:tlee@tfainsuranceadvisors.com">
-                    <Mail className="mr-2 h-5 w-5" />
-                    Contact Me
-                  </a>
+                  <Mail className="mr-2 h-5 w-5" />
+                  Contact Me
                 </Button>
               </div>
             </div>
@@ -295,12 +296,10 @@ const AdvisorTamaraLee = () => {
             <Button 
               size="lg" 
               className="bg-accent hover:bg-accent/90 text-accent-foreground"
-              asChild
+              onClick={() => setScheduleModalOpen(true)}
             >
-              <Link to="/book-consultation">
-                <Calendar className="mr-2 h-5 w-5" />
-                Book a Consultation
-              </Link>
+              <Calendar className="mr-2 h-5 w-5" />
+              Book a Consultation
             </Button>
             <Button 
               size="lg" 
@@ -331,6 +330,22 @@ const AdvisorTamaraLee = () => {
           </div>
         </div>
       </section>
+
+      {/* Modals */}
+      <ScheduleModal
+        open={scheduleModalOpen}
+        onOpenChange={setScheduleModalOpen}
+        advisorName="Tamara Lee"
+        advisorEmail="tlee@tfainsuranceadvisors.com"
+        advisorImage={tamaraLeeImg}
+      />
+      <ContactModal
+        open={contactModalOpen}
+        onOpenChange={setContactModalOpen}
+        advisorName="Tamara Lee"
+        advisorEmail="tlee@tfainsuranceadvisors.com"
+        advisorImage={tamaraLeeImg}
+      />
     </div>
   );
 };
