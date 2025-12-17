@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +16,8 @@ import {
   Award
 } from "lucide-react";
 import ruthImage from "@/assets/advisors/ruth-pacheco.jpg";
+import ScheduleModal from "@/components/advisors/ScheduleModal";
+import ContactModal from "@/components/advisors/ContactModal";
 
 const specialties = [
   "Reverse Mortgages",
@@ -84,6 +85,9 @@ const processSteps = [
 ];
 
 const AdvisorRuthPacheco = () => {
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -124,18 +128,23 @@ const AdvisorRuthPacheco = () => {
               </div>
 
               <div className="flex flex-wrap gap-4 pt-4">
-                <Link to="/book-consultation">
-                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold">
-                    <Calendar className="mr-2 h-5 w-5" />
-                    Book a Consultation
-                  </Button>
-                </Link>
-                <a href="mailto:ruth@tfainsuranceadvisors.com">
-                  <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                    <Mail className="mr-2 h-5 w-5" />
-                    Contact Me
-                  </Button>
-                </a>
+                <Button 
+                  size="lg" 
+                  className="bg-accent hover:bg-accent/90 text-primary font-semibold"
+                  onClick={() => setScheduleModalOpen(true)}
+                >
+                  <Calendar className="mr-2 h-5 w-5" />
+                  Book a Consultation
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white/30 text-white hover:bg-white/10"
+                  onClick={() => setContactModalOpen(true)}
+                >
+                  <Mail className="mr-2 h-5 w-5" />
+                  Contact Me
+                </Button>
               </div>
             </div>
 
@@ -293,12 +302,14 @@ const AdvisorRuthPacheco = () => {
               to help you find the right mortgage solution. Schedule your free consultation today.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/book-consultation">
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Book Your Free Consultation
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                className="bg-accent hover:bg-accent/90 text-primary font-semibold"
+                onClick={() => setScheduleModalOpen(true)}
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Book Your Free Consultation
+              </Button>
               <a href="tel:8883505396">
                 <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
                   <Phone className="mr-2 h-5 w-5" />
@@ -312,6 +323,22 @@ const AdvisorRuthPacheco = () => {
           </div>
         </div>
       </section>
+
+      {/* Modals */}
+      <ScheduleModal
+        open={scheduleModalOpen}
+        onOpenChange={setScheduleModalOpen}
+        advisorName="Ruth Pacheco"
+        advisorEmail="ruth@tfainsuranceadvisors.com"
+        advisorImage={ruthImage}
+      />
+      <ContactModal
+        open={contactModalOpen}
+        onOpenChange={setContactModalOpen}
+        advisorName="Ruth Pacheco"
+        advisorEmail="ruth@tfainsuranceadvisors.com"
+        advisorImage={ruthImage}
+      />
     </div>
   );
 };
