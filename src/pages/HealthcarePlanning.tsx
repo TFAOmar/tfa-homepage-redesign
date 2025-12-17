@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Phone, Heart, Shield, Clock, Stethoscope, FileHeart, Wallet, ChevronRight } from "lucide-react";
+import { Phone, Heart, Shield, Clock, Stethoscope, FileHeart, Wallet, ChevronRight, ArrowRight } from "lucide-react";
 import tfaLogo from "@/assets/tfa-logo.png";
+import americanWayHealthLogo from "@/assets/partners/american-way-health.png";
 import { ServiceConsultationForm } from "@/components/services/ServiceConsultationForm";
 import {
   Accordion,
@@ -182,6 +183,41 @@ const HealthcarePlanning = () => {
                 Maximize Health Savings Account benefits for tax-free healthcare 
                 spending now and in retirement.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Health Insurance Partner Callout */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-card border-2 border-accent/30 rounded-2xl p-8 md:p-10 hover:border-accent/50 transition-colors">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <div className="flex-shrink-0">
+                  <img 
+                    src={americanWayHealthLogo} 
+                    alt="American Way Health" 
+                    className="h-20 md:h-24 w-auto object-contain"
+                  />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-2xl font-bold text-foreground mb-3">
+                    Need Health Insurance Beyond Medicare?
+                  </h3>
+                  <p className="text-muted-foreground mb-6">
+                    Through our partnership with American Way Health, we offer comprehensive 
+                    health insurance solutions for individuals, families, and businesses—including 
+                    ACA plans, short-term coverage, and group health options.
+                  </p>
+                  <Button asChild className="btn-primary-cta">
+                    <Link to="/health-insurance/american-way-health">
+                      Explore Health Insurance Options
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
