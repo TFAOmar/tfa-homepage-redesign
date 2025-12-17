@@ -46,6 +46,10 @@ import TamaraLeeMedicare from "./pages/TamaraLeeMedicare";
 import MariahKaiZen from "./pages/MariahKaiZen";
 import RecinosBusinessInsurance from "./pages/RecinosBusinessInsurance";
 import AdvisorIsmaelVervera from "./pages/AdvisorIsmaelVervera";
+import AdvisorManuelSoto from "./pages/AdvisorManuelSoto";
+import AdvisorHamletOhandjanian from "./pages/AdvisorHamletOhandjanian";
+import AdvisorSeanCagle from "./pages/AdvisorSeanCagle";
+import AdvisorRuthPacheco from "./pages/AdvisorRuthPacheco";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
 import InvestmentManagement from "./pages/InvestmentManagement";
@@ -111,6 +115,10 @@ const AppLayout = () => {
           <Route path="/advisors/tamara-lee/medicare" element={<TamaraLeeMedicare />} />
           <Route path="/advisors/recinos" element={<RecinosBusinessInsurance />} />
           <Route path="/advisors/ismael-ververa" element={<AdvisorIsmaelVervera />} />
+          <Route path="/advisors/manuel-soto" element={<AdvisorManuelSoto />} />
+          <Route path="/advisors/hamlet-ohandjanian" element={<AdvisorHamletOhandjanian />} />
+          <Route path="/advisors/sean-cagle" element={<AdvisorSeanCagle />} />
+          <Route path="/advisors/ruth-pacheco" element={<AdvisorRuthPacheco />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
           <Route path="/services/estate-planning" element={<EstatePlanning />} />
           <Route path="/services/income-planning" element={<IncomePlanning />} />
