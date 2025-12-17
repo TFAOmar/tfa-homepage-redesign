@@ -50,6 +50,7 @@ import AdvisorManuelSoto from "./pages/AdvisorManuelSoto";
 import AdvisorHamletOhandjanian from "./pages/AdvisorHamletOhandjanian";
 import AdvisorSeanCagle from "./pages/AdvisorSeanCagle";
 import AdvisorRuthPacheco from "./pages/AdvisorRuthPacheco";
+import AdvisorAnthonyBottley from "./pages/AdvisorAnthonyBottley";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
 import InvestmentManagement from "./pages/InvestmentManagement";
@@ -120,6 +121,7 @@ const AppLayout = () => {
           <Route path="/advisors/hamlet-ohandjanian" element={<AdvisorHamletOhandjanian />} />
           <Route path="/advisors/sean-cagle" element={<AdvisorSeanCagle />} />
           <Route path="/advisors/ruth-pacheco" element={<AdvisorRuthPacheco />} />
+          <Route path="/advisors/anthony-bottley" element={<AdvisorAnthonyBottley />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
           <Route path="/services/estate-planning" element={<EstatePlanning />} />
           <Route path="/services/income-planning" element={<IncomePlanning />} />
