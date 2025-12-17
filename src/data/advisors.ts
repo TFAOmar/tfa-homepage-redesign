@@ -14,6 +14,7 @@ import seanCagleImg from "@/assets/advisors/sean-cagle.jpg";
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
 import ruthPachecoImg from "@/assets/advisors/ruth-pacheco.jpg";
 import tamaraLeeImg from "@/assets/advisors/tamara-lee.jpg";
+import ismaelVerveraImg from "@/assets/advisors/ismael-ververa.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -134,6 +135,20 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health (Lic# 0F66052)"],
     image: jorgeHernandezImg,
     yearsOfExperience: 30
+  },
+  {
+    id: "ismael-ververa",
+    name: "Ismael Ververa",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Claremont",
+    region: "West",
+    bio: "With nearly 25 years as a licensed realtor and 30 years in law enforcement, Ismael brings a unique blend of expertise to financial planning. His background instilled a strong sense of duty and ethical standards that he carries into helping families achieve financial success. Known for his community service mindset, Ismael focuses on sustainable investment strategies and empowering clients to achieve stability in their lives.",
+    specialties: ["Real Estate", "Retirement Planning", "Investment Management", "Estate Planning"],
+    licenses: ["Life & Health (Lic# 4152322)"],
+    image: ismaelVerveraImg,
+    yearsOfExperience: 25
   },
   {
     id: "joe-jessie-nieto",
