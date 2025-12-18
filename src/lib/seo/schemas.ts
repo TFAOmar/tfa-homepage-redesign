@@ -231,3 +231,116 @@ export const generateWebApplicationSchema = (
   },
   provider: { "@id": `${siteConfig.url}/#organization` },
 });
+
+// ContactPage schema
+export const generateContactPageSchema = (url: string) => ({
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": `${url}/#contactpage`,
+  url,
+  name: "Contact Us | The Financial Architects",
+  description: "Get in touch with our financial planning team. Contact us by phone, email, or visit one of our 19 office locations.",
+  mainEntity: { "@id": `${siteConfig.url}/#organization` },
+});
+
+// Blog schema
+export const generateBlogSchema = (url: string) => ({
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": `${url}/#blog`,
+  url,
+  name: "Financial Planning Insights | The Financial Architects",
+  description: "Expert articles on retirement planning, investment strategies, tax planning, and wealth management.",
+  publisher: { "@id": `${siteConfig.url}/#organization` },
+  inLanguage: "en-US",
+});
+
+// Event schema
+export const generateEventSchema = (
+  name: string,
+  description: string,
+  startDate: string,
+  endDate: string,
+  location: string,
+  url: string
+) => ({
+  "@context": "https://schema.org",
+  "@type": "EducationEvent",
+  "@id": `${url}/#event`,
+  name,
+  description,
+  startDate,
+  endDate,
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
+  location: {
+    "@type": "Place",
+    name: location,
+  },
+  organizer: { "@id": `${siteConfig.url}/#organization` },
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+  },
+});
+
+// JobPosting schema
+export const generateJobPostingSchema = (
+  title: string,
+  description: string,
+  url: string,
+  employmentType: string = "FULL_TIME"
+) => ({
+  "@context": "https://schema.org",
+  "@type": "JobPosting",
+  "@id": `${url}/#jobposting`,
+  title,
+  description,
+  url,
+  datePosted: new Date().toISOString().split("T")[0],
+  validThrough: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+  employmentType,
+  hiringOrganization: { "@id": `${siteConfig.url}/#organization` },
+  jobLocation: {
+    "@type": "Place",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: siteConfig.address.city,
+      addressRegion: siteConfig.address.state,
+      addressCountry: siteConfig.address.country,
+    },
+  },
+  baseSalary: {
+    "@type": "MonetaryAmount",
+    currency: "USD",
+    value: {
+      "@type": "QuantitativeValue",
+      minValue: 50000,
+      maxValue: 150000,
+      unitText: "YEAR",
+    },
+  },
+});
+
+// HowTo schema for process pages
+export const generateHowToSchema = (
+  name: string,
+  description: string,
+  steps: Array<{ name: string; text: string }>,
+  url: string
+) => ({
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": `${url}/#howto`,
+  name,
+  description,
+  url,
+  step: steps.map((step, index) => ({
+    "@type": "HowToStep",
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+});
