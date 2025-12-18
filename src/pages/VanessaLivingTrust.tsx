@@ -266,5 +266,6 @@ export default function VanessaLivingTrust() {
         </div>
       </footer>
     </div>
+    </>
   );
 }
