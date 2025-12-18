@@ -1,13 +1,34 @@
 import TFARequiredSavingsCalculator from "@/components/tools/TFARequiredSavingsCalculator";
-import { useEffect } from "react";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateWebApplicationSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 export default function RequiredSavingsCalculator() {
-  useEffect(() => {
-    document.title = "Required Savings to Hit Your Goal | The Financial Architects";
-  }, []);
-
   return (
     <>
+      <SEOHead
+        title="Required Savings Calculator"
+        description="Find out how much to save monthly, annually, or as a lump sum to reach your financial goals. Plan your path to retirement or any savings target."
+        canonical={`${siteConfig.url}/tools/required-savings-calculator`}
+        keywords="savings goal calculator, required savings, how much to save, retirement savings calculator, financial goal planner"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Required Savings Calculator | The Financial Architects",
+          "Find out how much to save monthly, annually, or as a lump sum to reach your financial goals. Plan your path to retirement or any savings target.",
+          `${siteConfig.url}/tools/required-savings-calculator`
+        ),
+        generateWebApplicationSchema(
+          "Required Savings Calculator",
+          "Find out how much to save monthly, annually, or as a lump sum to reach your financial goals. Plan your path to retirement or any savings target.",
+          `${siteConfig.url}/tools/required-savings-calculator`
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Tools", url: `${siteConfig.url}/tools` },
+          { name: "Required Savings Calculator", url: `${siteConfig.url}/tools/required-savings-calculator` }
+        ])
+      ]} />
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-background/95">
         <main className="container mx-auto px-4 pt-24 pb-16 md:pt-32 md:pb-24">
           {/* Page Header */}

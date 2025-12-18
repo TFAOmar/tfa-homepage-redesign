@@ -1,8 +1,10 @@
-import { useEffect } from "react";
 import { TrendingUp, PiggyBank, Receipt, Target, Landmark, Shield } from "lucide-react";
 import ToolsHero from "@/components/tools/ToolsHero";
 import ToolCard from "@/components/tools/ToolCard";
 import ToolsCTA from "@/components/tools/ToolsCTA";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const tools = [
   {
@@ -44,12 +46,26 @@ const tools = [
 ];
 
 export default function Tools() {
-  useEffect(() => {
-    document.title = "Financial Tools & Calculators | The Financial Architects";
-  }, []);
-
   return (
-    <div className="min-h-screen">
+    <>
+      <SEOHead
+        title="Financial Calculators & Planning Tools"
+        description="Free retirement calculators and financial planning tools. Estimate compound growth, retirement income, tax impact, required savings, and more."
+        canonical={`${siteConfig.url}/tools`}
+        keywords="retirement calculator, compound growth calculator, tax impact calculator, financial planning tools, retirement income estimator"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Financial Calculators & Planning Tools | The Financial Architects",
+          "Free retirement calculators and financial planning tools. Estimate compound growth, retirement income, tax impact, required savings, and more.",
+          `${siteConfig.url}/tools`
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Tools", url: `${siteConfig.url}/tools` }
+        ])
+      ]} />
+      <div className="min-h-screen">
       <ToolsHero />
 
       {/* Tools Grid */}
@@ -88,7 +104,8 @@ export default function Tools() {
         </div>
       </section>
 
-      <ToolsCTA />
-    </div>
+        <ToolsCTA />
+      </div>
+    </>
   );
 }

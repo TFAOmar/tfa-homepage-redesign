@@ -1,12 +1,35 @@
-import { useEffect } from "react";
 import TFACompoundGrowthCalculator from "@/components/tools/TFACompoundGrowthCalculator";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateWebApplicationSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const CompoundGrowthCalculator = () => {
-  useEffect(() => {
-    document.title = "Compound Growth Calculator | The Financial Architects";
-  }, []);
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
+    <>
+      <SEOHead
+        title="Compound Growth Calculator"
+        description="Calculate how your investments grow over time with compound interest. See the power of consistent saving and compounding on your long-term wealth."
+        canonical={`${siteConfig.url}/tools/compound-growth-calculator`}
+        keywords="compound growth calculator, compound interest calculator, investment growth estimator, savings calculator, compound interest"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Compound Growth Calculator | The Financial Architects",
+          "Calculate how your investments grow over time with compound interest. See the power of consistent saving and compounding on your long-term wealth.",
+          `${siteConfig.url}/tools/compound-growth-calculator`
+        ),
+        generateWebApplicationSchema(
+          "Compound Growth Calculator",
+          "Calculate how your investments grow over time with compound interest. See the power of consistent saving and compounding on your long-term wealth.",
+          `${siteConfig.url}/tools/compound-growth-calculator`
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Tools", url: `${siteConfig.url}/tools` },
+          { name: "Compound Growth Calculator", url: `${siteConfig.url}/tools/compound-growth-calculator` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
       {/* Header */}
       <section className="pt-16 md:pt-20 pb-10">
         <div className="container mx-auto px-4 max-w-5xl">
@@ -77,7 +100,8 @@ const CompoundGrowthCalculator = () => {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 

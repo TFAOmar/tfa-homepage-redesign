@@ -1,13 +1,34 @@
-import { useEffect } from "react";
 import TFATaxImpactCalculator from "@/components/tools/TFATaxImpactCalculator";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateWebApplicationSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 export default function TaxImpactCalculator() {
-  useEffect(() => {
-    document.title = "Tax Impact Calculator | The Financial Architects";
-  }, []);
-
   return (
     <>
+      <SEOHead
+        title="Tax Impact Calculator"
+        description="Estimate federal and state taxes on your retirement income. See how much you may keep after taxes and plan for a tax-efficient retirement."
+        canonical={`${siteConfig.url}/tools/tax-impact-calculator`}
+        keywords="retirement tax calculator, tax impact estimator, federal tax calculator, state tax retirement, after-tax income"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Tax Impact Calculator | The Financial Architects",
+          "Estimate federal and state taxes on your retirement income. See how much you may keep after taxes and plan for a tax-efficient retirement.",
+          `${siteConfig.url}/tools/tax-impact-calculator`
+        ),
+        generateWebApplicationSchema(
+          "Tax Impact Calculator",
+          "Estimate federal and state taxes on your retirement income. See how much you may keep after taxes and plan for a tax-efficient retirement.",
+          `${siteConfig.url}/tools/tax-impact-calculator`
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Tools", url: `${siteConfig.url}/tools` },
+          { name: "Tax Impact Calculator", url: `${siteConfig.url}/tools/tax-impact-calculator` }
+        ])
+      ]} />
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-background/95">
         <main className="container mx-auto px-4 pt-24 pb-16 md:pt-32 md:pb-24">
           {/* Page Header */}
