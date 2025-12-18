@@ -344,3 +344,109 @@ export const generateHowToSchema = (
     text: step.text,
   })),
 });
+
+// Product schema for shop pages
+export const generateProductSchema = (
+  name: string,
+  description: string,
+  price: string,
+  currency: string,
+  imageUrl: string,
+  url: string,
+  availability: string = "InStock"
+) => ({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${url}/#product`,
+  name,
+  description,
+  image: imageUrl,
+  url,
+  offers: {
+    "@type": "Offer",
+    price: parseFloat(price.replace(/[^0-9.]/g, "")),
+    priceCurrency: currency,
+    availability: `https://schema.org/${availability}`,
+    seller: { "@id": `${siteConfig.url}/#organization` },
+  },
+});
+
+// Article schema for blog posts
+export const generateArticleSchema = (
+  title: string,
+  description: string,
+  url: string,
+  datePublished: string,
+  dateModified: string,
+  imageUrl: string,
+  authorName: string = "The Financial Architects"
+) => ({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": `${url}/#article`,
+  headline: title,
+  description,
+  url,
+  image: imageUrl,
+  datePublished,
+  dateModified,
+  author: {
+    "@type": "Organization",
+    name: authorName,
+    url: siteConfig.url,
+  },
+  publisher: { "@id": `${siteConfig.url}/#organization` },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": url,
+  },
+});
+
+// InsuranceAgency schema for business insurance pages
+export const generateInsuranceAgencySchema = (
+  name: string,
+  description: string,
+  url: string,
+  specialties: string[]
+) => ({
+  "@context": "https://schema.org",
+  "@type": "InsuranceAgency",
+  "@id": `${url}/#insuranceagency`,
+  name,
+  description,
+  url,
+  parentOrganization: { "@id": `${siteConfig.url}/#organization` },
+  areaServed: siteConfig.areasServed.map((area) => ({
+    "@type": "State",
+    name: area,
+  })),
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Business Insurance Services",
+    itemListElement: specialties.map((specialty) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: specialty },
+    })),
+  },
+});
+
+// MedicalBusiness schema for healthcare/medicare pages
+export const generateMedicalBusinessSchema = (
+  name: string,
+  description: string,
+  url: string,
+  specialties: string[]
+) => ({
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "@id": `${url}/#medicalbusiness`,
+  name,
+  description,
+  url,
+  parentOrganization: { "@id": `${siteConfig.url}/#organization` },
+  medicalSpecialty: specialties,
+  areaServed: siteConfig.areasServed.map((area) => ({
+    "@type": "State",
+    name: area,
+  })),
+});

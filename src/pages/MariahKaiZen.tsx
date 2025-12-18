@@ -27,6 +27,9 @@ import tfaLogo from "@/assets/tfa-logo.png";
 import mariahLorenzenImg from "@/assets/advisors/mariah-lorenzen.jpg";
 import MariahKaiZenForm from "@/components/kaizen/MariahKaiZenForm";
 import KaiZenCalculator from "@/components/kaizen/KaiZenCalculator";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema, generatePersonSchema, generateServiceSchema, generateFAQSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const scrollToForm = () => {
   document.getElementById('kai-zen-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -166,7 +169,41 @@ const MariahKaiZen = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Kai-Zen Strategy with Mariah Lorenzen"
+        description="Supercharge your retirement with Kai-Zen leveraged life insurance. Work with Mariah Lorenzen, your dedicated Kai-Zen specialist at The Financial Architects."
+        canonical={`${siteConfig.url}/mariah-kaizen`}
+        keywords="Kai-Zen strategy, leveraged life insurance, retirement planning, Mariah Lorenzen, tax-free retirement"
+      />
+      <JsonLd
+        data={[
+          generateWebPageSchema(
+            "Kai-Zen Strategy with Mariah Lorenzen",
+            "Supercharge your retirement with Kai-Zen leveraged life insurance.",
+            `${siteConfig.url}/mariah-kaizen`
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Kai-Zen", url: `${siteConfig.url}/mariah-kaizen` },
+          ]),
+          generatePersonSchema(
+            "Mariah Lorenzen",
+            "Head of Franchise Operations & Kai-Zen Specialist",
+            "Licensed financial professional with nearly 30 years of experience in real estate, mortgage lending, and retirement planning strategies.",
+            `${siteConfig.url}/assets/advisors/mariah-lorenzen.jpg`,
+            `${siteConfig.url}/mariah-kaizen`,
+            ["Kai-Zen Strategy", "Retirement Planning", "Life Insurance"]
+          ),
+          generateServiceSchema(
+            "Kai-Zen Leveraged Life Insurance",
+            "Innovative leveraged retirement strategy using bank-financed life insurance.",
+            `${siteConfig.url}/mariah-kaizen`
+          ),
+          generateFAQSchema(faqs),
+        ]}
+      />
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -607,6 +644,7 @@ const MariahKaiZen = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 

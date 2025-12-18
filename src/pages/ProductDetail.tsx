@@ -8,6 +8,9 @@ import { ShoppingCart, ArrowLeft, Loader2, Minus, Plus } from "lucide-react";
 import { ShopifyProduct, fetchProductByHandle, fetchProducts } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
@@ -102,7 +105,31 @@ const ProductDetail = () => {
   const hasMultipleVariants = node.variants.edges.length > 1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-navy via-navy-light to-navy">
+    <>
+      <SEOHead
+        title={node.title}
+        description={node.description || `Shop ${node.title} from The Financial Architects merchandise store.`}
+        canonical={`${siteConfig.url}/shop/${handle}`}
+      />
+      <JsonLd
+        data={[
+          generateProductSchema(
+            node.title,
+            node.description || "TFA branded merchandise",
+            selectedVariant?.price.amount || "0",
+            selectedVariant?.price.currencyCode || "USD",
+            imageUrl || "",
+            `${siteConfig.url}/shop/${handle}`,
+            selectedVariant?.availableForSale ? "InStock" : "OutOfStock"
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Shop", url: `${siteConfig.url}/shop` },
+            { name: node.title, url: `${siteConfig.url}/shop/${handle}` },
+          ]),
+        ]}
+      />
+      <div className="min-h-screen bg-gradient-to-br from-navy via-navy-light to-navy">
       <div className="container mx-auto px-4 py-12">
         <Button 
           variant="ghost" 
@@ -265,6 +292,7 @@ const ProductDetail = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import RecinosBusinessInsuranceForm from "@/components/business-insurance/RecinosBusinessInsuranceForm";
 import tfaLogo from "@/assets/tfa-logo.png";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema, generateInsuranceAgencySchema, generateFAQSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const stats = [
   { value: "$1.2M+", label: "Avg. Business Assets Protected" },
@@ -102,7 +105,34 @@ const RecinosBusinessInsurance = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Business Insurance with Rolando & Savannah Recinos"
+        description="Expert commercial insurance solutions for your business. Get a free quote for general liability, workers' comp, commercial property, and more."
+        canonical={`${siteConfig.url}/recinos-business-insurance`}
+        keywords="business insurance, commercial insurance, Rolando Recinos, Savannah Recinos"
+      />
+      <JsonLd
+        data={[
+          generateWebPageSchema(
+            "Business Insurance | Rolando & Savannah Recinos",
+            "Expert commercial insurance solutions for your business.",
+            `${siteConfig.url}/recinos-business-insurance`
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Business Insurance", url: `${siteConfig.url}/recinos-business-insurance` },
+          ]),
+          generateInsuranceAgencySchema(
+            "TFA Business Insurance - Recinos Team",
+            "Expert commercial insurance solutions for businesses of all sizes.",
+            `${siteConfig.url}/recinos-business-insurance`,
+            coverageTypes
+          ),
+          generateFAQSchema(faqs),
+        ]}
+      />
+      <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">

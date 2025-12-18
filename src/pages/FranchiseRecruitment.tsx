@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import FranchiseApplicationForm from "@/components/careers/FranchiseApplicationForm";
 import { Building2, DollarSign, TrendingUp, Users, Target, Shield, Award, MapPin, CheckCircle2, ArrowRight, BookOpen, Headphones, BarChart3, Globe, Briefcase } from "lucide-react";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema, generateJobPostingSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 const franchiseFees = [{
   name: "Initial Franchise Fee",
   amount: "$15,000",
@@ -103,7 +106,34 @@ const FranchiseRecruitment = () => {
   }, []);
   const totalLow = 35000;
   const totalHigh = 68500;
-  return <div className="min-h-screen">
+  return <>
+      <SEOHead
+        title="Franchise Opportunity"
+        description="Own a TFA franchise and build generational wealth. Join a proven financial services franchise with comprehensive training and unlimited earning potential."
+        canonical={`${siteConfig.url}/franchise-recruitment`}
+        keywords="financial services franchise, insurance franchise, TFA franchise opportunity, franchise ownership"
+      />
+      <JsonLd
+        data={[
+          generateWebPageSchema(
+            "Franchise Opportunity | The Financial Architects",
+            "Own a TFA franchise and build generational wealth.",
+            `${siteConfig.url}/franchise-recruitment`
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Careers", url: `${siteConfig.url}/careers` },
+            { name: "Franchise Opportunity", url: `${siteConfig.url}/franchise-recruitment` },
+          ]),
+          generateJobPostingSchema(
+            "Franchise Owner / Managing Partner",
+            "Own a TFA franchise with comprehensive training, established carrier relationships, and unlimited earning potential. Initial investment $35,000-$68,500.",
+            `${siteConfig.url}/franchise-recruitment`,
+            "FULL_TIME"
+          ),
+        ]}
+      />
+      <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary via-primary/95 to-primary/90 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMtNi42MjcgMC0xMiA1LjM3My0xMiAxMnM1LjM3MyAxMiAxMiAxMiAxMi01LjM3MyAxMi0xMi01LjM3My0xMi0xMi0xMnoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9nPjwvc3ZnPg==')] opacity-30" />
@@ -365,6 +395,7 @@ const FranchiseRecruitment = () => {
           </div>
         </div>
       </section>
-    </div>;
+    </div>
+    </>;
 };
 export default FranchiseRecruitment;

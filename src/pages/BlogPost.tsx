@@ -15,6 +15,9 @@ import retirementImage from "@/assets/blog/retirement-planning.jpg";
 import estateImage from "@/assets/blog/estate-planning.jpg";
 import taxImage from "@/assets/blog/tax-strategy.jpg";
 import investmentImage from "@/assets/blog/investment-fundamentals.jpg";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const blogPosts: Record<string, any> = {
   "complete-guide-retirement-planning": {
@@ -61,13 +64,37 @@ const BlogPost = () => {
   const post = blogPosts[slug];
 
   return (
-    <BlogPostTemplate
-      title={post.title}
-      date={post.date}
-      category={post.category}
-      readTime={post.readTime}
-      bannerImage={post.bannerImage}
-    >
+    <>
+      <SEOHead
+        title={post.title}
+        description={`Read our article on ${post.title.toLowerCase()}. Expert financial planning insights from The Financial Architects.`}
+        canonical={`${siteConfig.url}/blog/${slug}`}
+        ogType="article"
+      />
+      <JsonLd
+        data={[
+          generateArticleSchema(
+            post.title,
+            `Expert insights on ${post.category.toLowerCase()} from The Financial Architects.`,
+            `${siteConfig.url}/blog/${slug}`,
+            post.date,
+            post.date,
+            post.bannerImage
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Blog", url: `${siteConfig.url}/blog` },
+            { name: post.title, url: `${siteConfig.url}/blog/${slug}` },
+          ]),
+        ]}
+      />
+      <BlogPostTemplate
+        title={post.title}
+        date={post.date}
+        category={post.category}
+        readTime={post.readTime}
+        bannerImage={post.bannerImage}
+      >
       <IntroText>
         Financial planning is more than just saving money—it&apos;s about creating a comprehensive strategy that aligns with your life goals, values, and aspirations. In this guide, we&apos;ll explore the essential components of effective financial planning and provide you with actionable steps to secure your financial future.
       </IntroText>
@@ -164,6 +191,7 @@ const BlogPost = () => {
         Remember, the best time to start planning was yesterday—the second-best time is today. Don&apos;t let uncertainty or complexity hold you back from building the financial future you deserve.
       </Paragraph>
     </BlogPostTemplate>
+    </>
   );
 };
 

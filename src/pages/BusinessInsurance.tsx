@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { Building2, Briefcase, Wrench, Shield, Phone, CheckCircle } from "lucide-react";
 import BusinessContactForm from "@/components/business-insurance/BusinessContactForm";
 import businessInsuranceHero from "@/assets/business-insurance-hero.jpg";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema, generateInsuranceAgencySchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const coverages = [
   "General Liability",
@@ -17,7 +20,33 @@ const coverages = [
 
 const BusinessInsurance = () => {
   return (
-    <div className="bg-gradient-to-b from-[#0A0F1F] to-[#131A2A] min-h-screen text-white font-sans">
+    <>
+      <SEOHead
+        title="Business Insurance"
+        description="Protect what you've built with comprehensive business insurance. General liability, workers' comp, commercial property, and more tailored to your business needs."
+        canonical={`${siteConfig.url}/business-insurance`}
+        keywords="business insurance, commercial insurance, general liability, workers compensation, commercial property"
+      />
+      <JsonLd
+        data={[
+          generateWebPageSchema(
+            "Business Insurance | The Financial Architects",
+            "Comprehensive business insurance solutions designed to protect what you've built.",
+            `${siteConfig.url}/business-insurance`
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Business Insurance", url: `${siteConfig.url}/business-insurance` },
+          ]),
+          generateInsuranceAgencySchema(
+            "TFA Business Insurance",
+            "Expert commercial insurance solutions for businesses of all sizes.",
+            `${siteConfig.url}/business-insurance`,
+            coverages
+          ),
+        ]}
+      />
+      <div className="bg-gradient-to-b from-[#0A0F1F] to-[#131A2A] min-h-screen text-white font-sans">
       {/* SECTION 1 — HERO */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         {/* Background Image with Overlay */}
@@ -292,6 +321,7 @@ const BusinessInsurance = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

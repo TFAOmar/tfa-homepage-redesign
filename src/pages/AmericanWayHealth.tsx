@@ -4,6 +4,9 @@ import tfaLogo from "@/assets/tfa-logo.png";
 import awhLogo from "@/assets/partners/american-way-health.png";
 import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
 import AmericanWayHealthForm from "@/components/health-insurance/AmericanWayHealthForm";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema, generateServiceSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const scrollToForm = () => {
   document.getElementById("quote-form")?.scrollIntoView({ behavior: "smooth" });
@@ -79,7 +82,32 @@ const steps = [
 
 const AmericanWayHealth = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary via-navy to-primary">
+    <>
+      <SEOHead
+        title="American Way Health - Health Insurance Solutions"
+        description="Affordable health coverage for individuals, families, and businesses. Expert guidance on individual, group, and Medicare health insurance options."
+        canonical={`${siteConfig.url}/american-way-health`}
+        keywords="health insurance, individual health plans, family health insurance, group health, Medicare"
+      />
+      <JsonLd
+        data={[
+          generateWebPageSchema(
+            "American Way Health | The Financial Architects",
+            "Affordable health coverage for you, your family, and your business.",
+            `${siteConfig.url}/american-way-health`
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Health Insurance", url: `${siteConfig.url}/american-way-health` },
+          ]),
+          generateServiceSchema(
+            "Health Insurance Services",
+            "Individual, family, and group health insurance solutions.",
+            `${siteConfig.url}/american-way-health`
+          ),
+        ]}
+      />
+      <div className="min-h-screen bg-gradient-to-b from-primary via-navy to-primary">
       {/* Co-Branded Header */}
       <header className="py-4 px-6 bg-white border-b border-gray-100">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -262,6 +290,7 @@ const AmericanWayHealth = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 

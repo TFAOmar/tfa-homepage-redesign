@@ -28,6 +28,9 @@ import {
 import tfaLogo from "@/assets/tfa-logo.png";
 import tamaraLeeImg from "@/assets/advisors/tamara-lee.jpg";
 import { TamaraLeeMedicareForm } from "@/components/medicare/TamaraLeeMedicareForm";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema, generatePersonSchema, generateMedicalBusinessSchema, generateFAQSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const stats = [
   { value: "65", label: "Medicare Eligibility Age" },
@@ -152,7 +155,42 @@ const TamaraLeeMedicare = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Medicare Planning with Tamara Lee"
+        description="Navigate Medicare with confidence. Tamara Lee is your dedicated Medicare specialist, helping with enrollment, plan selection, and ongoing coverage decisions."
+        canonical={`${siteConfig.url}/tamara-lee-medicare`}
+        keywords="Medicare specialist, Medicare planning, Medicare Advantage, Medigap, Tamara Lee, healthcare planning"
+      />
+      <JsonLd
+        data={[
+          generateWebPageSchema(
+            "Medicare Planning with Tamara Lee",
+            "Navigate Medicare with confidence with your dedicated Medicare specialist.",
+            `${siteConfig.url}/tamara-lee-medicare`
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Medicare Planning", url: `${siteConfig.url}/tamara-lee-medicare` },
+          ]),
+          generatePersonSchema(
+            "Tamara Lee",
+            "Medicare & Retirement Healthcare Specialist",
+            "Over 11 years of experience helping clients navigate Medicare and retirement healthcare decisions.",
+            `${siteConfig.url}/assets/advisors/tamara-lee.jpg`,
+            `${siteConfig.url}/tamara-lee-medicare`,
+            ["Medicare Planning", "Long-Term Care", "Healthcare Strategy"]
+          ),
+          generateMedicalBusinessSchema(
+            "TFA Medicare Planning",
+            "Expert Medicare guidance and enrollment support.",
+            `${siteConfig.url}/tamara-lee-medicare`,
+            ["Medicare Enrollment", "Medicare Advantage", "Medigap", "Part D"]
+          ),
+          generateFAQSchema(faqs),
+        ]}
+      />
+      <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -514,6 +552,7 @@ const TamaraLeeMedicare = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 
