@@ -230,27 +230,27 @@ export default function TFARetirementIncomeCalculator() {
         {/* Left Column - Inputs */}
         <div className="space-y-8 animate-fade-in">
           {/* Main Inputs Card */}
-          <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl p-6 md:p-8">
+          <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6 md:p-8">
             {/* Header with gold accent */}
-            <div className="mb-6 pb-4 border-b border-white/10">
+            <div className="mb-6 pb-4 border-b border-white/15">
               <div className="h-1 w-14 rounded-full bg-primary mb-4" />
-              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2">
                 Retirement Income Inputs
               </h3>
-              <p className="text-xs md:text-sm text-muted-foreground">
+              <p className="text-sm text-white/70">
                 Tell us about your age, savings, and estimated benefits.
               </p>
             </div>
 
             {/* Personal Timeline Subsection */}
             <div className="space-y-4 mb-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Timeline
               </p>
               
               <div className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="currentAge" className="text-sm md:text-base font-medium text-foreground">Current Age</Label>
+                <Label htmlFor="currentAge" className="text-sm font-medium text-white">Current Age</Label>
                 <Input
                   id="currentAge"
                   type="number"
@@ -261,12 +261,12 @@ export default function TFARetirementIncomeCalculator() {
                   }}
                   min={18}
                   max={80}
-                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.currentAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentAge}</p>}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="retirementAge" className="text-sm md:text-base font-medium text-foreground">Planned Retirement Age</Label>
+                <Label htmlFor="retirementAge" className="text-sm font-medium text-white">Planned Retirement Age</Label>
                 <Input
                   id="retirementAge"
                   type="number"
@@ -277,13 +277,13 @@ export default function TFARetirementIncomeCalculator() {
                   }}
                   min={currentAge + 1}
                   max={80}
-                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.retirementAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.retirementAge}</p>}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="incomeEndAge" className="text-sm md:text-base font-medium text-foreground">Plan For Income Until Age</Label>
-                <p className="text-xs text-muted-foreground mt-1">How long do you want your money to last?</p>
+                <Label htmlFor="incomeEndAge" className="text-sm font-medium text-white">Plan For Income Until Age</Label>
+                <p className="text-xs text-white/60 mt-1">How long do you want your money to last?</p>
                 <Input
                   id="incomeEndAge"
                   type="number"
@@ -293,7 +293,7 @@ export default function TFARetirementIncomeCalculator() {
                     setIncomeEndAge(Math.max(retirementAge + 1, value));
                   }}
                   min={retirementAge + 1}
-                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                   {errors.incomeEndAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.incomeEndAge}</p>}
                 </div>
@@ -302,13 +302,13 @@ export default function TFARetirementIncomeCalculator() {
 
             {/* Savings & Growth Subsection */}
             <div className="space-y-4 mt-6 md:mt-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Savings & Growth
               </p>
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="currentSavings" className="text-sm md:text-base font-medium text-foreground">Current Retirement Savings ($)</Label>
+                  <Label htmlFor="currentSavings" className="text-sm font-medium text-white">Current Retirement Savings ($)</Label>
                   <Input
                     id="currentSavings"
                     type="number"
@@ -318,26 +318,26 @@ export default function TFARetirementIncomeCalculator() {
                       setCurrentSavings(Math.max(0, value));
                     }}
                     min={0}
-                    className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.currentSavings && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentSavings}</p>}
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="monthlyContribution" className="text-xs md:text-sm text-foreground">Monthly Contribution Until Retirement ($)</Label>
+                  <Label htmlFor="monthlyContribution" className="text-sm font-medium text-white">Monthly Contribution Until Retirement ($)</Label>
                   <Input
                     id="monthlyContribution"
                     type="number"
                     value={monthlyContribution}
                     onChange={(e) => setMonthlyContribution(Number(e.target.value))}
                     min={0}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.monthlyContribution && (
                     <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.monthlyContribution}</p>
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="returnBeforeRetirement" className="text-xs md:text-sm text-foreground">Expected Annual Return Before Retirement (%)</Label>
+                  <Label htmlFor="returnBeforeRetirement" className="text-sm font-medium text-white">Expected Annual Return Before Retirement (%)</Label>
                   <Input
                     id="returnBeforeRetirement"
                     type="number"
@@ -346,14 +346,14 @@ export default function TFARetirementIncomeCalculator() {
                     min={0}
                     max={15}
                     step={0.1}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.returnBeforeRetirement && (
                     <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.returnBeforeRetirement}</p>
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="returnDuringRetirement" className="text-xs md:text-sm text-foreground">Expected Annual Return During Retirement (%)</Label>
+                  <Label htmlFor="returnDuringRetirement" className="text-sm font-medium text-white">Expected Annual Return During Retirement (%)</Label>
                   <Input
                     id="returnDuringRetirement"
                     type="number"
@@ -362,7 +362,7 @@ export default function TFARetirementIncomeCalculator() {
                     min={0}
                     max={10}
                     step={0.1}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.returnDuringRetirement && (
                     <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.returnDuringRetirement}</p>
@@ -373,44 +373,44 @@ export default function TFARetirementIncomeCalculator() {
 
             {/* Income Sources Subsection */}
             <div className="space-y-4 mt-6 md:mt-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Income Sources in Retirement
               </p>
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="socialSecurity" className="text-xs md:text-sm text-foreground">Estimated Monthly Social Security ($)</Label>
-                  <p className="text-[11px] md:text-xs text-muted-foreground">Use your latest SSA benefit estimate if available.</p>
+                  <Label htmlFor="socialSecurity" className="text-sm font-medium text-white">Estimated Monthly Social Security ($)</Label>
+                  <p className="text-xs text-white/60">Use your latest SSA benefit estimate if available.</p>
                   <Input
                     id="socialSecurity"
                     type="number"
                     value={socialSecurity}
                     onChange={(e) => setSocialSecurity(Number(e.target.value))}
                     min={0}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="pension" className="text-xs md:text-sm text-foreground">Monthly Pension Income ($)</Label>
+                  <Label htmlFor="pension" className="text-sm font-medium text-white">Monthly Pension Income ($)</Label>
                   <Input
                     id="pension"
                     type="number"
                     value={pension}
                     onChange={(e) => setPension(Number(e.target.value))}
                     min={0}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="otherIncome" className="text-xs md:text-sm text-foreground">Other Monthly Income in Retirement ($)</Label>
-                  <p className="text-[11px] md:text-xs text-muted-foreground">Example: rental income, part-time work</p>
+                  <Label htmlFor="otherIncome" className="text-sm font-medium text-white">Other Monthly Income in Retirement ($)</Label>
+                  <p className="text-xs text-white/60">Example: rental income, part-time work</p>
                   <Input
                     id="otherIncome"
                     type="number"
                     value={otherIncome}
                     onChange={(e) => setOtherIncome(Number(e.target.value))}
                     min={0}
-                    className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>
               </div>
@@ -418,13 +418,13 @@ export default function TFARetirementIncomeCalculator() {
 
             {/* Goal Subsection */}
             <div className="space-y-4 mt-6 md:mt-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Goal
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="desiredIncome" className="text-xs md:text-sm text-foreground">Desired Monthly Retirement Income ($)</Label>
-                <p className="text-[11px] md:text-xs text-muted-foreground">
+                <Label htmlFor="desiredIncome" className="text-sm font-medium text-white">Desired Monthly Retirement Income ($)</Label>
+                <p className="text-xs text-white/60">
                   Total amount you'd like to live on each month (before taxes).
                 </p>
                 <Input
@@ -433,7 +433,7 @@ export default function TFARetirementIncomeCalculator() {
                   value={desiredIncome}
                   onChange={(e) => setDesiredIncome(Number(e.target.value))}
                   min={0}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
               </div>
             </div>
@@ -441,14 +441,14 @@ export default function TFARetirementIncomeCalculator() {
 
           {/* Action Buttons */}
           <div className="flex gap-4">
-            <Button onClick={calculateRetirementIncome} size="lg" className="flex-1">
+            <Button onClick={calculateRetirementIncome} size="lg" className="flex-1 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
               Calculate
             </Button>
-            <Button onClick={handleReset} variant="outline" size="lg">
+            <Button onClick={handleReset} variant="outline" size="lg" className="bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
               Reset
             </Button>
             {results && (
-              <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg">
+              <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg" className="bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
                 <Mail className="h-4 w-4" />
               </Button>
             )}
@@ -460,33 +460,33 @@ export default function TFARetirementIncomeCalculator() {
           {results ? (
             <div className="space-y-8 animate-fade-in">
               {/* Summary Card */}
-              <Card className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 backdrop-blur-sm border-primary/20">
+              <Card className="bg-gradient-to-br from-primary/25 via-primary/15 to-secondary/15 backdrop-blur-xl border-primary/30 shadow-xl shadow-primary/20">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-foreground">Your Estimated Monthly Income</CardTitle>
-                  <CardDescription>Based on your inputs</CardDescription>
+                  <CardTitle className="text-2xl text-white font-bold">Your Estimated Monthly Income</CardTitle>
+                  <CardDescription className="text-white/70">Based on your inputs</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <p className="text-4xl md:text-5xl font-bold text-primary mb-2">
+                    <p className="text-4xl md:text-5xl font-bold text-white drop-shadow-[0_0_20px_rgba(228,181,72,0.5)] mb-2">
                       {formatCurrency(results.totalMonthlyIncome)}
                     </p>
-                    <p className="text-sm text-muted-foreground">per month in retirement</p>
+                    <p className="text-sm text-white/70">per month in retirement</p>
                   </div>
 
-                  <div className="pt-4 border-t border-border/50">
+                  <div className="pt-4 border-t border-white/20">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-muted-foreground">Your Goal:</span>
-                      <span className="text-lg font-semibold text-foreground">
+                      <span className="text-white/70">Your Goal:</span>
+                      <span className="text-lg font-semibold text-white">
                         {formatCurrency(results.desiredIncome)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">
+                      <span className="text-white/70">
                         {results.gap >= 0 ? "Surplus:" : "Shortfall:"}
                       </span>
                       <span
-                        className={`text-lg font-semibold ${
-                          results.gap >= 0 ? "text-primary" : "text-red-400"
+                        className={`text-lg font-bold ${
+                          results.gap >= 0 ? "text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.4)]" : "text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.4)]"
                         }`}
                       >
                         {results.gap >= 0 ? "+" : ""}
@@ -495,47 +495,47 @@ export default function TFARetirementIncomeCalculator() {
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-border/50 text-sm text-muted-foreground">
+                  <div className="pt-4 border-t border-white/20 text-sm text-white/70">
                     <p>
-                      <span className="font-medium">{results.yearsToRetirement}</span> years until retirement
+                      <span className="font-semibold text-white">{results.yearsToRetirement}</span> years until retirement
                     </p>
                     <p>
-                      Planning for <span className="font-medium">{results.yearsInRetirement}</span> years of retirement
+                      Planning for <span className="font-semibold text-white">{results.yearsInRetirement}</span> years of retirement
                       income
                     </p>
                     <p className="mt-2">
-                      Projected savings at retirement: <span className="font-medium text-foreground">{formatCurrency(results.savingsAtRetirement)}</span>
+                      Projected savings at retirement: <span className="font-bold text-white">{formatCurrency(results.savingsAtRetirement)}</span>
                     </p>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Income Breakdown */}
-              <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+              <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40">
                 <CardHeader>
-                  <CardTitle className="text-foreground">Monthly Income Breakdown</CardTitle>
-                  <CardDescription>Where your retirement income comes from</CardDescription>
+                  <CardTitle className="text-white font-bold">Monthly Income Breakdown</CardTitle>
+                  <CardDescription className="text-white/70">Where your retirement income comes from</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="space-y-3">
+                  <div className="space-y-3 bg-slate-800/60 rounded-xl p-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">From Savings:</span>
-                      <span className="font-semibold text-foreground">{formatCurrency(results.monthlyFromSavings)}</span>
+                      <span className="text-white/80">From Savings:</span>
+                      <span className="font-semibold text-white">{formatCurrency(results.monthlyFromSavings)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Social Security:</span>
-                      <span className="font-semibold text-foreground">{formatCurrency(results.socialSecurity)}</span>
+                      <span className="text-white/80">Social Security:</span>
+                      <span className="font-semibold text-white">{formatCurrency(results.socialSecurity)}</span>
                     </div>
                     {results.pension > 0 && (
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Pension:</span>
-                        <span className="font-semibold text-foreground">{formatCurrency(results.pension)}</span>
+                        <span className="text-white/80">Pension:</span>
+                        <span className="font-semibold text-white">{formatCurrency(results.pension)}</span>
                       </div>
                     )}
                     {results.otherIncome > 0 && (
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Other Income:</span>
-                        <span className="font-semibold text-foreground">{formatCurrency(results.otherIncome)}</span>
+                        <span className="text-white/80">Other Income:</span>
+                        <span className="font-semibold text-white">{formatCurrency(results.otherIncome)}</span>
                       </div>
                     )}
                   </div>
@@ -574,29 +574,29 @@ export default function TFARetirementIncomeCalculator() {
               </Card>
 
               {/* Timeline Visual */}
-              <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+              <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40">
                 <CardContent className="pt-6">
                   <div className="relative">
                     <div className="flex items-center justify-between mb-4">
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-primary">{currentAge}</p>
-                        <p className="text-xs text-muted-foreground">Today</p>
+                        <p className="text-2xl font-bold text-primary drop-shadow-[0_0_10px_rgba(228,181,72,0.4)]">{currentAge}</p>
+                        <p className="text-xs text-white/70">Today</p>
                       </div>
                       <div className="flex-1 mx-4">
                         <div className="h-1 bg-gradient-to-r from-primary via-accent to-secondary rounded-full" />
-                        <p className="text-xs text-center text-muted-foreground mt-2">Saving & Growth Phase</p>
+                        <p className="text-xs text-center text-white/70 mt-2">Saving & Growth Phase</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-accent">{retirementAge}</p>
-                        <p className="text-xs text-muted-foreground">Retirement</p>
+                        <p className="text-2xl font-bold text-accent drop-shadow-[0_0_10px_rgba(228,181,72,0.4)]">{retirementAge}</p>
+                        <p className="text-xs text-white/70">Retirement</p>
                       </div>
                       <div className="flex-1 mx-4">
                         <div className="h-1 bg-gradient-to-r from-accent to-muted rounded-full" />
-                        <p className="text-xs text-center text-muted-foreground mt-2">Income Phase</p>
+                        <p className="text-xs text-center text-white/70 mt-2">Income Phase</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-muted-foreground">{incomeEndAge}</p>
-                        <p className="text-xs text-muted-foreground">End</p>
+                        <p className="text-2xl font-bold text-white/60">{incomeEndAge}</p>
+                        <p className="text-xs text-white/70">End</p>
                       </div>
                     </div>
                   </div>
@@ -604,14 +604,14 @@ export default function TFARetirementIncomeCalculator() {
               </Card>
 
               {/* Guidance Callout */}
-              <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 backdrop-blur-sm border-primary/20">
+              <Card className="bg-gradient-to-br from-primary/15 to-secondary/15 backdrop-blur-xl border-primary/25 shadow-lg">
                 <CardContent className="pt-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-2">Not sure if this is enough?</h3>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                  <h3 className="text-lg font-bold text-white mb-2">Not sure if this is enough?</h3>
+                  <p className="text-white/70 mb-6 leading-relaxed">
                     A TFA advisor can help you refine your plan, stress-test your assumptions, and build a retirement
                     income strategy tailored to your family.
                   </p>
-                  <Button size="lg" className="w-full group">
+                  <Button size="lg" className="w-full group bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
                     Talk to an Advisor About Your Retirement Plan
                     <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Button>
@@ -619,14 +619,14 @@ export default function TFARetirementIncomeCalculator() {
               </Card>
             </div>
           ) : (
-            <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+            <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40">
               <CardContent className="pt-12 pb-12 text-center">
                 <div className="max-w-md mx-auto space-y-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                  <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                     <TrendingUp className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground">Ready to See Your Future?</h3>
-                  <p className="text-muted-foreground">
+                  <h3 className="text-xl font-bold text-white">Ready to See Your Future?</h3>
+                  <p className="text-white/70">
                     Fill out the form and click Calculate to see your estimated retirement income.
                   </p>
                 </div>
@@ -637,7 +637,7 @@ export default function TFARetirementIncomeCalculator() {
       </div>
 
       {/* Disclaimer */}
-      <div className="mt-12 pt-8 border-t border-border/30">
+      <div className="mt-12 pt-8 border-t border-white/20">
         <p className="text-xs md:text-sm text-white/60 leading-relaxed max-w-3xl mx-auto text-center">
           This calculator is for educational purposes only and does not guarantee future performance. Estimates do not
           account for taxes, fees, inflation, or changes in Social Security or pension benefits. Please speak with a

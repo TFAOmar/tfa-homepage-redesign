@@ -102,17 +102,17 @@ const KaiZenCalculator = () => {
 
   return (
     <div className="w-full">
-      <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-6 md:p-8 rounded-2xl">
+      <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 p-6 md:p-8 rounded-2xl">
         {/* Gender Toggle */}
         <div className="mb-8">
-          <label className="text-sm font-medium text-muted-foreground mb-3 block">Gender</label>
-          <div className="flex rounded-full bg-white/10 p-1 w-fit">
+          <label className="text-sm font-semibold text-white/80 mb-3 block">Gender</label>
+          <div className="flex rounded-full bg-slate-800/80 p-1 w-fit border border-white/15">
             <button
               onClick={() => setGender("male")}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                 gender === "male"
-                  ? "bg-accent text-accent-foreground shadow-lg"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-accent text-accent-foreground shadow-lg shadow-accent/30"
+                  : "text-white/70 hover:text-white"
               }`}
             >
               Male
@@ -121,8 +121,8 @@ const KaiZenCalculator = () => {
               onClick={() => setGender("female")}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                 gender === "female"
-                  ? "bg-accent text-accent-foreground shadow-lg"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-accent text-accent-foreground shadow-lg shadow-accent/30"
+                  : "text-white/70 hover:text-white"
               }`}
             >
               Female
@@ -133,8 +133,8 @@ const KaiZenCalculator = () => {
         {/* Age Slider */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-3">
-            <label className="text-sm font-medium text-muted-foreground">Age</label>
-            <span className="text-2xl font-bold text-accent">{age}</span>
+            <label className="text-sm font-semibold text-white/80">Age</label>
+            <span className="text-2xl font-bold text-accent drop-shadow-[0_0_10px_rgba(228,181,72,0.4)]">{age}</span>
           </div>
           <Slider
             value={[age]}
@@ -144,7 +144,7 @@ const KaiZenCalculator = () => {
             step={1}
             className="w-full"
           />
-          <div className="flex justify-between text-xs text-muted-foreground mt-2">
+          <div className="flex justify-between text-xs text-white/60 mt-2">
             <span>18</span>
             <span>60</span>
           </div>
@@ -153,8 +153,8 @@ const KaiZenCalculator = () => {
         {/* Annual Contribution Slider */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-3">
-            <label className="text-sm font-medium text-muted-foreground">Annual Contribution (5 years)</label>
-            <span className="text-2xl font-bold text-accent">{formatCurrency(annualContribution)}</span>
+            <label className="text-sm font-semibold text-white/80">Annual Contribution (5 years)</label>
+            <span className="text-2xl font-bold text-accent drop-shadow-[0_0_10px_rgba(228,181,72,0.4)]">{formatCurrency(annualContribution)}</span>
           </div>
           <Slider
             value={[annualContribution]}
@@ -164,11 +164,11 @@ const KaiZenCalculator = () => {
             step={500}
             className="w-full"
           />
-          <div className="flex justify-between text-xs text-muted-foreground mt-2">
+          <div className="flex justify-between text-xs text-white/60 mt-2">
             <span>$21,350 min</span>
             <span>$50,000</span>
           </div>
-          <p className="text-xs text-muted-foreground/70 mt-1 italic">
+          <p className="text-xs text-white/50 mt-1 italic">
             Includes $1,350 annual trust fee
           </p>
         </div>
@@ -178,63 +178,63 @@ const KaiZenCalculator = () => {
           <>
             <div className="grid md:grid-cols-3 gap-4 mb-8">
               {/* Annual Distribution */}
-              <div className="bg-white/5 rounded-xl p-5 border border-white/10">
+              <div className="bg-slate-800/80 rounded-xl p-5 border border-white/15">
                 <div className="flex items-center gap-2 mb-2">
                   <DollarSign className="h-5 w-5 text-accent" />
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  <span className="text-xs font-semibold text-white/80 uppercase tracking-wide">
                     Potential Annual Distribution
                   </span>
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-foreground">
+                <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-[0_0_10px_rgba(228,181,72,0.3)]">
                   {formatCurrency(results.annualDistribution)}
                 </div>
-                <div className="text-xs text-muted-foreground mt-1">
+                <div className="text-xs text-white/60 mt-1">
                   Starting at age {results.distributionStartAge}
                 </div>
               </div>
 
               {/* Total Distributions */}
-              <div className="bg-accent/10 rounded-xl p-5 border border-accent/30">
+              <div className="bg-gradient-to-br from-accent/20 via-accent/15 to-accent/10 rounded-xl p-5 border border-accent/40 shadow-lg shadow-accent/20">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="h-5 w-5 text-accent" />
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  <span className="text-xs font-semibold text-white/80 uppercase tracking-wide">
                     Total Tax-Free Distributions
                   </span>
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-accent">
+                <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(228,181,72,0.5)]">
                   {formatCurrency(results.totalDistributions)}
                 </div>
-                <div className="text-xs text-muted-foreground mt-1">
+                <div className="text-xs text-white/60 mt-1">
                   Through age 90
                 </div>
               </div>
 
               {/* Death Benefit */}
-              <div className="bg-white/5 rounded-xl p-5 border border-white/10">
+              <div className="bg-slate-800/80 rounded-xl p-5 border border-white/15">
                 <div className="flex items-center gap-2 mb-2">
                   <Shield className="h-5 w-5 text-accent" />
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  <span className="text-xs font-semibold text-white/80 uppercase tracking-wide">
                     Death Benefit
                   </span>
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-foreground">
+                <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-[0_0_10px_rgba(228,181,72,0.3)]">
                   {formatCurrency(results.deathBenefit)}
                 </div>
-                <div className="text-xs text-muted-foreground mt-1">
+                <div className="text-xs text-white/60 mt-1">
                   Tax-free to beneficiaries
                 </div>
               </div>
             </div>
 
             {/* Living Benefits */}
-            <div className="bg-gradient-to-r from-accent/10 to-accent/5 rounded-xl p-5 border border-accent/20 mb-8">
+            <div className="bg-gradient-to-r from-accent/15 via-accent/10 to-accent/5 rounded-xl p-5 border border-accent/30 mb-8">
               <div className="flex items-center gap-3">
                 <Heart className="h-6 w-6 text-accent" />
                 <div>
-                  <span className="text-sm font-medium text-foreground">
+                  <span className="text-sm font-semibold text-white">
                     Living Benefits Included
                   </span>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                  <p className="text-xs text-white/70 mt-0.5">
                     Access up to {formatCurrency(results.livingBenefits)} for chronic or terminal illness
                   </p>
                 </div>
@@ -244,10 +244,10 @@ const KaiZenCalculator = () => {
         )}
 
         {/* Your Contribution Summary */}
-        <div className="bg-white/5 rounded-xl p-5 border border-white/10 mb-6">
+        <div className="bg-slate-800/80 rounded-xl p-5 border border-white/15 mb-6">
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">Your total contribution (5 years)</span>
-            <span className="text-xl font-bold text-foreground">
+            <span className="text-white/80 font-medium">Your total contribution (5 years)</span>
+            <span className="text-xl font-bold text-white">
               {formatCurrency(annualContribution * 5)}
             </span>
           </div>
@@ -257,7 +257,7 @@ const KaiZenCalculator = () => {
         <div className="text-center">
           <Button
             onClick={scrollToForm}
-            className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-6 text-lg rounded-full shadow-[0_0_20px_rgba(228,181,72,0.3)] hover:shadow-[0_0_30px_rgba(228,181,72,0.5)] transition-all duration-300"
+            className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-6 text-lg rounded-full shadow-[0_0_25px_rgba(228,181,72,0.4)] hover:shadow-[0_0_35px_rgba(228,181,72,0.6)] transition-all duration-300"
           >
             Get Your Personalized Analysis
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -266,7 +266,7 @@ const KaiZenCalculator = () => {
       </Card>
 
       {/* Disclaimer */}
-      <p className="text-xs text-muted-foreground text-center mt-4 max-w-2xl mx-auto leading-relaxed">
+      <p className="text-xs text-white/60 text-center mt-4 max-w-2xl mx-auto leading-relaxed">
         *This calculator provides hypothetical illustrations based on a 6.65% illustrated growth rate 
         (S&P Annual PtP No Bonus Index). Distributions begin at the later of age 65 or after the lender 
         loan has been repaid (typically in the 15th policy year) and continue through age 90. 

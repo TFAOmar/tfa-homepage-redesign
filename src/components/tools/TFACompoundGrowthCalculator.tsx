@@ -314,26 +314,26 @@ const TFACompoundGrowthCalculator = () => {
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
         {/* Scenario A Inputs Section */}
         <div className="space-y-6">
-          <Card className="p-6 lg:p-8 bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl">
+          <Card className="p-6 lg:p-8 bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl">
             {/* Header with gold accent */}
-            <div className="mb-6 pb-4 border-b border-white/10">
+            <div className="mb-6 pb-4 border-b border-white/15">
               <div className="h-1 w-14 rounded-full bg-primary mb-4" />
-              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2">
                 {compareMode ? "Scenario A — Your Investment Plan" : "Inputs"}
               </h3>
-              <p className="text-xs md:text-sm text-muted-foreground">
+              <p className="text-sm text-white/70">
                 {compareMode ? "Configure your full investment strategy" : "Enter your starting amount, contributions, and assumptions."}
               </p>
             </div>
           <div className="space-y-6">
             {/* Savings & Growth Subsection */}
             <div className="space-y-4">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Savings & Growth
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="initial" className="text-sm md:text-base font-medium text-foreground">
+                <Label htmlFor="initial" className="text-sm md:text-base font-medium text-white">
                   Initial Investment Amount ($)
                 </Label>
                 <Input
@@ -345,7 +345,7 @@ const TFACompoundGrowthCalculator = () => {
                     const value = e.target.value === '' ? 0 : Number(e.target.value);
                     setInputs({ ...inputs, initialInvestment: Math.max(0, value) });
                   }}
-                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.initialInvestment && (
                   <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.initialInvestment}</p>
@@ -353,7 +353,7 @@ const TFACompoundGrowthCalculator = () => {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="monthly" className="text-sm md:text-base font-medium text-foreground">
+                <Label htmlFor="monthly" className="text-sm md:text-base font-medium text-white">
                   Monthly Contribution ($)
                 </Label>
                 <Input
@@ -365,7 +365,7 @@ const TFACompoundGrowthCalculator = () => {
                     const value = e.target.value === '' ? 0 : Number(e.target.value);
                     setInputs({ ...inputs, monthlyContribution: Math.max(0, value) });
                   }}
-                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.monthlyContribution && (
                   <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.monthlyContribution}</p>
@@ -375,12 +375,12 @@ const TFACompoundGrowthCalculator = () => {
 
             {/* Timeline Subsection */}
             <div className="space-y-4 mt-6 md:mt-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Timeline
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="years" className="text-sm md:text-base font-medium text-foreground">
+                <Label htmlFor="years" className="text-sm md:text-base font-medium text-white">
                   Length of Time (Years)
                 </Label>
                 <Input
@@ -393,7 +393,7 @@ const TFACompoundGrowthCalculator = () => {
                     const value = e.target.value === '' ? 1 : Number(e.target.value);
                     setInputs({ ...inputs, years: Math.max(1, Math.min(50, value)) });
                   }}
-                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.years && (
                   <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.years}</p>
@@ -401,7 +401,7 @@ const TFACompoundGrowthCalculator = () => {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="rate" className="text-sm md:text-base font-medium text-foreground">
+                <Label htmlFor="rate" className="text-sm md:text-base font-medium text-white">
                   Estimated Annual Rate of Return (%)
                 </Label>
                 <Input
@@ -415,7 +415,7 @@ const TFACompoundGrowthCalculator = () => {
                     const value = e.target.value === '' ? 0 : Number(e.target.value);
                     setInputs({ ...inputs, annualRate: Math.max(0, Math.min(20, value)) });
                   }}
-                  className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.annualRate && (
                   <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.annualRate}</p>
@@ -425,12 +425,12 @@ const TFACompoundGrowthCalculator = () => {
 
             {/* Advanced Settings Subsection */}
             <div className="space-y-4 mt-6 md:mt-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Advanced Settings
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="frequency" className="text-sm md:text-base font-medium text-foreground">
+                <Label htmlFor="frequency" className="text-sm md:text-base font-medium text-white">
                   Compounding Frequency
                 </Label>
                 <Select
@@ -439,7 +439,7 @@ const TFACompoundGrowthCalculator = () => {
                     setInputs({ ...inputs, compoundingFrequency: Number(value) })
                   }
                 >
-                  <SelectTrigger id="frequency" className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all">
+                  <SelectTrigger id="frequency" className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -452,7 +452,7 @@ const TFACompoundGrowthCalculator = () => {
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs md:text-sm text-foreground">Contribution Timing</Label>
+                <Label className="text-sm font-medium text-white">Contribution Timing</Label>
                 <RadioGroup
                   value={inputs.contributionTiming}
                   onValueChange={(value: "beginning" | "end") =>
@@ -461,13 +461,13 @@ const TFACompoundGrowthCalculator = () => {
                 >
                   <div className="flex items-center space-x-2 mb-2">
                     <RadioGroupItem value="beginning" id="beginning" />
-                    <Label htmlFor="beginning" className="text-xs md:text-sm font-normal cursor-pointer text-foreground">
+                    <Label htmlFor="beginning" className="text-sm font-normal cursor-pointer text-white">
                       Contribute at the beginning of each period
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="end" id="end" />
-                    <Label htmlFor="end" className="text-xs md:text-sm font-normal cursor-pointer text-foreground">
+                    <Label htmlFor="end" className="text-sm font-normal cursor-pointer text-white">
                       Contribute at the end of each period
                     </Label>
                   </div>
@@ -478,7 +478,7 @@ const TFACompoundGrowthCalculator = () => {
             <div className="flex gap-3 pt-4">
               <Button
                 onClick={calculateCompoundGrowth}
-                className="flex-1 h-12 bg-gold hover:bg-gold/90 text-navy font-semibold"
+                className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/25"
                 disabled={Object.keys(errors).length > 0}
               >
                 Calculate
@@ -486,7 +486,7 @@ const TFACompoundGrowthCalculator = () => {
               <Button
                 onClick={handleReset}
                 variant="outline"
-                className="h-12 px-6"
+                className="h-12 px-6 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80"
               >
                 Reset
               </Button>
@@ -494,7 +494,7 @@ const TFACompoundGrowthCalculator = () => {
                 <Button
                   onClick={() => setEmailModalOpen(true)}
                   variant="outline"
-                  className="h-12 px-4"
+                  className="h-12 px-4 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80"
                 >
                   <Mail className="h-4 w-4" />
                 </Button>
@@ -619,10 +619,10 @@ const TFACompoundGrowthCalculator = () => {
             <div className="animate-fade-in space-y-6">
               {/* Comparison Summary Cards */}
               <div className="grid sm:grid-cols-2 gap-4">
-                <Card className="p-6 bg-gradient-to-br from-gold/10 to-gold/5 backdrop-blur-sm border-gold/30">
-                  <p className="text-xs font-medium text-gold mb-1">Scenario A</p>
-                  <p className="text-sm text-muted-foreground mb-2">Your Investment Plan</p>
-                  <p className="text-3xl font-bold text-foreground mb-4">
+                <Card className="p-6 bg-gradient-to-br from-primary/25 via-primary/15 to-primary/5 backdrop-blur-xl border-primary/40 shadow-xl shadow-primary/20">
+                  <p className="text-xs font-semibold text-primary mb-1">Scenario A</p>
+                  <p className="text-sm text-white/70 mb-2">Your Investment Plan</p>
+                  <p className="text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(228,181,72,0.4)] mb-4">
                     {formatCurrency(comparisonResults.scenarioA.finalBalance)}
                   </p>
                   <div className="space-y-1 text-sm">
@@ -657,9 +657,9 @@ const TFACompoundGrowthCalculator = () => {
               </div>
 
               {/* Impact Statement */}
-              <Card className="p-8 bg-gradient-to-br from-gold/20 via-gold/10 to-gold/5 backdrop-blur-sm border-gold/30 text-center">
-                <p className="text-sm font-medium text-muted-foreground mb-2">Difference Over Time</p>
-                <p className="text-4xl lg:text-5xl font-bold text-gold mb-4">
+              <Card className="p-8 bg-gradient-to-br from-primary/30 via-primary/20 to-accent/15 backdrop-blur-xl border-primary/40 shadow-xl shadow-primary/25 text-center">
+                <p className="text-sm font-semibold text-white/80 mb-2">Difference Over Time</p>
+                <p className="text-4xl lg:text-5xl font-bold text-white drop-shadow-[0_0_20px_rgba(228,181,72,0.5)] mb-4">
                   {formatCurrency(Math.abs(comparisonResults.difference))}
                 </p>
                 <p className="text-base text-foreground/90 max-w-md mx-auto">
