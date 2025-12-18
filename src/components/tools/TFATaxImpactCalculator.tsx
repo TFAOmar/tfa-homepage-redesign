@@ -380,29 +380,29 @@ export default function TFATaxImpactCalculator() {
         {/* Left Column - Inputs */}
         <div className="space-y-6 animate-fade-in">
           {/* Main Inputs Card */}
-          <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl p-6 md:p-8">
+          <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6 md:p-8">
             {/* Header with gold accent */}
-            <div className="mb-6 pb-4 border-b border-white/10">
+            <div className="mb-6 pb-4 border-b border-white/15">
               <div className="h-1 w-14 rounded-full bg-primary mb-4" />
-              <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2">
                 Tax & Income Inputs
               </h3>
-              <p className="text-xs md:text-sm text-muted-foreground">
+              <p className="text-sm text-white/70">
                 Share your filing status, state, and retirement income sources.
               </p>
             </div>
 
             {/* Filing Profile Subsection */}
             <div className="space-y-4 mb-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Filing Profile
               </p>
               
               <div className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="filing-status" className="text-sm md:text-base font-medium text-foreground">Filing Status</Label>
+                <Label htmlFor="filing-status" className="text-sm font-medium text-white">Filing Status</Label>
                 <Select value={filingStatus} onValueChange={(v) => setFilingStatus(v as FilingStatus)}>
-                  <SelectTrigger id="filing-status" className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all">
+                  <SelectTrigger id="filing-status" className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -415,9 +415,9 @@ export default function TFATaxImpactCalculator() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="state" className="text-sm md:text-base font-medium text-foreground">State of Residence</Label>
+                <Label htmlFor="state" className="text-sm font-medium text-white">State of Residence</Label>
                 <Select value={stateCode} onValueChange={setStateCode}>
-                  <SelectTrigger id="state" className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all">
+                  <SelectTrigger id="state" className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
@@ -434,20 +434,20 @@ export default function TFATaxImpactCalculator() {
 
             {/* Retirement Income Subsection */}
             <div className="space-y-4 mt-6 md:mt-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Retirement Income
               </p>
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="total-income" className="text-sm md:text-base font-medium text-foreground">Total Annual Retirement Income (Before Taxes)</Label>
+                  <Label htmlFor="total-income" className="text-sm font-medium text-white">Total Annual Retirement Income (Before Taxes)</Label>
                   <Input
                     id="total-income"
                     type="number"
                     value={totalAnnualIncome}
                     onChange={(e) => setTotalAnnualIncome(Number(e.target.value))}
                     min={0}
-                    className="w-full rounded-xl bg-white/10 border border-white/20 shadow-inner shadow-black/20 text-foreground placeholder:text-white/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary backdrop-blur-md transition-all"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>
 
@@ -460,30 +460,30 @@ export default function TFATaxImpactCalculator() {
                       onCheckedChange={setShowAdvanced}
                       className="data-[state=checked]:bg-primary"
                     />
-                    <Label htmlFor="advanced-breakdown" className="cursor-pointer font-medium text-xs md:text-sm">
+                    <Label htmlFor="advanced-breakdown" className="cursor-pointer font-medium text-sm text-white">
                       Advanced Income Breakdown
                     </Label>
                   </div>
-                  {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  {showAdvanced ? <ChevronUp className="w-4 h-4 text-white/70" /> : <ChevronDown className="w-4 h-4 text-white/70" />}
                 </div>
 
                 {showAdvanced && (
-                  <div className="space-y-4 pt-2 border-t border-border/30 animate-fade-in">
-                    <p className="text-xs md:text-sm text-muted-foreground">
+                  <div className="space-y-4 pt-2 border-t border-white/20 animate-fade-in">
+                    <p className="text-sm text-white/70">
                       Break down your income sources for more accurate tax estimates.
                     </p>
 
                   {hasBreakdownMismatch && (
-                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                      <p className="text-xs text-yellow-200">
+                    <div className="bg-yellow-500/15 border border-yellow-500/40 rounded-lg p-3">
+                      <p className="text-xs text-yellow-300">
                         Note: Your breakdown total ({formatCurrency(breakdownTotal)}) doesn't match your total annual
                         income ({formatCurrency(totalAnnualIncome)}).
                       </p>
                     </div>
                   )}
 
-                  <div>
-                    <Label htmlFor="traditional">Traditional 401(k)/IRA & Tax-Deferred Income ($/year)</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="traditional" className="text-sm font-medium text-white">Traditional 401(k)/IRA & Tax-Deferred Income ($/year)</Label>
                     <Input
                       id="traditional"
                       type="number"
@@ -492,12 +492,12 @@ export default function TFATaxImpactCalculator() {
                         setIncomeBreakdown({ ...incomeBreakdown, traditional401k: Number(e.target.value) })
                       }
                       min={0}
-                      className="mt-1.5"
+                      className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
                     />
                   </div>
 
-                  <div>
-                    <Label htmlFor="roth">Roth 401(k)/Roth IRA Withdrawals ($/year)</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="roth" className="text-sm font-medium text-white">Roth 401(k)/Roth IRA Withdrawals ($/year)</Label>
                     <Input
                       id="roth"
                       type="number"
@@ -506,12 +506,12 @@ export default function TFATaxImpactCalculator() {
                         setIncomeBreakdown({ ...incomeBreakdown, rothWithdrawals: Number(e.target.value) })
                       }
                       min={0}
-                      className="mt-1.5"
+                      className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
                     />
                   </div>
 
-                  <div>
-                    <Label htmlFor="taxable">Taxable Investment / Interest / Dividends ($/year)</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="taxable" className="text-sm font-medium text-white">Taxable Investment / Interest / Dividends ($/year)</Label>
                     <Input
                       id="taxable"
                       type="number"
@@ -520,12 +520,12 @@ export default function TFATaxImpactCalculator() {
                         setIncomeBreakdown({ ...incomeBreakdown, taxableInvestments: Number(e.target.value) })
                       }
                       min={0}
-                      className="mt-1.5"
+                      className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
                     />
                   </div>
 
-                  <div>
-                    <Label htmlFor="ss">Social Security Benefits ($/year)</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="ss" className="text-sm font-medium text-white">Social Security Benefits ($/year)</Label>
                     <Input
                       id="ss"
                       type="number"
@@ -534,24 +534,24 @@ export default function TFATaxImpactCalculator() {
                         setIncomeBreakdown({ ...incomeBreakdown, socialSecurity: Number(e.target.value) })
                       }
                       min={0}
-                      className="mt-1.5"
+                      className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
                     />
                   </div>
 
-                  <div>
-                    <Label htmlFor="pension">Pension Income ($/year)</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="pension" className="text-sm font-medium text-white">Pension Income ($/year)</Label>
                     <Input
                       id="pension"
                       type="number"
                       value={incomeBreakdown.pension}
                       onChange={(e) => setIncomeBreakdown({ ...incomeBreakdown, pension: Number(e.target.value) })}
                       min={0}
-                      className="mt-1.5"
+                      className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
                     />
                   </div>
 
-                  <div>
-                    <Label htmlFor="other">Other Taxable Income ($/year)</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="other" className="text-sm font-medium text-white">Other Taxable Income ($/year)</Label>
                     <Input
                       id="other"
                       type="number"
@@ -560,7 +560,7 @@ export default function TFATaxImpactCalculator() {
                         setIncomeBreakdown({ ...incomeBreakdown, otherIncome: Number(e.target.value) })
                       }
                       min={0}
-                      className="mt-1.5"
+                      className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
                     />
                   </div>
                   </div>
@@ -570,19 +570,19 @@ export default function TFATaxImpactCalculator() {
 
             {/* Goal Subsection */}
             <div className="space-y-4 mt-6 md:mt-6">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Goal (Optional)
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="desired-income" className="text-xs md:text-sm text-foreground">Desired Monthly After-Tax Income</Label>
+                <Label htmlFor="desired-income" className="text-sm font-medium text-white">Desired Monthly After-Tax Income</Label>
                 <Input
                   id="desired-income"
                   type="number"
                   value={desiredMonthlyIncome}
                   onChange={(e) => setDesiredMonthlyIncome(Number(e.target.value))}
                   min={0}
-                  className="w-full rounded-xl bg-white/8 border border-white/20 text-foreground placeholder:text-white/40 px-3.5 py-2.5 md:px-4 md:py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/60"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
               </div>
             </div>
@@ -590,15 +590,15 @@ export default function TFATaxImpactCalculator() {
 
           {/* Action Buttons */}
           <div className="flex gap-4">
-            <Button onClick={calculateTaxImpact} size="lg" className="flex-1">
+            <Button onClick={calculateTaxImpact} size="lg" className="flex-1 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
               <Calculator className="w-4 h-4 mr-2" />
               Calculate
             </Button>
-            <Button onClick={handleReset} variant="outline" size="lg">
+            <Button onClick={handleReset} variant="outline" size="lg" className="bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
               Reset
             </Button>
             {results && (
-              <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg">
+              <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg" className="bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
                 <Mail className="h-4 w-4" />
               </Button>
             )}
@@ -610,40 +610,40 @@ export default function TFATaxImpactCalculator() {
           {results ? (
             <div className="space-y-6 animate-fade-in">
               {/* Summary Card */}
-              <Card className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 backdrop-blur-sm border-primary/20">
+              <Card className="bg-gradient-to-br from-primary/25 via-primary/15 to-secondary/15 backdrop-blur-xl border-primary/30 shadow-xl shadow-primary/20">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-foreground">Estimated After-Tax Monthly Income</CardTitle>
+                  <CardTitle className="text-2xl text-white font-bold">Estimated After-Tax Monthly Income</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <p className="text-4xl md:text-5xl font-bold text-primary mb-2">
+                    <p className="text-4xl md:text-5xl font-bold text-white drop-shadow-[0_0_20px_rgba(228,181,72,0.5)] mb-2">
                       {formatCurrency(results.afterTaxMonthly)}
                     </p>
-                    <p className="text-sm text-muted-foreground">per month after taxes</p>
+                    <p className="text-sm text-white/70">per month after taxes</p>
                   </div>
 
-                  <div className="pt-4 border-t border-border/50 space-y-2">
+                  <div className="pt-4 border-t border-white/20 space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Total annual retirement income:</span>
-                      <span className="font-semibold text-foreground">
+                      <span className="text-sm text-white/70">Total annual retirement income:</span>
+                      <span className="font-semibold text-white">
                         {formatCurrency(results.totalRetirementIncome)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Estimated federal tax:</span>
+                      <span className="text-sm text-white/70">Estimated federal tax:</span>
                       <span className="font-semibold text-red-400">{formatCurrency(results.federalTax)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Estimated state tax:</span>
+                      <span className="text-sm text-white/70">Estimated state tax:</span>
                       <span className="font-semibold text-red-400">{formatCurrency(results.stateTax)}</span>
                     </div>
-                    <div className="flex justify-between items-center pt-2 border-t border-border/30">
-                      <span className="text-sm font-medium text-muted-foreground">Total estimated annual tax:</span>
+                    <div className="flex justify-between items-center pt-2 border-t border-white/15">
+                      <span className="text-sm font-medium text-white/80">Total estimated annual tax:</span>
                       <span className="font-bold text-red-400">{formatCurrency(results.totalTax)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-muted-foreground">Combined effective tax rate:</span>
-                      <span className="font-bold text-foreground">{formatPercent(results.combinedEffectiveRate)}</span>
+                      <span className="text-sm font-medium text-white/80">Combined effective tax rate:</span>
+                      <span className="font-bold text-white">{formatPercent(results.combinedEffectiveRate)}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -651,34 +651,34 @@ export default function TFATaxImpactCalculator() {
 
               {/* Gap vs Goal */}
               {desiredMonthlyIncome > 0 && (
-                <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+                <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40">
                   <CardContent className="pt-6">
-                    <h3 className="text-lg font-semibold text-foreground mb-4">Your Goal vs Estimated Income</h3>
-                    <div className="space-y-3">
+                    <h3 className="text-lg font-bold text-white mb-4">Your Goal vs Estimated Income</h3>
+                    <div className="space-y-3 bg-slate-800/60 rounded-xl p-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Your goal:</span>
-                        <span className="font-semibold text-foreground">
+                        <span className="text-white/70">Your goal:</span>
+                        <span className="font-semibold text-white">
                           {formatCurrency(desiredMonthlyIncome)} / month
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Estimated after-tax income:</span>
-                        <span className="font-semibold text-foreground">
+                        <span className="text-white/70">Estimated after-tax income:</span>
+                        <span className="font-semibold text-white">
                           {formatCurrency(results.afterTaxMonthly)} / month
                         </span>
                       </div>
-                      <div className="pt-3 border-t border-border/30">
+                      <div className="pt-3 border-t border-white/15">
                         {results.afterTaxMonthly >= desiredMonthlyIncome ? (
                           <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">Surplus per month:</span>
-                            <span className="text-lg font-bold text-primary">
+                            <span className="text-white/70">Surplus per month:</span>
+                            <span className="text-lg font-bold text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.4)]">
                               {formatCurrency(results.afterTaxMonthly - desiredMonthlyIncome)}
                             </span>
                           </div>
                         ) : (
                           <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">Shortfall per month:</span>
-                            <span className="text-lg font-bold text-red-400">
+                            <span className="text-white/70">Shortfall per month:</span>
+                            <span className="text-lg font-bold text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.4)]">
                               {formatCurrency(desiredMonthlyIncome - results.afterTaxMonthly)}
                             </span>
                           </div>
@@ -691,47 +691,47 @@ export default function TFATaxImpactCalculator() {
 
               {/* Source & Tax Breakdown */}
               {showAdvanced && (
-                <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+                <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40">
                   <CardContent className="pt-6">
                     <div className="grid sm:grid-cols-2 gap-6">
                       {/* Income Sources */}
                       <div>
-                        <h3 className="text-base font-semibold text-foreground mb-4">Your Income Sources</h3>
-                        <div className="space-y-2 text-sm">
+                        <h3 className="text-base font-bold text-white mb-4">Your Income Sources</h3>
+                        <div className="space-y-2 text-sm bg-slate-800/60 rounded-xl p-4">
                           {incomeBreakdown.socialSecurity > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-muted-foreground">Social Security:</span>
-                              <span className="font-medium">{formatCurrency(incomeBreakdown.socialSecurity)}</span>
+                              <span className="text-white/70">Social Security:</span>
+                              <span className="font-medium text-white">{formatCurrency(incomeBreakdown.socialSecurity)}</span>
                             </div>
                           )}
                           {incomeBreakdown.pension > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-muted-foreground">Pension:</span>
-                              <span className="font-medium">{formatCurrency(incomeBreakdown.pension)}</span>
+                              <span className="text-white/70">Pension:</span>
+                              <span className="font-medium text-white">{formatCurrency(incomeBreakdown.pension)}</span>
                             </div>
                           )}
                           {incomeBreakdown.traditional401k > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-muted-foreground">Tax-deferred:</span>
-                              <span className="font-medium">{formatCurrency(incomeBreakdown.traditional401k)}</span>
+                              <span className="text-white/70">Tax-deferred:</span>
+                              <span className="font-medium text-white">{formatCurrency(incomeBreakdown.traditional401k)}</span>
                             </div>
                           )}
                           {incomeBreakdown.rothWithdrawals > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-muted-foreground">Roth (tax-free):</span>
-                              <span className="font-medium">{formatCurrency(incomeBreakdown.rothWithdrawals)}</span>
+                              <span className="text-white/70">Roth (tax-free):</span>
+                              <span className="font-medium text-white">{formatCurrency(incomeBreakdown.rothWithdrawals)}</span>
                             </div>
                           )}
                           {incomeBreakdown.taxableInvestments > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-muted-foreground">Taxable investments:</span>
-                              <span className="font-medium">{formatCurrency(incomeBreakdown.taxableInvestments)}</span>
+                              <span className="text-white/70">Taxable investments:</span>
+                              <span className="font-medium text-white">{formatCurrency(incomeBreakdown.taxableInvestments)}</span>
                             </div>
                           )}
                           {incomeBreakdown.otherIncome > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-muted-foreground">Other income:</span>
-                              <span className="font-medium">{formatCurrency(incomeBreakdown.otherIncome)}</span>
+                              <span className="text-white/70">Other income:</span>
+                              <span className="font-medium text-white">{formatCurrency(incomeBreakdown.otherIncome)}</span>
                             </div>
                           )}
                         </div>
@@ -739,27 +739,27 @@ export default function TFATaxImpactCalculator() {
 
                       {/* Tax Breakdown */}
                       <div>
-                        <h3 className="text-base font-semibold text-foreground mb-4">Your Estimated Taxes</h3>
-                        <div className="space-y-2 text-sm">
+                        <h3 className="text-base font-bold text-white mb-4">Your Estimated Taxes</h3>
+                        <div className="space-y-2 text-sm bg-slate-800/60 rounded-xl p-4">
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Federal tax:</span>
-                            <span className="font-medium">{formatCurrency(results.federalTax)}</span>
+                            <span className="text-white/70">Federal tax:</span>
+                            <span className="font-medium text-white">{formatCurrency(results.federalTax)}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">State tax:</span>
-                            <span className="font-medium">{formatCurrency(results.stateTax)}</span>
+                            <span className="text-white/70">State tax:</span>
+                            <span className="font-medium text-white">{formatCurrency(results.stateTax)}</span>
                           </div>
-                          <div className="flex justify-between pt-2 border-t border-border/30">
-                            <span className="font-medium text-muted-foreground">Total tax:</span>
-                            <span className="font-bold">{formatCurrency(results.totalTax)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-xs text-muted-foreground">Federal effective rate:</span>
-                            <span className="text-xs font-medium">{formatPercent(results.federalEffectiveRate)}</span>
+                          <div className="flex justify-between pt-2 border-t border-white/15">
+                            <span className="font-medium text-white/80">Total tax:</span>
+                            <span className="font-bold text-white">{formatCurrency(results.totalTax)}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-xs text-muted-foreground">State effective rate:</span>
-                            <span className="text-xs font-medium">{formatPercent(results.stateEffectiveRate)}</span>
+                            <span className="text-xs text-white/60">Federal effective rate:</span>
+                            <span className="text-xs font-medium text-white">{formatPercent(results.federalEffectiveRate)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-xs text-white/60">State effective rate:</span>
+                            <span className="text-xs font-medium text-white">{formatPercent(results.stateEffectiveRate)}</span>
                           </div>
                         </div>
                       </div>
@@ -769,18 +769,18 @@ export default function TFATaxImpactCalculator() {
               )}
 
               {/* Guidance CTA */}
-              <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 backdrop-blur-sm border-primary/20">
+              <Card className="bg-gradient-to-br from-primary/15 to-secondary/15 backdrop-blur-xl border-primary/25 shadow-lg">
                 <CardContent className="pt-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                  <h3 className="text-lg font-bold text-white mb-2">
                     Not sure if these numbers are right for your situation?
                   </h3>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                  <p className="text-white/70 mb-6 leading-relaxed">
                     A TFA advisor can help you customize your retirement income strategy, coordinate taxes, and explore
                     options to improve after-tax income.
                   </p>
                   <Button
                     size="lg"
-                    className="w-full group"
+                    className="w-full group bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25"
                     onClick={() => (window.location.href = "/contact")}
                   >
                     Talk to a TFA Advisor About Taxes in Retirement
@@ -790,15 +790,16 @@ export default function TFATaxImpactCalculator() {
               </Card>
             </div>
           ) : (
-            <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+            <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40">
               <CardContent className="pt-12 pb-12 text-center">
                 <div className="max-w-md mx-auto space-y-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                  <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                     <Calculator className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground">Ready to See Your Tax Impact?</h3>
-                  <p className="text-muted-foreground">
-                    Fill out the form and click Calculate to estimate your federal and state taxes in retirement.
+                  <h3 className="text-xl font-bold text-white">Estimate Your Tax Impact</h3>
+                  <p className="text-white/70">
+                    Enter your filing status and retirement income, then click Calculate to see your estimated after-tax
+                    income.
                   </p>
                 </div>
               </CardContent>
@@ -808,11 +809,11 @@ export default function TFATaxImpactCalculator() {
       </div>
 
       {/* Disclaimer */}
-      <div className="mt-12 pt-8 border-t border-border/30">
+      <div className="mt-12 pt-8 border-t border-white/20">
         <p className="text-xs md:text-sm text-white/60 leading-relaxed max-w-3xl mx-auto text-center">
-          This calculator is for educational purposes only and does not provide tax, legal, or financial advice. Tax
-          laws can change and your actual tax situation may differ significantly from these estimates. Please consult a
-          qualified tax professional or advisor before making decisions.
+          This calculator is for educational purposes only and provides simplified estimates. Actual tax liability
+          depends on many factors not captured here. Please consult a qualified tax professional for personalized
+          advice.
         </p>
       </div>
 
