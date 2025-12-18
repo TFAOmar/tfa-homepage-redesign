@@ -82,7 +82,8 @@ const AgentRecruitment = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  return <>
+  return (
+    <>
       <SEOHead
         title="Agent Recruitment - Become a Licensed Financial Advisor"
         description="Build a career helping families achieve financial security. No experience required. Comprehensive training and unlimited income potential."
@@ -308,6 +309,9 @@ const AgentRecruitment = () => {
           </div>
         </div>
       </section>
-    </div>;
+    </div>
+    </>
+  );
 };
+
 export default AgentRecruitment;
