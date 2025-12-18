@@ -1,16 +1,37 @@
-import { useEffect } from "react";
 import { TrendingUp } from "lucide-react";
-import ToolsHero from "@/components/tools/ToolsHero";
 import ToolsCTA from "@/components/tools/ToolsCTA";
 import KaiZenCalculator from "@/components/kaizen/KaiZenCalculator";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateWebApplicationSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 export default function KaiZenCalculatorPage() {
-  useEffect(() => {
-    document.title = "Kai-Zen Retirement Calculator | The Financial Architects";
-  }, []);
-
   return (
-    <div className="min-h-screen">
+    <>
+      <SEOHead
+        title="Kai-Zen Retirement Calculator"
+        description="Estimate potential tax-free retirement distributions using the Kai-Zen leveraged life insurance strategy. See how premium financing can boost your retirement."
+        canonical={`${siteConfig.url}/tools/kai-zen-calculator`}
+        keywords="Kai-Zen calculator, leveraged life insurance, tax-free retirement, premium financing calculator, retirement strategy"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Kai-Zen Retirement Calculator | The Financial Architects",
+          "Estimate potential tax-free retirement distributions using the Kai-Zen leveraged life insurance strategy. See how premium financing can boost your retirement.",
+          `${siteConfig.url}/tools/kai-zen-calculator`
+        ),
+        generateWebApplicationSchema(
+          "Kai-Zen Retirement Calculator",
+          "Estimate potential tax-free retirement distributions using the Kai-Zen leveraged life insurance strategy. See how premium financing can boost your retirement.",
+          `${siteConfig.url}/tools/kai-zen-calculator`
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Tools", url: `${siteConfig.url}/tools` },
+          { name: "Kai-Zen Calculator", url: `${siteConfig.url}/tools/kai-zen-calculator` }
+        ])
+      ]} />
+      <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy-light to-navy opacity-95" />
@@ -71,7 +92,8 @@ export default function KaiZenCalculatorPage() {
         </div>
       </section>
 
-      <ToolsCTA />
-    </div>
+        <ToolsCTA />
+      </div>
+    </>
   );
 }

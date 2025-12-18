@@ -1,16 +1,38 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Shield, TrendingUp, DollarSign, Clock, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import TFAGuaranteedIncomeCalculator from "@/components/tools/TFAGuaranteedIncomeCalculator";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateWebApplicationSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 export default function GuaranteedIncomeCalculator() {
-  useEffect(() => {
-    document.title = "Guaranteed Income Calculator | The Financial Architects";
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-navy via-navy to-primary">
+    <>
+      <SEOHead
+        title="Guaranteed Income Calculator"
+        description="Estimate guaranteed lifetime income from a fixed index annuity. Calculate the premium needed for your desired retirement income you can't outlive."
+        canonical={`${siteConfig.url}/tools/guaranteed-income-calculator`}
+        keywords="guaranteed income calculator, annuity calculator, lifetime income, fixed index annuity, retirement income"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Guaranteed Income Calculator | The Financial Architects",
+          "Estimate guaranteed lifetime income from a fixed index annuity. Calculate the premium needed for your desired retirement income you can't outlive.",
+          `${siteConfig.url}/tools/guaranteed-income-calculator`
+        ),
+        generateWebApplicationSchema(
+          "Guaranteed Income Calculator",
+          "Estimate guaranteed lifetime income from a fixed index annuity. Calculate the premium needed for your desired retirement income you can't outlive.",
+          `${siteConfig.url}/tools/guaranteed-income-calculator`
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Tools", url: `${siteConfig.url}/tools` },
+          { name: "Guaranteed Income Calculator", url: `${siteConfig.url}/tools/guaranteed-income-calculator` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-gradient-to-b from-navy via-navy to-primary">
       {/* Hero Section */}
       <section className="relative py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -198,6 +220,7 @@ export default function GuaranteedIncomeCalculator() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,13 +1,34 @@
 import TFARetirementIncomeCalculator from "@/components/tools/TFARetirementIncomeCalculator";
-import { useEffect } from "react";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateWebApplicationSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 export default function RetirementIncomeCalculator() {
-  useEffect(() => {
-    document.title = "Retirement Income Calculator | The Financial Architects";
-  }, []);
-
   return (
     <>
+      <SEOHead
+        title="Retirement Income Calculator"
+        description="Estimate your monthly retirement income from savings, Social Security, and pensions. See if you're on track for the retirement lifestyle you want."
+        canonical={`${siteConfig.url}/tools/retirement-income-calculator`}
+        keywords="retirement income calculator, retirement planning, Social Security estimator, pension calculator, monthly retirement income"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Retirement Income Calculator | The Financial Architects",
+          "Estimate your monthly retirement income from savings, Social Security, and pensions. See if you're on track for the retirement lifestyle you want.",
+          `${siteConfig.url}/tools/retirement-income-calculator`
+        ),
+        generateWebApplicationSchema(
+          "Retirement Income Calculator",
+          "Estimate your monthly retirement income from savings, Social Security, and pensions. See if you're on track for the retirement lifestyle you want.",
+          `${siteConfig.url}/tools/retirement-income-calculator`
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Tools", url: `${siteConfig.url}/tools` },
+          { name: "Retirement Income Calculator", url: `${siteConfig.url}/tools/retirement-income-calculator` }
+        ])
+      ]} />
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-background/95">
         <main className="container mx-auto px-4 pt-24 pb-16 md:pt-32 md:pb-24">
           {/* Page Header */}
