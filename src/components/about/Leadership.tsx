@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Linkedin, Mail, Facebook, Instagram, Youtube, Quote, CheckCircle } from "lucide-react";
 import mannySotoImg from "@/assets/leadership/manny-soto.jpg";
 import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
+import ravvenMurphyImg from "@/assets/leadership/ravven-murphy.jpg";
 import { Button } from "@/components/ui/button";
 
 interface Leader {
@@ -65,6 +66,21 @@ const leaders: Leader[] = [
     ],
     closing: `Omar is recognized for blending high-level financial strategy with real-world practicality, making him a trusted guide for both clients and advisors. Outside of work, Omar is a dedicated husband and father who values family above all. His purpose — both personally and professionally — is to help families build stability, wealth, and generational security.`,
     linkedin: "https://linkedin.com/in/omarsanchez",
+  },
+  {
+    name: "Ravven Murphy",
+    title: "Executive Assistant to the CEO",
+    subtitle: "Operations & Executive Support",
+    image: ravvenMurphyImg,
+    intro: `Ravven Murphy is the Executive Assistant to Manny Soto, CEO of The Financial Architects. With over a decade of entrepreneurial experience, Ravven brings a high-level operational mindset, strategic foresight, and exceptional organizational leadership to her role.`,
+    highlights: [
+      "10+ years of entrepreneurial experience building and managing businesses",
+      "Expertise in operations, client relations, branding, and large-scale event execution",
+      "Manages complex logistics and day-to-day CEO operations for a multi-million-dollar organization",
+      "Prioritizes high-impact initiatives and ensures seamless execution across professional and personal priorities",
+      "Known for adaptability, strong communication skills, and commitment to excellence",
+    ],
+    closing: `As Executive Assistant, Ravven plays a critical role in managing the day-to-day operations of the CEO, ensuring efficiency, discretion, and seamless execution. Her ability to balance high-pressure demands with strategic problem-solving makes her an integral part of The Financial Architects leadership ecosystem — bringing structure, clarity, and momentum to fast-moving environments.`,
   },
 ];
 
