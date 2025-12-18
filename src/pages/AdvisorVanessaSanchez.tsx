@@ -7,6 +7,9 @@ import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRig
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const AdvisorVanessaSanchez = () => {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
@@ -61,7 +64,35 @@ const AdvisorVanessaSanchez = () => {
   }];
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Vanessa Sanchez - Financial Strategist"
+        description="Work with Vanessa Sanchez, a Financial Strategist in Chino Hills, CA. Expert guidance in retirement planning, estate planning, tax strategies, and living trusts."
+        canonical={`${siteConfig.url}/advisors/vanessa-sanchez`}
+        ogType="profile"
+        keywords="financial strategist Chino Hills, retirement planning, estate planning, tax strategies, living trust advisor California"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Vanessa Sanchez - Financial Strategist | The Financial Architects",
+          "Work with Vanessa Sanchez, a Financial Strategist in Chino Hills, CA. Expert guidance in retirement planning, estate planning, and tax strategies.",
+          `${siteConfig.url}/advisors/vanessa-sanchez`
+        ),
+        generatePersonSchema(
+          "Vanessa Sanchez",
+          "Financial Strategist",
+          "Vanessa Sanchez is a Financial Strategist at The Financial Architects in Chino Hills, CA, specializing in retirement planning, estate planning, tax strategies, and life insurance.",
+          vanessaSanchezImg,
+          `${siteConfig.url}/advisors/vanessa-sanchez`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Vanessa Sanchez", url: `${siteConfig.url}/advisors/vanessa-sanchez` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary/90" />
@@ -289,6 +320,7 @@ const AdvisorVanessaSanchez = () => {
         advisorImage={vanessaSanchezImg}
       />
     </div>
+    </>
   );
 };
 

@@ -18,6 +18,9 @@ import {
 import hamletImage from "@/assets/advisors/hamlet-ohandjanian.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const specialties = [
   "Retirement Planning",
@@ -93,7 +96,35 @@ const AdvisorHamletOhandjanian = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Hamlet Ohandjanian - Managing Partner"
+        description="Work with Hamlet Ohandjanian, Managing Partner at TFA in Granada Hills, CA. 28 years of leadership experience, committed to integrity and transparent financial planning."
+        canonical={`${siteConfig.url}/advisors/hamlet-ohandjanian`}
+        ogType="profile"
+        keywords="managing partner Granada Hills, retirement planning, tax strategies, life insurance, financial education California"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Hamlet Ohandjanian - Managing Partner | The Financial Architects",
+          "Work with Hamlet Ohandjanian, Managing Partner at TFA in Granada Hills, CA. 28 years of leadership experience.",
+          `${siteConfig.url}/advisors/hamlet-ohandjanian`
+        ),
+        generatePersonSchema(
+          "Hamlet Ohandjanian",
+          "Managing Partner",
+          "Hamlet Ohandjanian is a Managing Partner at The Financial Architects in Granada Hills, CA, with 28 years of leadership experience committed to integrity and transparent financial planning.",
+          hamletImage,
+          `${siteConfig.url}/advisors/hamlet-ohandjanian`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Hamlet Ohandjanian", url: `${siteConfig.url}/advisors/hamlet-ohandjanian` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-white py-20 lg:py-28">
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
@@ -341,6 +372,7 @@ const AdvisorHamletOhandjanian = () => {
         advisorImage={hamletImage}
       />
     </div>
+    </>
   );
 };
 

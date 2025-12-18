@@ -19,6 +19,9 @@ import {
 import ismaelImage from "@/assets/advisors/ismael-ververa.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const specialties = [
   "Real Estate Planning",
@@ -94,7 +97,35 @@ const AdvisorIsmaelVervera = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Ismael Ververa - Financial Strategist"
+        description="Work with Ismael Ververa, a Financial Strategist in Claremont, CA. 30 years in law enforcement and 25 years as a licensed realtor. Expert in real estate and retirement planning."
+        canonical={`${siteConfig.url}/advisors/ismael-ververa`}
+        ogType="profile"
+        keywords="financial strategist Claremont, real estate planning, retirement planning, investment management California"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Ismael Ververa - Financial Strategist | The Financial Architects",
+          "Work with Ismael Ververa, a Financial Strategist in Claremont, CA. Expert in real estate and retirement planning.",
+          `${siteConfig.url}/advisors/ismael-ververa`
+        ),
+        generatePersonSchema(
+          "Ismael Ververa",
+          "Financial Strategist",
+          "Ismael Ververa is a Financial Strategist at The Financial Architects in Claremont, CA, with 30 years in law enforcement and 25 years as a licensed realtor.",
+          ismaelImage,
+          `${siteConfig.url}/advisors/ismael-ververa`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Ismael Ververa", url: `${siteConfig.url}/advisors/ismael-ververa` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-white py-20 lg:py-28">
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
@@ -340,6 +371,7 @@ const AdvisorIsmaelVervera = () => {
         advisorImage={ismaelImage}
       />
     </div>
+    </>
   );
 };
 

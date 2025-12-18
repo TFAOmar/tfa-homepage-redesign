@@ -18,6 +18,9 @@ import {
 import ruthImage from "@/assets/advisors/ruth-pacheco.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const specialties = [
   "Reverse Mortgages",
@@ -93,7 +96,35 @@ const AdvisorRuthPacheco = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Ruth Pacheco - Reverse Mortgage Specialist"
+        description="Work with Ruth Pacheco, Reverse Mortgage Certified specialist in Upland, CA. 36+ years of lending experience helping seniors access home equity."
+        canonical={`${siteConfig.url}/advisors/ruth-pacheco`}
+        ogType="profile"
+        keywords="reverse mortgage specialist Upland, senior financial planning, home equity, mortgage financing California"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Ruth Pacheco - Reverse Mortgage Specialist | The Financial Architects",
+          "Work with Ruth Pacheco, Reverse Mortgage Certified specialist in Upland, CA. 36+ years of lending experience.",
+          `${siteConfig.url}/advisors/ruth-pacheco`
+        ),
+        generatePersonSchema(
+          "Ruth Pacheco",
+          "Reverse Mortgage Specialist",
+          "Ruth Pacheco is a Reverse Mortgage Certified specialist at The Financial Architects in Upland, CA, with 36+ years of lending experience helping seniors access home equity.",
+          ruthImage,
+          `${siteConfig.url}/advisors/ruth-pacheco`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Ruth Pacheco", url: `${siteConfig.url}/advisors/ruth-pacheco` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-white py-20 lg:py-28">
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
@@ -340,6 +371,7 @@ const AdvisorRuthPacheco = () => {
         advisorImage={ruthImage}
       />
     </div>
+    </>
   );
 };
 

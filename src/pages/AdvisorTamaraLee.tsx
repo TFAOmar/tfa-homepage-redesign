@@ -21,6 +21,9 @@ import {
 import tamaraLeeImg from "@/assets/advisors/tamara-lee.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const specialties = [
   "Medicare Planning",
@@ -94,7 +97,35 @@ const AdvisorTamaraLee = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Tamara Lee - Medicare & Retirement Healthcare Expert"
+        description="Work with Tamara Lee, Medicare Specialist in Claremont, CA. Over 11 years of experience helping clients navigate Medicare and retirement healthcare planning."
+        canonical={`${siteConfig.url}/advisors/tamara-lee`}
+        ogType="profile"
+        keywords="Medicare specialist Claremont, Medicare planning, retirement healthcare, healthcare planning California"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Tamara Lee - Medicare & Retirement Healthcare Expert | The Financial Architects",
+          "Work with Tamara Lee, Medicare Specialist in Claremont, CA. Over 11 years of experience in Medicare and retirement healthcare planning.",
+          `${siteConfig.url}/advisors/tamara-lee`
+        ),
+        generatePersonSchema(
+          "Tamara Lee",
+          "Medicare Specialist",
+          "Tamara Lee is a Medicare and Retirement Healthcare Expert at The Financial Architects in Claremont, CA, with over 11 years of experience helping clients navigate Medicare options.",
+          tamaraLeeImg,
+          `${siteConfig.url}/advisors/tamara-lee`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Tamara Lee", url: `${siteConfig.url}/advisors/tamara-lee` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-primary-foreground overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5" />
@@ -347,6 +378,7 @@ const AdvisorTamaraLee = () => {
         advisorImage={tamaraLeeImg}
       />
     </div>
+    </>
   );
 };
 

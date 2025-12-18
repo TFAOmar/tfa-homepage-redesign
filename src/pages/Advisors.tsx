@@ -6,6 +6,9 @@ import { useState, useEffect, useMemo } from "react";
 import { advisors, Advisor } from "@/data/advisors";
 import { usePublishedAdvisors } from "@/hooks/useDynamicAdvisors";
 import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const Advisors = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -97,7 +100,25 @@ const Advisors = () => {
   }, [allAdvisors, searchQuery, selectedType, selectedState, selectedSpecialty]);
 
   return (
-    <div className="min-h-screen">
+    <>
+      <SEOHead
+        title="Meet Our Financial Advisors"
+        description="Find a trusted TFA financial advisor near you. Our team specializes in retirement planning, estate planning, Medicare, tax strategies, and wealth protection."
+        canonical={`${siteConfig.url}/advisors`}
+        keywords="TFA financial advisors, retirement planning advisors, estate planning specialists, Medicare advisors, wealth protection"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Meet Our Financial Advisors | The Financial Architects",
+          "Find a trusted TFA financial advisor near you. Our team specializes in retirement planning, estate planning, Medicare, and tax strategies.",
+          `${siteConfig.url}/advisors`
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` }
+        ])
+      ]} />
+      <div className="min-h-screen">
       <AdvisorsHero />
       <AdvisorsFilters
         searchQuery={searchQuery}
@@ -112,6 +133,7 @@ const Advisors = () => {
       <AdvisorsGrid advisors={filteredAdvisors} />
       <AdvisorsCTA />
     </div>
+    </>
   );
 };
 
