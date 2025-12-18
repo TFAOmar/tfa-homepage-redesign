@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,9 @@ import { MapPin, Shield, Heart, Users, Building2, Calendar, ClipboardCheck, Phon
 import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const specialties = [
   "Health Insurance",
@@ -75,8 +78,40 @@ const AdvisorAnthonyBottley = () => {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Anthony Bottley - Health Insurance Specialist"
+        description="Work with Anthony Bottley, founder of American Way Health in West Palm Beach, FL. Expert guidance in health insurance, Medicare, and business health solutions."
+        canonical={`${siteConfig.url}/advisors/anthony-bottley`}
+        ogType="profile"
+        keywords="health insurance specialist West Palm Beach, Medicare planning, American Way Health, business health solutions Florida"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Anthony Bottley - Health Insurance Specialist | The Financial Architects",
+          "Work with Anthony Bottley, founder of American Way Health in West Palm Beach, FL. Expert in health insurance and Medicare.",
+          `${siteConfig.url}/advisors/anthony-bottley`
+        ),
+        generatePersonSchema(
+          "Anthony Bottley",
+          "Health Insurance Specialist",
+          "Anthony Bottley is a Health Insurance Specialist and founder of American Way Health in West Palm Beach, FL, providing expert guidance in health insurance, Medicare, and business health solutions.",
+          anthonyBottleyImg,
+          `${siteConfig.url}/advisors/anthony-bottley`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Anthony Bottley", url: `${siteConfig.url}/advisors/anthony-bottley` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 bg-gradient-to-br from-navy via-primary to-navy overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(228,181,72,0.1),transparent_50%)]" />
@@ -310,6 +345,7 @@ const AdvisorAnthonyBottley = () => {
         advisorImage={anthonyBottleyImg}
       />
     </div>
+    </>
   );
 };
 

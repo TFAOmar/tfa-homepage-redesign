@@ -7,6 +7,9 @@ import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRig
 import mariahLorenzenImg from "@/assets/advisors/mariah-lorenzen.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const AdvisorMariahLorenzen = () => {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
@@ -76,7 +79,35 @@ const AdvisorMariahLorenzen = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Mariah Lorenzen - Kai-Zen Retirement Specialist"
+        description="Work with Mariah Lorenzen, Head of Franchise Operations and Kai-Zen specialist in Chino Hills, CA. Expert in leveraged retirement strategies and mortgage financing."
+        canonical={`${siteConfig.url}/advisors/mariah-lorenzen`}
+        ogType="profile"
+        keywords="Kai-Zen strategy, retirement planning, mortgage financing, leveraged life insurance, Chino Hills financial advisor"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Mariah Lorenzen - Kai-Zen Retirement Specialist | The Financial Architects",
+          "Work with Mariah Lorenzen, Head of Franchise Operations and Kai-Zen specialist in Chino Hills, CA.",
+          `${siteConfig.url}/advisors/mariah-lorenzen`
+        ),
+        generatePersonSchema(
+          "Mariah Lorenzen",
+          "Head of Franchise Operations",
+          "Mariah Lorenzen is a Kai-Zen Retirement Specialist at The Financial Architects in Chino Hills, CA, specializing in leveraged life insurance strategies and mortgage financing.",
+          mariahLorenzenImg,
+          `${siteConfig.url}/advisors/mariah-lorenzen`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Mariah Lorenzen", url: `${siteConfig.url}/advisors/mariah-lorenzen` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary/90" />
@@ -327,6 +358,7 @@ const AdvisorMariahLorenzen = () => {
         advisorImage={mariahLorenzenImg}
       />
     </div>
+    </>
   );
 };
 

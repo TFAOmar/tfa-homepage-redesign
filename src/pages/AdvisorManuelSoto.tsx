@@ -18,6 +18,9 @@ import {
 import manuelImage from "@/assets/advisors/manuel-soto.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const specialties = [
   "Retirement Planning",
@@ -93,7 +96,35 @@ const AdvisorManuelSoto = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Manuel Soto - Founder & CEO of The Financial Architects"
+        description="Work with Manuel Soto, Founder & CEO of The Financial Architects in Chino Hills, CA. Needs-based planning that rejects one-size-fits-all approaches."
+        canonical={`${siteConfig.url}/advisors/manuel-soto`}
+        ogType="profile"
+        keywords="TFA founder, financial advisor Chino Hills, retirement planning, tax strategies, estate planning CEO"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Manuel Soto - Founder & CEO | The Financial Architects",
+          "Work with Manuel Soto, Founder & CEO of The Financial Architects in Chino Hills, CA. Needs-based financial planning.",
+          `${siteConfig.url}/advisors/manuel-soto`
+        ),
+        generatePersonSchema(
+          "Manuel Soto",
+          "Founder & CEO",
+          "Manuel Soto is the Founder & CEO of The Financial Architects in Chino Hills, CA, committed to needs-based planning that rejects one-size-fits-all approaches.",
+          manuelImage,
+          `${siteConfig.url}/advisors/manuel-soto`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Manuel Soto", url: `${siteConfig.url}/advisors/manuel-soto` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-white py-20 lg:py-28">
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
@@ -339,6 +370,7 @@ const AdvisorManuelSoto = () => {
         advisorImage={manuelImage}
       />
     </div>
+    </>
   );
 };
 

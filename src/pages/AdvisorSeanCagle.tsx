@@ -18,6 +18,9 @@ import {
 import seanImage from "@/assets/advisors/sean-cagle.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 const specialties = [
   "Estate Planning",
@@ -93,7 +96,35 @@ const AdvisorSeanCagle = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Sean Cagle - Senior Estate Planning Partner"
+        description="Work with Sean Cagle, Senior Estate Planning Partner at TFA in Arizona. Expert in living trusts, estate planning, and legacy preservation strategies."
+        canonical={`${siteConfig.url}/advisors/sean-cagle`}
+        ogType="profile"
+        keywords="estate planning Arizona, living trusts, legacy preservation, senior estate planning partner"
+      />
+      <JsonLd data={[
+        generateWebPageSchema(
+          "Sean Cagle - Senior Estate Planning Partner | The Financial Architects",
+          "Work with Sean Cagle, Senior Estate Planning Partner at TFA in Arizona. Expert in living trusts and estate planning.",
+          `${siteConfig.url}/advisors/sean-cagle`
+        ),
+        generatePersonSchema(
+          "Sean Cagle",
+          "Senior Estate Planning Partner",
+          "Sean Cagle is a Senior Estate Planning Partner at The Financial Architects in Arizona, specializing in living trusts, estate planning, and legacy preservation.",
+          seanImage,
+          `${siteConfig.url}/advisors/sean-cagle`,
+          specialties
+        ),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Advisors", url: `${siteConfig.url}/advisors` },
+          { name: "Sean Cagle", url: `${siteConfig.url}/advisors/sean-cagle` }
+        ])
+      ]} />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-white py-20 lg:py-28">
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5"></div>
@@ -341,6 +372,7 @@ const AdvisorSeanCagle = () => {
         advisorImage={seanImage}
       />
     </div>
+    </>
   );
 };
 
