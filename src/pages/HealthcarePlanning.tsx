@@ -10,6 +10,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const healthcareFaqs = [
+  { question: "When should I enroll in Medicare?", answer: "Your Initial Enrollment Period begins 3 months before your 65th birthday and ends 3 months after. If you're still working with employer coverage, different rules apply. Late enrollment can result in permanent penalties." },
+  { question: "Should I choose Medicare Advantage or a Supplement?", answer: "It depends on your health, budget, and preferences. Advantage plans often have lower premiums but narrower networks. Supplements cost more but offer more flexibility. We help you compare options based on your situation." },
+  { question: "Do I need long-term care insurance?", answer: "70% of people turning 65 will need some form of long-term care. Medicare and health insurance don't cover extended care. We'll help you evaluate whether traditional LTC insurance, hybrid policies, or self-funding makes sense for you." },
+  { question: "What's the difference between Medicare parts?", answer: "Part A covers hospital stays (usually premium-free). Part B covers doctor visits and outpatient care. Part C (Medicare Advantage) bundles A, B, and often D. Part D covers prescription drugs. We help you understand which parts you need." },
+];
 
 const HealthcarePlanning = () => {
   const scrollToForm = () => {
@@ -17,6 +27,23 @@ const HealthcarePlanning = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Healthcare Planning & Medicare"
+        description="Navigate Medicare and healthcare costs with expert guidance. Medicare enrollment, long-term care planning, and HSA optimization services."
+        canonical={`${siteConfig.url}/services/healthcare-planning`}
+        keywords="Medicare planning, healthcare planning, long-term care, Medicare enrollment, HSA optimization"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("Healthcare Planning & Medicare", "Medicare, long-term care, and healthcare cost planning to protect your health and your wealth.", `${siteConfig.url}/services/healthcare-planning`),
+        generateServiceSchema("Healthcare Planning", "Comprehensive healthcare planning including Medicare guidance, long-term care planning, and HSA optimization.", `${siteConfig.url}/services/healthcare-planning`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Healthcare Planning", url: `${siteConfig.url}/services/healthcare-planning` }
+        ]),
+        generateFAQSchema(healthcareFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-xl border-b border-white/10">
@@ -416,6 +443,7 @@ const HealthcarePlanning = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

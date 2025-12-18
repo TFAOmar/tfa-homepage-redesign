@@ -9,6 +9,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const estatePlanningFaqs = [
+  { question: "What is a Living Trust?", answer: "A Living Trust is a legal document that places your assets into a trust during your lifetime. You maintain full control as the trustee, and upon your passing, your assets transfer directly to your beneficiaries without going through probate." },
+  { question: "How is a Living Trust different from a Will?", answer: "While both documents specify how your assets should be distributed, a Will must go through probate court—a public, expensive, and time-consuming process. A Living Trust bypasses probate entirely, keeping your affairs private and allowing immediate asset transfer." },
+  { question: "Do I need a Living Trust if I already have a Will?", answer: "A Will alone doesn't avoid probate. If you own real estate, have assets over $184,500 (in California), or value privacy, a Living Trust provides significant advantages." },
+  { question: "How much does estate planning cost?", answer: "Costs vary based on complexity. We offer competitive pricing and can discuss options during your free consultation. The cost is typically far less than what your family would pay in probate fees." },
+];
 
 const EstatePlanning = () => {
   const scrollToForm = () => {
@@ -20,6 +30,23 @@ const EstatePlanning = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Estate Planning & Living Trusts"
+        description="Protect your legacy with estate planning and living trusts. Avoid probate, maintain privacy, and ensure your wishes are honored. Free consultation in Chino Hills."
+        canonical={`${siteConfig.url}/services/estate-planning`}
+        keywords="estate planning, living trust, probate avoidance, wills, beneficiary review, Chino Hills estate planning"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("Estate Planning & Living Trusts", "Comprehensive estate planning services including living trusts, wills, and beneficiary review to protect your legacy.", `${siteConfig.url}/services/estate-planning`),
+        generateServiceSchema("Estate Planning", "Estate planning and Living Trusts that protect your family, avoid probate, and ensure your wishes are carried out exactly as you intend.", `${siteConfig.url}/services/estate-planning`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Estate Planning", url: `${siteConfig.url}/services/estate-planning` }
+        ]),
+        generateFAQSchema(estatePlanningFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-xl border-b border-white/10">
@@ -431,6 +458,7 @@ const EstatePlanning = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 

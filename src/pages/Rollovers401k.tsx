@@ -3,6 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ServiceConsultationForm } from "@/components/services/ServiceConsultationForm";
 import tfaLogo from "@/assets/tfa-logo.png";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const rolloverFaqs = [
+  { question: "What's the difference between a direct and indirect rollover?", answer: "A direct rollover transfers funds straight from your old 401(k) to your new IRA—no taxes withheld, no penalties. An indirect rollover gives you the check, which means 20% is withheld for taxes and you have 60 days to deposit it or face penalties. We always recommend direct rollovers." },
+  { question: "Will I owe taxes on my rollover?", answer: "Not if you do a direct rollover from a traditional 401(k) to a traditional IRA. The money stays tax-deferred. If you roll to a Roth IRA, you'll owe taxes on the converted amount that year—but future growth and withdrawals are tax-free." },
+  { question: "Can I roll over while still employed?", answer: "It depends on your plan. Many plans allow 'in-service' rollovers once you reach a certain age (often 59½). Some plans don't allow any rollovers until you leave. We can help you check your specific plan rules." },
+  { question: "How long does a rollover take?", answer: "Most direct rollovers complete within 1-2 weeks. The timeline depends on your old plan's processing speed. We'll track the transfer and keep you informed throughout the process." },
+  { question: "What happens to my 401(k) loans?", answer: "Outstanding 401(k) loans must typically be repaid before or shortly after you leave your employer, or they may be treated as a taxable distribution. We'll help you understand your options and plan accordingly." },
+];
 
 const Rollovers401k = () => {
   const scrollToForm = () => {
@@ -10,6 +21,23 @@ const Rollovers401k = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="401(k) & IRA Rollovers"
+        description="Consolidate retirement accounts with tax-free 401(k) and IRA rollovers. More investment options, lower fees, and simplified management."
+        canonical={`${siteConfig.url}/services/401k-rollover`}
+        keywords="401k rollover, IRA rollover, retirement account consolidation, direct rollover, Roth conversion"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("401(k) & IRA Rollovers", "Consolidate your retirement savings with tax-free rollovers. Take control with more investment options and simplified management.", `${siteConfig.url}/services/401k-rollover`),
+        generateServiceSchema("401(k) & IRA Rollovers", "Tax-free 401(k) and IRA rollover services to consolidate your retirement accounts, expand investment options, and simplify management.", `${siteConfig.url}/services/401k-rollover`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "401(k) Rollovers", url: `${siteConfig.url}/services/401k-rollover` }
+        ]),
+        generateFAQSchema(rolloverFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-white/10">
@@ -339,6 +367,7 @@ const Rollovers401k = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 
