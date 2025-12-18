@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Calendar, FileText, Phone, Mail, Download, Play, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-
+import { SEOHead } from "@/components/seo";
 const ThankYou = () => {
   // Track conversion
   useEffect(() => {
@@ -35,7 +35,13 @@ const ThankYou = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <SEOHead
+        title="Thank You - Consultation Booked"
+        description="Your consultation has been scheduled. Learn what to expect next."
+        noIndex={true}
+      />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 bg-gradient-to-br from-[hsl(var(--navy))] via-[hsl(215,40%,18%)] to-[hsl(215,45%,12%)] overflow-hidden">
         {/* Success Animation Background */}
@@ -208,6 +214,7 @@ const ThankYou = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

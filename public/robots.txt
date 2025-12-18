@@ -81,4 +81,4 @@ Disallow: /api/
 # Sitemap Location
 # ===========================================
 
-Sitemap: https://tfainsuranceadvisors.com/sitemap.xml
+Sitemap: https://tfawealthplanning.com/sitemap.xml

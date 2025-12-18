@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AgentApplicationForm from "@/components/careers/AgentApplicationForm";
 import { GraduationCap, FileCheck, UserCheck, Rocket, DollarSign, TrendingUp, Users, BookOpen, Shield, Award, Clock, Briefcase, CheckCircle2, ArrowRight } from "lucide-react";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema, generateJobPostingSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 const steps = [{
   icon: GraduationCap,
   title: "Pre-Licensing Education",
@@ -79,7 +82,33 @@ const AgentRecruitment = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  return <div className="min-h-screen">
+  return <>
+      <SEOHead
+        title="Agent Recruitment - Become a Licensed Financial Advisor"
+        description="Build a career helping families achieve financial security. No experience required. Comprehensive training and unlimited income potential."
+        canonical={`${siteConfig.url}/agent-recruitment`}
+        keywords="financial advisor jobs, insurance agent career, TFA agent recruitment"
+      />
+      <JsonLd
+        data={[
+          generateWebPageSchema(
+            "Agent Recruitment | The Financial Architects",
+            "Build a career helping families achieve financial security.",
+            `${siteConfig.url}/agent-recruitment`
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Careers", url: `${siteConfig.url}/careers` },
+            { name: "Agent Recruitment", url: `${siteConfig.url}/agent-recruitment` },
+          ]),
+          generateJobPostingSchema(
+            "Licensed Financial Advisor",
+            "Join The Financial Architects and transform lives while building unlimited income potential. No experience required — we provide all the training and support you need.",
+            `${siteConfig.url}/agent-recruitment`
+          ),
+        ]}
+      />
+      <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary via-primary/95 to-primary/90 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMtNi42MjcgMC0xMiA1LjM3My0xMiAxMnM1LjM3MyAxMiAxMiAxMiAxMi01LjM3MyAxMi0xMi01LjM3My0xMi0xMi0xMnoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9nPjwvc3ZnPg==')] opacity-30" />

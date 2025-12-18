@@ -17,6 +17,7 @@ import {
   DynamicAdvisor 
 } from "@/hooks/useDynamicAdvisors";
 import { useAdminApprovalSetting } from "@/hooks/useAdminSettings";
+import { SEOHead } from "@/components/seo";
 
 const AdminDashboard = () => {
   const { data: advisors = [], isLoading } = useAdminAdvisors();
@@ -143,7 +144,13 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
+    <>
+      <SEOHead
+        title="Admin Dashboard"
+        description="Manage advisor profiles and visibility"
+        noIndex={true}
+      />
+      <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header with Inline Workflow Toggle */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 animate-fade-in">
@@ -298,6 +305,7 @@ const AdminDashboard = () => {
         />
       </div>
     </div>
+    </>
   );
 };
 

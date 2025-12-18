@@ -4,6 +4,9 @@ import LivingTrustForm from "@/components/living-trust/LivingTrustForm";
 import tfaLogo from "@/assets/tfa-logo.png";
 import brandonGroupLogo from "@/assets/partners/the-brandon-group.png";
 import vanessaPhoto from "@/assets/advisors/vanessa-sanchez.jpg";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateWebPageSchema, generateBreadcrumbSchema, generatePersonSchema, generateServiceSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
 
 export default function VanessaLivingTrust() {
   const scrollToForm = () => {
@@ -52,7 +55,35 @@ export default function VanessaLivingTrust() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary via-primary-dark to-primary">
+    <>
+      <SEOHead
+        title="Living Trust Planning with Vanessa Sanchez"
+        description="Protect your family's future with a Living Trust. Avoid probate, protect privacy, and ensure your assets go to the people you love."
+        canonical={`${siteConfig.url}/vanessa-living-trust`}
+        keywords="living trust, estate planning, avoid probate, Vanessa Sanchez, asset protection"
+      />
+      <JsonLd
+        data={[
+          generateWebPageSchema(
+            "Living Trust Planning | The Financial Architects",
+            "Protect your family's future with a Living Trust.",
+            `${siteConfig.url}/vanessa-living-trust`
+          ),
+          generateBreadcrumbSchema([
+            { name: "Home", url: siteConfig.url },
+            { name: "Living Trust", url: `${siteConfig.url}/vanessa-living-trust` },
+          ]),
+          generatePersonSchema(
+            "Vanessa Sanchez",
+            "Financial Strategist",
+            "Vanessa Sanchez specializes in Living Trust consultations.",
+            `${siteConfig.url}/assets/advisors/vanessa-sanchez.jpg`,
+            `${siteConfig.url}/vanessa-living-trust`,
+            ["Living Trust", "Estate Planning", "Asset Protection"]
+          ),
+        ]}
+      />
+      <div className="min-h-screen bg-gradient-to-b from-primary via-primary-dark to-primary">
       {/* Co-Branded Header */}
       <header className="py-6 px-4 bg-white border-b border-gray-100">
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-6 md:gap-10">
