@@ -3,6 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ServiceConsultationForm } from "@/components/services/ServiceConsultationForm";
 import tfaLogo from "@/assets/tfa-logo.png";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const groupRetirementFaqs = [
+  { question: "What are my fiduciary responsibilities?", answer: "As a plan sponsor, you're responsible for acting in the best interest of participants. This includes selecting and monitoring investments, ensuring reasonable fees, and following the plan document. We help you meet these responsibilities with fiduciary support services that document your process and decisions." },
+  { question: "How much does a 401(k) plan cost?", answer: "Costs vary based on plan size and features. Typical expenses include setup fees ($500-$2,000), annual administration ($1,500-$5,000), and per-participant fees ($20-$100/year). Many of these costs are tax-deductible, and small businesses may qualify for tax credits that offset startup costs for the first three years." },
+  { question: "What matching formula should I use?", answer: "Common formulas include 100% match on the first 3% deferred, or 50% match on the first 6%. The right formula depends on your budget, industry norms, and goals. We'll help you design a formula that's competitive yet sustainable for your business." },
+  { question: "How do we increase employee participation?", answer: "We recommend auto-enrollment with an opt-out provision—this typically boosts participation to 90%+ compared to 50-60% with voluntary enrollment. We also provide employee education sessions that help participants understand the value of the plan and how to use it effectively." },
+  { question: "Can I set up a plan just for myself?", answer: "Yes! A Solo 401(k) or SEP IRA allows self-employed individuals and business owners with no employees (other than a spouse) to save significant amounts for retirement with high contribution limits and tax advantages." },
+];
 
 const GroupRetirement = () => {
   const scrollToForm = () => {
@@ -10,6 +21,23 @@ const GroupRetirement = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="401(k) & Group Retirement Plans"
+        description="Offer competitive retirement benefits with 401(k), 403(b), SIMPLE, and SEP plans. Attract and retain top talent with expert plan design."
+        canonical={`${siteConfig.url}/services/group-retirement`}
+        keywords="401k plan, group retirement plan, employer 401k, 403b plan, SIMPLE IRA, SEP IRA"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("401(k) & Group Retirement Plans", "Retirement benefits that attract and retain top talent. 401(k), 403(b), SIMPLE, and SEP plan design and administration.", `${siteConfig.url}/services/group-retirement`),
+        generateServiceSchema("Group Retirement Plans", "401(k) and group retirement plan design, setup, and administration for businesses of all sizes.", `${siteConfig.url}/services/group-retirement`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Group Retirement", url: `${siteConfig.url}/services/group-retirement` }
+        ]),
+        generateFAQSchema(groupRetirementFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-white/10">
@@ -352,6 +380,7 @@ const GroupRetirement = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

@@ -9,6 +9,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const incomePlanningFaqs = [
+  { question: "When should I start Social Security?", answer: "The optimal claiming age depends on your health, other income sources, and whether you're married. Claiming at 62 permanently reduces benefits by up to 30%, while waiting until 70 can increase them by 32%. We help you determine the best strategy for your situation." },
+  { question: "What is the 4% rule and does it still work?", answer: "The 4% rule suggests withdrawing 4% of your portfolio in year one, then adjusting for inflation. While it's a useful starting point, it may be too conservative or aggressive depending on your situation. We create dynamic withdrawal strategies tailored to your needs." },
+  { question: "How much income will I need in retirement?", answer: "Most retirees need 70-80% of their pre-retirement income, but this varies widely based on your lifestyle, healthcare needs, and goals. We help you calculate your specific income needs and create a plan to meet them." },
+  { question: "Which accounts should I withdraw from first?", answer: "The conventional wisdom of drawing from taxable accounts first isn't always optimal. Strategic sequencing between traditional IRAs, Roth IRAs, and taxable accounts can save significant taxes over your retirement." },
+];
 
 const IncomePlanning = () => {
   const scrollToForm = () => {
@@ -16,6 +26,23 @@ const IncomePlanning = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Retirement Income Planning"
+        description="Create sustainable retirement income that lasts. Social Security optimization, withdrawal strategies, and guaranteed income planning in Chino Hills."
+        canonical={`${siteConfig.url}/services/income-planning`}
+        keywords="retirement income planning, Social Security optimization, withdrawal strategies, pension planning, retirement income"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("Retirement Income Planning", "Create a sustainable income stream that lasts your entire retirement—no matter how long you live or what the market does.", `${siteConfig.url}/services/income-planning`),
+        generateServiceSchema("Retirement Income Planning", "Comprehensive retirement income planning including Social Security optimization, withdrawal strategies, and guaranteed income solutions.", `${siteConfig.url}/services/income-planning`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Income Planning", url: `${siteConfig.url}/services/income-planning` }
+        ]),
+        generateFAQSchema(incomePlanningFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-xl border-b border-white/10">
@@ -382,6 +409,7 @@ const IncomePlanning = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

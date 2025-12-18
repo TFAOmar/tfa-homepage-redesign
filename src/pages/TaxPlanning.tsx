@@ -9,6 +9,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const taxPlanningFaqs = [
+  { question: "Should I do a Roth conversion?", answer: "Roth conversions can be beneficial, especially in years with lower income or before RMDs begin. We analyze your specific situation to determine if and when conversions make sense, including the impact on current taxes, Medicare premiums, and long-term growth." },
+  { question: "Do you replace my CPA?", answer: "No, we complement your CPA. We focus on proactive tax planning and strategy, while your CPA handles tax preparation and filing. We coordinate closely with your CPA to ensure all strategies are properly implemented." },
+  { question: "What is IRMAA and how does it affect me?", answer: "IRMAA (Income-Related Monthly Adjustment Amount) is a surcharge added to Medicare premiums for higher-income beneficiaries. It's based on income from two years prior. Strategic planning can help you avoid or minimize these surcharges." },
+  { question: "How much can I save with tax planning?", answer: "Savings vary based on your situation, but clients often save $5,000-$50,000+ over their retirement. Even modest savings compound significantly over time. We'll show you projected savings during your consultation." },
+];
 
 const TaxPlanning = () => {
   const scrollToForm = () => {
@@ -16,6 +26,23 @@ const TaxPlanning = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Tax Planning Strategies"
+        description="Proactive tax planning to minimize your tax burden. Roth conversions, tax-loss harvesting, IRMAA planning, and retirement tax strategies."
+        canonical={`${siteConfig.url}/services/tax-planning`}
+        keywords="tax planning, Roth conversion, tax-loss harvesting, IRMAA planning, retirement tax strategy"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("Tax Planning Strategies", "Keep more of what you earn with proactive tax planning strategies that minimize your tax burden legally and strategically.", `${siteConfig.url}/services/tax-planning`),
+        generateServiceSchema("Tax Planning", "Proactive tax planning strategies including Roth conversions, tax-loss harvesting, and IRMAA planning to minimize your tax burden.", `${siteConfig.url}/services/tax-planning`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Tax Planning", url: `${siteConfig.url}/services/tax-planning` }
+        ]),
+        generateFAQSchema(taxPlanningFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-xl border-b border-white/10">
@@ -381,6 +408,7 @@ const TaxPlanning = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

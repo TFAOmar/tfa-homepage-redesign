@@ -25,6 +25,17 @@ import {
 import tfaLogo from "@/assets/tfa-logo.png";
 import KaiZenForm from "@/components/kaizen/KaiZenForm";
 import KaiZenCalculator from "@/components/kaizen/KaiZenCalculator";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const kaizenFaqs = [
+  { question: "Why was Kai-Zen developed?", answer: "Kai-Zen was developed to address a critical gap in retirement planning. Traditional qualified plans have low contribution limits, and most people aren't saving enough for retirement. Kai-Zen uses institutional-style financing to help individuals accumulate significantly more for retirement while also providing life insurance protection." },
+  { question: "What's the catch?", answer: "There's no catch, but Kai-Zen isn't for everyone. It requires a 5-year contribution commitment and works best for those with a long-term perspective. The strategy uses leverage, which amplifies both the benefits and the importance of working with qualified professionals who understand the product." },
+  { question: "Do I have to apply for the loan?", answer: "No. The bank financing is arranged through the program without any loan application, credit check, or personal guarantee from you. You never sign loan documents or make interest payments out of pocket." },
+  { question: "Is this too good to be true?", answer: "Kai-Zen uses well-established financial principles—leverage, life insurance tax advantages, and indexed crediting—in an innovative way. The strategy has been used successfully since 2006 and is backed by top-rated insurance carriers and established lending institutions." },
+  { question: "What are the risks?", answer: "Like any financial strategy, Kai-Zen has considerations. Policy performance depends on the insurance carrier's indexed crediting, and early termination may result in surrender charges. That's why it's designed for those with a long-term commitment to their retirement goals." },
+];
 
 const scrollToForm = () => {
   document.getElementById('kai-zen-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -166,6 +177,23 @@ const comparisonData = [
 
 const KaiZen = () => {
   return (
+    <>
+      <SEOHead
+        title="Kai-Zen Strategy - Leveraged Retirement Planning"
+        description="Kai-Zen uses smart leverage to help you accumulate significantly more for retirement with life insurance protection. No credit check, no personal guarantee."
+        canonical={`${siteConfig.url}/services/kai-zen`}
+        keywords="Kai-Zen, leveraged life insurance, retirement strategy, tax-free retirement, indexed life insurance"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("Kai-Zen Strategy", "Kai-Zen uses institutional-style leverage to amplify retirement savings with life insurance protection.", `${siteConfig.url}/services/kai-zen`),
+        generateServiceSchema("Kai-Zen Strategy", "Leveraged life insurance strategy to help you accumulate significantly more for retirement with tax-free distributions.", `${siteConfig.url}/services/kai-zen`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Kai-Zen", url: `${siteConfig.url}/services/kai-zen` }
+        ]),
+        generateFAQSchema(kaizenFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
@@ -594,6 +622,7 @@ const KaiZen = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 

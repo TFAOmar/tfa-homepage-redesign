@@ -9,6 +9,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const investmentFaqs = [
+  { question: "How often will my portfolio be rebalanced?", answer: "We typically rebalance quarterly or when asset allocations drift significantly from targets. This disciplined approach ensures your portfolio stays aligned with your risk tolerance without excessive trading." },
+  { question: "What are your management fees?", answer: "Our fees are competitive and transparent. We'll provide a complete fee schedule during your consultation. We believe in aligning our interests with yours through reasonable, value-based pricing." },
+  { question: "How do you determine my risk tolerance?", answer: "We use a combination of questionnaires, discussions about your financial situation, and scenario analysis to understand both your ability and willingness to take risk. Your portfolio is then designed to match your unique risk profile." },
+  { question: "Can I access my money when I need it?", answer: "Yes, your investments remain liquid. While we recommend a long-term approach, you can access your funds when needed. We'll help you structure your portfolio to balance growth with liquidity needs." },
+];
 
 const InvestmentManagement = () => {
   const scrollToForm = () => {
@@ -16,6 +26,23 @@ const InvestmentManagement = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Investment Management"
+        description="Professional investment management with goal-based strategies, risk management, and tax-efficient portfolios. Grow your wealth with confidence."
+        canonical={`${siteConfig.url}/services/investment-management`}
+        keywords="investment management, portfolio management, financial advisor, wealth management, investment strategy"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("Investment Management", "Professional investment management designed to help you reach your financial goals while managing risk appropriately.", `${siteConfig.url}/services/investment-management`),
+        generateServiceSchema("Investment Management", "Professional investment management with goal-based strategies, risk management, and tax-efficient portfolios to grow your wealth.", `${siteConfig.url}/services/investment-management`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Investment Management", url: `${siteConfig.url}/services/investment-management` }
+        ]),
+        generateFAQSchema(investmentFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-xl border-b border-white/10">
@@ -379,6 +406,7 @@ const InvestmentManagement = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

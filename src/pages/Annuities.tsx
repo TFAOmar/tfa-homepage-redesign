@@ -3,6 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ServiceConsultationForm } from "@/components/services/ServiceConsultationForm";
 import tfaLogo from "@/assets/tfa-logo.png";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const annuityFaqs = [
+  { question: "What exactly is an annuity?", answer: "An annuity is a contract with an insurance company that provides guaranteed income payments—either immediately or at a future date. You can fund it with a lump sum or over time. It's essentially a way to create your own personal pension that can last for your entire lifetime." },
+  { question: "Who should consider an annuity?", answer: "Annuities are ideal for people who want guaranteed income in retirement, protection from market volatility, and peace of mind knowing they can't outlive their money. They're particularly valuable for those without pensions or who want to supplement Social Security with reliable income." },
+  { question: "What are surrender charges?", answer: "Surrender charges are fees you may pay if you withdraw more than allowed during the early years of your contract (typically 5-10 years). Most annuities allow 10% penalty-free withdrawals annually. After the surrender period ends, you have full access to your money without penalties." },
+  { question: "How are annuities different from other investments?", answer: "Unlike stocks or mutual funds, annuities can guarantee your principal and provide guaranteed lifetime income. They're insurance products, not investments, which means they offer protections other investment vehicles can't—like a guarantee you'll never run out of money." },
+  { question: "Are annuities safe?", answer: "Annuities are backed by the claims-paying ability of the issuing insurance company. We only work with highly-rated carriers with strong financial foundations. Additionally, most states have guaranty associations that provide another layer of protection." },
+];
 
 const Annuities = () => {
   const scrollToForm = () => {
@@ -10,6 +21,23 @@ const Annuities = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Annuities - Guaranteed Lifetime Income"
+        description="Discover annuities for guaranteed lifetime income, principal protection, and peace of mind in retirement. Fixed, indexed, and income annuities available."
+        canonical={`${siteConfig.url}/services/annuities`}
+        keywords="annuities, guaranteed income, fixed annuity, indexed annuity, retirement income, lifetime income"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("Annuities - Guaranteed Lifetime Income", "Annuity solutions providing guaranteed income you can never outlive with principal protection.", `${siteConfig.url}/services/annuities`),
+        generateServiceSchema("Annuities", "Guaranteed income annuities that provide lifetime income, principal protection, and peace of mind for retirement.", `${siteConfig.url}/services/annuities`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Annuities", url: `${siteConfig.url}/services/annuities` }
+        ]),
+        generateFAQSchema(annuityFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-white/10">
@@ -339,6 +367,7 @@ const Annuities = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

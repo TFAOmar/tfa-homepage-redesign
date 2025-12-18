@@ -3,6 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ServiceConsultationForm } from "@/components/services/ServiceConsultationForm";
 import tfaLogo from "@/assets/tfa-logo.png";
+import { SEOHead, JsonLd } from "@/components/seo";
+import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
+import { siteConfig } from "@/lib/seo/siteConfig";
+
+const insuranceFaqs = [
+  { question: "How much life insurance do I need?", answer: "A common rule of thumb is 10-12x your annual income, but the real answer depends on your specific situation—debts, number of dependents, spouse's income, future expenses like college. We'll calculate your exact needs based on your unique circumstances." },
+  { question: "Term vs. permanent—which is right for me?", answer: "Term is more affordable and works well for temporary needs (like covering a mortgage or raising kids). Permanent insurance costs more but lasts forever and builds cash value. Many people use a combination of both. We'll help you determine the right mix." },
+  { question: "What if I've been denied coverage before?", answer: "Don't give up. Different carriers have different underwriting criteria. We work with many carriers and specialize in finding coverage for people who've been declined elsewhere. Health conditions that were once uninsurable often have options today." },
+  { question: "When should I consider long-term care insurance?", answer: "The ideal time is in your 50s or early 60s—when you're healthy enough to qualify and premiums are still reasonable. Waiting too long can mean higher costs or being uninsurable. We'll help you explore options including hybrid policies that combine life insurance with LTC benefits." },
+  { question: "Is disability insurance really necessary?", answer: "Your ability to earn income is your most valuable asset. You're more likely to become disabled than die during your working years. Without disability insurance, an illness or injury could devastate your finances. Most people are dramatically underinsured—employer coverage often isn't enough." },
+];
 
 const InsuranceServices = () => {
   const scrollToForm = () => {
@@ -10,6 +21,23 @@ const InsuranceServices = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Life & Disability Insurance"
+        description="Protect your family's financial future with life insurance, disability insurance, and long-term care coverage. Get a free coverage analysis."
+        canonical={`${siteConfig.url}/services/insurance`}
+        keywords="life insurance, disability insurance, long-term care insurance, term life, whole life insurance"
+      />
+      <JsonLd data={[
+        generateWebPageSchema("Life & Disability Insurance", "Comprehensive insurance protection including life insurance, disability insurance, and long-term care coverage.", `${siteConfig.url}/services/insurance`),
+        generateServiceSchema("Insurance Services", "Life insurance, disability insurance, and long-term care coverage to protect your family's financial future.", `${siteConfig.url}/services/insurance`),
+        generateBreadcrumbSchema([
+          { name: "Home", url: siteConfig.url },
+          { name: "Services", url: `${siteConfig.url}/services` },
+          { name: "Insurance", url: `${siteConfig.url}/services/insurance` }
+        ]),
+        generateFAQSchema(insuranceFaqs)
+      ]} />
     <div className="min-h-screen bg-background">
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-white/10">
@@ -345,6 +373,7 @@ const InsuranceServices = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 
