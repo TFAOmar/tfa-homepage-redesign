@@ -14,6 +14,7 @@ import EmailResultsModal from "./EmailResultsModal";
 import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
 import { CurrencyInput } from "@/components/ui/currency-input";
 import { NumericInput } from "@/components/ui/numeric-input";
+import { PercentageInput } from "@/components/ui/percentage-input";
 
 interface CalculatorInputs {
   initialInvestment: number;
@@ -393,14 +394,12 @@ const TFACompoundGrowthCalculator = () => {
                 <Label htmlFor="rate" className="text-sm md:text-base font-medium text-white">
                   Estimated Annual Rate of Return (%)
                 </Label>
-                <NumericInput
+                <PercentageInput
                   id="rate"
                   value={inputs.annualRate}
                   onChange={(value) => setInputs({ ...inputs, annualRate: Math.max(0, Math.min(20, value)) })}
-                  allowDecimals
                   min={0}
                   max={20}
-                  suffix="%"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.annualRate && (
@@ -551,7 +550,7 @@ const TFACompoundGrowthCalculator = () => {
                     <Label htmlFor="scenarioB-rate" className="text-sm font-medium mb-2 block">
                       Estimated Annual Rate of Return (%)
                     </Label>
-                    <NumericInput
+                    <PercentageInput
                       id="scenarioB-rate"
                       value={scenarioBInputs.annualRate}
                       onChange={(value) =>
@@ -559,8 +558,6 @@ const TFACompoundGrowthCalculator = () => {
                       }
                       min={0}
                       max={20}
-                      allowDecimals
-                      suffix="%"
                       className="h-12"
                     />
                   </div>

@@ -18,6 +18,7 @@ import EmailResultsModal from "./EmailResultsModal";
 import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
 import { CurrencyInput } from "@/components/ui/currency-input";
 import { NumericInput } from "@/components/ui/numeric-input";
+import { PercentageInput } from "@/components/ui/percentage-input";
 
 type SavingsMode = "monthly" | "annual" | "lumpsum";
 
@@ -307,14 +308,12 @@ export default function TFARequiredSavingsCalculator() {
                   <Label htmlFor="returnRate" className="text-sm font-medium text-white">
                     Expected Annual Rate of Return (%)
                   </Label>
-                  <NumericInput
+                  <PercentageInput
                     id="returnRate"
                     value={parseFloat(returnRate) || 0}
                     onChange={(value) => setReturnRate(value.toString())}
-                    allowDecimals
                     min={0}
                     max={20}
-                    suffix="%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>
