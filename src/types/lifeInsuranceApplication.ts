@@ -157,10 +157,6 @@ export const step5Schema = z.object({
   termDuration: z.string().optional(),
   faceAmount: z.number().min(1000, "Face amount is required"),
 
-  // Tests
-  lifeInsuranceTest: z.enum(["gpt", "cvat"], { required_error: "Test selection is required" }),
-  deathBenefitOption: z.enum(["level", "increasing"], { required_error: "Death benefit option is required" }),
-
   // Riders
   ridersChildrenTerm: z.boolean().default(false),
   ridersWaiverOfPremium: z.boolean().default(false),
@@ -191,7 +187,6 @@ export const existingPolicySchema = z.object({
 export const step6Schema = z.object({
   hasExistingCoverage: z.boolean().default(false),
   existingPolicies: z.array(existingPolicySchema).optional(),
-  is1035Exchange: z.boolean().default(false),
 });
 
 export type ExistingPolicy = z.infer<typeof existingPolicySchema>;
