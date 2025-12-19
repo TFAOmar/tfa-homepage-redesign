@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.send-life-insurance-notification]
 verify_jwt = false
+
+[functions.send-application-resume-link]
+verify_jwt = false
