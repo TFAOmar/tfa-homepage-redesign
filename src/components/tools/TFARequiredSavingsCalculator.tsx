@@ -218,7 +218,7 @@ export default function TFARequiredSavingsCalculator() {
           <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6 md:p-8">
             {/* Header with gold accent */}
             <div className="mb-6 pb-4 border-b border-white/15">
-              <div className="h-1 w-14 rounded-full bg-primary mb-4" />
+              <div className="h-1 w-14 rounded-full bg-accent mb-4" />
               <h2 className="text-lg md:text-xl font-bold text-white mb-2">
                 Goal & Savings Inputs
               </h2>
@@ -351,34 +351,36 @@ export default function TFARequiredSavingsCalculator() {
                 </div>
               </RadioGroup>
             </div>
-          </Card>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              onClick={calculateRequiredSavings}
-              className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground font-semibold rounded-full py-6 transition-all duration-300 shadow-lg shadow-primary/25"
-            >
-              Calculate Required Savings
-            </Button>
-            <Button
-              onClick={handleReset}
-              variant="outline"
-              className="flex-1 sm:flex-initial border-white/25 bg-slate-800/80 text-white hover:bg-slate-700/80 rounded-full py-6"
-            >
-              Reset
-            </Button>
-            {result && (
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-6 mt-6 border-t border-white/15">
               <Button
-                onClick={() => setEmailModalOpen(true)}
-                variant="outline"
-                className="flex-1 sm:flex-initial border-white/25 bg-slate-800/80 text-white hover:bg-slate-700/80 rounded-full py-6"
+                onClick={calculateRequiredSavings}
+                size="lg"
+                className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/25"
               >
-                <Mail className="h-4 w-4 mr-2" />
-                Email
+                Calculate
               </Button>
-            )}
-          </div>
+              <Button
+                onClick={handleReset}
+                variant="outline"
+                size="lg"
+                className="h-12 px-6 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80"
+              >
+                Reset
+              </Button>
+              {result && (
+                <Button
+                  onClick={() => setEmailModalOpen(true)}
+                  variant="outline"
+                  size="lg"
+                  className="h-12 px-4 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80"
+                >
+                  <Mail className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </Card>
         </div>
 
         {/* Right Column - Results */}
@@ -386,7 +388,7 @@ export default function TFARequiredSavingsCalculator() {
           {result ? (
             <div className="space-y-6 animate-fade-in">
               {/* Summary Card */}
-              <Card className="bg-gradient-to-br from-primary/25 via-accent/20 to-secondary/20 backdrop-blur-xl border-primary/30 p-8 rounded-2xl shadow-xl shadow-primary/20">
+              <Card className="bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 backdrop-blur-xl border-accent/30 p-8 rounded-2xl shadow-xl shadow-accent/20">
                 <div className="flex items-center gap-3 mb-4">
                   {result.isOnTrack ? (
                     <CheckCircle className="h-8 w-8 text-green-400" />
@@ -449,8 +451,8 @@ export default function TFARequiredSavingsCalculator() {
                       key={index}
                       className="flex items-center gap-2 bg-slate-800/60 rounded-lg p-3 border border-white/10"
                     >
-                      <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
-                        <Check className="h-3 w-3 text-primary" />
+                      <div className="w-6 h-6 rounded-full bg-accent/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="h-3 w-3 text-accent" />
                       </div>
                       <span className="text-xs text-white font-medium">{benefit.label}</span>
                     </div>
@@ -459,12 +461,12 @@ export default function TFARequiredSavingsCalculator() {
               </Card>
 
               {/* CTA Card */}
-              <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 backdrop-blur-xl border-primary/20 p-6 rounded-2xl">
+              <Card className="bg-gradient-to-br from-accent/15 to-slate-800/80 backdrop-blur-xl border-accent/25 p-6 rounded-2xl">
                 <h3 className="text-lg font-bold text-white mb-2">Need help building your plan?</h3>
                 <p className="text-white/70 mb-4 text-sm">
                   A TFA advisor can help you create a personalized savings and investment strategy.
                 </p>
-                <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full shadow-lg shadow-primary/25">
+                <Button asChild className="btn-primary-cta w-full">
                   <Link to="/contact">
                     Talk to an Advisor
                   </Link>
