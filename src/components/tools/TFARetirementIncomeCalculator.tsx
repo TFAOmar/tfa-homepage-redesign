@@ -460,7 +460,7 @@ export default function TFARetirementIncomeCalculator() {
           {results ? (
             <div className="space-y-8 animate-fade-in">
               {/* Summary Card */}
-              <Card className="bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 backdrop-blur-xl border-accent/30 shadow-xl shadow-accent/20">
+              <Card className="bg-slate-900/90 backdrop-blur-sm border border-accent/40 shadow-xl shadow-accent/15">
                 <CardHeader>
                   <CardTitle className="text-2xl text-white font-bold">Your Estimated Monthly Income</CardTitle>
                   <CardDescription className="text-white/70">Based on your inputs</CardDescription>
@@ -579,11 +579,11 @@ export default function TFARetirementIncomeCalculator() {
                   <div className="relative">
                     <div className="flex items-center justify-between mb-4">
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-primary drop-shadow-[0_0_10px_rgba(228,181,72,0.4)]">{currentAge}</p>
+                        <p className="text-2xl font-bold text-accent drop-shadow-[0_0_10px_rgba(228,181,72,0.4)]">{currentAge}</p>
                         <p className="text-xs text-white/70">Today</p>
                       </div>
                       <div className="flex-1 mx-4">
-                        <div className="h-1 bg-gradient-to-r from-primary via-accent to-secondary rounded-full" />
+                        <div className="h-1 bg-gradient-to-r from-accent via-accent/60 to-accent/30 rounded-full" />
                         <p className="text-xs text-center text-white/70 mt-2">Saving & Growth Phase</p>
                       </div>
                       <div className="text-center">
@@ -591,7 +591,7 @@ export default function TFARetirementIncomeCalculator() {
                         <p className="text-xs text-white/70">Retirement</p>
                       </div>
                       <div className="flex-1 mx-4">
-                        <div className="h-1 bg-gradient-to-r from-accent to-muted rounded-full" />
+                        <div className="h-1 bg-gradient-to-r from-accent/80 to-slate-600/60 rounded-full" />
                         <p className="text-xs text-center text-white/70 mt-2">Income Phase</p>
                       </div>
                       <div className="text-center">
@@ -629,7 +629,7 @@ export default function TFARetirementIncomeCalculator() {
               </Card>
 
               {/* Guidance Callout */}
-              <Card className="bg-gradient-to-br from-accent/15 to-slate-800/80 backdrop-blur-xl border-accent/25 shadow-lg">
+              <Card className="bg-slate-900/90 backdrop-blur-sm border border-accent/30 shadow-lg shadow-accent/10">
                 <CardContent className="pt-6">
                   <h3 className="text-lg font-bold text-white mb-2">Not sure if this is enough?</h3>
                   <p className="text-white/70 mb-6 leading-relaxed">
