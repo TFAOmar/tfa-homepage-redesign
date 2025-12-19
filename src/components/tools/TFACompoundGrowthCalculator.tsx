@@ -519,14 +519,14 @@ const TFACompoundGrowthCalculator = () => {
                     <Label htmlFor="scenarioB-initial" className="text-sm font-medium mb-2 block">
                       Initial Investment Amount ($)
                     </Label>
-                    <Input
+                    <CurrencyInput
                       id="scenarioB-initial"
-                      type="number"
-                      min="0"
                       value={scenarioBInputs.initialInvestment}
-                      onChange={(e) =>
-                        setScenarioBInputs({ ...scenarioBInputs, initialInvestment: Number(e.target.value) })
+                      onChange={(value) =>
+                        setScenarioBInputs({ ...scenarioBInputs, initialInvestment: value })
                       }
+                      min={0}
+                      showPrefix
                       className="h-12"
                     />
                   </div>
@@ -535,14 +535,14 @@ const TFACompoundGrowthCalculator = () => {
                     <Label htmlFor="scenarioB-monthly" className="text-sm font-medium mb-2 block">
                       Monthly Contribution ($)
                     </Label>
-                    <Input
+                    <CurrencyInput
                       id="scenarioB-monthly"
-                      type="number"
-                      min="0"
                       value={scenarioBInputs.monthlyContribution}
-                      onChange={(e) =>
-                        setScenarioBInputs({ ...scenarioBInputs, monthlyContribution: Number(e.target.value) })
+                      onChange={(value) =>
+                        setScenarioBInputs({ ...scenarioBInputs, monthlyContribution: value })
                       }
+                      min={0}
+                      showPrefix
                       className="h-12"
                     />
                   </div>
@@ -551,16 +551,16 @@ const TFACompoundGrowthCalculator = () => {
                     <Label htmlFor="scenarioB-rate" className="text-sm font-medium mb-2 block">
                       Estimated Annual Rate of Return (%)
                     </Label>
-                    <Input
+                    <NumericInput
                       id="scenarioB-rate"
-                      type="number"
-                      min="0"
-                      max="20"
-                      step="0.1"
                       value={scenarioBInputs.annualRate}
-                      onChange={(e) =>
-                        setScenarioBInputs({ ...scenarioBInputs, annualRate: Number(e.target.value) })
+                      onChange={(value) =>
+                        setScenarioBInputs({ ...scenarioBInputs, annualRate: value })
                       }
+                      min={0}
+                      max={20}
+                      allowDecimals
+                      suffix="%"
                       className="h-12"
                     />
                   </div>
@@ -573,14 +573,14 @@ const TFACompoundGrowthCalculator = () => {
                     <Label htmlFor="scenarioB-monthly-nointerest" className="text-sm font-medium mb-2 block">
                       Monthly Contribution ($)
                     </Label>
-                    <Input
+                    <CurrencyInput
                       id="scenarioB-monthly-nointerest"
-                      type="number"
-                      min="0"
                       value={scenarioBInputs.monthlyContribution}
-                      onChange={(e) =>
-                        setScenarioBInputs({ ...scenarioBInputs, monthlyContribution: Number(e.target.value) })
+                      onChange={(value) =>
+                        setScenarioBInputs({ ...scenarioBInputs, monthlyContribution: value })
                       }
+                      min={0}
+                      showPrefix
                       className="h-12"
                     />
                   </div>
