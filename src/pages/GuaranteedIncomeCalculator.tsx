@@ -212,7 +212,7 @@ export default function GuaranteedIncomeCalculator() {
                 </Button>
               </Link>
               <Link to="/services/annuities">
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg">
+                <Button variant="outline" className="bg-white/5 border-white/30 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg">
                   Learn About Annuities
                 </Button>
               </Link>

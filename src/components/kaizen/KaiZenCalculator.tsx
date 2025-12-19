@@ -201,7 +201,7 @@ const KaiZenCalculator = () => {
               <Button
                 onClick={handleReset}
                 variant="outline"
-                className="px-6 py-6 border-white/20 text-white hover:bg-white/10 rounded-xl"
+                className="px-6 py-6 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80 rounded-xl"
               >
                 <RefreshCw className="h-5 w-5" />
               </Button>
