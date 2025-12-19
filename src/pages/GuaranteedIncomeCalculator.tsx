@@ -85,8 +85,8 @@ export default function GuaranteedIncomeCalculator() {
             {/* Feature Grid */}
             <div className="grid md:grid-cols-2 gap-6 mb-12">
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 animate-fade-in">
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                  <TrendingUp className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+                  <TrendingUp className="h-6 w-6 text-accent" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">
                   8% Roll-Up Rate
@@ -98,8 +98,8 @@ export default function GuaranteedIncomeCalculator() {
               </div>
 
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "100ms" }}>
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+                  <Shield className="h-6 w-6 text-accent" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">
                   Principal Protection
@@ -111,8 +111,8 @@ export default function GuaranteedIncomeCalculator() {
               </div>
 
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "200ms" }}>
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                  <DollarSign className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+                  <DollarSign className="h-6 w-6 text-accent" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">
                   Tax-Deferred Growth
@@ -124,8 +124,8 @@ export default function GuaranteedIncomeCalculator() {
               </div>
 
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "300ms" }}>
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                  <Clock className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+                  <Clock className="h-6 w-6 text-accent" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">
                   Lifetime Income
@@ -144,7 +144,7 @@ export default function GuaranteedIncomeCalculator() {
               </h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground font-bold flex items-center justify-center mx-auto mb-3">
+                  <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mx-auto mb-3">
                     1
                   </div>
                   <h4 className="font-medium text-white mb-2">Fund Your Annuity</h4>
@@ -153,7 +153,7 @@ export default function GuaranteedIncomeCalculator() {
                   </p>
                 </div>
                 <div className="text-center">
-                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground font-bold flex items-center justify-center mx-auto mb-3">
+                  <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mx-auto mb-3">
                     2
                   </div>
                   <h4 className="font-medium text-white mb-2">Let It Grow</h4>
@@ -162,7 +162,7 @@ export default function GuaranteedIncomeCalculator() {
                   </p>
                 </div>
                 <div className="text-center">
-                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground font-bold flex items-center justify-center mx-auto mb-3">
+                  <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center mx-auto mb-3">
                     3
                   </div>
                   <h4 className="font-medium text-white mb-2">Turn On Income</h4>
