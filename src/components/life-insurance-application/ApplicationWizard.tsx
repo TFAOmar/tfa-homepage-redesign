@@ -191,19 +191,57 @@ const ApplicationWizard = ({
         step9: step9Form.getValues(),
       };
 
-      const { error } = await supabase.from("life_insurance_applications").insert({
-        form_data: finalFormData,
-        current_step: 9,
-        status: "submitted",
-        advisor_id: advisorId || null,
-        advisor_name: advisorName || null,
-        advisor_email: advisorEmail || null,
-        applicant_name: `${finalFormData.step1?.firstName || ""} ${finalFormData.step1?.lastName || ""}`.trim(),
-        applicant_email: finalFormData.step2?.email || null,
-        applicant_phone: finalFormData.step2?.mobilePhone || null,
-      });
+      const applicantName = `${finalFormData.step1?.firstName || ""} ${finalFormData.step1?.lastName || ""}`.trim();
+      const applicantEmail = finalFormData.step2?.email || null;
+      const applicantPhone = finalFormData.step2?.mobilePhone || null;
+
+      const { data: insertedData, error } = await supabase
+        .from("life_insurance_applications")
+        .insert({
+          form_data: finalFormData,
+          current_step: 9,
+          status: "submitted",
+          advisor_id: advisorId || null,
+          advisor_name: advisorName || null,
+          advisor_email: advisorEmail || null,
+          applicant_name: applicantName,
+          applicant_email: applicantEmail,
+          applicant_phone: applicantPhone,
+        })
+        .select("id")
+        .single();
 
       if (error) throw error;
+
+      // Send email notifications via edge function
+      if (insertedData?.id) {
+        try {
+          console.log("Sending life insurance notification emails...");
+          const { error: emailError } = await supabase.functions.invoke(
+            "send-life-insurance-notification",
+            {
+              body: {
+                applicationId: insertedData.id,
+                applicantName,
+                applicantEmail,
+                applicantPhone,
+                advisorName: advisorName || null,
+                advisorEmail: advisorEmail || null,
+                formData: finalFormData,
+              },
+            }
+          );
+
+          if (emailError) {
+            console.error("Failed to send notification emails:", emailError);
+          } else {
+            console.log("Notification emails sent successfully");
+          }
+        } catch (emailError) {
+          console.error("Error invoking email function:", emailError);
+          // Don't throw - application was saved successfully
+        }
+      }
 
       // Clear the draft from localStorage
       localStorage.removeItem("lifeInsuranceApplication");
