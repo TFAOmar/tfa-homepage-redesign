@@ -43,7 +43,7 @@ interface NotificationRequest {
 }
 
 const ADMIN_EMAIL = "leads@tfainsuranceadvisors.com";
-const FROM_EMAIL = "TFA Insurance <noreply@tfainsuranceadvisors.com>";
+const FROM_EMAIL = "The Financial Architects <noreply@tfainsuranceadvisors.com>";
 
 const formatCurrency = (amount?: number): string => {
   if (!amount) return "N/A";
@@ -82,7 +82,7 @@ const generateAdminEmail = (data: NotificationRequest): string => {
   <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
     <div style="background-color: #1e3a5f; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
       <h1 style="color: #ffffff; margin: 0; font-size: 24px;">New Life Insurance Application</h1>
-      <p style="color: #94a3b8; margin: 10px 0 0 0; font-size: 14px;">TFA Insurance Advisors</p>
+      <p style="color: #94a3b8; margin: 10px 0 0 0; font-size: 14px;">The Financial Architects</p>
     </div>
     
     <div style="background-color: #ffffff; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -162,7 +162,7 @@ const generateAdminEmail = (data: NotificationRequest): string => {
     </div>
     
     <p style="text-align: center; color: #6b7280; font-size: 12px; margin-top: 20px;">
-      © ${new Date().getFullYear()} TFA Insurance Advisors. All rights reserved.
+      © ${new Date().getFullYear()} The Financial Architects. All rights reserved.
     </p>
   </div>
 </body>
@@ -186,7 +186,7 @@ const generateApplicantEmail = (data: NotificationRequest): string => {
   <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
     <div style="background-color: #1e3a5f; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
       <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Application Received!</h1>
-      <p style="color: #94a3b8; margin: 10px 0 0 0; font-size: 14px;">TFA Insurance Advisors</p>
+      <p style="color: #94a3b8; margin: 10px 0 0 0; font-size: 14px;">The Financial Architects</p>
     </div>
     
     <div style="background-color: #ffffff; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -195,7 +195,7 @@ const generateApplicantEmail = (data: NotificationRequest): string => {
       </p>
       
       <p style="color: #111827; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-        Thank you for submitting your life insurance application with TFA Insurance Advisors. We have successfully received your application and our team is reviewing it.
+        Thank you for submitting your life insurance application with The Financial Architects. We have successfully received your application and our team is reviewing it.
       </p>
 
       <div style="background-color: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; margin: 25px 0; border-radius: 0 4px 4px 0;">
@@ -231,17 +231,17 @@ const generateApplicantEmail = (data: NotificationRequest): string => {
       </div>
 
       <p style="color: #111827; font-size: 16px; line-height: 1.6; margin: 25px 0 0 0;">
-        Thank you for choosing TFA Insurance Advisors. We're committed to helping you protect what matters most.
+        Thank you for choosing The Financial Architects. We're committed to helping you protect what matters most.
       </p>
 
       <p style="color: #111827; font-size: 16px; line-height: 1.6; margin: 20px 0 0 0;">
         Warm regards,<br>
-        <strong>The TFA Insurance Team</strong>
+        <strong>The Financial Architects Team</strong>
       </p>
     </div>
     
     <p style="text-align: center; color: #6b7280; font-size: 12px; margin-top: 20px;">
-      © ${new Date().getFullYear()} TFA Insurance Advisors. All rights reserved.<br>
+      © ${new Date().getFullYear()} The Financial Architects. All rights reserved.<br>
       This email was sent regarding your life insurance application.
     </p>
   </div>

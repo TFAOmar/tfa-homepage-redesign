@@ -64,7 +64,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <!-- Header -->
                 <tr>
                   <td style="background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8a 100%); padding: 40px 40px 30px; text-align: center;">
-                    <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700;">TFA Financial</h1>
+                    <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700;">The Financial Architects</h1>
                     <p style="margin: 10px 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">Life Insurance Application</p>
                   </td>
                 </tr>
@@ -112,7 +112,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <tr>
                   <td style="background-color: #f4f4f5; padding: 30px 40px; text-align: center;">
                     <p style="margin: 0 0 10px; color: #71717a; font-size: 12px;">
-                      © ${new Date().getFullYear()} TFA Financial. All rights reserved.
+                      © ${new Date().getFullYear()} The Financial Architects. All rights reserved.
                     </p>
                     <p style="margin: 0; color: #a1a1aa; font-size: 11px;">
                       This is an automated message. Please do not reply to this email.
@@ -134,7 +134,7 @@ const handler = async (req: Request): Promise<Response> => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "TFA Financial <onboarding@resend.dev>",
+        from: "The Financial Architects <onboarding@resend.dev>",
         to: [email],
         subject: "Continue Your Life Insurance Application",
         html: emailHtml,

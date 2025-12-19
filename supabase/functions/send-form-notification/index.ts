@@ -267,7 +267,7 @@ const getConfirmationEmailConfig = (formType: string, advisorName?: string): Con
       subject: "Your Insurance Consultation Request",
       bodyIntro: "Thank you for your interest in protecting your family's financial future.",
       nextSteps: [
-        "A TFA insurance specialist will review your information",
+        "A Financial Architects specialist will review your information",
         "You can expect to be contacted within 24 hours",
         "No commitment required - this is a complimentary consultation"
       ],
