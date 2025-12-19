@@ -388,12 +388,12 @@ export default function TFARequiredSavingsCalculator() {
           {result ? (
             <div className="space-y-6 animate-fade-in">
               {/* Summary Card */}
-              <Card className="bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 backdrop-blur-xl border-accent/30 p-8 rounded-2xl shadow-xl shadow-accent/20">
+              <Card className="bg-slate-900/90 backdrop-blur-sm border border-accent/40 p-8 rounded-2xl shadow-xl shadow-accent/15">
                 <div className="flex items-center gap-3 mb-4">
                   {result.isOnTrack ? (
                     <CheckCircle className="h-8 w-8 text-green-400" />
                   ) : (
-                    <Target className="h-8 w-8 text-primary" />
+                    <Target className="h-8 w-8 text-accent" />
                   )}
                   <h2 className="text-2xl font-bold text-white">
                     {result.isOnTrack ? "You're On Track!" : "You need to save approximately:"}
@@ -461,7 +461,7 @@ export default function TFARequiredSavingsCalculator() {
               </Card>
 
               {/* CTA Card */}
-              <Card className="bg-gradient-to-br from-accent/15 to-slate-800/80 backdrop-blur-xl border-accent/25 p-6 rounded-2xl">
+              <Card className="bg-slate-900/90 backdrop-blur-sm border border-accent/30 p-6 rounded-2xl shadow-lg shadow-accent/10">
                 <h3 className="text-lg font-bold text-white mb-2">Need help building your plan?</h3>
                 <p className="text-white/70 mb-4 text-sm">
                   A TFA advisor can help you create a personalized savings and investment strategy.

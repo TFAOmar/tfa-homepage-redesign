@@ -610,7 +610,7 @@ export default function TFATaxImpactCalculator() {
           {results ? (
             <div className="space-y-6 animate-fade-in">
               {/* Summary Card */}
-              <Card className="bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 backdrop-blur-xl border-accent/30 shadow-xl shadow-accent/20">
+              <Card className="bg-slate-900/90 backdrop-blur-sm border border-accent/40 shadow-xl shadow-accent/15">
                 <CardHeader>
                   <CardTitle className="text-2xl text-white font-bold">Estimated After-Tax Monthly Income</CardTitle>
                 </CardHeader>
@@ -794,7 +794,7 @@ export default function TFATaxImpactCalculator() {
               </Card>
 
               {/* Guidance CTA */}
-              <Card className="bg-gradient-to-br from-accent/15 to-slate-800/80 backdrop-blur-xl border-accent/25 shadow-lg">
+              <Card className="bg-slate-900/90 backdrop-blur-sm border border-accent/30 shadow-lg shadow-accent/10">
                 <CardContent className="pt-6">
                   <h3 className="text-lg font-bold text-white mb-2">
                     Not sure if these numbers are right for your situation?

@@ -459,7 +459,7 @@ export default function TFAGuaranteedIncomeCalculator() {
             {results ? (
               <div className="space-y-6">
                 {/* Main Result */}
-                <div className="bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 rounded-xl p-6 text-center border border-accent/30 shadow-lg shadow-accent/20">
+                <div className="bg-slate-900/90 backdrop-blur-sm rounded-xl p-6 text-center border border-accent/40 shadow-xl shadow-accent/15">
                   <p className="text-sm font-medium text-white/80 mb-2">
                     {solveMode === "income"
                       ? `Estimated ${payoutMode === "monthly" ? "Monthly" : "Yearly"} Income`
