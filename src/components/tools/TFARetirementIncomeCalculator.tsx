@@ -10,6 +10,7 @@ import EmailResultsModal from "./EmailResultsModal";
 import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
 import { CurrencyInput } from "@/components/ui/currency-input";
 import { NumericInput } from "@/components/ui/numeric-input";
+import { PercentageInput } from "@/components/ui/percentage-input";
 
 interface CalculationResults {
   savingsAtRetirement: number;
@@ -322,14 +323,12 @@ export default function TFARetirementIncomeCalculator() {
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="returnBeforeRetirement" className="text-sm font-medium text-white">Expected Annual Return Before Retirement (%)</Label>
-                  <NumericInput
+                  <PercentageInput
                     id="returnBeforeRetirement"
                     value={returnBeforeRetirement}
                     onChange={(value) => setReturnBeforeRetirement(Math.max(0, Math.min(15, value)))}
-                    allowDecimals
                     min={0}
                     max={15}
-                    suffix="%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.returnBeforeRetirement && (
@@ -338,14 +337,12 @@ export default function TFARetirementIncomeCalculator() {
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="returnDuringRetirement" className="text-sm font-medium text-white">Expected Annual Return During Retirement (%)</Label>
-                  <NumericInput
+                  <PercentageInput
                     id="returnDuringRetirement"
                     value={returnDuringRetirement}
                     onChange={(value) => setReturnDuringRetirement(Math.max(0, Math.min(10, value)))}
-                    allowDecimals
                     min={0}
                     max={10}
-                    suffix="%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.returnDuringRetirement && (
