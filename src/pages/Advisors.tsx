@@ -103,14 +103,14 @@ const Advisors = () => {
     <>
       <SEOHead
         title="Meet Our Financial Advisors"
-        description="Find a trusted TFA financial advisor near you. Our team specializes in retirement planning, estate planning, Medicare, tax strategies, and wealth protection."
+        description="Find a trusted Financial Architects advisor near you. Our team specializes in retirement planning, estate planning, Medicare, tax strategies, and wealth protection."
         canonical={`${siteConfig.url}/advisors`}
-        keywords="TFA financial advisors, retirement planning advisors, estate planning specialists, Medicare advisors, wealth protection"
+        keywords="Financial Architects advisors, retirement planning advisors, estate planning specialists, Medicare advisors, wealth protection"
       />
       <JsonLd data={[
         generateWebPageSchema(
           "Meet Our Financial Advisors | The Financial Architects",
-          "Find a trusted TFA financial advisor near you. Our team specializes in retirement planning, estate planning, Medicare, and tax strategies.",
+          "Find a trusted Financial Architects advisor near you. Our team specializes in retirement planning, estate planning, Medicare, and tax strategies.",
           `${siteConfig.url}/advisors`
         ),
         generateBreadcrumbSchema([

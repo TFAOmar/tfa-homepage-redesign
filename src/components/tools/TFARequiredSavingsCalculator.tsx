@@ -474,7 +474,7 @@ export default function TFARequiredSavingsCalculator() {
               <Card className="bg-slate-900/90 backdrop-blur-sm border border-accent/30 p-6 rounded-2xl shadow-lg shadow-accent/10">
                 <h3 className="text-lg font-bold text-white mb-2">Need help building your plan?</h3>
                 <p className="text-white/70 mb-4 text-sm">
-                  A TFA advisor can help you create a personalized savings and investment strategy.
+                  Our advisors can help you create a personalized savings and investment strategy.
                 </p>
                 <Button asChild className="btn-primary-cta w-full">
                   <Link to="/contact">

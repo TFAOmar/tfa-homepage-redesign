@@ -5,7 +5,7 @@ const ContactInfo = () => {
   return <div className="space-y-8">
       {/* Team Photo */}
       <div className="glass rounded-2xl overflow-hidden">
-        <img src={teamPhoto} alt="TFA Advisor Team" className="w-full h-64 object-cover" />
+        <img src={teamPhoto} alt="The Financial Architects Team" className="w-full h-64 object-cover" />
         <div className="p-6">
           <h3 className="text-2xl font-bold text-navy mb-2">
             Our Expert Team

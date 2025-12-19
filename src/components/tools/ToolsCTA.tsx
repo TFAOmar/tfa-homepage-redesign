@@ -28,7 +28,7 @@ const ToolsCTA = () => {
               className="bg-accent hover:bg-accent/90 text-accent-foreground neuro-button px-8"
             >
               <Link to="/contact">
-                Talk to a TFA Advisor
+                Talk to an Advisor
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

@@ -80,7 +80,7 @@ export default function Tools() {
               Explore Our Calculators
             </h2>
             <p className="text-foreground/80 leading-relaxed">
-              These tools offer clear, educational estimates to help you make informed decisions. For personalized recommendations, connect with a TFA advisor.
+              These tools offer clear, educational estimates to help you make informed decisions. For personalized recommendations, connect with one of our advisors.
             </p>
           </div>
 

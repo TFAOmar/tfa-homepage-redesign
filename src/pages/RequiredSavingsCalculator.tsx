@@ -147,7 +147,7 @@ export default function RequiredSavingsCalculator() {
                       This calculator provides estimates for educational purposes only. Actual 
                       investment returns will vary and are not guaranteed. This tool does not 
                       account for taxes, fees, or inflation. For a customized savings strategy, 
-                      connect with a TFA advisor.
+                      connect with one of our advisors.
                     </p>
                   </div>
                 </div>

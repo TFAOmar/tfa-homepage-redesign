@@ -162,7 +162,7 @@ const AdvisorVanessaSanchez = () => {
                 <div className="absolute -bottom-4 -right-4 bg-accent text-primary px-6 py-3 rounded-xl font-semibold shadow-lg">
                   <div className="flex items-center gap-2">
                     <Award className="h-5 w-5" />
-                    <span>TFA Advisor</span>
+                    <span>Financial Advisor</span>
                   </div>
                 </div>
               </div>

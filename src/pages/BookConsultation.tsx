@@ -202,7 +202,7 @@ const BookConsultation = () => {
                     <div className="p-8 text-center">
                       <Calendar className="h-16 w-16 text-[#E4B548] mx-auto mb-6" />
                       <h3 className="text-2xl font-bold text-[hsl(var(--navy))] mb-4">
-                        TFA Financial Consultation (30 Minutes)
+                        Financial Architects Consultation (30 Minutes)
                       </h3>
                       <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                         Select a time that works for you. Our advisors are available Monday through Friday, 9 AM to 6 PM.
@@ -325,7 +325,7 @@ const BookConsultation = () => {
                 What Our Clients Say
               </h2>
               <p className="text-muted-foreground text-lg">
-                Join thousands of families who have secured their financial future with TFA.
+                Join thousands of families who have secured their financial future with The Financial Architects.
               </p>
             </div>
 
