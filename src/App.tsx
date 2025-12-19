@@ -69,11 +69,12 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning', '/services/annuities', '/services/401k-rollovers', '/services/insurance', '/services/group-retirement', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning', '/services/annuities', '/services/401k-rollovers', '/services/insurance', '/services/group-retirement', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/life-insurance-application'];
 
 const AppLayout = () => {
   const location = useLocation();
-  const isStandalonePage = standalonePages.includes(location.pathname);
+  const isStandalonePage = standalonePages.includes(location.pathname) || 
+    /^\/advisors\/[^/]+\/life-insurance$/.test(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col">
