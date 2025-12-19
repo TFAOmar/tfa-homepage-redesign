@@ -85,8 +85,8 @@ export default function RequiredSavingsCalculator() {
               {/* Feature Grid */}
               <div className="grid md:grid-cols-2 gap-6 mb-12">
                 <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 animate-fade-in">
-                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                    <Target className="h-6 w-6 text-primary" />
+                  <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+                    <Target className="h-6 w-6 text-accent" />
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-2">
                     Set Clear Goals
@@ -98,8 +98,8 @@ export default function RequiredSavingsCalculator() {
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "100ms" }}>
-                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                    <Clock className="h-6 w-6 text-primary" />
+                  <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+                    <Clock className="h-6 w-6 text-accent" />
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-2">
                     Time is Your Ally
@@ -111,8 +111,8 @@ export default function RequiredSavingsCalculator() {
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "200ms" }}>
-                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                    <TrendingUp className="h-6 w-6 text-primary" />
+                  <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+                    <TrendingUp className="h-6 w-6 text-accent" />
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-2">
                     Growth Matters
@@ -124,8 +124,8 @@ export default function RequiredSavingsCalculator() {
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "300ms" }}>
-                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                    <PiggyBank className="h-6 w-6 text-primary" />
+                  <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+                    <PiggyBank className="h-6 w-6 text-accent" />
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-2">
                     Consistency Wins
