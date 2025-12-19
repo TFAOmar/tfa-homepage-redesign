@@ -141,7 +141,7 @@ const AdvisorManuelSoto = () => {
                 "Change What You're Doing to Change What You're Getting."
               </p>
               <p className="text-lg text-white/80 leading-relaxed">
-                As the founder of TFA Insurance Advisors, Manuel built his career on needs-based 
+                As the founder of The Financial Architects, Manuel built his career on needs-based 
                 planning that rejects one-size-fits-all approaches. With a personal client base 
                 of ~2,000 and having trained thousands of advisors, he leads by example.
               </p>
@@ -209,7 +209,7 @@ const AdvisorManuelSoto = () => {
             
             <div className="prose prose-lg max-w-none text-muted-foreground space-y-6">
               <p>
-                Manuel Soto founded TFA Insurance Advisors with a simple yet powerful mission: 
+                Manuel Soto founded The Financial Architects with a simple yet powerful mission: 
                 to help families achieve lasting financial security through personalized, 
                 needs-based planning. His approach rejects cookie-cutter solutions in favor of 
                 strategies tailored to each client's unique situation.

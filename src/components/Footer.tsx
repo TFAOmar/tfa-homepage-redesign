@@ -96,7 +96,7 @@ const Footer = () => {
             </div>
           </div>
           <p className="text-primary-foreground/50 text-xs mt-4 text-center md:text-left">
-            Securities and advisory services offered through licensed representatives. Investment advisory services offered through TFA Wealth Planning, LLC. Insurance products and services offered through TFA Insurance Services.
+            Securities and advisory services offered through licensed representatives. Investment advisory services offered through TFA Wealth Planning, LLC. Insurance products and services offered through The Financial Architects.
           </p>
         </div>
       </div>

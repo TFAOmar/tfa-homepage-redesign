@@ -44,7 +44,7 @@ export const advisors: Advisor[] = [
     state: "California",
     city: "Chino Hills",
     region: "West",
-    bio: "Founder of TFA Insurance Advisors, dedicated to helping families achieve financial security and build lasting legacies.",
+    bio: "Founder of The Financial Architects, dedicated to helping families achieve financial security and build lasting legacies.",
     specialties: ["Retirement Planning", "Tax Strategies", "Estate Planning", "Business Planning"],
     licenses: ["Life & Health (Lic# 0D87636)"],
     image: manuelSotoImg,
