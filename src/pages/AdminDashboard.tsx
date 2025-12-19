@@ -1,8 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Shield, Users, Clock, EyeOff, Archive, Loader2 } from "lucide-react";
+import { Shield, Users, Clock, EyeOff, Archive, Loader2, FileText } from "lucide-react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdvisorTable from "@/components/admin/AdvisorTable";
 import AdvisorEditModal from "@/components/admin/AdvisorEditModal";
@@ -153,7 +155,7 @@ const AdminDashboard = () => {
       <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header with Inline Workflow Toggle */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 animate-fade-in">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 animate-fade-in">
           <div className="flex items-center gap-3">
             <Shield className="h-10 w-10 text-accent" />
             <div>
@@ -161,18 +163,26 @@ const AdminDashboard = () => {
               <p className="text-muted-foreground">Manage advisor profiles and visibility</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-card border shadow-sm">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium text-foreground">Admin Approval</p>
-              <p className="text-xs text-muted-foreground">
-                {adminApprovalEnabled ? "Required for new profiles" : "Auto-publish enabled"}
-              </p>
+          <div className="flex items-center gap-4">
+            <Button variant="outline" asChild>
+              <Link to="/admin/applications">
+                <FileText className="h-4 w-4 mr-2" />
+                Life Insurance Applications
+              </Link>
+            </Button>
+            <div className="flex items-center gap-3 p-3 rounded-lg bg-card border shadow-sm">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-medium text-foreground">Admin Approval</p>
+                <p className="text-xs text-muted-foreground">
+                  {adminApprovalEnabled ? "Required for new profiles" : "Auto-publish enabled"}
+                </p>
+              </div>
+              <span className="text-sm font-medium sm:hidden">Approval</span>
+              <Switch 
+                checked={adminApprovalEnabled} 
+                onCheckedChange={toggleAdminApproval}
+              />
             </div>
-            <span className="text-sm font-medium sm:hidden">Approval</span>
-            <Switch 
-              checked={adminApprovalEnabled} 
-              onCheckedChange={toggleAdminApproval}
-            />
           </div>
         </div>
 

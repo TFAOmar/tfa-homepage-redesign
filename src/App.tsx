@@ -25,6 +25,7 @@ import Advisors from "./pages/Advisors";
 import Partners from "./pages/Partners";
 import AdvisorOnboarding from "./pages/AdvisorOnboarding";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminApplications from "./pages/AdminApplications";
 import CompoundGrowthCalculator from "./pages/CompoundGrowthCalculator";
 import RetirementIncomeCalculator from "./pages/RetirementIncomeCalculator";
 import TaxImpactCalculator from "./pages/TaxImpactCalculator";
@@ -97,6 +98,11 @@ const AppLayout = () => {
           <Route path="/admin" element={
             <ProtectedRoute requireAdmin>
               <AdminDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/applications" element={
+            <ProtectedRoute requireAdmin>
+              <AdminApplications />
             </ProtectedRoute>
           } />
           <Route path="/tools" element={<Tools />} />
