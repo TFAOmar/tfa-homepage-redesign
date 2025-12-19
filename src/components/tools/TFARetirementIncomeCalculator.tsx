@@ -233,7 +233,7 @@ export default function TFARetirementIncomeCalculator() {
           <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6 md:p-8">
             {/* Header with gold accent */}
             <div className="mb-6 pb-4 border-b border-white/15">
-              <div className="h-1 w-14 rounded-full bg-primary mb-4" />
+              <div className="h-1 w-14 rounded-full bg-accent mb-4" />
               <h3 className="text-lg md:text-xl font-bold text-white mb-2">
                 Retirement Income Inputs
               </h3>
@@ -437,22 +437,22 @@ export default function TFARetirementIncomeCalculator() {
                 />
               </div>
             </div>
-          </Card>
 
-          {/* Action Buttons */}
-          <div className="flex gap-4">
-            <Button onClick={calculateRetirementIncome} size="lg" className="flex-1 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
-              Calculate
-            </Button>
-            <Button onClick={handleReset} variant="outline" size="lg" className="bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
-              Reset
-            </Button>
-            {results && (
-              <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg" className="bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
-                <Mail className="h-4 w-4" />
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-6 mt-6 border-t border-white/15">
+              <Button onClick={calculateRetirementIncome} size="lg" className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/25">
+                Calculate
               </Button>
-            )}
-          </div>
+              <Button onClick={handleReset} variant="outline" size="lg" className="h-12 px-6 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
+                Reset
+              </Button>
+              {results && (
+                <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg" className="h-12 px-4 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
+                  <Mail className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </Card>
         </div>
 
         {/* Right Column - Results */}
@@ -619,8 +619,8 @@ export default function TFARetirementIncomeCalculator() {
                       key={index}
                       className="flex items-center gap-2 bg-slate-800/60 rounded-lg p-3 border border-white/10"
                     >
-                      <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
-                        <Check className="h-3 w-3 text-primary" />
+                      <div className="w-6 h-6 rounded-full bg-accent/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="h-3 w-3 text-accent" />
                       </div>
                       <span className="text-xs text-white font-medium">{benefit.label}</span>
                     </div>
@@ -636,7 +636,7 @@ export default function TFARetirementIncomeCalculator() {
                     A TFA advisor can help you refine your plan, stress-test your assumptions, and build a retirement
                     income strategy tailored to your family.
                   </p>
-                  <Button size="lg" className="w-full group bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
+                  <Button size="lg" className="btn-primary-cta w-full group">
                     Talk to an Advisor About Your Retirement Plan
                     <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Button>
