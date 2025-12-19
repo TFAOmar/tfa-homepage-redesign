@@ -829,7 +829,7 @@ const TFACompoundGrowthCalculator = () => {
               <Card className="p-8 bg-background/40 backdrop-blur-sm border-border/50 text-center">
                 <h3 className="text-xl font-semibold mb-2">See What This Could Look Like for You</h3>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Talk to a TFA Advisor • Free Consultation
+                  Talk to an Advisor • Free Consultation
                 </p>
                 <Button
                   className="h-12 px-8 bg-gold hover:bg-gold/90 text-navy font-semibold shadow-lg hover:shadow-gold/20"

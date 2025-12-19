@@ -94,7 +94,7 @@ export const ServiceConsultationForm = ({
 
       toast({
         title: "Thank you for your interest!",
-        description: "A TFA advisor will contact you within 24 hours.",
+        description: "A Financial Architects advisor will contact you within 24 hours.",
       });
 
       form.reset();
@@ -309,7 +309,7 @@ export const ServiceConsultationForm = ({
         </Button>
 
         <p className="text-white/60 text-xs text-center">
-          Your information is secure and will never be shared. A TFA advisor will 
+          Your information is secure and will never be shared. A Financial Architects advisor will 
           contact you within 24 hours.
         </p>
       </form>

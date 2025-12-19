@@ -794,7 +794,7 @@ export default function TFATaxImpactCalculator() {
                     Not sure if these numbers are right for your situation?
                   </h3>
                   <p className="text-white/70 mb-6 leading-relaxed">
-                    A TFA advisor can help you customize your retirement income strategy, coordinate taxes, and explore
+                    Our advisors can help you customize your retirement income strategy, coordinate taxes, and explore
                     options to improve after-tax income.
                   </p>
                   <Button
@@ -802,7 +802,7 @@ export default function TFATaxImpactCalculator() {
                     className="btn-primary-cta w-full group"
                     onClick={() => (window.location.href = "/contact")}
                   >
-                    Talk to a TFA Advisor About Taxes in Retirement
+                    Talk to an Advisor About Taxes in Retirement
                     <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </CardContent>

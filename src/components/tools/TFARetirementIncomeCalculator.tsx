@@ -618,7 +618,7 @@ export default function TFARetirementIncomeCalculator() {
                 <CardContent className="pt-6">
                   <h3 className="text-lg font-bold text-white mb-2">Not sure if this is enough?</h3>
                   <p className="text-white/70 mb-6 leading-relaxed">
-                    A TFA advisor can help you refine your plan, stress-test your assumptions, and build a retirement
+                    Our advisors can help you refine your plan, stress-test your assumptions, and build a retirement
                     income strategy tailored to your family.
                   </p>
                   <Button size="lg" className="btn-primary-cta w-full group">
