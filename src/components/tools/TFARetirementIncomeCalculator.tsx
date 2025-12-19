@@ -619,18 +619,18 @@ export default function TFARetirementIncomeCalculator() {
               </Card>
             </div>
           ) : (
-            <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40">
-              <CardContent className="pt-12 pb-12 text-center">
-                <div className="max-w-md mx-auto space-y-4">
-                  <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                    <TrendingUp className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white">Ready to See Your Future?</h3>
-                  <p className="text-white/70">
-                    Fill out the form and click Calculate to see your estimated retirement income.
-                  </p>
+            <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6 md:p-8">
+              <div className="mb-6 pb-4 border-b border-white/15">
+                <div className="h-1 w-14 rounded-full bg-accent mb-4" />
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2">Results</h3>
+                <p className="text-sm text-white/70">Enter your details and click Calculate</p>
+              </div>
+              <div className="text-center py-12">
+                <div className="w-16 h-16 rounded-full bg-slate-800/80 flex items-center justify-center mx-auto mb-4">
+                  <DollarSign className="h-8 w-8 text-white/50" />
                 </div>
-              </CardContent>
+                <p className="text-white/60">Your results will appear here</p>
+              </div>
             </Card>
           )}
         </div>
