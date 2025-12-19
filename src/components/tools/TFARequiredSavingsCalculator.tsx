@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router-dom";
-import { Target, Mail, CheckCircle, AlertCircle } from "lucide-react";
+import { Target, Mail, CheckCircle, AlertCircle, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import EmailResultsModal from "./EmailResultsModal";
@@ -433,23 +433,29 @@ export default function TFARequiredSavingsCalculator() {
                 </div>
               </Card>
 
-              {/* Next Steps Card */}
-              <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 p-6 rounded-2xl">
-                <h3 className="text-lg font-bold text-white mb-4">What's Next?</h3>
-                <ul className="space-y-3 text-white/80 text-sm">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">•</span>
-                    This is an estimate — actual results will vary with market performance.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">•</span>
-                    Consider increasing contributions or adjusting your timeline if needed.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">•</span>
-                    Review your progress annually and adjust your strategy.
-                  </li>
-                </ul>
+              {/* Key Benefits Card */}
+              <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6">
+                <h4 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">
+                  Key Benefits
+                </h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { label: "Goal-Based Planning" },
+                    { label: "Monthly Savings Clarity" },
+                    { label: "Timeline Visualization" },
+                    { label: "Progress Tracking Guidance" },
+                  ].map((benefit, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 bg-slate-800/60 rounded-lg p-3 border border-white/10"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="h-3 w-3 text-primary" />
+                      </div>
+                      <span className="text-xs text-white font-medium">{benefit.label}</span>
+                    </div>
+                  ))}
+                </div>
               </Card>
 
               {/* CTA Card */}
