@@ -12,13 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { CurrencyInput } from "@/components/ui/currency-input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { FileStack, HelpCircle, Plus, Trash2, RefreshCw } from "lucide-react";
+import { FileStack, Plus, Trash2 } from "lucide-react";
 import { Step6Data } from "@/types/lifeInsuranceApplication";
 
 interface Step6ExistingCoverageProps {
@@ -207,48 +201,6 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
           </div>
         )}
 
-        {/* 1035 Exchange Section */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-border">
-            <RefreshCw className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">1035 Exchange</h3>
-          </div>
-
-          <TooltipProvider>
-            <FormField
-              control={form.control}
-              name="is1035Exchange"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <FormLabel className="text-base">
-                        Is this a 1035 Exchange?
-                      </FormLabel>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-xs">
-                          <p>A Section 1035 exchange allows you to transfer funds from one life insurance or annuity policy to another without paying taxes on the gain.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                    <FormDescription>
-                      A tax-free transfer from an existing policy to this new policy
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </TooltipProvider>
-        </div>
       </form>
     </Form>
   );

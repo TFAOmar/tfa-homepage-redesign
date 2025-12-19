@@ -234,8 +234,6 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <DataRow label="Plan Name" value={formData.step5?.planName} />
                 <DataRow label="Face Amount" value={formatCurrency(formData.step5?.faceAmount)} />
-                <DataRow label="Death Benefit Option" value={formData.step5?.deathBenefitOption} />
-                <DataRow label="Life Insurance Test" value={formData.step5?.lifeInsuranceTest?.toUpperCase()} />
               </div>
               <div className="mt-4 pt-4 border-t border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Selected Riders</p>
@@ -281,9 +279,6 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
                       </div>
                     </div>
                   ))}
-                  {formData.step6.is1035Exchange && (
-                    <p className="text-sm text-primary mt-2">✓ 1035 Exchange elected</p>
-                  )}
                 </div>
               ) : (
                 <p className="text-foreground">No existing life insurance coverage.</p>

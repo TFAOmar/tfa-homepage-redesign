@@ -9,7 +9,6 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CurrencyInput } from "@/components/ui/currency-input";
@@ -38,7 +37,6 @@ const PLAN_OPTIONS = [
   { value: "whole-life", label: "Whole Life Insurance" },
   { value: "universal-life", label: "Universal Life Insurance" },
   { value: "indexed-universal-life", label: "Indexed Universal Life (IUL)" },
-  { value: "variable-universal-life", label: "Variable Universal Life (VUL)" },
 ];
 
 const TERM_DURATIONS = [
@@ -142,108 +140,6 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
               </FormItem>
             )}
           />
-        </div>
-
-        {/* Test Options Section */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-border">
-            <FileText className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Policy Options</h3>
-          </div>
-
-          <TooltipProvider>
-            <FormField
-              control={form.control}
-              name="lifeInsuranceTest"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <FormLabel>Definition of Life Insurance Test *</FormLabel>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        <p><strong>GPT (Guideline Premium Test):</strong> Provides flexibility in premium payments.</p>
-                        <p className="mt-1"><strong>CVAT (Cash Value Accumulation Test):</strong> Maximizes cash value growth potential.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      className="flex flex-col space-y-2"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="gpt" />
-                        </FormControl>
-                        <FormLabel className="font-normal cursor-pointer">
-                          GPT (Guideline Premium Test)
-                        </FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="cvat" />
-                        </FormControl>
-                        <FormLabel className="font-normal cursor-pointer">
-                          CVAT (Cash Value Accumulation Test)
-                        </FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="deathBenefitOption"
-              render={({ field }) => (
-                <FormItem className="space-y-3 mt-6">
-                  <div className="flex items-center gap-2">
-                    <FormLabel>Death Benefit Option *</FormLabel>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        <p><strong>Level:</strong> Death benefit stays constant throughout the policy.</p>
-                        <p className="mt-1"><strong>Increasing:</strong> Cash value is added to the face amount, increasing the total death benefit.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      className="flex flex-col space-y-2"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="level" />
-                        </FormControl>
-                        <FormLabel className="font-normal cursor-pointer">
-                          Level Death Benefit
-                        </FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="increasing" />
-                        </FormControl>
-                        <FormLabel className="font-normal cursor-pointer">
-                          Increasing Death Benefit
-                        </FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </TooltipProvider>
         </div>
 
         {/* Riders Section */}
