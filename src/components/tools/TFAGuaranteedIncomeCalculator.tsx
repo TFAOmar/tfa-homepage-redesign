@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -9,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import EmailResultsModal from "./EmailResultsModal";
 import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
+import { CurrencyInput } from "@/components/ui/currency-input";
+import { NumericInput } from "@/components/ui/numeric-input";
 
 type SolveMode = "premium" | "income";
 type CoverageType = "single" | "joint";
@@ -297,11 +298,10 @@ export default function TFAGuaranteedIncomeCalculator() {
                   <Label htmlFor="currentAge" className="text-sm font-medium text-white">
                     Current Age
                   </Label>
-                  <Input
+                  <NumericInput
                     id="currentAge"
-                    type="number"
                     value={currentAge}
-                    onChange={(e) => setCurrentAge(Number(e.target.value))}
+                    onChange={(value) => setCurrentAge(Math.max(40, Math.min(79, value)))}
                     min={40}
                     max={79}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
@@ -314,11 +314,10 @@ export default function TFAGuaranteedIncomeCalculator() {
                   <Label htmlFor="incomeStartAge" className="text-sm font-medium text-white">
                     Income Start Age
                   </Label>
-                  <Input
+                  <NumericInput
                     id="incomeStartAge"
-                    type="number"
                     value={incomeStartAge}
-                    onChange={(e) => setIncomeStartAge(Number(e.target.value))}
+                    onChange={(value) => setIncomeStartAge(Math.max(50, Math.min(115, value)))}
                     min={50}
                     max={115}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
@@ -372,13 +371,12 @@ export default function TFAGuaranteedIncomeCalculator() {
               {solveMode === "income" ? (
                 <div className="space-y-1.5">
                   <Label htmlFor="premium" className="text-sm font-medium text-white">
-                    Initial Premium ($)
+                    Initial Premium
                   </Label>
-                  <Input
+                  <CurrencyInput
                     id="premium"
-                    type="number"
                     value={premium}
-                    onChange={(e) => setPremium(Number(e.target.value))}
+                    onChange={(value) => setPremium(Math.max(20000, Math.min(20000000, value)))}
                     min={20000}
                     max={20000000}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
@@ -393,13 +391,12 @@ export default function TFAGuaranteedIncomeCalculator() {
               ) : (
                 <div className="space-y-1.5">
                   <Label htmlFor="desiredIncome" className="text-sm font-medium text-white">
-                    Desired {payoutMode === "monthly" ? "Monthly" : "Yearly"} Income ($)
+                    Desired {payoutMode === "monthly" ? "Monthly" : "Yearly"} Income
                   </Label>
-                  <Input
+                  <CurrencyInput
                     id="desiredIncome"
-                    type="number"
                     value={desiredIncome}
-                    onChange={(e) => setDesiredIncome(Number(e.target.value))}
+                    onChange={(value) => setDesiredIncome(Math.max(1000, value))}
                     min={1000}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />

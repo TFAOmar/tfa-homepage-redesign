@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
@@ -9,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import EmailResultsModal from "./EmailResultsModal";
 import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
+import { CurrencyInput } from "@/components/ui/currency-input";
+import { NumericInput } from "@/components/ui/numeric-input";
 
 interface CalculationResults {
   savingsAtRetirement: number;
@@ -251,14 +252,10 @@ export default function TFARetirementIncomeCalculator() {
               <div className="space-y-4">
               <div className="space-y-1.5">
                 <Label htmlFor="currentAge" className="text-sm font-medium text-white">Current Age</Label>
-                <Input
+                <NumericInput
                   id="currentAge"
-                  type="number"
                   value={currentAge}
-                  onChange={(e) => {
-                    const value = e.target.value === '' ? 18 : Number(e.target.value);
-                    setCurrentAge(Math.max(18, Math.min(80, value)));
-                  }}
+                  onChange={(value) => setCurrentAge(Math.max(18, Math.min(80, value)))}
                   min={18}
                   max={80}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
@@ -267,14 +264,10 @@ export default function TFARetirementIncomeCalculator() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="retirementAge" className="text-sm font-medium text-white">Planned Retirement Age</Label>
-                <Input
+                <NumericInput
                   id="retirementAge"
-                  type="number"
                   value={retirementAge}
-                  onChange={(e) => {
-                    const value = e.target.value === '' ? currentAge + 1 : Number(e.target.value);
-                    setRetirementAge(Math.max(currentAge + 1, Math.min(80, value)));
-                  }}
+                  onChange={(value) => setRetirementAge(Math.max(currentAge + 1, Math.min(80, value)))}
                   min={currentAge + 1}
                   max={80}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
@@ -284,14 +277,10 @@ export default function TFARetirementIncomeCalculator() {
               <div className="space-y-1.5">
                 <Label htmlFor="incomeEndAge" className="text-sm font-medium text-white">Plan For Income Until Age</Label>
                 <p className="text-xs text-white/60 mt-1">How long do you want your money to last?</p>
-                <Input
+                <NumericInput
                   id="incomeEndAge"
-                  type="number"
                   value={incomeEndAge}
-                  onChange={(e) => {
-                    const value = e.target.value === '' ? retirementAge + 1 : Number(e.target.value);
-                    setIncomeEndAge(Math.max(retirementAge + 1, value));
-                  }}
+                  onChange={(value) => setIncomeEndAge(Math.max(retirementAge + 1, value))}
                   min={retirementAge + 1}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
@@ -308,27 +297,22 @@ export default function TFARetirementIncomeCalculator() {
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="currentSavings" className="text-sm font-medium text-white">Current Retirement Savings ($)</Label>
-                  <Input
+                  <Label htmlFor="currentSavings" className="text-sm font-medium text-white">Current Retirement Savings</Label>
+                  <CurrencyInput
                     id="currentSavings"
-                    type="number"
                     value={currentSavings}
-                    onChange={(e) => {
-                      const value = e.target.value === '' ? 0 : Number(e.target.value);
-                      setCurrentSavings(Math.max(0, value));
-                    }}
+                    onChange={(value) => setCurrentSavings(Math.max(0, value))}
                     min={0}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.currentSavings && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentSavings}</p>}
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="monthlyContribution" className="text-sm font-medium text-white">Monthly Contribution Until Retirement ($)</Label>
-                  <Input
+                  <Label htmlFor="monthlyContribution" className="text-sm font-medium text-white">Monthly Contribution Until Retirement</Label>
+                  <CurrencyInput
                     id="monthlyContribution"
-                    type="number"
                     value={monthlyContribution}
-                    onChange={(e) => setMonthlyContribution(Number(e.target.value))}
+                    onChange={(value) => setMonthlyContribution(Math.max(0, value))}
                     min={0}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
@@ -338,14 +322,14 @@ export default function TFARetirementIncomeCalculator() {
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="returnBeforeRetirement" className="text-sm font-medium text-white">Expected Annual Return Before Retirement (%)</Label>
-                  <Input
+                  <NumericInput
                     id="returnBeforeRetirement"
-                    type="number"
                     value={returnBeforeRetirement}
-                    onChange={(e) => setReturnBeforeRetirement(Number(e.target.value))}
+                    onChange={(value) => setReturnBeforeRetirement(Math.max(0, Math.min(15, value)))}
+                    allowDecimals
                     min={0}
                     max={15}
-                    step={0.1}
+                    suffix="%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.returnBeforeRetirement && (
@@ -354,14 +338,14 @@ export default function TFARetirementIncomeCalculator() {
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="returnDuringRetirement" className="text-sm font-medium text-white">Expected Annual Return During Retirement (%)</Label>
-                  <Input
+                  <NumericInput
                     id="returnDuringRetirement"
-                    type="number"
                     value={returnDuringRetirement}
-                    onChange={(e) => setReturnDuringRetirement(Number(e.target.value))}
+                    onChange={(value) => setReturnDuringRetirement(Math.max(0, Math.min(10, value)))}
+                    allowDecimals
                     min={0}
                     max={10}
-                    step={0.1}
+                    suffix="%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   {errors.returnDuringRetirement && (
@@ -379,36 +363,33 @@ export default function TFARetirementIncomeCalculator() {
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="socialSecurity" className="text-sm font-medium text-white">Estimated Monthly Social Security ($)</Label>
+                  <Label htmlFor="socialSecurity" className="text-sm font-medium text-white">Estimated Monthly Social Security</Label>
                   <p className="text-xs text-white/60">Use your latest SSA benefit estimate if available.</p>
-                  <Input
+                  <CurrencyInput
                     id="socialSecurity"
-                    type="number"
                     value={socialSecurity}
-                    onChange={(e) => setSocialSecurity(Number(e.target.value))}
+                    onChange={(value) => setSocialSecurity(Math.max(0, value))}
                     min={0}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="pension" className="text-sm font-medium text-white">Monthly Pension Income ($)</Label>
-                  <Input
+                  <Label htmlFor="pension" className="text-sm font-medium text-white">Monthly Pension Income</Label>
+                  <CurrencyInput
                     id="pension"
-                    type="number"
                     value={pension}
-                    onChange={(e) => setPension(Number(e.target.value))}
+                    onChange={(value) => setPension(Math.max(0, value))}
                     min={0}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="otherIncome" className="text-sm font-medium text-white">Other Monthly Income in Retirement ($)</Label>
+                  <Label htmlFor="otherIncome" className="text-sm font-medium text-white">Other Monthly Income in Retirement</Label>
                   <p className="text-xs text-white/60">Example: rental income, part-time work</p>
-                  <Input
+                  <CurrencyInput
                     id="otherIncome"
-                    type="number"
                     value={otherIncome}
-                    onChange={(e) => setOtherIncome(Number(e.target.value))}
+                    onChange={(value) => setOtherIncome(Math.max(0, value))}
                     min={0}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
@@ -423,15 +404,14 @@ export default function TFARetirementIncomeCalculator() {
               </p>
               
               <div className="space-y-1.5">
-                <Label htmlFor="desiredIncome" className="text-sm font-medium text-white">Desired Monthly Retirement Income ($)</Label>
+                <Label htmlFor="desiredIncome" className="text-sm font-medium text-white">Desired Monthly Retirement Income</Label>
                 <p className="text-xs text-white/60">
                   Total amount you'd like to live on each month (before taxes).
                 </p>
-                <Input
+                <CurrencyInput
                   id="desiredIncome"
-                  type="number"
                   value={desiredIncome}
-                  onChange={(e) => setDesiredIncome(Number(e.target.value))}
+                  onChange={(value) => setDesiredIncome(Math.max(0, value))}
                   min={0}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />

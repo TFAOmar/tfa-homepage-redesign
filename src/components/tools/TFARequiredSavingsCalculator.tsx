@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -17,6 +16,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import EmailResultsModal from "./EmailResultsModal";
 import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
+import { CurrencyInput } from "@/components/ui/currency-input";
+import { NumericInput } from "@/components/ui/numeric-input";
 
 type SavingsMode = "monthly" | "annual" | "lumpsum";
 
@@ -253,15 +254,14 @@ export default function TFARequiredSavingsCalculator() {
 
               <div className="space-y-1.5">
                 <Label htmlFor="targetAmount" className="text-sm font-medium text-white">
-                  Target Goal Amount ($)
+                  Target Goal Amount
                 </Label>
-                <Input
+                <CurrencyInput
                   id="targetAmount"
-                  type="number"
-                  value={targetAmount}
-                  onChange={(e) => setTargetAmount(e.target.value)}
+                  value={parseFloat(targetAmount) || 0}
+                  onChange={(value) => setTargetAmount(value.toString())}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
-                  min="0"
+                  min={0}
                 />
               </div>
 
@@ -269,13 +269,12 @@ export default function TFARequiredSavingsCalculator() {
                 <Label htmlFor="yearsUntilGoal" className="text-sm font-medium text-white">
                   Years Until Goal
                 </Label>
-                <Input
+                <NumericInput
                   id="yearsUntilGoal"
-                  type="number"
-                  value={yearsUntilGoal}
-                  onChange={(e) => setYearsUntilGoal(e.target.value)}
+                  value={parseFloat(yearsUntilGoal) || 0}
+                  onChange={(value) => setYearsUntilGoal(value.toString())}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
-                  min="1"
+                  min={1}
                 />
                 <p className="text-xs text-white/60 mt-1">
                   How many years from now until you want to reach this goal?
@@ -293,15 +292,14 @@ export default function TFARequiredSavingsCalculator() {
               <div className="space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="currentSavings" className="text-sm font-medium text-white">
-                    Current Savings Toward This Goal ($)
+                    Current Savings Toward This Goal
                   </Label>
-                  <Input
+                  <CurrencyInput
                     id="currentSavings"
-                    type="number"
-                    value={currentSavings}
-                    onChange={(e) => setCurrentSavings(e.target.value)}
+                    value={parseFloat(currentSavings) || 0}
+                    onChange={(value) => setCurrentSavings(value.toString())}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
-                    min="0"
+                    min={0}
                   />
                 </div>
 
@@ -309,15 +307,15 @@ export default function TFARequiredSavingsCalculator() {
                   <Label htmlFor="returnRate" className="text-sm font-medium text-white">
                     Expected Annual Rate of Return (%)
                   </Label>
-                  <Input
+                  <NumericInput
                     id="returnRate"
-                    type="number"
-                    value={returnRate}
-                    onChange={(e) => setReturnRate(e.target.value)}
+                    value={parseFloat(returnRate) || 0}
+                    onChange={(value) => setReturnRate(value.toString())}
+                    allowDecimals
+                    min={0}
+                    max={20}
+                    suffix="%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
-                    min="0"
-                    max="20"
-                    step="0.1"
                   />
                 </div>
               </div>

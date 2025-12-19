@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -13,6 +12,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import EmailResultsModal from "./EmailResultsModal";
 import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
+import { CurrencyInput } from "@/components/ui/currency-input";
+import { NumericInput } from "@/components/ui/numeric-input";
 
 interface CalculatorInputs {
   initialInvestment: number;
@@ -334,17 +335,13 @@ const TFACompoundGrowthCalculator = () => {
               
               <div className="space-y-1.5">
                 <Label htmlFor="initial" className="text-sm md:text-base font-medium text-white">
-                  Initial Investment Amount ($)
+                  Initial Investment Amount
                 </Label>
-                <Input
+                <CurrencyInput
                   id="initial"
-                  type="number"
-                  min="0"
                   value={inputs.initialInvestment}
-                  onChange={(e) => {
-                    const value = e.target.value === '' ? 0 : Number(e.target.value);
-                    setInputs({ ...inputs, initialInvestment: Math.max(0, value) });
-                  }}
+                  onChange={(value) => setInputs({ ...inputs, initialInvestment: Math.max(0, value) })}
+                  min={0}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.initialInvestment && (
@@ -354,17 +351,13 @@ const TFACompoundGrowthCalculator = () => {
 
               <div className="space-y-1.5">
                 <Label htmlFor="monthly" className="text-sm md:text-base font-medium text-white">
-                  Monthly Contribution ($)
+                  Monthly Contribution
                 </Label>
-                <Input
+                <CurrencyInput
                   id="monthly"
-                  type="number"
-                  min="0"
                   value={inputs.monthlyContribution}
-                  onChange={(e) => {
-                    const value = e.target.value === '' ? 0 : Number(e.target.value);
-                    setInputs({ ...inputs, monthlyContribution: Math.max(0, value) });
-                  }}
+                  onChange={(value) => setInputs({ ...inputs, monthlyContribution: Math.max(0, value) })}
+                  min={0}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.monthlyContribution && (
@@ -383,16 +376,12 @@ const TFACompoundGrowthCalculator = () => {
                 <Label htmlFor="years" className="text-sm md:text-base font-medium text-white">
                   Length of Time (Years)
                 </Label>
-                <Input
+                <NumericInput
                   id="years"
-                  type="number"
-                  min="1"
-                  max="50"
                   value={inputs.years}
-                  onChange={(e) => {
-                    const value = e.target.value === '' ? 1 : Number(e.target.value);
-                    setInputs({ ...inputs, years: Math.max(1, Math.min(50, value)) });
-                  }}
+                  onChange={(value) => setInputs({ ...inputs, years: Math.max(1, Math.min(50, value)) })}
+                  min={1}
+                  max={50}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.years && (
@@ -404,17 +393,14 @@ const TFACompoundGrowthCalculator = () => {
                 <Label htmlFor="rate" className="text-sm md:text-base font-medium text-white">
                   Estimated Annual Rate of Return (%)
                 </Label>
-                <Input
+                <NumericInput
                   id="rate"
-                  type="number"
-                  min="0"
-                  max="20"
-                  step="0.1"
                   value={inputs.annualRate}
-                  onChange={(e) => {
-                    const value = e.target.value === '' ? 0 : Number(e.target.value);
-                    setInputs({ ...inputs, annualRate: Math.max(0, Math.min(20, value)) });
-                  }}
+                  onChange={(value) => setInputs({ ...inputs, annualRate: Math.max(0, Math.min(20, value)) })}
+                  allowDecimals
+                  min={0}
+                  max={20}
+                  suffix="%"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 {errors.annualRate && (
