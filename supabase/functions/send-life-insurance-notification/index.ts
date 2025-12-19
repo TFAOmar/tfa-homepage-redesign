@@ -43,6 +43,7 @@ interface NotificationRequest {
 }
 
 const ADMIN_EMAIL = "leads@tfainsuranceadvisors.com";
+const FROM_EMAIL = "TFA Insurance <noreply@tfainsuranceadvisors.com>";
 
 const formatCurrency = (amount?: number): string => {
   if (!amount) return "N/A";
@@ -267,7 +268,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       console.log("Sending admin notification to:", ADMIN_EMAIL);
       const adminResult = await resend.emails.send({
-        from: "TFA Insurance <onboarding@resend.dev>",
+        from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
         subject: `New Life Insurance Application - ${data.applicantName}`,
         html: generateAdminEmail(data),
@@ -284,7 +285,7 @@ const handler = async (req: Request): Promise<Response> => {
       try {
         console.log("Sending advisor notification to:", data.advisorEmail);
         const advisorResult = await resend.emails.send({
-          from: "TFA Insurance <onboarding@resend.dev>",
+          from: FROM_EMAIL,
           to: [data.advisorEmail],
           subject: `New Life Insurance Application - ${data.applicantName}`,
           html: generateAdminEmail(data),
@@ -302,7 +303,7 @@ const handler = async (req: Request): Promise<Response> => {
       try {
         console.log("Sending confirmation to applicant:", data.applicantEmail);
         const applicantResult = await resend.emails.send({
-          from: "TFA Insurance <onboarding@resend.dev>",
+          from: FROM_EMAIL,
           to: [data.applicantEmail],
           subject: "Your Life Insurance Application Has Been Received",
           html: generateApplicantEmail(data),
