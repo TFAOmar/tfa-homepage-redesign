@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.send-calculator-results]
 verify_jwt = false
+
+[functions.send-life-insurance-notification]
+verify_jwt = false
