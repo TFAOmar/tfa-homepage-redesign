@@ -170,6 +170,8 @@ export type Database = {
           current_step: number
           form_data: Json
           id: string
+          resume_email: string | null
+          resume_token: string | null
           status: Database["public"]["Enums"]["application_status"]
           updated_at: string
         }
@@ -184,6 +186,8 @@ export type Database = {
           current_step?: number
           form_data?: Json
           id?: string
+          resume_email?: string | null
+          resume_token?: string | null
           status?: Database["public"]["Enums"]["application_status"]
           updated_at?: string
         }
@@ -198,6 +202,8 @@ export type Database = {
           current_step?: number
           form_data?: Json
           id?: string
+          resume_email?: string | null
+          resume_token?: string | null
           status?: Database["public"]["Enums"]["application_status"]
           updated_at?: string
         }
