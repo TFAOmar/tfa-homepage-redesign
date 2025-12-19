@@ -459,7 +459,7 @@ export default function TFAGuaranteedIncomeCalculator() {
             {results ? (
               <div className="space-y-6">
                 {/* Main Result */}
-                <div className="bg-gradient-to-br from-primary/30 via-primary/20 to-accent/20 rounded-xl p-6 text-center border border-primary/30 shadow-lg shadow-primary/20">
+                <div className="bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 rounded-xl p-6 text-center border border-accent/30 shadow-lg shadow-accent/20">
                   <p className="text-sm font-medium text-white/80 mb-2">
                     {solveMode === "income"
                       ? `Estimated ${payoutMode === "monthly" ? "Monthly" : "Yearly"} Income`
@@ -484,7 +484,7 @@ export default function TFAGuaranteedIncomeCalculator() {
                   <div className="grid gap-3 bg-slate-800/60 rounded-xl p-4">
                     <div className="flex justify-between items-center py-2 border-b border-white/10">
                       <span className="text-sm text-white/80 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-primary" />
+                        <Calendar className="h-4 w-4 text-accent" />
                         Deferral Period
                       </span>
                       <span className="text-sm font-semibold text-white">
@@ -493,7 +493,7 @@ export default function TFAGuaranteedIncomeCalculator() {
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-white/10">
                       <span className="text-sm text-white/80 flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 text-primary" />
+                        <TrendingUp className="h-4 w-4 text-accent" />
                         Roll-Up Growth
                       </span>
                       <span className="text-sm font-semibold text-white">
@@ -502,7 +502,7 @@ export default function TFAGuaranteedIncomeCalculator() {
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-white/10">
                       <span className="text-sm text-white/80 flex items-center gap-2">
-                        <DollarSign className="h-4 w-4 text-primary" />
+                        <DollarSign className="h-4 w-4 text-accent" />
                         Accumulation Value
                       </span>
                       <span className="text-sm font-semibold text-white">
@@ -547,8 +547,8 @@ export default function TFAGuaranteedIncomeCalculator() {
                   key={index}
                   className="flex items-center gap-2 bg-slate-800/60 rounded-lg p-3 border border-white/10"
                 >
-                  <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
-                    <Check className="h-3 w-3 text-primary" />
+                  <div className="w-6 h-6 rounded-full bg-accent/30 flex items-center justify-center flex-shrink-0">
+                    <Check className="h-3 w-3 text-accent" />
                   </div>
                   <span className="text-xs text-white font-medium">{benefit.label}</span>
                 </div>

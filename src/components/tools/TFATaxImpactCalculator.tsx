@@ -383,7 +383,7 @@ export default function TFATaxImpactCalculator() {
           <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6 md:p-8">
             {/* Header with gold accent */}
             <div className="mb-6 pb-4 border-b border-white/15">
-              <div className="h-1 w-14 rounded-full bg-primary mb-4" />
+              <div className="h-1 w-14 rounded-full bg-accent mb-4" />
               <h3 className="text-lg md:text-xl font-bold text-white mb-2">
                 Tax & Income Inputs
               </h3>
@@ -586,23 +586,23 @@ export default function TFATaxImpactCalculator() {
                 />
               </div>
             </div>
-          </Card>
 
-          {/* Action Buttons */}
-          <div className="flex gap-4">
-            <Button onClick={calculateTaxImpact} size="lg" className="flex-1 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
-              <Calculator className="w-4 h-4 mr-2" />
-              Calculate
-            </Button>
-            <Button onClick={handleReset} variant="outline" size="lg" className="bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
-              Reset
-            </Button>
-            {results && (
-              <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg" className="bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
-                <Mail className="h-4 w-4" />
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-6 mt-6 border-t border-white/15">
+              <Button onClick={calculateTaxImpact} size="lg" className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/25">
+                <Calculator className="w-4 h-4 mr-2" />
+                Calculate
               </Button>
-            )}
-          </div>
+              <Button onClick={handleReset} variant="outline" size="lg" className="h-12 px-6 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
+                Reset
+              </Button>
+              {results && (
+                <Button onClick={() => setEmailModalOpen(true)} variant="outline" size="lg" className="h-12 px-4 bg-slate-800/80 border-white/25 text-white hover:bg-slate-700/80">
+                  <Mail className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </Card>
         </div>
 
         {/* Right Column - Results */}
@@ -610,7 +610,7 @@ export default function TFATaxImpactCalculator() {
           {results ? (
             <div className="space-y-6 animate-fade-in">
               {/* Summary Card */}
-              <Card className="bg-gradient-to-br from-primary/25 via-primary/15 to-secondary/15 backdrop-blur-xl border-primary/30 shadow-xl shadow-primary/20">
+              <Card className="bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 backdrop-blur-xl border-accent/30 shadow-xl shadow-accent/20">
                 <CardHeader>
                   <CardTitle className="text-2xl text-white font-bold">Estimated After-Tax Monthly Income</CardTitle>
                 </CardHeader>
@@ -784,8 +784,8 @@ export default function TFATaxImpactCalculator() {
                       key={index}
                       className="flex items-center gap-2 bg-slate-800/60 rounded-lg p-3 border border-white/10"
                     >
-                      <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
-                        <Check className="h-3 w-3 text-primary" />
+                      <div className="w-6 h-6 rounded-full bg-accent/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="h-3 w-3 text-accent" />
                       </div>
                       <span className="text-xs text-white font-medium">{benefit.label}</span>
                     </div>
@@ -794,7 +794,7 @@ export default function TFATaxImpactCalculator() {
               </Card>
 
               {/* Guidance CTA */}
-              <Card className="bg-gradient-to-br from-primary/15 to-secondary/15 backdrop-blur-xl border-primary/25 shadow-lg">
+              <Card className="bg-gradient-to-br from-accent/15 to-slate-800/80 backdrop-blur-xl border-accent/25 shadow-lg">
                 <CardContent className="pt-6">
                   <h3 className="text-lg font-bold text-white mb-2">
                     Not sure if these numbers are right for your situation?
@@ -805,7 +805,7 @@ export default function TFATaxImpactCalculator() {
                   </p>
                   <Button
                     size="lg"
-                    className="w-full group bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25"
+                    className="btn-primary-cta w-full group"
                     onClick={() => (window.location.href = "/contact")}
                   >
                     Talk to a TFA Advisor About Taxes in Retirement

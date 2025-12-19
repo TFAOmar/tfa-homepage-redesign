@@ -460,7 +460,7 @@ export default function TFARetirementIncomeCalculator() {
           {results ? (
             <div className="space-y-8 animate-fade-in">
               {/* Summary Card */}
-              <Card className="bg-gradient-to-br from-primary/25 via-primary/15 to-secondary/15 backdrop-blur-xl border-primary/30 shadow-xl shadow-primary/20">
+              <Card className="bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 backdrop-blur-xl border-accent/30 shadow-xl shadow-accent/20">
                 <CardHeader>
                   <CardTitle className="text-2xl text-white font-bold">Your Estimated Monthly Income</CardTitle>
                   <CardDescription className="text-white/70">Based on your inputs</CardDescription>
@@ -629,7 +629,7 @@ export default function TFARetirementIncomeCalculator() {
               </Card>
 
               {/* Guidance Callout */}
-              <Card className="bg-gradient-to-br from-primary/15 to-secondary/15 backdrop-blur-xl border-primary/25 shadow-lg">
+              <Card className="bg-gradient-to-br from-accent/15 to-slate-800/80 backdrop-blur-xl border-accent/25 shadow-lg">
                 <CardContent className="pt-6">
                   <h3 className="text-lg font-bold text-white mb-2">Not sure if this is enough?</h3>
                   <p className="text-white/70 mb-6 leading-relaxed">
