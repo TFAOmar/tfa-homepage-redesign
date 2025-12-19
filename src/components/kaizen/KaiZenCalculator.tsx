@@ -330,8 +330,8 @@ const KaiZenCalculator = () => {
                   key={index}
                   className="flex items-center gap-2 bg-slate-800/60 rounded-lg p-3 border border-white/10"
                 >
-                  <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
-                    <Check className="h-3 w-3 text-primary" />
+                  <div className="w-6 h-6 rounded-full bg-accent/30 flex items-center justify-center flex-shrink-0">
+                    <Check className="h-3 w-3 text-accent" />
                   </div>
                   <span className="text-xs text-white font-medium">{benefit.label}</span>
                 </div>
