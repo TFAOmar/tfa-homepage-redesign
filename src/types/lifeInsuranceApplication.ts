@@ -259,6 +259,19 @@ export const step8Schema = z.object({
 export type Step8Data = z.infer<typeof step8Schema>;
 
 // ==========================================
+// Step 9: Review & Submit
+// ==========================================
+export const step9Schema = z.object({
+  acknowledged: z.boolean().refine((val) => val === true, {
+    message: "You must acknowledge that the information is accurate",
+  }),
+  electronicSignature: z.string().min(2, "Electronic signature is required"),
+  signatureDate: z.string().min(1, "Signature date is required"),
+});
+
+export type Step9Data = z.infer<typeof step9Schema>;
+
+// ==========================================
 // Complete Application Data
 // ==========================================
 export interface LifeInsuranceApplicationData {
@@ -270,6 +283,7 @@ export interface LifeInsuranceApplicationData {
   step6: Partial<Step6Data>;
   step7: Partial<Step7Data>;
   step8: Partial<Step8Data>;
+  step9: Partial<Step9Data>;
 }
 
 export const defaultApplicationData: LifeInsuranceApplicationData = {
@@ -281,6 +295,7 @@ export const defaultApplicationData: LifeInsuranceApplicationData = {
   step6: { hasExistingCoverage: false, existingPolicies: [] },
   step7: {},
   step8: {},
+  step9: { signatureDate: new Date().toLocaleDateString("en-US") },
 };
 
 // Step configuration
@@ -293,4 +308,5 @@ export const STEPS = [
   { number: 6, title: "Existing Coverage", shortTitle: "Coverage" },
   { number: 7, title: "Medical & Lifestyle", shortTitle: "Medical" },
   { number: 8, title: "Premium Payment", shortTitle: "Payment" },
+  { number: 9, title: "Review & Submit", shortTitle: "Review" },
 ] as const;
