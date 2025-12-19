@@ -261,8 +261,11 @@ export default function TFARequiredSavingsCalculator() {
                   id="targetAmount"
                   value={parseFloat(targetAmount) || 0}
                   onChange={(value) => setTargetAmount(value.toString())}
+                  min={1}
+                  isValid={(parseFloat(targetAmount) || 0) > 0}
+                  isInvalid={(parseFloat(targetAmount) || 0) <= 0}
+                  errorMessage="Must be greater than 0"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
-                  min={0}
                 />
               </div>
 
@@ -274,8 +277,12 @@ export default function TFARequiredSavingsCalculator() {
                   id="yearsUntilGoal"
                   value={parseFloat(yearsUntilGoal) || 0}
                   onChange={(value) => setYearsUntilGoal(value.toString())}
-                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   min={1}
+                  max={50}
+                  isValid={(parseFloat(yearsUntilGoal) || 0) >= 1 && (parseFloat(yearsUntilGoal) || 0) <= 50}
+                  isInvalid={(parseFloat(yearsUntilGoal) || 0) < 1 || (parseFloat(yearsUntilGoal) || 0) > 50}
+                  errorMessage="Must be between 1 and 50 years"
+                  className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
                 <p className="text-xs text-white/60 mt-1">
                   How many years from now until you want to reach this goal?
@@ -299,8 +306,11 @@ export default function TFARequiredSavingsCalculator() {
                     id="currentSavings"
                     value={parseFloat(currentSavings) || 0}
                     onChange={(value) => setCurrentSavings(value.toString())}
-                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                     min={0}
+                    isValid={(parseFloat(currentSavings) || 0) >= 0}
+                    isInvalid={(parseFloat(currentSavings) || 0) < 0}
+                    errorMessage="Cannot be negative"
+                    className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>
 
@@ -314,6 +324,9 @@ export default function TFARequiredSavingsCalculator() {
                     onChange={(value) => setReturnRate(value.toString())}
                     min={0}
                     max={20}
+                    isValid={(parseFloat(returnRate) || 0) >= 0 && (parseFloat(returnRate) || 0) <= 20}
+                    isInvalid={(parseFloat(returnRate) || 0) < 0 || (parseFloat(returnRate) || 0) > 20}
+                    errorMessage="Must be between 0% and 20%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>

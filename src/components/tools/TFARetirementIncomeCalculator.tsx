@@ -259,9 +259,11 @@ export default function TFARetirementIncomeCalculator() {
                   onChange={(value) => setCurrentAge(Math.max(18, Math.min(80, value)))}
                   min={18}
                   max={80}
+                  isValid={currentAge >= 18 && currentAge <= 80}
+                  isInvalid={currentAge < 18 || currentAge > 80}
+                  errorMessage="Must be between 18 and 80"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
-                {errors.currentAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentAge}</p>}
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="retirementAge" className="text-sm font-medium text-white">Planned Retirement Age</Label>
@@ -271,9 +273,11 @@ export default function TFARetirementIncomeCalculator() {
                   onChange={(value) => setRetirementAge(Math.max(currentAge + 1, Math.min(80, value)))}
                   min={currentAge + 1}
                   max={80}
+                  isValid={retirementAge > currentAge && retirementAge <= 80}
+                  isInvalid={retirementAge <= currentAge || retirementAge > 80}
+                  errorMessage="Must be greater than current age"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
-                {errors.retirementAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.retirementAge}</p>}
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="incomeEndAge" className="text-sm font-medium text-white">Plan For Income Until Age</Label>
@@ -283,9 +287,11 @@ export default function TFARetirementIncomeCalculator() {
                   value={incomeEndAge}
                   onChange={(value) => setIncomeEndAge(Math.max(retirementAge + 1, value))}
                   min={retirementAge + 1}
+                  isValid={incomeEndAge > retirementAge}
+                  isInvalid={incomeEndAge <= retirementAge}
+                  errorMessage="Must be greater than retirement age"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
-                  {errors.incomeEndAge && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.incomeEndAge}</p>}
                 </div>
               </div>
             </div>
@@ -304,9 +310,11 @@ export default function TFARetirementIncomeCalculator() {
                     value={currentSavings}
                     onChange={(value) => setCurrentSavings(Math.max(0, value))}
                     min={0}
+                    isValid={currentSavings >= 0}
+                    isInvalid={currentSavings < 0}
+                    errorMessage="Cannot be negative"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
-                  {errors.currentSavings && <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.currentSavings}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="monthlyContribution" className="text-sm font-medium text-white">Monthly Contribution Until Retirement</Label>
@@ -315,11 +323,11 @@ export default function TFARetirementIncomeCalculator() {
                     value={monthlyContribution}
                     onChange={(value) => setMonthlyContribution(Math.max(0, value))}
                     min={0}
+                    isValid={monthlyContribution >= 0}
+                    isInvalid={monthlyContribution < 0}
+                    errorMessage="Cannot be negative"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
-                  {errors.monthlyContribution && (
-                    <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.monthlyContribution}</p>
-                  )}
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="returnBeforeRetirement" className="text-sm font-medium text-white">Expected Annual Return Before Retirement (%)</Label>
@@ -329,11 +337,11 @@ export default function TFARetirementIncomeCalculator() {
                     onChange={(value) => setReturnBeforeRetirement(Math.max(0, Math.min(15, value)))}
                     min={0}
                     max={15}
+                    isValid={returnBeforeRetirement >= 0 && returnBeforeRetirement <= 15}
+                    isInvalid={returnBeforeRetirement < 0 || returnBeforeRetirement > 15}
+                    errorMessage="Must be between 0% and 15%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
-                  {errors.returnBeforeRetirement && (
-                    <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.returnBeforeRetirement}</p>
-                  )}
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="returnDuringRetirement" className="text-sm font-medium text-white">Expected Annual Return During Retirement (%)</Label>
@@ -343,11 +351,11 @@ export default function TFARetirementIncomeCalculator() {
                     onChange={(value) => setReturnDuringRetirement(Math.max(0, Math.min(10, value)))}
                     min={0}
                     max={10}
+                    isValid={returnDuringRetirement >= 0 && returnDuringRetirement <= 10}
+                    isInvalid={returnDuringRetirement < 0 || returnDuringRetirement > 10}
+                    errorMessage="Must be between 0% and 10%"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
-                  {errors.returnDuringRetirement && (
-                    <p className="text-[11px] md:text-xs text-destructive mt-1">{errors.returnDuringRetirement}</p>
-                  )}
                 </div>
               </div>
             </div>

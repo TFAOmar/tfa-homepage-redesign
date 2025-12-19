@@ -445,6 +445,9 @@ export default function TFATaxImpactCalculator() {
                     value={totalAnnualIncome}
                     onChange={(value) => setTotalAnnualIncome(Math.max(0, value))}
                     min={0}
+                    isValid={totalAnnualIncome >= 0}
+                    isInvalid={totalAnnualIncome < 0}
+                    errorMessage="Cannot be negative"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                 </div>

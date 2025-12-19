@@ -304,11 +304,11 @@ export default function TFAGuaranteedIncomeCalculator() {
                     onChange={(value) => setCurrentAge(Math.max(40, Math.min(79, value)))}
                     min={40}
                     max={79}
+                    isValid={currentAge >= 40 && currentAge <= 79}
+                    isInvalid={currentAge < 40 || currentAge > 79}
+                    errorMessage="Must be between 40 and 79"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
-                  {errors.currentAge && (
-                    <p className="text-[11px] text-destructive">{errors.currentAge}</p>
-                  )}
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="incomeStartAge" className="text-sm font-medium text-white">
@@ -320,11 +320,11 @@ export default function TFAGuaranteedIncomeCalculator() {
                     onChange={(value) => setIncomeStartAge(Math.max(50, Math.min(115, value)))}
                     min={50}
                     max={115}
+                    isValid={incomeStartAge >= 50 && incomeStartAge <= 115 && incomeStartAge > currentAge}
+                    isInvalid={incomeStartAge < 50 || incomeStartAge > 115 || incomeStartAge <= currentAge}
+                    errorMessage={incomeStartAge <= currentAge ? "Must be greater than current age" : "Must be between 50 and 115"}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
-                  {errors.incomeStartAge && (
-                    <p className="text-[11px] text-destructive">{errors.incomeStartAge}</p>
-                  )}
                 </div>
               </div>
             </div>
@@ -379,14 +379,14 @@ export default function TFAGuaranteedIncomeCalculator() {
                     onChange={(value) => setPremium(Math.max(20000, Math.min(20000000, value)))}
                     min={20000}
                     max={20000000}
+                    isValid={premium >= 20000 && premium <= 20000000}
+                    isInvalid={premium < 20000 || premium > 20000000}
+                    errorMessage="Must be between $20,000 and $20,000,000"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
                   <p className="text-[11px] text-white/60">
                     Minimum $20,000 • Maximum $20,000,000
                   </p>
-                  {errors.premium && (
-                    <p className="text-[11px] text-destructive">{errors.premium}</p>
-                  )}
                 </div>
               ) : (
                 <div className="space-y-1.5">
@@ -398,11 +398,11 @@ export default function TFAGuaranteedIncomeCalculator() {
                     value={desiredIncome}
                     onChange={(value) => setDesiredIncome(Math.max(1000, value))}
                     min={1000}
+                    isValid={desiredIncome >= 1000}
+                    isInvalid={desiredIncome < 1000}
+                    errorMessage="Must be at least $1,000"
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
-                  {errors.desiredIncome && (
-                    <p className="text-[11px] text-destructive">{errors.desiredIncome}</p>
-                  )}
                 </div>
               )}
             </div>

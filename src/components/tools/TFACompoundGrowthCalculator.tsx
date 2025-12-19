@@ -343,11 +343,11 @@ const TFACompoundGrowthCalculator = () => {
                   value={inputs.initialInvestment}
                   onChange={(value) => setInputs({ ...inputs, initialInvestment: Math.max(0, value) })}
                   min={0}
+                  isValid={inputs.initialInvestment >= 0}
+                  isInvalid={inputs.initialInvestment < 0}
+                  errorMessage="Must be 0 or greater"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
-                {errors.initialInvestment && (
-                  <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.initialInvestment}</p>
-                )}
               </div>
 
               <div className="space-y-1.5">
@@ -359,11 +359,11 @@ const TFACompoundGrowthCalculator = () => {
                   value={inputs.monthlyContribution}
                   onChange={(value) => setInputs({ ...inputs, monthlyContribution: Math.max(0, value) })}
                   min={0}
+                  isValid={inputs.monthlyContribution >= 0}
+                  isInvalid={inputs.monthlyContribution < 0}
+                  errorMessage="Must be 0 or greater"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
-                {errors.monthlyContribution && (
-                  <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.monthlyContribution}</p>
-                )}
               </div>
             </div>
 
@@ -383,11 +383,11 @@ const TFACompoundGrowthCalculator = () => {
                   onChange={(value) => setInputs({ ...inputs, years: Math.max(1, Math.min(50, value)) })}
                   min={1}
                   max={50}
+                  isValid={inputs.years >= 1 && inputs.years <= 50}
+                  isInvalid={inputs.years < 1 || inputs.years > 50}
+                  errorMessage={inputs.years < 1 ? "Must be at least 1 year" : "Maximum is 50 years"}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
-                {errors.years && (
-                  <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.years}</p>
-                )}
               </div>
 
               <div className="space-y-1.5">
@@ -400,11 +400,11 @@ const TFACompoundGrowthCalculator = () => {
                   onChange={(value) => setInputs({ ...inputs, annualRate: Math.max(0, Math.min(20, value)) })}
                   min={0}
                   max={20}
+                  isValid={inputs.annualRate >= 0 && inputs.annualRate <= 20}
+                  isInvalid={inputs.annualRate < 0 || inputs.annualRate > 20}
+                  errorMessage="Must be between 0% and 20%"
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
-                {errors.annualRate && (
-                  <p className="text-destructive text-[11px] md:text-xs mt-1">{errors.annualRate}</p>
-                )}
               </div>
             </div>
 
