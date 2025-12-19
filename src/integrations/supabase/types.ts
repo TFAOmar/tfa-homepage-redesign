@@ -158,6 +158,51 @@ export type Database = {
         }
         Relationships: []
       }
+      life_insurance_applications: {
+        Row: {
+          advisor_email: string | null
+          advisor_id: string | null
+          advisor_name: string | null
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_phone: string | null
+          created_at: string
+          current_step: number
+          form_data: Json
+          id: string
+          status: Database["public"]["Enums"]["application_status"]
+          updated_at: string
+        }
+        Insert: {
+          advisor_email?: string | null
+          advisor_id?: string | null
+          advisor_name?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          current_step?: number
+          form_data?: Json
+          id?: string
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+        }
+        Update: {
+          advisor_email?: string | null
+          advisor_id?: string | null
+          advisor_name?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          current_step?: number
+          form_data?: Json
+          id?: string
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -281,6 +326,13 @@ export type Database = {
       advisor_status: "pending" | "published" | "hidden" | "archived"
       advisor_type: "Advisor" | "Broker"
       app_role: "admin" | "moderator" | "user"
+      application_status:
+        | "draft"
+        | "submitted"
+        | "under_review"
+        | "approved"
+        | "needs_info"
+        | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -411,6 +463,14 @@ export const Constants = {
       advisor_status: ["pending", "published", "hidden", "archived"],
       advisor_type: ["Advisor", "Broker"],
       app_role: ["admin", "moderator", "user"],
+      application_status: [
+        "draft",
+        "submitted",
+        "under_review",
+        "approved",
+        "needs_info",
+        "rejected",
+      ],
     },
   },
 } as const

@@ -62,6 +62,7 @@ import Rollovers401k from "./pages/Rollovers401k";
 import InsuranceServices from "./pages/InsuranceServices";
 import GroupRetirement from "./pages/GroupRetirement";
 import AmericanWayHealth from "./pages/AmericanWayHealth";
+import LifeInsuranceApplication from "./pages/LifeInsuranceApplication";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -135,6 +136,8 @@ const AppLayout = () => {
           <Route path="/services/insurance" element={<InsuranceServices />} />
           <Route path="/services/group-retirement" element={<GroupRetirement />} />
           <Route path="/health-insurance/american-way-health" element={<AmericanWayHealth />} />
+          <Route path="/advisors/:advisorSlug/life-insurance" element={<LifeInsuranceApplication />} />
+          <Route path="/life-insurance-application" element={<LifeInsuranceApplication />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
