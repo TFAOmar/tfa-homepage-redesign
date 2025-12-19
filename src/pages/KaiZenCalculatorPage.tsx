@@ -211,7 +211,7 @@ export default function KaiZenCalculatorPage() {
                   </Button>
                 </Link>
                 <Link to="/kai-zen">
-                  <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg">
+                  <Button variant="outline" className="bg-white/5 border-white/30 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg">
                     Learn More About Kai-Zen
                   </Button>
                 </Link>
