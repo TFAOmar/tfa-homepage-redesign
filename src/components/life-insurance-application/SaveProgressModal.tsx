@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { z } from "zod";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +14,12 @@ import { Label } from "@/components/ui/label";
 import { Loader2, Mail, Check, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
+const emailSchema = z
+  .string()
+  .trim()
+  .email({ message: "Please enter a valid email address" })
+  .max(255, { message: "Email must be less than 255 characters" });
 
 interface SaveProgressModalProps {
   open: boolean;
@@ -31,21 +38,62 @@ const SaveProgressModal = ({
 }: SaveProgressModalProps) => {
   const { toast } = useToast();
   const [email, setEmail] = useState(currentEmail || "");
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const validateEmail = (value: string): boolean => {
+    try {
+      emailSchema.parse(value);
+      setEmailError(null);
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setEmailError(error.errors[0].message);
+      }
+      return false;
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (emailError) {
+      setEmailError(null);
+    }
+  };
+
+  const handleEmailBlur = () => {
+    if (email) {
+      validateEmail(email);
+    }
+  };
+
+  const isEmailValid = (): boolean => {
+    try {
+      emailSchema.parse(email);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
   const resumeUrl = resumeToken
     ? `${window.location.origin}${window.location.pathname}?resume=${resumeToken}`
     : null;
 
   const handleSendEmail = async () => {
-    if (!email || !draftId || !resumeToken) {
+    if (!draftId || !resumeToken) {
       toast({
         title: "Error",
-        description: "Please enter a valid email address.",
+        description: "Unable to save progress. Please try again.",
         variant: "destructive",
       });
+      return;
+    }
+
+    if (!validateEmail(email)) {
       return;
     }
 
@@ -139,12 +187,13 @@ const SaveProgressModal = ({
                   type="email"
                   placeholder="your@email.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1"
+                  onChange={handleEmailChange}
+                  onBlur={handleEmailBlur}
+                  className={`flex-1 ${emailError ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 />
                 <Button
                   onClick={handleSendEmail}
-                  disabled={isSending || !email}
+                  disabled={isSending || !email || !isEmailValid()}
                   className="gap-2"
                 >
                   {isSending ? (
@@ -155,9 +204,14 @@ const SaveProgressModal = ({
                   Send Link
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground">
-                We'll send you a secure link to resume your application.
-              </p>
+              {emailError && (
+                <p className="text-xs text-destructive">{emailError}</p>
+              )}
+              {!emailError && (
+                <p className="text-xs text-muted-foreground">
+                  We'll send you a secure link to resume your application.
+                </p>
+              )}
             </div>
 
             {resumeUrl && (

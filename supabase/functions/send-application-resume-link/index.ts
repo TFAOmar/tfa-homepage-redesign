@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -8,11 +9,11 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface ResumeEmailRequest {
-  email: string;
-  resumeUrl: string;
-  resumeToken: string;
-}
+const requestSchema = z.object({
+  email: z.string().trim().email("Invalid email address").max(255, "Email too long"),
+  resumeUrl: z.string().url("Invalid resume URL"),
+  resumeToken: z.string().min(1, "Resume token is required"),
+});
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -21,14 +22,27 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, resumeUrl, resumeToken }: ResumeEmailRequest = await req.json();
+    const body = await req.json();
+    
+    // Validate request body with Zod
+    const validationResult = requestSchema.safeParse(body);
+    
+    if (!validationResult.success) {
+      const errorMessage = validationResult.error.errors[0]?.message || "Invalid request data";
+      console.error("Validation error:", validationResult.error.errors);
+      return new Response(
+        JSON.stringify({ error: errorMessage }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    const { email, resumeUrl, resumeToken } = validationResult.data;
 
     console.log("Sending resume link email to:", email);
     console.log("Resume URL:", resumeUrl);
-
-    if (!email || !resumeUrl) {
-      throw new Error("Missing required fields: email or resumeUrl");
-    }
 
     if (!RESEND_API_KEY) {
       throw new Error("RESEND_API_KEY is not configured");
