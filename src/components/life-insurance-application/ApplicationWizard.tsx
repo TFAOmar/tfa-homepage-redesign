@@ -7,9 +7,18 @@ import { ArrowLeft, ArrowRight, Save, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ProgressBar from "./ProgressBar";
 import Step1ProposedInsured from "./steps/Step1ProposedInsured";
+import Step2ContactEmployment from "./steps/Step2ContactEmployment";
+import Step3Ownership from "./steps/Step3Ownership";
+import Step4Beneficiaries from "./steps/Step4Beneficiaries";
 import {
   step1Schema,
+  step2Schema,
+  step3Schema,
+  step4Schema,
   Step1Data,
+  Step2Data,
+  Step3Data,
+  Step4Data,
   STEPS,
   LifeInsuranceApplicationData,
   defaultApplicationData,
@@ -39,6 +48,29 @@ const ApplicationWizard = ({
     mode: "onChange",
   });
 
+  // Step 2 form
+  const step2Form = useForm<Step2Data>({
+    resolver: zodResolver(step2Schema),
+    defaultValues: formData.step2 as Step2Data,
+    mode: "onChange",
+  });
+
+  // Step 3 form
+  const step3Form = useForm<Step3Data>({
+    resolver: zodResolver(step3Schema),
+    defaultValues: formData.step3 as Step3Data,
+    mode: "onChange",
+  });
+
+  // Step 4 form
+  const step4Form = useForm<Step4Data>({
+    resolver: zodResolver(step4Schema),
+    defaultValues: {
+      beneficiaries: formData.step4?.beneficiaries || [],
+    },
+    mode: "onChange",
+  });
+
   // Load saved draft from localStorage on mount
   useEffect(() => {
     const savedDraft = localStorage.getItem("lifeInsuranceApplication");
@@ -49,9 +81,18 @@ const ApplicationWizard = ({
         setCurrentStep(parsed.currentStep || 1);
         setCompletedSteps(parsed.completedSteps || []);
         
-        // Reset form with saved data
+        // Reset forms with saved data
         if (parsed.formData?.step1) {
           step1Form.reset(parsed.formData.step1);
+        }
+        if (parsed.formData?.step2) {
+          step2Form.reset(parsed.formData.step2);
+        }
+        if (parsed.formData?.step3) {
+          step3Form.reset(parsed.formData.step3);
+        }
+        if (parsed.formData?.step4?.beneficiaries) {
+          step4Form.reset({ beneficiaries: parsed.formData.step4.beneficiaries });
         }
 
         toast({
@@ -69,6 +110,9 @@ const ApplicationWizard = ({
     const currentFormData = {
       ...formData,
       step1: step1Form.getValues(),
+      step2: step2Form.getValues(),
+      step3: step3Form.getValues(),
+      step4: step4Form.getValues(),
     };
     
     const draft = {
@@ -106,7 +150,33 @@ const ApplicationWizard = ({
           }));
         }
         break;
-      // Future steps will be added here
+      case 2:
+        isValid = await step2Form.trigger();
+        if (isValid) {
+          setFormData((prev) => ({
+            ...prev,
+            step2: step2Form.getValues(),
+          }));
+        }
+        break;
+      case 3:
+        isValid = await step3Form.trigger();
+        if (isValid) {
+          setFormData((prev) => ({
+            ...prev,
+            step3: step3Form.getValues(),
+          }));
+        }
+        break;
+      case 4:
+        isValid = await step4Form.trigger();
+        if (isValid) {
+          setFormData((prev) => ({
+            ...prev,
+            step4: step4Form.getValues(),
+          }));
+        }
+        break;
       default:
         isValid = true;
     }
@@ -128,11 +198,19 @@ const ApplicationWizard = ({
 
   const handleBack = () => {
     // Save current step data before going back
-    if (currentStep === 1) {
-      setFormData((prev) => ({
-        ...prev,
-        step1: step1Form.getValues(),
-      }));
+    switch (currentStep) {
+      case 1:
+        setFormData((prev) => ({ ...prev, step1: step1Form.getValues() }));
+        break;
+      case 2:
+        setFormData((prev) => ({ ...prev, step2: step2Form.getValues() }));
+        break;
+      case 3:
+        setFormData((prev) => ({ ...prev, step3: step3Form.getValues() }));
+        break;
+      case 4:
+        setFormData((prev) => ({ ...prev, step4: step4Form.getValues() }));
+        break;
     }
     setCurrentStep((prev) => Math.max(prev - 1, 1));
     saveDraft();
@@ -155,8 +233,11 @@ const ApplicationWizard = ({
       case 1:
         return <Step1ProposedInsured form={step1Form} />;
       case 2:
+        return <Step2ContactEmployment form={step2Form} />;
       case 3:
+        return <Step3Ownership form={step3Form} />;
       case 4:
+        return <Step4Beneficiaries form={step4Form} />;
       case 5:
       case 6:
       case 7:
