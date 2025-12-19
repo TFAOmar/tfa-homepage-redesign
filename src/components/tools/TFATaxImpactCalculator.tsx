@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import EmailResultsModal from "./EmailResultsModal";
 import { generateCalculatorPdf } from "@/lib/calculatorPdfGenerator";
+import { CurrencyInput } from "@/components/ui/currency-input";
 
 type FilingStatus = "single" | "married-joint" | "married-separate" | "head-of-household";
 
@@ -437,15 +437,13 @@ export default function TFATaxImpactCalculator() {
               <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">
                 Retirement Income
               </p>
-              
               <div className="space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="total-income" className="text-sm font-medium text-white">Total Annual Retirement Income (Before Taxes)</Label>
-                  <Input
+                  <CurrencyInput
                     id="total-income"
-                    type="number"
                     value={totalAnnualIncome}
-                    onChange={(e) => setTotalAnnualIncome(Number(e.target.value))}
+                    onChange={(value) => setTotalAnnualIncome(Math.max(0, value))}
                     min={0}
                     className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                   />
@@ -484,12 +482,11 @@ export default function TFATaxImpactCalculator() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="traditional" className="text-sm font-medium text-white">Traditional 401(k)/IRA & Tax-Deferred Income ($/year)</Label>
-                    <Input
+                    <CurrencyInput
                       id="traditional"
-                      type="number"
                       value={incomeBreakdown.traditional401k}
-                      onChange={(e) =>
-                        setIncomeBreakdown({ ...incomeBreakdown, traditional401k: Number(e.target.value) })
+                      onChange={(value) =>
+                        setIncomeBreakdown({ ...incomeBreakdown, traditional401k: Math.max(0, value) })
                       }
                       min={0}
                       className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
@@ -498,12 +495,11 @@ export default function TFATaxImpactCalculator() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="roth" className="text-sm font-medium text-white">Roth 401(k)/Roth IRA Withdrawals ($/year)</Label>
-                    <Input
+                    <CurrencyInput
                       id="roth"
-                      type="number"
                       value={incomeBreakdown.rothWithdrawals}
-                      onChange={(e) =>
-                        setIncomeBreakdown({ ...incomeBreakdown, rothWithdrawals: Number(e.target.value) })
+                      onChange={(value) =>
+                        setIncomeBreakdown({ ...incomeBreakdown, rothWithdrawals: Math.max(0, value) })
                       }
                       min={0}
                       className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
@@ -512,12 +508,11 @@ export default function TFATaxImpactCalculator() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="taxable" className="text-sm font-medium text-white">Taxable Investment / Interest / Dividends ($/year)</Label>
-                    <Input
+                    <CurrencyInput
                       id="taxable"
-                      type="number"
                       value={incomeBreakdown.taxableInvestments}
-                      onChange={(e) =>
-                        setIncomeBreakdown({ ...incomeBreakdown, taxableInvestments: Number(e.target.value) })
+                      onChange={(value) =>
+                        setIncomeBreakdown({ ...incomeBreakdown, taxableInvestments: Math.max(0, value) })
                       }
                       min={0}
                       className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
@@ -526,12 +521,11 @@ export default function TFATaxImpactCalculator() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="ss" className="text-sm font-medium text-white">Social Security Benefits ($/year)</Label>
-                    <Input
+                    <CurrencyInput
                       id="ss"
-                      type="number"
                       value={incomeBreakdown.socialSecurity}
-                      onChange={(e) =>
-                        setIncomeBreakdown({ ...incomeBreakdown, socialSecurity: Number(e.target.value) })
+                      onChange={(value) =>
+                        setIncomeBreakdown({ ...incomeBreakdown, socialSecurity: Math.max(0, value) })
                       }
                       min={0}
                       className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
@@ -540,11 +534,10 @@ export default function TFATaxImpactCalculator() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="pension" className="text-sm font-medium text-white">Pension Income ($/year)</Label>
-                    <Input
+                    <CurrencyInput
                       id="pension"
-                      type="number"
                       value={incomeBreakdown.pension}
-                      onChange={(e) => setIncomeBreakdown({ ...incomeBreakdown, pension: Number(e.target.value) })}
+                      onChange={(value) => setIncomeBreakdown({ ...incomeBreakdown, pension: Math.max(0, value) })}
                       min={0}
                       className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
                     />
@@ -552,12 +545,11 @@ export default function TFATaxImpactCalculator() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="other" className="text-sm font-medium text-white">Other Taxable Income ($/year)</Label>
-                    <Input
+                    <CurrencyInput
                       id="other"
-                      type="number"
                       value={incomeBreakdown.otherIncome}
-                      onChange={(e) =>
-                        setIncomeBreakdown({ ...incomeBreakdown, otherIncome: Number(e.target.value) })
+                      onChange={(value) =>
+                        setIncomeBreakdown({ ...incomeBreakdown, otherIncome: Math.max(0, value) })
                       }
                       min={0}
                       className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary mt-1.5"
@@ -576,11 +568,10 @@ export default function TFATaxImpactCalculator() {
               
               <div className="space-y-1.5">
                 <Label htmlFor="desired-income" className="text-sm font-medium text-white">Desired Monthly After-Tax Income</Label>
-                <Input
+                <CurrencyInput
                   id="desired-income"
-                  type="number"
                   value={desiredMonthlyIncome}
-                  onChange={(e) => setDesiredMonthlyIncome(Number(e.target.value))}
+                  onChange={(value) => setDesiredMonthlyIncome(Math.max(0, value))}
                   min={0}
                   className="w-full rounded-xl bg-slate-800/80 border border-white/25 text-white placeholder:text-white/40 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary"
                 />
