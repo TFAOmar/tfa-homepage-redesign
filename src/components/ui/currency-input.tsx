@@ -46,7 +46,23 @@ const parseNumber = (value: string, allowDecimals: boolean): number => {
 };
 
 const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
-  ({ className, value, onChange, showPrefix = true, allowDecimals = false, min, max, isValid, isInvalid, errorMessage, ...props }, ref) => {
+  (
+    {
+      className,
+      value,
+      onChange,
+      showPrefix = true,
+      allowDecimals = false,
+      min,
+      max,
+      isValid,
+      isInvalid,
+      errorMessage,
+      style: inputStyle,
+      ...props
+    },
+    ref
+  ) => {
     const [displayValue, setDisplayValue] = React.useState(() => formatNumber(value, allowDecimals));
     const [isFocused, setIsFocused] = React.useState(false);
 
@@ -59,7 +75,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = e.target.value;
-      
+
       // Allow empty input
       if (rawValue === '' || rawValue === '$') {
         setDisplayValue('');
@@ -70,12 +86,12 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
       // Remove $ prefix if present for parsing
       const valueWithoutPrefix = rawValue.replace(/^\$\s*/, '');
       const numericValue = parseNumber(valueWithoutPrefix, allowDecimals);
-      
+
       // Apply min/max constraints
       let constrainedValue = numericValue;
       if (min !== undefined && numericValue < min) constrainedValue = min;
       if (max !== undefined && numericValue > max) constrainedValue = max;
-      
+
       // Update display with formatted value while typing
       setDisplayValue(valueWithoutPrefix.replace(/[^0-9.,]/g, ''));
       onChange(constrainedValue);
@@ -114,12 +130,12 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
             inputMode="decimal"
             className={cn(
               "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-colors",
-              showPrefix && "pl-9",
               isValid && "border-green-500 focus-visible:ring-green-500",
               isInvalid && "border-red-500 focus-visible:ring-red-500",
               (isValid || isInvalid) && "pr-10",
               className
             )}
+            style={showPrefix ? { ...inputStyle, paddingLeft: "36px" } : inputStyle}
             ref={ref}
             value={displayValue}
             onChange={handleChange}
