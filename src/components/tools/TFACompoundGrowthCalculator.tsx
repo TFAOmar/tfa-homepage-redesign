@@ -619,7 +619,7 @@ const TFACompoundGrowthCalculator = () => {
             <div className="animate-fade-in space-y-6">
               {/* Comparison Summary Cards */}
               <div className="grid sm:grid-cols-2 gap-4">
-                <Card className="p-6 bg-gradient-to-br from-accent/20 via-accent/10 to-slate-800/80 backdrop-blur-xl border-accent/40 shadow-xl shadow-accent/20">
+                <Card className="p-6 bg-slate-900/90 backdrop-blur-sm border border-accent/40 shadow-xl shadow-accent/15">
                   <p className="text-xs font-semibold text-accent mb-1">Scenario A</p>
                   <p className="text-sm text-white/70 mb-2">Your Investment Plan</p>
                   <p className="text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(228,181,72,0.4)] mb-4">
@@ -657,7 +657,7 @@ const TFACompoundGrowthCalculator = () => {
               </div>
 
               {/* Impact Statement */}
-              <Card className="p-8 bg-gradient-to-br from-accent/25 via-accent/15 to-slate-800/80 backdrop-blur-xl border-accent/40 shadow-xl shadow-accent/25 text-center">
+              <Card className="p-8 bg-slate-900/90 backdrop-blur-sm border border-accent/40 shadow-xl shadow-accent/15 text-center">
                 <p className="text-sm font-semibold text-white/80 mb-2">Difference Over Time</p>
                 <p className="text-4xl lg:text-5xl font-bold text-white drop-shadow-[0_0_20px_rgba(228,181,72,0.5)] mb-4">
                   {formatCurrency(Math.abs(comparisonResults.difference))}
