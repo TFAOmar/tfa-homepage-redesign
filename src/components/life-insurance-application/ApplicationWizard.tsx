@@ -108,12 +108,45 @@ const ApplicationWizard = ({
 
   const handleNext = async () => {
     let isValid = false;
-    const stepForms = [step1Form, step2Form, step3Form, step4Form, step5Form, step6Form, step7Form, step8Form];
-    const form = stepForms[currentStep - 1];
-    
-    isValid = await form.trigger();
+
+    switch (currentStep) {
+      case 1:
+        isValid = await step1Form.trigger();
+        if (isValid) setFormData((prev) => ({ ...prev, step1: step1Form.getValues() }));
+        break;
+      case 2:
+        isValid = await step2Form.trigger();
+        if (isValid) setFormData((prev) => ({ ...prev, step2: step2Form.getValues() }));
+        break;
+      case 3:
+        isValid = await step3Form.trigger();
+        if (isValid) setFormData((prev) => ({ ...prev, step3: step3Form.getValues() }));
+        break;
+      case 4:
+        isValid = await step4Form.trigger();
+        if (isValid) setFormData((prev) => ({ ...prev, step4: step4Form.getValues() }));
+        break;
+      case 5:
+        isValid = await step5Form.trigger();
+        if (isValid) setFormData((prev) => ({ ...prev, step5: step5Form.getValues() }));
+        break;
+      case 6:
+        isValid = await step6Form.trigger();
+        if (isValid) setFormData((prev) => ({ ...prev, step6: step6Form.getValues() }));
+        break;
+      case 7:
+        isValid = await step7Form.trigger();
+        if (isValid) setFormData((prev) => ({ ...prev, step7: step7Form.getValues() }));
+        break;
+      case 8:
+        isValid = await step8Form.trigger();
+        if (isValid) setFormData((prev) => ({ ...prev, step8: step8Form.getValues() }));
+        break;
+      default:
+        isValid = true;
+    }
+
     if (isValid) {
-      setFormData((prev) => ({ ...prev, [`step${currentStep}`]: form.getValues() }));
       if (!completedSteps.includes(currentStep)) setCompletedSteps((prev) => [...prev, currentStep]);
       setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
       saveDraft();
@@ -123,8 +156,16 @@ const ApplicationWizard = ({
   };
 
   const handleBack = () => {
-    const stepForms = [step1Form, step2Form, step3Form, step4Form, step5Form, step6Form, step7Form, step8Form];
-    setFormData((prev) => ({ ...prev, [`step${currentStep}`]: stepForms[currentStep - 1].getValues() }));
+    switch (currentStep) {
+      case 1: setFormData((prev) => ({ ...prev, step1: step1Form.getValues() })); break;
+      case 2: setFormData((prev) => ({ ...prev, step2: step2Form.getValues() })); break;
+      case 3: setFormData((prev) => ({ ...prev, step3: step3Form.getValues() })); break;
+      case 4: setFormData((prev) => ({ ...prev, step4: step4Form.getValues() })); break;
+      case 5: setFormData((prev) => ({ ...prev, step5: step5Form.getValues() })); break;
+      case 6: setFormData((prev) => ({ ...prev, step6: step6Form.getValues() })); break;
+      case 7: setFormData((prev) => ({ ...prev, step7: step7Form.getValues() })); break;
+      case 8: setFormData((prev) => ({ ...prev, step8: step8Form.getValues() })); break;
+    }
     setCurrentStep((prev) => Math.max(prev - 1, 1));
     saveDraft();
   };
