@@ -169,7 +169,7 @@ export default function RequiredSavingsCalculator() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/book-consultation">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full px-8 py-6 text-lg">
+                  <Button className="btn-primary-cta px-8 py-6 text-lg">
                     Book a Consultation
                   </Button>
                 </Link>
