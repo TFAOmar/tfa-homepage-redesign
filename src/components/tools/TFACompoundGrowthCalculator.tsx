@@ -1043,12 +1043,22 @@ const TFACompoundGrowthCalculator = () => {
               </Card>
             </div>
           ) : (
-            <Card className="p-12 bg-background/40 backdrop-blur-sm border-border/50 text-center">
-              <p className="text-muted-foreground">
-                {compareMode 
-                  ? "Enter information for both scenarios and click Calculate to see the comparison."
-                  : "Enter your information and click Calculate to see your potential growth."}
-              </p>
+            <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6 md:p-8">
+              <div className="mb-6 pb-4 border-b border-white/15">
+                <div className="h-1 w-14 rounded-full bg-accent mb-4" />
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2">Results</h3>
+                <p className="text-sm text-white/70">
+                  {compareMode 
+                    ? "Enter both scenarios and click Calculate"
+                    : "Enter your details and click Calculate"}
+                </p>
+              </div>
+              <div className="text-center py-12">
+                <div className="w-16 h-16 rounded-full bg-slate-800/80 flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-white/50" />
+                </div>
+                <p className="text-white/60">Your results will appear here</p>
+              </div>
             </Card>
           )}
         </div>
