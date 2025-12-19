@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
-import { ArrowRight, TrendingUp, DollarSign, Calendar, Mail } from "lucide-react";
+import { ArrowRight, TrendingUp, DollarSign, Calendar, Mail, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import EmailResultsModal from "./EmailResultsModal";
@@ -601,6 +601,31 @@ export default function TFARetirementIncomeCalculator() {
                     </div>
                   </div>
                 </CardContent>
+              </Card>
+
+              {/* Key Benefits Card */}
+              <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6">
+                <h4 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">
+                  Key Benefits
+                </h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { label: "Retirement Income Planning" },
+                    { label: "Social Security Optimization" },
+                    { label: "Gap Analysis Included" },
+                    { label: "Multiple Income Sources" },
+                  ].map((benefit, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 bg-slate-800/60 rounded-lg p-3 border border-white/10"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="h-3 w-3 text-primary" />
+                      </div>
+                      <span className="text-xs text-white font-medium">{benefit.label}</span>
+                    </div>
+                  ))}
+                </div>
               </Card>
 
               {/* Guidance Callout */}

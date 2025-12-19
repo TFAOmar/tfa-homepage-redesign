@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DollarSign, TrendingUp, Shield, ArrowRight, Heart, Calculator, RefreshCw, Percent, Clock } from "lucide-react";
+import { DollarSign, TrendingUp, Shield, ArrowRight, Heart, Calculator, RefreshCw, Percent, Clock, Check } from "lucide-react";
 
 type Gender = "male" | "female";
 
@@ -106,12 +106,6 @@ const KaiZenCalculator = () => {
     document.getElementById('kai-zen-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const benefits = [
-    { icon: Percent, label: "Premium Financing", desc: "Leverage for growth" },
-    { icon: DollarSign, label: "Tax-Free Distributions", desc: "Policy loans" },
-    { icon: Shield, label: "Death Benefit", desc: "Family protection" },
-    { icon: Heart, label: "Living Benefits", desc: "Illness access" },
-  ];
 
   return (
     <div className="w-full">
@@ -322,13 +316,24 @@ const KaiZenCalculator = () => {
 
           {/* Key Benefits Card */}
           <Card className="bg-slate-900/80 backdrop-blur-xl border-white/20 shadow-xl shadow-black/40 rounded-2xl p-6">
-            <h4 className="text-sm font-semibold text-white/80 uppercase tracking-wide mb-4">Key Benefits</h4>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">
+              Key Benefits
+            </h4>
             <div className="grid grid-cols-2 gap-3">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="bg-slate-800/60 rounded-lg p-3 border border-white/10">
-                  <benefit.icon className="h-5 w-5 text-accent mb-2" />
-                  <p className="text-sm font-medium text-white">{benefit.label}</p>
-                  <p className="text-xs text-white/60">{benefit.desc}</p>
+              {[
+                { label: "Premium Financing Available" },
+                { label: "Tax-Free Distributions" },
+                { label: "Death Benefit Protection" },
+                { label: "Living Benefits Access" },
+              ].map((benefit, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 bg-slate-800/60 rounded-lg p-3 border border-white/10"
+                >
+                  <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
+                    <Check className="h-3 w-3 text-primary" />
+                  </div>
+                  <span className="text-xs text-white font-medium">{benefit.label}</span>
                 </div>
               ))}
             </div>
