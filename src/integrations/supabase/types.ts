@@ -51,6 +51,7 @@ export type Database = {
           region: string
           rejection_reason: string | null
           scheduling_link: string | null
+          slug: string
           specialties: string[]
           state: string
           status: Database["public"]["Enums"]["advisor_status"]
@@ -74,6 +75,7 @@ export type Database = {
           region: string
           rejection_reason?: string | null
           scheduling_link?: string | null
+          slug: string
           specialties?: string[]
           state: string
           status?: Database["public"]["Enums"]["advisor_status"]
@@ -97,6 +99,7 @@ export type Database = {
           region?: string
           rejection_reason?: string | null
           scheduling_link?: string | null
+          slug?: string
           specialties?: string[]
           state?: string
           status?: Database["public"]["Enums"]["advisor_status"]
@@ -297,6 +300,18 @@ export type Database = {
       }
     }
     Functions: {
+      generate_advisor_slug: { Args: { advisor_name: string }; Returns: string }
+      get_advisor_by_slug: {
+        Args: { advisor_slug: string }
+        Returns: {
+          email: string
+          id: string
+          image_url: string
+          name: string
+          scheduling_link: string
+          title: string
+        }[]
+      }
       get_public_advisors: {
         Args: never
         Returns: {

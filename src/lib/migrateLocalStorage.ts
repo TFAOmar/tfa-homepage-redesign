@@ -93,6 +93,9 @@ export async function migrateLocalStorageAdvisors(): Promise<MigrationResult> {
           imageUrl = imageData;
         }
 
+        // Generate slug from name
+        const slug = advisor.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        
         // Insert into database
         const { error: insertError } = await supabase
           .from("dynamic_advisors")
@@ -114,6 +117,7 @@ export async function migrateLocalStorageAdvisors(): Promise<MigrationResult> {
             type: advisor.type === "Broker" ? "Broker" : "Advisor",
             scheduling_link: advisor.scheduling_link || null,
             display_priority: advisor.display_priority || null,
+            slug,
           });
 
         if (insertError) {
