@@ -342,6 +342,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      submit_life_insurance_application: {
+        Args: { application_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       advisor_status: "pending" | "published" | "hidden" | "archived"
