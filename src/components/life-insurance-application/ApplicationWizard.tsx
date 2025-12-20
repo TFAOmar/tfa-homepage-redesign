@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { ArrowLeft, ArrowRight, Save, Loader2, Send, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 import ProgressBar from "./ProgressBar";
 import SaveProgressModal from "./SaveProgressModal";
 import ResumeApplicationModal from "./ResumeApplicationModal";
@@ -101,20 +102,23 @@ const ApplicationWizard = ({
   const step8Form = useForm<Step8Data>({ resolver: zodResolver(step8Schema), defaultValues: formData.step8 as Step8Data, mode: "onChange" });
   const step9Form = useForm<Step9Data>({ resolver: zodResolver(step9Schema), defaultValues: { ...formData.step9, signatureDate: new Date().toLocaleDateString("en-US") } as Step9Data, mode: "onChange" });
 
-  // Get current form data
-  const getCurrentFormData = useCallback(() => {
-    return {
-      step1: step1Form.getValues(),
-      step2: step2Form.getValues(),
-      step3: step3Form.getValues(),
-      step4: step4Form.getValues(),
-      step5: step5Form.getValues(),
-      step6: step6Form.getValues(),
-      step7: step7Form.getValues(),
-      step8: step8Form.getValues(),
-      step9: step9Form.getValues(),
-    };
-  }, [step1Form, step2Form, step3Form, step4Form, step5Form, step6Form, step7Form, step8Form, step9Form]);
+  // Get current form data - merges saved formData with current step values
+  const getCurrentFormData = useCallback((): LifeInsuranceApplicationData => {
+    const stepForms = [step1Form, step2Form, step3Form, step4Form, step5Form, step6Form, step7Form, step8Form, step9Form];
+    
+    // Start with saved form data
+    const result: LifeInsuranceApplicationData = { ...formData };
+    
+    // Update data for completed steps and current step with form values
+    const stepsToInclude = [...new Set([...completedSteps, currentStep])];
+    
+    stepsToInclude.forEach(step => {
+      const stepKey = `step${step}` as keyof LifeInsuranceApplicationData;
+      result[stepKey] = stepForms[step - 1].getValues();
+    });
+    
+    return result;
+  }, [formData, completedSteps, currentStep, step1Form, step2Form, step3Form, step4Form, step5Form, step6Form, step7Form, step8Form, step9Form]);
 
   // Reset all forms with data
   const resetFormsWithData = useCallback((data: LifeInsuranceApplicationData) => {
@@ -130,8 +134,9 @@ const ApplicationWizard = ({
   }, [step1Form, step2Form, step3Form, step4Form, step5Form, step6Form, step7Form, step8Form, step9Form]);
 
   // Save draft to both localStorage and database
-  const saveDraftToServer = useCallback(async (showToast = false) => {
-    const currentFormData = getCurrentFormData();
+  // overrideFormData allows passing form data directly to avoid race conditions with state updates
+  const saveDraftToServer = useCallback(async (showToast = false, overrideFormData?: LifeInsuranceApplicationData) => {
+    const currentFormData = overrideFormData || getCurrentFormData();
     const applicantName = `${currentFormData.step1?.firstName || ""} ${currentFormData.step1?.lastName || ""}`.trim();
     const applicantEmail = currentFormData.step2?.email || null;
     const applicantPhone = currentFormData.step2?.mobilePhone || null;
@@ -161,7 +166,7 @@ const ApplicationWizard = ({
         const { error } = await supabase
           .from("life_insurance_applications")
           .update({
-            form_data: currentFormData,
+            form_data: currentFormData as unknown as Json,
             current_step: currentStep,
             applicant_name: applicantName || null,
             applicant_email: applicantEmail,
@@ -176,7 +181,7 @@ const ApplicationWizard = ({
         const { data, error } = await supabase
           .from("life_insurance_applications")
           .insert({
-            form_data: currentFormData,
+            form_data: currentFormData as unknown as Json,
             current_step: currentStep,
             status: "draft",
             advisor_id: advisorId || null,
@@ -399,13 +404,37 @@ const ApplicationWizard = ({
 
     if (isValid) {
       setHasValidationErrors(false);
-      if (!completedSteps.includes(currentStep)) setCompletedSteps((prev) => [...prev, currentStep]);
+      
+      // Get the current step's data
+      const stepForms = [step1Form, step2Form, step3Form, step4Form, step5Form, step6Form, step7Form, step8Form, step9Form];
+      const currentStepData = stepForms[currentStep - 1].getValues();
+      const stepKey = `step${currentStep}` as keyof LifeInsuranceApplicationData;
+      
+      // Build updated form data with the current step's values
+      const updatedFormData: LifeInsuranceApplicationData = {
+        ...formData,
+        [stepKey]: currentStepData,
+      };
+      
+      // Update formData state
+      setFormData(updatedFormData);
+      
+      // Update completed steps
+      const newCompletedSteps = completedSteps.includes(currentStep) 
+        ? completedSteps 
+        : [...completedSteps, currentStep];
+      if (!completedSteps.includes(currentStep)) {
+        setCompletedSteps(newCompletedSteps);
+      }
       
       // If on step 9 and valid, submit the application
       if (currentStep === 9) {
         await handleSubmitApplication();
         return;
       }
+      
+      // Save to server with the updated data directly (avoids race condition with setState)
+      await saveDraftToServer(false, updatedFormData);
       
       // Show success toast for step completion
       toast({
@@ -434,7 +463,7 @@ const ApplicationWizard = ({
         const { error } = await supabase
           .from("life_insurance_applications")
           .update({
-            form_data: finalFormData,
+            form_data: finalFormData as unknown as Json,
             current_step: 9,
             status: "submitted",
             applicant_name: applicantName,
@@ -477,7 +506,7 @@ const ApplicationWizard = ({
         const { data: insertedData, error } = await supabase
           .from("life_insurance_applications")
           .insert({
-            form_data: finalFormData,
+            form_data: finalFormData as unknown as Json,
             current_step: 9,
             status: "submitted",
             advisor_id: advisorId || null,
