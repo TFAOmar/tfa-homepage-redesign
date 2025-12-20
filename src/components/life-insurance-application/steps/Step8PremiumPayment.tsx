@@ -8,17 +8,17 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { CreditCard, Building, Calendar, Wallet } from "lucide-react";
 import { Step8Data } from "@/types/lifeInsuranceApplication";
+import { ValidatedInput } from "../ValidatedInput";
+import { ValidatedSelectTrigger } from "../ValidatedSelect";
 
 interface Step8PremiumPaymentProps {
   form: UseFormReturn<Step8Data>;
@@ -109,14 +109,14 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
           <FormField
             control={form.control}
             name="paymentFrequency"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem className="max-w-md">
                 <FormLabel className="text-sm md:text-base">How often would you like to pay? *</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="min-h-[44px]">
+                    <ValidatedSelectTrigger fieldState={fieldState} className="min-h-[44px]">
                       <SelectValue placeholder="Select payment frequency" />
-                    </SelectTrigger>
+                    </ValidatedSelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {PAYMENT_FREQUENCIES.map((option) => (
@@ -150,11 +150,16 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
               <FormField
                 control={form.control}
                 name="bankName"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="text-sm md:text-base">Bank Name *</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter bank name" className="min-h-[44px]" />
+                      <ValidatedInput
+                        placeholder="Enter bank name"
+                        fieldState={fieldState}
+                        className="min-h-[44px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -164,16 +169,16 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
               <FormField
                 control={form.control}
                 name="routingNumber"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="text-sm md:text-base">Routing Number *</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
+                      <ValidatedInput
                         placeholder="9-digit routing number"
                         maxLength={9}
-                        pattern="[0-9]*"
+                        fieldState={fieldState}
                         className="min-h-[44px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormDescription className="text-xs">
@@ -187,16 +192,17 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
               <FormField
                 control={form.control}
                 name="accountNumber"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="text-sm md:text-base">Account Number *</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
+                      <ValidatedInput
                         placeholder="Enter account number"
                         type="password"
                         autoComplete="off"
+                        fieldState={fieldState}
                         className="min-h-[44px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -253,14 +259,14 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
             <FormField
               control={form.control}
               name="sourceOfFunds"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">What is the source of premium funds? *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="min-h-[44px]">
+                      <ValidatedSelectTrigger fieldState={fieldState} className="min-h-[44px]">
                         <SelectValue placeholder="Select source" />
-                      </SelectTrigger>
+                      </ValidatedSelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {FUND_SOURCES.map((option) => (
@@ -282,11 +288,16 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
               <FormField
                 control={form.control}
                 name="sourceOfFundsOther"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="text-sm md:text-base">Please specify *</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Describe source of funds" className="min-h-[44px]" />
+                      <ValidatedInput
+                        placeholder="Describe source of funds"
+                        fieldState={fieldState}
+                        className="min-h-[44px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

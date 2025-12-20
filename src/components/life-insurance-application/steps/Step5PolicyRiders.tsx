@@ -8,7 +8,6 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CurrencyInput } from "@/components/ui/currency-input";
@@ -16,7 +15,6 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
@@ -27,6 +25,8 @@ import {
 } from "@/components/ui/tooltip";
 import { FileText, Shield, HelpCircle, Plus, Trash2, Baby } from "lucide-react";
 import { Step5Data } from "@/types/lifeInsuranceApplication";
+import { ValidatedInput } from "../ValidatedInput";
+import { ValidatedSelectTrigger } from "../ValidatedSelect";
 
 interface Step5PolicyRidersProps {
   form: UseFormReturn<Step5Data>;
@@ -71,14 +71,14 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
             <FormField
               control={form.control}
               name="planName"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Plan Name *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="min-h-[44px]">
+                      <ValidatedSelectTrigger fieldState={fieldState} className="min-h-[44px]">
                         <SelectValue placeholder="Select a plan" />
-                      </SelectTrigger>
+                      </ValidatedSelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {PLAN_OPTIONS.map((option) => (
@@ -97,14 +97,14 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
               <FormField
                 control={form.control}
                 name="termDuration"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="text-sm md:text-base">Term Duration *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger className="min-h-[44px]">
+                        <ValidatedSelectTrigger fieldState={fieldState} className="min-h-[44px]">
                           <SelectValue placeholder="Select term length" />
-                        </SelectTrigger>
+                        </ValidatedSelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {TERM_DURATIONS.map((option) => (
@@ -298,11 +298,16 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                   <FormField
                     control={form.control}
                     name={`childrenDetails.${index}.name`}
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel className="text-sm md:text-base">Child's Name</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Full name" className="min-h-[44px]" />
+                          <ValidatedInput
+                            placeholder="Full name"
+                            fieldState={fieldState}
+                            className="min-h-[44px]"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -312,11 +317,16 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                   <FormField
                     control={form.control}
                     name={`childrenDetails.${index}.dateOfBirth`}
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel className="text-sm md:text-base">Date of Birth</FormLabel>
                         <FormControl>
-                          <Input {...field} type="date" className="min-h-[44px]" />
+                          <ValidatedInput
+                            type="date"
+                            fieldState={fieldState}
+                            className="min-h-[44px]"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
