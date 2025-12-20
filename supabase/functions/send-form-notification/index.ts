@@ -643,7 +643,7 @@ serve(async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "TFA Leads <leads@tfainsuranceadvisors.com>",
+        from: "The Financial Architects <leads@tfainsuranceadvisors.com>",
         to: recipients,
         subject: subject,
         html: htmlContent,
