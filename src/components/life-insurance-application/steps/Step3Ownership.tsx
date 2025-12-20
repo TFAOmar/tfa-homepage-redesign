@@ -49,9 +49,9 @@ const Step3Ownership = ({ form }: Step3Props) => {
 
   return (
     <Form {...form}>
-      <div className="space-y-8">
+      <div className="space-y-6 md:space-y-8">
         {/* Owner Toggle Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <UserCheck className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Policy Ownership</h3>
@@ -61,16 +61,16 @@ const Step3Ownership = ({ form }: Step3Props) => {
             control={form.control}
             name="insuredIsOwner"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">
+              <FormItem className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                <div className="space-y-1 flex-1">
+                  <FormLabel className="text-sm md:text-base leading-snug">
                     Is the Proposed Insured also the Policy Owner?
                   </FormLabel>
-                  <FormDescription>
-                    Toggle off if someone else (individual, trust, or business) will own the policy.
+                  <FormDescription className="text-xs md:text-sm">
+                    Toggle off if someone else will own the policy.
                   </FormDescription>
                 </div>
-                <FormControl>
+                <FormControl className="self-start sm:self-center">
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
@@ -85,7 +85,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
         {!insuredIsOwner && (
           <>
             {/* Owner Type Selection */}
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-border">
                 <Building2 className="w-5 h-5 text-primary" />
                 <h3 className="text-lg font-semibold text-foreground">Owner Type</h3>
@@ -130,15 +130,14 @@ const Step3Ownership = ({ form }: Step3Props) => {
               />
             </div>
 
-            {/* Individual Owner Fields */}
             {ownerType === "individual" && (
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 <div className="flex items-center gap-2 pb-2 border-b border-border">
                   <User className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">Individual Owner Information</h3>
+                  <h3 className="text-base md:text-lg font-semibold text-foreground">Individual Owner Information</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                   <FormField
                     control={form.control}
                     name="ownerName"
@@ -221,15 +220,14 @@ const Step3Ownership = ({ form }: Step3Props) => {
               </div>
             )}
 
-            {/* Trust Owner Fields */}
             {ownerType === "trust" && (
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 <div className="flex items-center gap-2 pb-2 border-b border-border">
                   <FileText className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">Trust Information</h3>
+                  <h3 className="text-base md:text-lg font-semibold text-foreground">Trust Information</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                   <FormField
                     control={form.control}
                     name="ownerName"
@@ -305,15 +303,14 @@ const Step3Ownership = ({ form }: Step3Props) => {
               </div>
             )}
 
-            {/* Business Owner Fields */}
             {ownerType === "business" && (
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 <div className="flex items-center gap-2 pb-2 border-b border-border">
                   <Building2 className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">Business Information</h3>
+                  <h3 className="text-base md:text-lg font-semibold text-foreground">Business Information</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                   <FormField
                     control={form.control}
                     name="ownerName"
@@ -357,12 +354,12 @@ const Step3Ownership = ({ form }: Step3Props) => {
             {ownerType && (
               <>
                 {/* Owner Address */}
-                <div className="space-y-4">
-                  <h4 className="text-md font-medium text-foreground border-b border-border pb-2">
+                <div className="space-y-3 md:space-y-4">
+                  <h4 className="text-sm md:text-base font-medium text-foreground border-b border-border pb-2">
                     Owner Address
                   </h4>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                     <FormField
                       control={form.control}
                       name="ownerStreet"

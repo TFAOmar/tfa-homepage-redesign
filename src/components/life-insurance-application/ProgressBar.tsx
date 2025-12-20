@@ -9,20 +9,20 @@ interface ProgressBarProps {
 
 const ProgressBar = ({ currentStep, completedSteps }: ProgressBarProps) => {
   return (
-    <div className="w-full py-6">
-      {/* Mobile view - simplified */}
+    <div className="w-full py-4 md:py-6">
+      {/* Mobile view - simplified with larger touch area */}
       <div className="md:hidden">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-foreground">
+        <div className="flex items-center justify-between mb-3 gap-2">
+          <span className="text-sm font-semibold text-foreground whitespace-nowrap">
             Step {currentStep} of {STEPS.length}
           </span>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-muted-foreground truncate max-w-[180px] text-right">
             {STEPS[currentStep - 1]?.title}
           </span>
         </div>
-        <div className="w-full bg-muted rounded-full h-2">
+        <div className="w-full bg-muted rounded-full h-2.5">
           <div
-            className="bg-primary h-2 rounded-full transition-all duration-500"
+            className="bg-primary h-2.5 rounded-full transition-all duration-500"
             style={{ width: `${(currentStep / STEPS.length) * 100}%` }}
           />
         </div>

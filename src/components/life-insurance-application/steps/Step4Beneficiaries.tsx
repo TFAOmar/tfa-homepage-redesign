@@ -89,48 +89,48 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
 
   return (
     <Form {...form}>
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         {/* Header Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Users className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Beneficiaries</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Beneficiaries</h3>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs md:text-sm text-muted-foreground">
             Add one or more beneficiaries. Primary beneficiaries must total 100%.
           </p>
         </div>
 
-        {/* Percentage Totals */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className={`rounded-lg border p-4 ${primaryTotal === 100 ? 'border-green-500/50 bg-green-500/10' : 'border-destructive/50 bg-destructive/10'}`}>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Primary Total</span>
+        {/* Percentage Totals - Improved mobile layout */}
+        <div className="grid grid-cols-2 gap-2 md:gap-4">
+          <div className={`rounded-lg border p-3 md:p-4 ${primaryTotal === 100 ? 'border-green-500/50 bg-green-500/10' : 'border-destructive/50 bg-destructive/10'}`}>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs md:text-sm font-medium">Primary Total</span>
               {primaryTotal === 100 ? (
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-green-500 flex-shrink-0" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-destructive" />
+                <AlertCircle className="w-4 h-4 md:w-5 md:h-5 text-destructive flex-shrink-0" />
               )}
             </div>
-            <p className={`text-2xl font-bold ${primaryTotal === 100 ? 'text-green-500' : 'text-destructive'}`}>
+            <p className={`text-xl md:text-2xl font-bold ${primaryTotal === 100 ? 'text-green-500' : 'text-destructive'}`}>
               {primaryTotal}%
             </p>
             {primaryTotal !== 100 && (
-              <p className="text-xs text-destructive mt-1">Must equal 100%</p>
+              <p className="text-[10px] md:text-xs text-destructive mt-1">Must equal 100%</p>
             )}
           </div>
-          <div className={`rounded-lg border p-4 ${contingentTotal === 0 || contingentTotal === 100 ? 'border-border bg-muted/50' : 'border-yellow-500/50 bg-yellow-500/10'}`}>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Contingent Total</span>
+          <div className={`rounded-lg border p-3 md:p-4 ${contingentTotal === 0 || contingentTotal === 100 ? 'border-border bg-muted/50' : 'border-yellow-500/50 bg-yellow-500/10'}`}>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs md:text-sm font-medium">Contingent</span>
               {(contingentTotal === 0 || contingentTotal === 100) && (
-                <CheckCircle2 className="w-5 h-5 text-muted-foreground" />
+                <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground flex-shrink-0" />
               )}
             </div>
-            <p className="text-2xl font-bold text-foreground">
+            <p className="text-xl md:text-2xl font-bold text-foreground">
               {contingentTotal}%
             </p>
             {contingentTotal > 0 && contingentTotal !== 100 && (
-              <p className="text-xs text-yellow-600 mt-1">Should equal 100% if used</p>
+              <p className="text-[10px] md:text-xs text-yellow-600 mt-1">Should equal 100%</p>
             )}
           </div>
         </div>
@@ -143,13 +143,13 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
             <p className="text-sm text-muted-foreground mt-1 mb-4">
               Add at least one beneficiary to continue.
             </p>
-            <Button type="button" onClick={addBeneficiary} className="gap-2">
+            <Button type="button" onClick={addBeneficiary} className="gap-2 min-h-[44px]">
               <Plus className="w-4 h-4" />
               Add Beneficiary
             </Button>
           </div>
         ) : (
-          <Accordion type="multiple" className="space-y-3">
+          <Accordion type="multiple" className="space-y-2 md:space-y-3">
             {fields.map((field, index) => {
               const beneficiary = beneficiaries[index];
               return (
@@ -158,26 +158,26 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                   value={field.id}
                   className="border border-border rounded-lg bg-card/50 overflow-hidden"
                 >
-                  <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/50">
-                    <div className="flex items-center justify-between w-full pr-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-2 h-2 rounded-full ${beneficiary?.designation === 'primary' ? 'bg-primary' : 'bg-muted-foreground'}`} />
-                        <span className="font-medium">
+                  <AccordionTrigger className="px-3 md:px-4 py-3 min-h-[56px] hover:no-underline hover:bg-muted/50">
+                    <div className="flex items-center justify-between w-full pr-2 md:pr-4 gap-2">
+                      <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${beneficiary?.designation === 'primary' ? 'bg-primary' : 'bg-muted-foreground'}`} />
+                        <span className="font-medium text-sm md:text-base truncate">
                           {beneficiary?.fullName || `Beneficiary ${index + 1}`}
                         </span>
-                        <span className="text-sm text-muted-foreground capitalize">
+                        <span className="text-xs md:text-sm text-muted-foreground capitalize hidden sm:inline">
                           ({beneficiary?.designation || 'primary'})
                         </span>
                       </div>
-                      <span className="text-sm font-medium text-primary">
+                      <span className="text-sm font-medium text-primary flex-shrink-0">
                         {beneficiary?.sharePercentage || 0}%
                       </span>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="px-4 pb-4">
-                    <div className="space-y-4 pt-2">
+                  <AccordionContent className="px-3 md:px-4 pb-4">
+                    <div className="space-y-3 md:space-y-4 pt-2">
                       {/* Basic Info */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.fullName`}
@@ -275,7 +275,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                       />
 
                       {/* Optional Fields */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.ssn`}
@@ -331,7 +331,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         />
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.email`}
@@ -370,7 +370,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         />
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.city`}
