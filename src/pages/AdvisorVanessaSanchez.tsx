@@ -126,15 +126,15 @@ const AdvisorVanessaSanchez = () => {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-white/30 hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto text-white"
+                  variant="hero" 
+                  className="text-lg px-8 py-6 w-full sm:w-auto"
                   onClick={() => setContactModalOpen(true)}
                 >
                   <Mail className="mr-2 h-5 w-5" />
                   Contact Me
                 </Button>
                 <Link to="/advisors/vanessa-sanchez/living-trust">
-                  <Button size="lg" variant="outline" className="border-accent/50 hover:bg-accent/20 text-lg px-8 py-6 w-full sm:w-auto text-accent">
+                  <Button size="lg" variant="outline" className="border-accent bg-transparent text-accent hover:bg-accent/20 text-lg px-8 py-6 w-full sm:w-auto">
                     <Shield className="mr-2 h-5 w-5" />
                     Living Trust Planning
                   </Button>

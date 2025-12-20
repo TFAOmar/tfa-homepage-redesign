@@ -158,8 +158,7 @@ const AdvisorAnthonyBottley = () => {
                   </Button>
                   <Button 
                     size="lg" 
-                    variant="outline"
-                    className="border-white/30 bg-transparent text-white hover:bg-white/10"
+                    variant="hero"
                     asChild
                   >
                     <Link to="/health-insurance/american-way-health">
@@ -169,8 +168,7 @@ const AdvisorAnthonyBottley = () => {
                   </Button>
                   <Button 
                     size="lg" 
-                    variant="outline"
-                    className="border-white/30 bg-transparent text-white hover:bg-white/10"
+                    variant="hero"
                     onClick={() => setContactModalOpen(true)}
                   >
                     Contact Me
@@ -312,8 +310,7 @@ const AdvisorAnthonyBottley = () => {
               </Button>
               <Button 
                 size="lg" 
-                variant="outline"
-                className="border-white/30 bg-transparent text-white hover:bg-white/10"
+                variant="hero"
                 asChild
               >
                 <a href="tel:+15614484831">

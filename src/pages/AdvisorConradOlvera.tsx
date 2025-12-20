@@ -170,8 +170,7 @@ const AdvisorConradOlvera = () => {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10"
+                  variant="hero" 
                   onClick={() => setContactModalOpen(true)}
                 >
                   <Mail className="mr-2 h-5 w-5" />
@@ -181,7 +180,7 @@ const AdvisorConradOlvera = () => {
                   <Button 
                     size="lg" 
                     variant="outline" 
-                    className="border-accent/50 text-accent hover:bg-accent/10"
+                    className="border-accent bg-transparent text-accent hover:bg-accent/20"
                   >
                     <FileText className="mr-2 h-5 w-5" />
                     Start Life Insurance Application
@@ -351,7 +350,7 @@ const AdvisorConradOlvera = () => {
                 Book Your Free Consultation
               </Button>
               <a href="tel:8883505396">
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                <Button size="lg" variant="hero">
                   <Phone className="mr-2 h-5 w-5" />
                   (888) 350-5396
                 </Button>
@@ -359,8 +358,7 @@ const AdvisorConradOlvera = () => {
               <Link to="/advisors/conrad-olvera/life-insurance">
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10"
+                  variant="hero"
                 >
                   <FileText className="mr-2 h-5 w-5" />
                   Life Insurance Application

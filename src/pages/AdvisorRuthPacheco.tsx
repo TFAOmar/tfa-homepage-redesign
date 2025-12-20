@@ -169,8 +169,7 @@ const AdvisorRuthPacheco = () => {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10"
+                  variant="hero" 
                   onClick={() => setContactModalOpen(true)}
                 >
                   <Mail className="mr-2 h-5 w-5" />
@@ -342,7 +341,7 @@ const AdvisorRuthPacheco = () => {
                 Book Your Free Consultation
               </Button>
               <a href="tel:8883505396">
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                <Button size="lg" variant="hero">
                   <Phone className="mr-2 h-5 w-5" />
                   (888) 350-5396
                 </Button>
