@@ -350,13 +350,13 @@ const ApplicationWizard = ({
     setPendingDraft(null);
   };
 
-  // Auto-save every step change
+  // Auto-save every step change (skip when submitting to prevent race conditions)
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && !isSubmitting) {
       const timeoutId = setTimeout(() => saveDraftToServer(false), 1000);
       return () => clearTimeout(timeoutId);
     }
-  }, [currentStep, completedSteps, isLoading]);
+  }, [currentStep, completedSteps, isLoading, isSubmitting]);
 
   const handleNext = async () => {
     let isValid = false;
@@ -458,97 +458,90 @@ const ApplicationWizard = ({
       const applicantEmail = finalFormData.step2?.email || null;
       const applicantPhone = finalFormData.step2?.mobilePhone || null;
 
-      if (draftId) {
-        // Update existing draft to submitted
-        const { error } = await supabase
-          .from("life_insurance_applications")
-          .update({
-            form_data: finalFormData as unknown as Json,
-            current_step: 9,
-            status: "submitted",
-            applicant_name: applicantName,
-            applicant_email: applicantEmail,
-            applicant_phone: applicantPhone,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", draftId);
+      console.log("Starting submission, draftId:", draftId);
 
-        if (error) throw error;
-
-        // Send email notifications
-        try {
-          console.log("Sending life insurance notification emails...");
-          const { error: emailError } = await supabase.functions.invoke(
-            "send-life-insurance-notification",
-            {
-              body: {
-                applicationId: draftId,
-                applicantName,
-                applicantEmail,
-                applicantPhone,
-                advisorName: advisorName || null,
-                advisorEmail: advisorEmail || null,
-                formData: finalFormData,
-              },
-            }
-          );
-
-          if (emailError) {
-            console.error("Failed to send notification emails:", emailError);
-          } else {
-            console.log("Notification emails sent successfully");
-          }
-        } catch (emailError) {
-          console.error("Error invoking email function:", emailError);
-        }
-      } else {
-        // Insert new submission
-        const { data: insertedData, error } = await supabase
+      // Ensure we have a draftId before submission
+      let applicationId = draftId;
+      
+      if (!applicationId) {
+        // Create a draft first to get an ID
+        console.log("No draftId found, creating draft first...");
+        const token = resumeToken || generateResumeToken();
+        
+        const { data: newDraft, error: createError } = await supabase
           .from("life_insurance_applications")
           .insert({
             form_data: finalFormData as unknown as Json,
             current_step: 9,
-            status: "submitted",
+            status: "draft",
             advisor_id: advisorId || null,
             advisor_name: advisorName || null,
             advisor_email: advisorEmail || null,
             applicant_name: applicantName,
             applicant_email: applicantEmail,
             applicant_phone: applicantPhone,
+            resume_token: token,
           })
           .select("id")
           .single();
 
-        if (error) throw error;
-
-        // Send email notifications via edge function
-        if (insertedData?.id) {
-          try {
-            console.log("Sending life insurance notification emails...");
-            const { error: emailError } = await supabase.functions.invoke(
-              "send-life-insurance-notification",
-              {
-                body: {
-                  applicationId: insertedData.id,
-                  applicantName,
-                  applicantEmail,
-                  applicantPhone,
-                  advisorName: advisorName || null,
-                  advisorEmail: advisorEmail || null,
-                  formData: finalFormData,
-                },
-              }
-            );
-
-            if (emailError) {
-              console.error("Failed to send notification emails:", emailError);
-            } else {
-              console.log("Notification emails sent successfully");
-            }
-          } catch (emailError) {
-            console.error("Error invoking email function:", emailError);
-          }
+        if (createError) {
+          console.error("Error creating draft before submission:", createError);
+          throw createError;
         }
+
+        applicationId = newDraft.id;
+        setDraftId(applicationId);
+        console.log("Created draft with ID:", applicationId);
+      }
+
+      // Now update to submitted status
+      console.log("Updating application to submitted status, ID:", applicationId);
+      const { error: updateError } = await supabase
+        .from("life_insurance_applications")
+        .update({
+          form_data: finalFormData as unknown as Json,
+          current_step: 9,
+          status: "submitted",
+          applicant_name: applicantName,
+          applicant_email: applicantEmail,
+          applicant_phone: applicantPhone,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", applicationId);
+
+      if (updateError) {
+        console.error("Error updating application to submitted:", updateError);
+        throw updateError;
+      }
+
+      console.log("Application submitted successfully");
+
+      // Send email notifications
+      try {
+        console.log("Sending life insurance notification emails...");
+        const { error: emailError } = await supabase.functions.invoke(
+          "send-life-insurance-notification",
+          {
+            body: {
+              applicationId,
+              applicantName,
+              applicantEmail,
+              applicantPhone,
+              advisorName: advisorName || null,
+              advisorEmail: advisorEmail || null,
+              formData: finalFormData,
+            },
+          }
+        );
+
+        if (emailError) {
+          console.error("Failed to send notification emails:", emailError);
+        } else {
+          console.log("Notification emails sent successfully");
+        }
+      } catch (emailError) {
+        console.error("Error invoking email function:", emailError);
       }
 
       // Clear the draft from localStorage
