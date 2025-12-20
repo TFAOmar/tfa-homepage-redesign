@@ -9,14 +9,18 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Send } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const contactFormSchema = z.object({
-  name: z.string()
+  firstName: z.string()
     .trim()
-    .min(2, { message: "Name must be at least 2 characters" })
-    .max(100, { message: "Name must be less than 100 characters" }),
+    .min(2, { message: "First name must be at least 2 characters" })
+    .max(50, { message: "First name must be less than 50 characters" }),
+  lastName: z.string()
+    .trim()
+    .min(2, { message: "Last name must be at least 2 characters" })
+    .max(50, { message: "Last name must be less than 50 characters" }),
   email: z.string()
     .trim()
     .email({ message: "Please enter a valid email address" })
@@ -35,10 +39,23 @@ const contactFormSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
 
+const serviceLabels: Record<string, string> = {
+  retirement: "Retirement Planning",
+  investment: "Investment Management",
+  estate: "Estate & Legacy Planning",
+  tax: "Tax Planning",
+  healthcare: "Health Care Planning",
+  annuities: "Annuities",
+  "401k": "401(k) Rollover",
+  insurance: "Insurance",
+  group: "Group Retirement Plans",
+  other: "General Inquiry",
+};
+
 const ContactForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, honeypotValue, isBot } = useHoneypot();
 
   const {
     register,
@@ -70,21 +87,28 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "contact",
-          formData: data,
-        },
+      const serviceLabel = serviceLabels[data.service] || data.service;
+      
+      const result = await submitForm({
+        form_name: "Contact Form",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        notes: `Service Interest: ${serviceLabel}\n\nMessage:\n${data.message}`,
+        tags: [serviceLabel],
+        honeypot: honeypotValue,
       });
 
-      if (error) throw error;
-
-      toast({
-        title: "Message Sent Successfully!",
-        description: "We'll get back to you within 24 hours.",
-      });
-
-      reset();
+      if (result.ok) {
+        toast({
+          title: "Message Sent Successfully!",
+          description: "We'll get back to you within 24 hours.",
+        });
+        reset();
+      } else {
+        throw new Error(result.error || "Submission failed");
+      }
     } catch (error) {
       console.error("Form submission error:", error);
       toast({
@@ -116,20 +140,37 @@ const ContactForm = () => {
           />
         </div>
 
-        {/* Name */}
-        <div className="space-y-2">
-          <Label htmlFor="name" className="text-foreground">
-            Full Name <span className="text-destructive">*</span>
-          </Label>
-          <Input
-            id="name"
-            placeholder="John Doe"
-            {...register("name")}
-            className={errors.name ? "border-destructive" : ""}
-          />
-          {errors.name && (
-            <p className="text-sm text-destructive">{errors.name.message}</p>
-          )}
+        {/* Name Fields - Side by Side */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="firstName" className="text-foreground">
+              First Name <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="firstName"
+              placeholder="John"
+              {...register("firstName")}
+              className={errors.firstName ? "border-destructive" : ""}
+            />
+            {errors.firstName && (
+              <p className="text-sm text-destructive">{errors.firstName.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="lastName" className="text-foreground">
+              Last Name <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="lastName"
+              placeholder="Doe"
+              {...register("lastName")}
+              className={errors.lastName ? "border-destructive" : ""}
+            />
+            {errors.lastName && (
+              <p className="text-sm text-destructive">{errors.lastName.message}</p>
+            )}
+          </div>
         </div>
 
         {/* Email */}
