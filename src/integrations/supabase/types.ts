@@ -311,6 +311,31 @@ export type Database = {
           title: string
         }[]
       }
+      get_draft_application_by_token: {
+        Args: { p_resume_token: string }
+        Returns: {
+          advisor_email: string | null
+          advisor_id: string | null
+          advisor_name: string | null
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_phone: string | null
+          created_at: string
+          current_step: number
+          form_data: Json
+          id: string
+          resume_email: string | null
+          resume_token: string | null
+          status: Database["public"]["Enums"]["application_status"]
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "life_insurance_applications"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_public_advisors: {
         Args: never
         Returns: {
@@ -344,6 +369,17 @@ export type Database = {
       submit_life_insurance_application: {
         Args: { application_id: string }
         Returns: undefined
+      }
+      update_draft_application_by_token: {
+        Args: {
+          p_applicant_email?: string
+          p_applicant_name?: string
+          p_applicant_phone?: string
+          p_current_step: number
+          p_form_data: Json
+          p_resume_token: string
+        }
+        Returns: string
       }
     }
     Enums: {

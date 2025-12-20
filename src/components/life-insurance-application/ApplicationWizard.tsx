@@ -158,19 +158,16 @@ const ApplicationWizard = ({
     localStorage.setItem("lifeInsuranceApplication", JSON.stringify(localDraft));
     
     try {
-      if (draftId) {
-        // Update existing draft
-        const { error } = await supabase
-          .from("life_insurance_applications")
-          .update({
-            form_data: currentFormData as unknown as Json,
-            current_step: currentStep,
-            applicant_name: applicantName || null,
-            applicant_email: applicantEmail,
-            applicant_phone: applicantPhone,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", draftId);
+      if (draftId && resumeToken) {
+        // Update existing draft using secure RPC function (token-based)
+        const { error } = await supabase.rpc("update_draft_application_by_token", {
+          p_resume_token: token,
+          p_form_data: currentFormData as unknown as Json,
+          p_current_step: currentStep,
+          p_applicant_name: applicantName || null,
+          p_applicant_email: applicantEmail,
+          p_applicant_phone: applicantPhone,
+        });
         
         if (error) throw error;
       } else {
@@ -221,22 +218,22 @@ const ApplicationWizard = ({
       const resumeParam = searchParams.get("resume");
       
       if (resumeParam) {
-        // Try to load from database using resume token
+        // Try to load from database using secure RPC function (token-based)
         try {
-          const { data, error } = await supabase
-            .from("life_insurance_applications")
-            .select("*")
-            .eq("resume_token", resumeParam)
-            .eq("status", "draft")
-            .single();
+          const { data, error } = await supabase.rpc("get_draft_application_by_token", {
+            p_resume_token: resumeParam,
+          });
           
-          if (data && !error) {
-            const formDataFromDb = data.form_data as unknown as LifeInsuranceApplicationData;
+          // RPC returns array, get first item
+          const draft = Array.isArray(data) ? data[0] : data;
+          
+          if (draft && !error) {
+            const formDataFromDb = draft.form_data as unknown as LifeInsuranceApplicationData;
             setFormData(formDataFromDb);
-            setCurrentStep(data.current_step);
-            setDraftId(data.id);
-            setResumeToken(data.resume_token);
-            setLastSaved(data.updated_at);
+            setCurrentStep(draft.current_step);
+            setDraftId(draft.id);
+            setResumeToken(draft.resume_token);
+            setLastSaved(draft.updated_at);
             resetFormsWithData(formDataFromDb);
             
             // Clear the URL param
@@ -260,14 +257,14 @@ const ApplicationWizard = ({
         try {
           const parsed = JSON.parse(savedDraft);
           
-          // If we have a draftId, load the full form data from the database
-          if (parsed.draftId) {
-            const { data: dbDraft, error: dbError } = await supabase
-              .from("life_insurance_applications")
-              .select("*")
-              .eq("id", parsed.draftId)
-              .eq("status", "draft")
-              .single();
+          // If we have a resumeToken, load the full form data from the database using secure RPC
+          if (parsed.resumeToken) {
+            const { data: rpcResult, error: dbError } = await supabase.rpc("get_draft_application_by_token", {
+              p_resume_token: parsed.resumeToken,
+            });
+            
+            // RPC returns array, get first item
+            const dbDraft = Array.isArray(rpcResult) ? rpcResult[0] : rpcResult;
             
             if (dbDraft && !dbError) {
               const formDataFromDb = dbDraft.form_data as unknown as LifeInsuranceApplicationData;
