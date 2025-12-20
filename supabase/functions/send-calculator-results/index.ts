@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -8,13 +9,27 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface CalculatorResultsRequest {
-  email: string;
-  firstName: string;
-  calculatorName: string;
-  pdfBase64: string;
-  resultsSummary: { label: string; value: string }[];
-}
+// HTML escaping function to prevent XSS
+const escapeHtml = (str: string): string => {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+// Input validation schema
+const requestSchema = z.object({
+  email: z.string().email().max(255),
+  firstName: z.string().min(1).max(100),
+  calculatorName: z.string().min(1).max(100),
+  pdfBase64: z.string(),
+  resultsSummary: z.array(z.object({
+    label: z.string().max(200),
+    value: z.string().max(200)
+  })).max(50)
+});
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -23,28 +38,47 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, firstName, calculatorName, pdfBase64, resultsSummary }: CalculatorResultsRequest = await req.json();
+    // Parse and validate input
+    const rawBody = await req.json();
+    const validationResult = requestSchema.safeParse(rawBody);
+    
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error);
+      return new Response(
+        JSON.stringify({ error: "Invalid input", details: validationResult.error.flatten() }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+    
+    const { email, firstName, calculatorName, pdfBase64, resultsSummary } = validationResult.data;
 
     console.log(`Sending ${calculatorName} results to ${email}`);
 
-    // Build results summary HTML
+    // Build results summary HTML with escaped values
     const summaryHtml = resultsSummary
       .map(
         (item) =>
           `<tr>
-            <td style="padding: 8px 0; color: #666; border-bottom: 1px solid #eee;">${item.label}</td>
-            <td style="padding: 8px 0; font-weight: 600; color: #0A0F1F; text-align: right; border-bottom: 1px solid #eee;">${item.value}</td>
+            <td style="padding: 8px 0; color: #666; border-bottom: 1px solid #eee;">${escapeHtml(item.label)}</td>
+            <td style="padding: 8px 0; font-weight: 600; color: #0A0F1F; text-align: right; border-bottom: 1px solid #eee;">${escapeHtml(item.value)}</td>
           </tr>`
       )
       .join("");
 
+    // Escape user-controlled values in the email template
+    const safeFirstName = escapeHtml(firstName);
+    const safeCalculatorName = escapeHtml(calculatorName);
+
     const emailResponse = await resend.emails.send({
       from: "The Financial Architects <leads@tfainsuranceadvisors.com>",
       to: [email],
-      subject: `Your ${calculatorName} Results`,
+      subject: `Your ${safeCalculatorName} Results`,
       attachments: [
         {
-          filename: `TFA-${calculatorName.replace(/\s+/g, "-")}-Results.pdf`,
+          filename: `TFA-${calculatorName.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9-]/g, "")}-Results.pdf`,
           content: pdfBase64,
         },
       ],
@@ -70,10 +104,10 @@ const handler = async (req: Request): Promise<Response> => {
                   <!-- Content -->
                   <tr>
                     <td style="padding: 40px;">
-                      <h2 style="margin: 0 0 20px; color: #0A0F1F; font-size: 22px;">Hi ${firstName},</h2>
+                      <h2 style="margin: 0 0 20px; color: #0A0F1F; font-size: 22px;">Hi ${safeFirstName},</h2>
                       
                       <p style="margin: 0 0 25px; color: #444; font-size: 16px; line-height: 1.6;">
-                        Thank you for using our <strong>${calculatorName}</strong>. Your personalized results are attached as a PDF for your records.
+                        Thank you for using our <strong>${safeCalculatorName}</strong>. Your personalized results are attached as a PDF for your records.
                       </p>
                       
                       <!-- Quick Summary Box -->
