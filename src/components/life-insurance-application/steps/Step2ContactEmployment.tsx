@@ -20,26 +20,26 @@ interface Step2Props {
 const Step2ContactEmployment = ({ form }: Step2Props) => {
   return (
     <Form {...form}>
-      <div className="space-y-8">
+      <div className="space-y-6 md:space-y-8">
         {/* Contact Information Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Phone className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Contact Information</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Contact Information</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="mobilePhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mobile Phone *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Mobile Phone *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="(555) 123-4567"
                       {...field}
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -52,12 +52,12 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="homePhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Home Phone</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Home Phone</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="(555) 123-4567"
                       {...field}
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -70,12 +70,12 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="workPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Work Phone</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Work Phone</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="(555) 123-4567"
                       {...field}
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -88,13 +88,13 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Email Address *</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder="email@example.com"
                       {...field}
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -105,24 +105,24 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
         </div>
 
         {/* Employment Details Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Briefcase className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Employment Details</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Employment Details</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="employerName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Employer Name *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Employer Name *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Company Name"
                       {...field}
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -135,12 +135,12 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="occupation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Occupation *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Occupation *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Job Title"
                       {...field}
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -153,12 +153,12 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="industry"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Industry</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Industry</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g., Technology, Healthcare"
                       {...field}
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -171,7 +171,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="yearsEmployed"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Years Employed</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Years Employed</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -180,7 +180,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       {...field}
                       onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
                       value={field.value ?? ""}
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -194,12 +194,12 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             name="jobDuties"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Job Duties</FormLabel>
+                <FormLabel className="text-sm md:text-base">Job Duties</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Briefly describe your job responsibilities..."
                     {...field}
-                    className="bg-background/50 min-h-[80px]"
+                    className="bg-background/50 min-h-[100px]"
                   />
                 </FormControl>
                 <FormMessage />
@@ -209,25 +209,25 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
         </div>
 
         {/* Financial Information Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <DollarSign className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Financial Information</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Financial Information</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="annualEarnedIncome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Annual Earned Income *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Annual Earned Income *</FormLabel>
                   <FormControl>
                     <CurrencyInput
                       value={field.value ?? 0}
                       onChange={field.onChange}
                       showPrefix
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -240,13 +240,13 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="householdIncome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Household Income</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Household Income</FormLabel>
                   <FormControl>
                     <CurrencyInput
                       value={field.value ?? 0}
                       onChange={field.onChange}
                       showPrefix
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -259,13 +259,13 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="netWorth"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Net Worth *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Net Worth *</FormLabel>
                   <FormControl>
                     <CurrencyInput
                       value={field.value ?? 0}
                       onChange={field.onChange}
                       showPrefix
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -276,28 +276,28 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
         </div>
 
         {/* Family Insurance Section (AGL-specific) */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Users className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Family Insurance</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Family Insurance</h3>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs md:text-sm text-muted-foreground">
             Amount of life insurance currently in force on family members (if known).
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="spouseInsuranceAmount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Spouse</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Spouse</FormLabel>
                   <FormControl>
                     <CurrencyInput
                       value={field.value ?? 0}
                       onChange={field.onChange}
                       showPrefix
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -310,13 +310,13 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="parentsInsuranceAmount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Parents</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Parents</FormLabel>
                   <FormControl>
                     <CurrencyInput
                       value={field.value ?? 0}
                       onChange={field.onChange}
                       showPrefix
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -329,13 +329,13 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               name="siblingsInsuranceAmount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Siblings</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Siblings</FormLabel>
                   <FormControl>
                     <CurrencyInput
                       value={field.value ?? 0}
                       onChange={field.onChange}
                       showPrefix
-                      className="bg-background/50"
+                      className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
                   <FormMessage />

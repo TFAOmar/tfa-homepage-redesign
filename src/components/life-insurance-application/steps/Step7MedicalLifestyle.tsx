@@ -54,28 +54,28 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
 
   return (
     <Form {...form}>
-      <form className="space-y-8">
+      <form className="space-y-6 md:space-y-8">
         {/* Tobacco Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Cigarette className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Tobacco Use</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Tobacco Use</h3>
           </div>
 
           <FormField
             control={form.control}
             name="usedTobacco"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">
+              <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                <div className="space-y-1 flex-1">
+                  <FormLabel className="text-sm md:text-base leading-snug">
                     Have you used nicotine or tobacco products in the last 5 years?
                   </FormLabel>
-                  <FormDescription>
+                  <FormDescription className="text-xs md:text-sm">
                     Includes cigarettes, cigars, vaping, chewing tobacco, etc.
                   </FormDescription>
                 </div>
-                <FormControl>
+                <FormControl className="self-start sm:self-center">
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
@@ -86,16 +86,16 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
           />
 
           {watchTobacco && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-lg border border-border bg-muted/30">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 p-3 md:p-4 rounded-lg border border-border bg-muted/30">
               <FormField
                 control={form.control}
                 name="tobaccoType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Type of Tobacco</FormLabel>
+                    <FormLabel className="text-sm md:text-base">Type of Tobacco</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="min-h-[44px]">
                           <SelectValue placeholder="Select type" />
                         </SelectTrigger>
                       </FormControl>
@@ -117,10 +117,10 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                 name="tobaccoFrequency"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Frequency</FormLabel>
+                    <FormLabel className="text-sm md:text-base">Frequency</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="min-h-[44px]">
                           <SelectValue placeholder="Select frequency" />
                         </SelectTrigger>
                       </FormControl>
@@ -142,9 +142,9 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                 name="tobaccoLastUsed"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date Last Used</FormLabel>
+                    <FormLabel className="text-sm md:text-base">Date Last Used</FormLabel>
                     <FormControl>
-                      <Input {...field} type="date" />
+                      <Input {...field} type="date" className="min-h-[44px]" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -155,27 +155,27 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
         </div>
 
         {/* High-Risk Activities Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Plane className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">High-Risk Activities</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">High-Risk Activities</h3>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             <FormField
               control={form.control}
               name="aviation"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
+                <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                  <div className="space-y-1 flex-1">
+                    <FormLabel className="text-sm md:text-base leading-snug">
                       Do you pilot or intend to pilot any aircraft?
                     </FormLabel>
-                    <FormDescription>
+                    <FormDescription className="text-xs md:text-sm">
                       Excluding commercial airline travel as a passenger
                     </FormDescription>
                   </div>
-                  <FormControl>
+                  <FormControl className="self-start sm:self-center">
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
@@ -190,13 +190,13 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                 control={form.control}
                 name="aviationDetails"
                 render={({ field }) => (
-                  <FormItem className="ml-4">
-                    <FormLabel>Please provide details</FormLabel>
+                  <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
+                    <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
                       <Textarea
                         {...field}
                         placeholder="Describe your aviation activities, certifications, and frequency"
-                        className="min-h-[80px]"
+                        className="min-h-[80px] md:min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -209,16 +209,16 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               control={form.control}
               name="hazardousSports"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
+                <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                  <div className="space-y-1 flex-1">
+                    <FormLabel className="text-sm md:text-base leading-snug">
                       Do you participate in hazardous sports or activities?
                     </FormLabel>
-                    <FormDescription>
+                    <FormDescription className="text-xs md:text-sm">
                       Racing, scuba diving, skydiving, rock climbing, etc.
                     </FormDescription>
                   </div>
-                  <FormControl>
+                  <FormControl className="self-start sm:self-center">
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
@@ -233,13 +233,13 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                 control={form.control}
                 name="hazardousSportsDetails"
                 render={({ field }) => (
-                  <FormItem className="ml-4">
-                    <FormLabel>Please provide details</FormLabel>
+                  <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
+                    <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
                       <Textarea
                         {...field}
                         placeholder="List the activities and frequency of participation"
-                        className="min-h-[80px]"
+                        className="min-h-[80px] md:min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -252,16 +252,16 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               control={form.control}
               name="foreignTravel"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
+                <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                  <div className="space-y-1 flex-1">
+                    <FormLabel className="text-sm md:text-base leading-snug">
                       Do you intend to travel outside the United States in the next 2 years?
                     </FormLabel>
-                    <FormDescription>
+                    <FormDescription className="text-xs md:text-sm">
                       For purposes other than vacation in developed countries
                     </FormDescription>
                   </div>
-                  <FormControl>
+                  <FormControl className="self-start sm:self-center">
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
@@ -276,13 +276,13 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                 control={form.control}
                 name="foreignTravelDetails"
                 render={({ field }) => (
-                  <FormItem className="ml-4">
-                    <FormLabel>Please provide details</FormLabel>
+                  <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
+                    <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
                       <Textarea
                         {...field}
                         placeholder="List destinations, duration, and purpose of travel"
-                        className="min-h-[80px]"
+                        className="min-h-[80px] md:min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -294,27 +294,27 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
         </div>
 
         {/* Legal/Financial History Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Scale className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Legal & Financial History</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Legal & Financial History</h3>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             <FormField
               control={form.control}
               name="bankruptcy"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
+                <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                  <div className="space-y-1 flex-1">
+                    <FormLabel className="text-sm md:text-base leading-snug">
                       Have you filed for bankruptcy (active or discharged)?
                     </FormLabel>
-                    <FormDescription>
+                    <FormDescription className="text-xs md:text-sm">
                       Within the last 10 years
                     </FormDescription>
                   </div>
-                  <FormControl>
+                  <FormControl className="self-start sm:self-center">
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
@@ -329,13 +329,13 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                 control={form.control}
                 name="bankruptcyDetails"
                 render={({ field }) => (
-                  <FormItem className="ml-4">
-                    <FormLabel>Please provide details</FormLabel>
+                  <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
+                    <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
                       <Textarea
                         {...field}
                         placeholder="Provide chapter type, date filed, and current status"
-                        className="min-h-[80px]"
+                        className="min-h-[80px] md:min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -348,16 +348,16 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               control={form.control}
               name="criminalHistory"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
+                <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                  <div className="space-y-1 flex-1">
+                    <FormLabel className="text-sm md:text-base leading-snug">
                       Have you ever been convicted of a felony or misdemeanor, or are you currently on probation?
                     </FormLabel>
-                    <FormDescription>
+                    <FormDescription className="text-xs md:text-sm">
                       Excluding minor traffic violations
                     </FormDescription>
                   </div>
-                  <FormControl>
+                  <FormControl className="self-start sm:self-center">
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
@@ -372,13 +372,13 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                 control={form.control}
                 name="criminalHistoryDetails"
                 render={({ field }) => (
-                  <FormItem className="ml-4">
-                    <FormLabel>Please provide details</FormLabel>
+                  <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
+                    <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
                       <Textarea
                         {...field}
                         placeholder="Describe the nature of offense, date, and resolution"
-                        className="min-h-[80px]"
+                        className="min-h-[80px] md:min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -391,16 +391,16 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               control={form.control}
               name="drivingViolations"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
+                <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                  <div className="space-y-1 flex-1">
+                    <FormLabel className="text-sm md:text-base leading-snug">
                       Have you had a DUI, DWI, or suspended license in the last 5 years?
                     </FormLabel>
-                    <FormDescription>
+                    <FormDescription className="text-xs md:text-sm">
                       Include any pending charges
                     </FormDescription>
                   </div>
-                  <FormControl>
+                  <FormControl className="self-start sm:self-center">
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
@@ -415,13 +415,13 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                 control={form.control}
                 name="drivingViolationsDetails"
                 render={({ field }) => (
-                  <FormItem className="ml-4">
-                    <FormLabel>Please provide details</FormLabel>
+                  <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
+                    <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
                       <Textarea
                         {...field}
                         placeholder="Describe the violation(s), date(s), and any court outcomes"
-                        className="min-h-[80px]"
+                        className="min-h-[80px] md:min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -433,15 +433,15 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
         </div>
 
         {/* Medical Knockout Question */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Stethoscope className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Medical History</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Medical History</h3>
           </div>
 
           <Alert variant="default" className="border-amber-500/50 bg-amber-500/10">
             <AlertTriangle className="h-4 w-4 text-amber-500" />
-            <AlertDescription className="text-sm text-amber-700 dark:text-amber-300">
+            <AlertDescription className="text-xs md:text-sm text-amber-700 dark:text-amber-300">
               Your answers to these questions may affect your underwriting classification and premium rates.
             </AlertDescription>
           </Alert>
@@ -450,16 +450,16 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
             control={form.control}
             name="hasMedicalConditions"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">
+              <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                <div className="space-y-1 flex-1">
+                  <FormLabel className="text-sm md:text-base leading-snug">
                     Have you ever been diagnosed with or treated for any of the following?
                   </FormLabel>
-                  <FormDescription>
+                  <FormDescription className="text-xs md:text-sm">
                     Heart disease, stroke, cancer, diabetes, or immune system disorders
                   </FormDescription>
                 </div>
-                <FormControl>
+                <FormControl className="self-start sm:self-center">
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
@@ -474,16 +474,16 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               control={form.control}
               name="medicalConditionsDetails"
               render={({ field }) => (
-                <FormItem className="ml-4">
-                  <FormLabel>Please provide details</FormLabel>
+                <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
+                  <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       placeholder="List conditions, dates of diagnosis, treatments, and current status"
-                      className="min-h-[100px]"
+                      className="min-h-[100px] md:min-h-[120px]"
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="text-xs md:text-sm">
                     Include all relevant medical history, medications, and treating physicians
                   </FormDescription>
                   <FormMessage />

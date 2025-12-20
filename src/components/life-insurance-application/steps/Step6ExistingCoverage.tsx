@@ -39,28 +39,28 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
 
   return (
     <Form {...form}>
-      <form className="space-y-8">
+      <form className="space-y-6 md:space-y-8">
         {/* Existing Coverage Toggle */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <FileStack className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Existing Insurance</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Existing Insurance</h3>
           </div>
 
           <FormField
             control={form.control}
             name="hasExistingCoverage"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/50">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">
+              <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                <div className="space-y-1">
+                  <FormLabel className="text-sm md:text-base leading-snug">
                     Do you have any existing life insurance or annuity policies?
                   </FormLabel>
-                  <FormDescription>
+                  <FormDescription className="text-xs md:text-sm">
                     This includes any in-force policies with other companies
                   </FormDescription>
                 </div>
-                <FormControl>
+                <FormControl className="self-start sm:self-center">
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
@@ -73,9 +73,9 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
 
         {/* Existing Policies List */}
         {watchHasExisting && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
+          <div className="space-y-3 md:space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Please list all existing life insurance and annuity policies.
               </p>
               <Button
@@ -83,7 +83,7 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                 variant="outline"
                 size="sm"
                 onClick={addPolicy}
-                className="gap-2"
+                className="gap-2 min-h-[44px] w-full sm:w-auto"
               >
                 <Plus className="w-4 h-4" />
                 Add Policy
@@ -92,7 +92,7 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
 
             {fields.length === 0 ? (
               <div className="text-center py-8 border border-dashed border-border rounded-lg">
-                <p className="text-muted-foreground">No policies added yet.</p>
+                <p className="text-muted-foreground text-sm">No policies added yet.</p>
                 <Button
                   type="button"
                   variant="link"
@@ -103,11 +103,11 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 {fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="p-4 rounded-lg border border-border bg-card/50 space-y-4"
+                    className="p-3 md:p-4 rounded-lg border border-border bg-card/50 space-y-3 md:space-y-4"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-foreground">
@@ -118,22 +118,22 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                         variant="ghost"
                         size="sm"
                         onClick={() => remove(index)}
-                        className="text-destructive hover:text-destructive gap-2"
+                        className="text-destructive hover:text-destructive gap-2 min-h-[36px]"
                       >
                         <Trash2 className="w-4 h-4" />
                         Remove
                       </Button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                       <FormField
                         control={form.control}
                         name={`existingPolicies.${index}.companyName`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Company Name *</FormLabel>
+                            <FormLabel className="text-sm md:text-base">Company Name *</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Insurance company name" />
+                              <Input {...field} placeholder="Insurance company name" className="min-h-[44px]" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -145,9 +145,9 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                         name={`existingPolicies.${index}.policyNumber`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Policy Number *</FormLabel>
+                            <FormLabel className="text-sm md:text-base">Policy Number *</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Policy number" />
+                              <Input {...field} placeholder="Policy number" className="min-h-[44px]" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -159,13 +159,14 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                         name={`existingPolicies.${index}.amountOfCoverage`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Amount of Coverage</FormLabel>
+                            <FormLabel className="text-sm md:text-base">Amount of Coverage</FormLabel>
                             <FormControl>
                               <CurrencyInput
                                 value={field.value || 0}
                                 onChange={field.onChange}
                                 showPrefix
                                 placeholder="Coverage amount"
+                                className="min-h-[44px]"
                               />
                             </FormControl>
                             <FormMessage />
@@ -177,14 +178,14 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                         control={form.control}
                         name={`existingPolicies.${index}.isBeingReplaced`}
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-3">
+                          <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-border p-3">
                             <div className="space-y-0.5">
                               <FormLabel className="text-sm">Being Replaced?</FormLabel>
                               <FormDescription className="text-xs">
                                 Will this policy be replaced?
                               </FormDescription>
                             </div>
-                            <FormControl>
+                            <FormControl className="self-start sm:self-center">
                               <Switch
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
