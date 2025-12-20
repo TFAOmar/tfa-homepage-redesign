@@ -182,8 +182,7 @@ const AdvisorTamaraLee = () => {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
+                  variant="hero" 
                   onClick={() => setContactModalOpen(true)}
                 >
                   <Mail className="mr-2 h-5 w-5" />
@@ -334,8 +333,7 @@ const AdvisorTamaraLee = () => {
             </Button>
             <Button 
               size="lg" 
-              variant="outline" 
-              className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
+              variant="hero" 
               asChild
             >
               <a href="tel:+18883505396">
