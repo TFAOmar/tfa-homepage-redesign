@@ -5,10 +5,27 @@ import { Button } from "@/components/ui/button";
 import ApplicationWizard from "@/components/life-insurance-application/ApplicationWizard";
 import tfaLogo from "@/assets/tfa-logo.png";
 import { useAdvisorBySlug } from "@/hooks/useDynamicAdvisors";
+import { advisors as staticAdvisors } from "@/data/advisors";
+
+// Helper to find static advisor by slug
+const findStaticAdvisor = (slug: string) => {
+  return staticAdvisors.find(a => a.landingPage === `/advisors/${slug}`);
+};
 
 const LifeInsuranceApplication = () => {
   const { advisorSlug } = useParams<{ advisorSlug: string }>();
-  const { data: advisor, isLoading, error } = useAdvisorBySlug(advisorSlug);
+  const { data: dbAdvisor, isLoading } = useAdvisorBySlug(advisorSlug);
+  
+  // Hybrid lookup: try database first, then fall back to static data
+  const staticAdvisor = advisorSlug ? findStaticAdvisor(advisorSlug) : null;
+  const advisor = dbAdvisor || (staticAdvisor ? {
+    id: String(staticAdvisor.id),
+    name: staticAdvisor.name,
+    email: staticAdvisor.email,
+    title: staticAdvisor.title,
+    image_url: staticAdvisor.image,
+    scheduling_link: undefined,
+  } : null);
 
   // Show loading state while fetching advisor
   if (advisorSlug && isLoading) {
@@ -22,8 +39,8 @@ const LifeInsuranceApplication = () => {
     );
   }
 
-  // If slug provided but advisor not found, show error
-  if (advisorSlug && !isLoading && !advisor) {
+  // If slug provided but advisor not found in DB or static data, show error
+  if (advisorSlug && !isLoading && !advisor && !staticAdvisor) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto px-4">
