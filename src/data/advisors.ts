@@ -16,6 +16,7 @@ import ruthPachecoImg from "@/assets/advisors/ruth-pacheco.jpg";
 import tamaraLeeImg from "@/assets/advisors/tamara-lee.jpg";
 import ismaelVerveraImg from "@/assets/advisors/ismael-ververa.jpg";
 import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
+import conradOlveraImg from "@/assets/advisors/conrad-olvera.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -319,6 +320,21 @@ export const advisors: Advisor[] = [
     email: "info@awhealthllc.com",
     yearsOfExperience: 4,
     landingPage: "/advisors/anthony-bottley"
+  },
+  {
+    id: "conrad-olvera",
+    name: "Conrad Olvera",
+    title: "Mortgage and Financial Specialist",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Since 2014, I have dedicated myself to providing exceptional mortgage and financial services. With a focus on delivering the best customer experience, I strive to build lasting relationships with my clients. My expertise in the industry, combined with a commitment to understanding each client's unique needs, ensures tailored solutions that facilitate their financial goal whether it's a home loan, estate planning or retirement needs.",
+    specialties: ["Mortgage Financing", "Estate Planning", "Retirement Planning"],
+    licenses: ["Life & Health"],
+    image: conradOlveraImg,
+    yearsOfExperience: 11,
+    landingPage: "/advisors/conrad-olvera"
   }
 ];
 
