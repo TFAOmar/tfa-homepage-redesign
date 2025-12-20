@@ -190,7 +190,7 @@ const upsertOrganization = async (
   return (result.data as { id?: number })?.id || null;
 };
 
-// Create lead in Pipedrive
+// Create lead in Pipedrive Leads Inbox
 const createLead = async (
   formData: FormSubmitData,
   personId: number,
@@ -211,36 +211,10 @@ const createLead = async (
   return (result.data as { id?: string })?.id || null;
 };
 
-// Create deal in Pipedrive (fallback if leads API not available)
-const createDeal = async (
-  formData: FormSubmitData,
-  personId: number,
-  orgId: number | null,
-  ownerId: number,
-  pipelineId: number,
-  stageId: number
-): Promise<number | null> => {
-  const title = `[${formData.form_name}] - ${formData.first_name} ${formData.last_name}${formData.state ? ` - ${formData.state}` : ""}`;
-  
-  const dealData: Record<string, unknown> = {
-    title,
-    person_id: personId,
-    user_id: ownerId,
-    pipeline_id: pipelineId,
-    stage_id: stageId,
-  };
-  
-  if (orgId) dealData.org_id = orgId;
-  
-  const result = await pipedriveApi("/deals", "POST", dealData);
-  return (result.data as { id?: number })?.id || null;
-};
-
-// Add note to deal or lead
+// Add note to lead
 const addNote = async (
   formData: FormSubmitData,
   leadId: string | null,
-  dealId: number | null,
   personId: number
 ): Promise<boolean> => {
   const utmInfo = [
@@ -268,7 +242,6 @@ const addNote = async (
   };
   
   if (leadId) noteData.lead_id = leadId;
-  if (dealId) noteData.deal_id = dealId;
   
   const result = await pipedriveApi("/notes", "POST", noteData);
   return result.success;
@@ -352,7 +325,7 @@ serve(async (req) => {
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
     const { data: recentSubmission } = await supabase
       .from("form_submissions")
-      .select("id, pipedrive_lead_id, pipedrive_deal_id, pipedrive_person_id")
+      .select("id, pipedrive_lead_id, pipedrive_person_id")
       .eq("email", formData.email)
       .eq("form_type", formData.form_name)
       .gte("created_at", tenMinutesAgo)
@@ -369,7 +342,6 @@ serve(async (req) => {
           pipedrive_ids: {
             person_id: recentSubmission.pipedrive_person_id,
             lead_id: recentSubmission.pipedrive_lead_id,
-            deal_id: recentSubmission.pipedrive_deal_id,
           },
           submission_id: recentSubmission.id,
           duplicate: true,
@@ -378,14 +350,14 @@ serve(async (req) => {
       );
     }
     
-    // Resolve advisor routing
+    // Resolve advisor routing - only need pipedrive_user_id now
     let advisor = null;
     let routingResult: "advisor_match" | "default_manny" = "default_manny";
     
     if (formData.advisor_id || formData.advisor_slug || formData.advisor_email) {
       let query = supabase
         .from("dynamic_advisors")
-        .select("id, name, email, slug, pipedrive_user_id, pipedrive_pipeline_id, pipedrive_stage_id")
+        .select("id, name, email, slug, pipedrive_user_id")
         .eq("status", "published");
       
       if (formData.advisor_id) {
@@ -404,22 +376,17 @@ serve(async (req) => {
       }
     }
     
-    // Get Manny Soto defaults from system_settings
+    // Get Manny Soto default user ID from system_settings
     const { data: settings } = await supabase
       .from("system_settings")
       .select("key, value")
-      .in("key", ["manny_pipedrive_user_id", "manny_pipedrive_pipeline_id", "manny_pipedrive_stage_id"]);
+      .eq("key", "manny_pipedrive_user_id")
+      .maybeSingle();
     
-    const mannySettings = {
-      userId: parseInt(settings?.find(s => s.key === "manny_pipedrive_user_id")?.value as string || "0"),
-      pipelineId: parseInt(settings?.find(s => s.key === "manny_pipedrive_pipeline_id")?.value as string || "0"),
-      stageId: parseInt(settings?.find(s => s.key === "manny_pipedrive_stage_id")?.value as string || "0"),
-    };
+    const mannyUserId = parseInt(settings?.value as string || "0");
     
-    // Determine final owner/pipeline/stage
-    const ownerId = advisor?.pipedrive_user_id || mannySettings.userId;
-    const pipelineId = advisor?.pipedrive_pipeline_id || mannySettings.pipelineId;
-    const stageId = advisor?.pipedrive_stage_id || mannySettings.stageId;
+    // Determine final owner
+    const ownerId = advisor?.pipedrive_user_id || mannyUserId;
     const routedToName = advisor?.name || "Manny Soto";
     
     if (ownerId === 0) {
@@ -450,7 +417,6 @@ serve(async (req) => {
         utm_content: formData.utm_content,
         utm_term: formData.utm_term,
         advisor_slug: formData.advisor_slug,
-        advisor_email: formData.advisor_email,
         advisor: advisor?.name || null,
         routing_result: routingResult,
         pipedrive_owner_id: ownerId,
@@ -475,7 +441,6 @@ serve(async (req) => {
     let personId: number | null = null;
     let orgId: number | null = null;
     let leadId: string | null = null;
-    let dealId: number | null = null;
     let errorMessage: string | null = null;
     
     try {
@@ -492,20 +457,15 @@ serve(async (req) => {
         orgId = await upsertOrganization(formData.company_name, ownerId);
       }
       
-      // 3. Create Lead (preferred) or Deal (fallback)
+      // 3. Create Lead in Leads Inbox
       leadId = await createLead(formData, personId, orgId, ownerId);
       
       if (!leadId) {
-        // Fallback to deal creation
-        dealId = await createDeal(formData, personId, orgId, ownerId, pipelineId, stageId);
-      }
-      
-      if (!leadId && !dealId) {
-        throw new Error("Failed to create lead or deal in Pipedrive");
+        throw new Error("Failed to create lead in Pipedrive");
       }
       
       // 4. Add note with attribution
-      await addNote(formData, leadId, dealId, personId);
+      await addNote(formData, leadId, personId);
       
     } catch (pipedriveError) {
       console.error("[Pipedrive Error]", pipedriveError);
@@ -520,7 +480,6 @@ serve(async (req) => {
         pipedrive_person_id: personId,
         pipedrive_org_id: orgId,
         pipedrive_lead_id: leadId,
-        pipedrive_deal_id: dealId,
         status: finalStatus,
         error_message: errorMessage,
       })
@@ -549,7 +508,6 @@ serve(async (req) => {
           person_id: personId,
           org_id: orgId,
           lead_id: leadId,
-          deal_id: dealId,
         },
         submission_id: submissionId,
       }),
