@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import jsPDF from "https://esm.sh/jspdf@2.5.1?bundle";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -8,6 +9,146 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Zod validation schemas
+const beneficiarySchema = z.object({
+  fullName: z.string().max(200).optional(),
+  relationship: z.string().max(100).optional(),
+  sharePercentage: z.number().min(0).max(100).optional(),
+  designation: z.string().max(50).optional(),
+  ssn: z.string().max(20).optional(),
+  dateOfBirth: z.string().max(20).optional(),
+  phone: z.string().max(30).optional(),
+  email: z.string().email().max(255).optional().or(z.literal("")),
+}).passthrough();
+
+const existingPolicySchema = z.object({
+  companyName: z.string().max(200).optional(),
+  policyNumber: z.string().max(100).optional(),
+  amountOfCoverage: z.number().optional(),
+  isBeingReplaced: z.boolean().optional(),
+}).passthrough();
+
+const notificationRequestSchema = z.object({
+  applicationId: z.string().uuid(),
+  applicantName: z.string().min(1).max(200),
+  applicantEmail: z.string().email().max(255),
+  applicantPhone: z.string().max(30).optional(),
+  advisorName: z.string().max(200).optional(),
+  advisorEmail: z.string().email().max(255).optional().or(z.literal("")),
+  formData: z.object({
+    step1: z.object({
+      firstName: z.string().max(100).optional(),
+      lastName: z.string().max(100).optional(),
+      middleName: z.string().max(100).optional(),
+      suffix: z.string().max(20).optional(),
+      dateOfBirth: z.string().max(20).optional(),
+      gender: z.string().max(20).optional(),
+      ssn: z.string().max(20).optional(),
+      birthCity: z.string().max(100).optional(),
+      birthState: z.string().max(100).optional(),
+      birthCountry: z.string().max(100).optional(),
+      citizenship: z.string().max(100).optional(),
+    }).passthrough().optional(),
+    step2: z.object({
+      email: z.string().email().max(255).optional().or(z.literal("")),
+      mobilePhone: z.string().max(30).optional(),
+      homePhone: z.string().max(30).optional(),
+      address: z.string().max(300).optional(),
+      address2: z.string().max(300).optional(),
+      city: z.string().max(100).optional(),
+      state: z.string().max(100).optional(),
+      zipCode: z.string().max(20).optional(),
+      mailingAddressDifferent: z.boolean().optional(),
+      mailingAddress: z.string().max(300).optional(),
+      mailingCity: z.string().max(100).optional(),
+      mailingState: z.string().max(100).optional(),
+      mailingZipCode: z.string().max(20).optional(),
+      employer: z.string().max(200).optional(),
+      occupation: z.string().max(200).optional(),
+      employerAddress: z.string().max(300).optional(),
+      employerCity: z.string().max(100).optional(),
+      employerState: z.string().max(100).optional(),
+      employerZipCode: z.string().max(20).optional(),
+      annualIncome: z.number().optional(),
+      netWorth: z.number().optional(),
+    }).passthrough().optional(),
+    step3: z.object({
+      insuredIsOwner: z.boolean().optional(),
+      ownerType: z.string().max(50).optional(),
+      ownerFirstName: z.string().max(100).optional(),
+      ownerLastName: z.string().max(100).optional(),
+      ownerSsn: z.string().max(20).optional(),
+      ownerDateOfBirth: z.string().max(20).optional(),
+      ownerRelationship: z.string().max(100).optional(),
+      trustName: z.string().max(200).optional(),
+      trustTaxId: z.string().max(20).optional(),
+      trustDate: z.string().max(20).optional(),
+      trusteeNames: z.string().max(500).optional(),
+      businessName: z.string().max(200).optional(),
+      businessTaxId: z.string().max(20).optional(),
+      ownerAddress: z.string().max(300).optional(),
+      ownerCity: z.string().max(100).optional(),
+      ownerState: z.string().max(100).optional(),
+      ownerZipCode: z.string().max(20).optional(),
+      ownerEmail: z.string().email().max(255).optional().or(z.literal("")),
+      ownerPhone: z.string().max(30).optional(),
+      ownerCitizenship: z.string().max(100).optional(),
+    }).passthrough().optional(),
+    step4: z.object({
+      beneficiaries: z.array(beneficiarySchema).optional(),
+    }).passthrough().optional(),
+    step5: z.object({
+      planName: z.string().max(100).optional(),
+      faceAmount: z.number().optional(),
+      termDuration: z.string().max(50).optional(),
+      riders: z.array(z.string().max(100)).optional(),
+      premiumMode: z.string().max(50).optional(),
+    }).passthrough().optional(),
+    step6: z.object({
+      hasExistingCoverage: z.boolean().optional(),
+      existingPolicies: z.array(existingPolicySchema).optional(),
+    }).passthrough().optional(),
+    step7: z.object({
+      usesTobacco: z.boolean().optional(),
+      tobaccoType: z.string().max(100).optional(),
+      tobaccoFrequency: z.string().max(100).optional(),
+      tobaccoLastUsed: z.string().max(100).optional(),
+      hasAviation: z.boolean().optional(),
+      aviationDetails: z.string().max(1000).optional(),
+      hasHazardousSports: z.boolean().optional(),
+      hazardousSportsDetails: z.string().max(1000).optional(),
+      hasForeignTravel: z.boolean().optional(),
+      foreignTravelDetails: z.string().max(1000).optional(),
+      hasBankruptcy: z.boolean().optional(),
+      bankruptcyDetails: z.string().max(1000).optional(),
+      hasCriminalHistory: z.boolean().optional(),
+      criminalHistoryDetails: z.string().max(1000).optional(),
+      hasDrivingViolations: z.boolean().optional(),
+      drivingViolationsDetails: z.string().max(1000).optional(),
+      hasMedicalConditions: z.boolean().optional(),
+      medicalConditionsDetails: z.string().max(2000).optional(),
+    }).passthrough().optional(),
+    step8: z.object({
+      paymentMethod: z.string().max(50).optional(),
+      paymentFrequency: z.string().max(50).optional(),
+      bankName: z.string().max(200).optional(),
+      routingNumber: z.string().max(20).optional(),
+      accountNumber: z.string().max(30).optional(),
+      accountType: z.string().max(50).optional(),
+      sourceOfFunds: z.string().max(100).optional(),
+      sourceOfFundsOther: z.string().max(200).optional(),
+    }).passthrough().optional(),
+    step9: z.object({
+      acknowledgment: z.boolean().optional(),
+      electronicSignature: z.string().max(200).optional(),
+      signatureDate: z.string().max(20).optional(),
+    }).passthrough().optional(),
+  }).passthrough(),
+});
+
+// Infer types from Zod schema
+type NotificationRequest = z.infer<typeof notificationRequestSchema>;
 
 interface Beneficiary {
   fullName?: string;
@@ -25,125 +166,6 @@ interface ExistingPolicy {
   policyNumber?: string;
   amountOfCoverage?: number;
   isBeingReplaced?: boolean;
-}
-
-interface NotificationRequest {
-  applicationId: string;
-  applicantName: string;
-  applicantEmail: string;
-  applicantPhone?: string;
-  advisorName?: string;
-  advisorEmail?: string;
-  formData: {
-    step1?: {
-      firstName?: string;
-      lastName?: string;
-      middleName?: string;
-      suffix?: string;
-      dateOfBirth?: string;
-      gender?: string;
-      ssn?: string;
-      birthCity?: string;
-      birthState?: string;
-      birthCountry?: string;
-      citizenship?: string;
-    };
-    step2?: {
-      email?: string;
-      mobilePhone?: string;
-      homePhone?: string;
-      address?: string;
-      address2?: string;
-      city?: string;
-      state?: string;
-      zipCode?: string;
-      mailingAddressDifferent?: boolean;
-      mailingAddress?: string;
-      mailingCity?: string;
-      mailingState?: string;
-      mailingZipCode?: string;
-      employer?: string;
-      occupation?: string;
-      employerAddress?: string;
-      employerCity?: string;
-      employerState?: string;
-      employerZipCode?: string;
-      annualIncome?: number;
-      netWorth?: number;
-    };
-    step3?: {
-      insuredIsOwner?: boolean;
-      ownerType?: string;
-      ownerFirstName?: string;
-      ownerLastName?: string;
-      ownerSsn?: string;
-      ownerDateOfBirth?: string;
-      ownerRelationship?: string;
-      trustName?: string;
-      trustTaxId?: string;
-      trustDate?: string;
-      trusteeNames?: string;
-      businessName?: string;
-      businessTaxId?: string;
-      ownerAddress?: string;
-      ownerCity?: string;
-      ownerState?: string;
-      ownerZipCode?: string;
-      ownerEmail?: string;
-      ownerPhone?: string;
-      ownerCitizenship?: string;
-    };
-    step4?: {
-      beneficiaries?: Beneficiary[];
-    };
-    step5?: {
-      planName?: string;
-      faceAmount?: number;
-      termDuration?: string;
-      riders?: string[];
-      premiumMode?: string;
-    };
-    step6?: {
-      hasExistingCoverage?: boolean;
-      existingPolicies?: ExistingPolicy[];
-    };
-    step7?: {
-      usesTobacco?: boolean;
-      tobaccoType?: string;
-      tobaccoFrequency?: string;
-      tobaccoLastUsed?: string;
-      hasAviation?: boolean;
-      aviationDetails?: string;
-      hasHazardousSports?: boolean;
-      hazardousSportsDetails?: string;
-      hasForeignTravel?: boolean;
-      foreignTravelDetails?: string;
-      hasBankruptcy?: boolean;
-      bankruptcyDetails?: string;
-      hasCriminalHistory?: boolean;
-      criminalHistoryDetails?: string;
-      hasDrivingViolations?: boolean;
-      drivingViolationsDetails?: string;
-      hasMedicalConditions?: boolean;
-      medicalConditionsDetails?: string;
-    };
-    step8?: {
-      paymentMethod?: string;
-      paymentFrequency?: string;
-      bankName?: string;
-      routingNumber?: string;
-      accountNumber?: string;
-      accountType?: string;
-      sourceOfFunds?: string;
-      sourceOfFundsOther?: string;
-    };
-    step9?: {
-      acknowledgment?: boolean;
-      electronicSignature?: string;
-      signatureDate?: string;
-    };
-    [key: string]: unknown;
-  };
 }
 
 const ADMIN_EMAIL = "leads@tfainsuranceadvisors.com";
@@ -1012,7 +1034,26 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const data: NotificationRequest = await req.json();
+    const rawData = await req.json();
+    
+    // Validate request data with Zod schema
+    const parseResult = notificationRequestSchema.safeParse(rawData);
+    
+    if (!parseResult.success) {
+      console.error("Validation error:", parseResult.error.errors);
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid request data", 
+          details: parseResult.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+    
+    const data: NotificationRequest = parseResult.data;
     console.log("Received notification request for application:", data.applicationId);
     console.log("Form data steps received:", Object.keys(data.formData || {}).join(", "));
 
