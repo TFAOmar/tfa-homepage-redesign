@@ -910,7 +910,7 @@ const generateAdminEmail = (data: NotificationRequest): string => {
       </div>
 
       <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-        <a href="https://supabase.com/dashboard/project/cstkeblqqyjwlrbppucu/editor" style="display: inline-block; background-color: #1e3a5f; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">View in Dashboard</a>
+        <a href="https://tfawealthplanning.com/admin/applications" style="display: inline-block; background-color: #1e3a5f; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">View in Dashboard</a>
       </div>
     </div>
     
