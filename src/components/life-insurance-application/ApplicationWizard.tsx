@@ -49,9 +49,11 @@ interface ApplicationWizardProps {
   advisorEmail?: string;
 }
 
-// Generate a unique resume token
+// Generate a cryptographically secure resume token
 const generateResumeToken = () => {
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+  const array = new Uint8Array(32); // 256 bits of entropy
+  crypto.getRandomValues(array);
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 };
 
 const ApplicationWizard = ({
@@ -140,9 +142,8 @@ const ApplicationWizard = ({
       setResumeToken(token);
     }
     
-    // Save to localStorage first (quick save)
+    // Save only non-sensitive metadata to localStorage (no PII)
     const localDraft = {
-      formData: currentFormData,
       currentStep,
       completedSteps,
       advisorId,
@@ -252,25 +253,55 @@ const ApplicationWizard = ({
         }
       }
       
-      // Check localStorage for saved draft
+      // Check localStorage for saved draft metadata (no PII stored)
       const savedDraft = localStorage.getItem("lifeInsuranceApplication");
       if (savedDraft) {
         try {
           const parsed = JSON.parse(savedDraft);
-          const applicantName = `${parsed.formData?.step1?.firstName || ""} ${parsed.formData?.step1?.lastName || ""}`.trim();
           
-          setPendingDraft({
-            formData: parsed.formData || defaultApplicationData,
-            currentStep: parsed.currentStep || 1,
-            completedSteps: parsed.completedSteps || [],
-            lastSaved: parsed.lastSaved,
-            applicantName: applicantName || undefined,
-            draftId: parsed.draftId,
-            resumeToken: parsed.resumeToken,
-          });
-          setShowResumeModal(true);
+          // If we have a draftId, load the full form data from the database
+          if (parsed.draftId) {
+            const { data: dbDraft, error: dbError } = await supabase
+              .from("life_insurance_applications")
+              .select("*")
+              .eq("id", parsed.draftId)
+              .eq("status", "draft")
+              .single();
+            
+            if (dbDraft && !dbError) {
+              const formDataFromDb = dbDraft.form_data as unknown as LifeInsuranceApplicationData;
+              const applicantName = `${formDataFromDb?.step1?.firstName || ""} ${formDataFromDb?.step1?.lastName || ""}`.trim();
+              
+              setPendingDraft({
+                formData: formDataFromDb,
+                currentStep: dbDraft.current_step,
+                completedSteps: parsed.completedSteps || [],
+                lastSaved: dbDraft.updated_at,
+                applicantName: applicantName || undefined,
+                draftId: dbDraft.id,
+                resumeToken: dbDraft.resume_token,
+              });
+              setShowResumeModal(true);
+            } else {
+              // Database record not found, clear invalid localStorage
+              localStorage.removeItem("lifeInsuranceApplication");
+            }
+          } else {
+            // No draftId means this is a very early draft, just show resume modal with current step
+            setPendingDraft({
+              formData: defaultApplicationData,
+              currentStep: parsed.currentStep || 1,
+              completedSteps: parsed.completedSteps || [],
+              lastSaved: parsed.lastSaved,
+              applicantName: undefined,
+              draftId: undefined,
+              resumeToken: parsed.resumeToken,
+            });
+            setShowResumeModal(true);
+          }
         } catch (error) {
           console.error("Error loading saved draft:", error);
+          localStorage.removeItem("lifeInsuranceApplication");
         }
       }
       
