@@ -26,6 +26,8 @@ import { Step4Data } from "@/types/lifeInsuranceApplication";
 import { Users, Plus, Trash2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { ValidatedInput } from "../ValidatedInput";
 import { ValidatedSelectTrigger } from "../ValidatedSelect";
+import { ValidatedSSNInput } from "../ValidatedSSNInput";
+import { ValidatedPhoneInput } from "../ValidatedPhoneInput";
 
 interface Step4Props {
   form: UseFormReturn<Step4Data>;
@@ -284,12 +286,12 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                             <FormItem>
                               <FormLabel>SSN</FormLabel>
                               <FormControl>
-                                <ValidatedInput
-                                  placeholder="XXX-XX-XXXX"
+                                <ValidatedSSNInput
                                   fieldState={fieldState}
                                   showSuccessIndicator={false}
                                   className="bg-background/50"
-                                  {...field}
+                                  value={field.value}
+                                  onChange={field.onChange}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -324,12 +326,12 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                             <FormItem>
                               <FormLabel>Phone</FormLabel>
                               <FormControl>
-                                <ValidatedInput
-                                  placeholder="(555) 123-4567"
+                                <ValidatedPhoneInput
                                   fieldState={fieldState}
                                   showSuccessIndicator={false}
                                   className="bg-background/50"
-                                  {...field}
+                                  value={field.value}
+                                  onChange={field.onChange}
                                 />
                               </FormControl>
                               <FormMessage />

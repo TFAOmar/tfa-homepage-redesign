@@ -12,6 +12,7 @@ import { Step2Data } from "@/types/lifeInsuranceApplication";
 import { Phone, Briefcase, DollarSign, Users } from "lucide-react";
 import { ValidatedInput } from "../ValidatedInput";
 import { ValidatedTextarea } from "../ValidatedTextarea";
+import { ValidatedPhoneInput } from "../ValidatedPhoneInput";
 
 interface Step2Props {
   form: UseFormReturn<Step2Data>;
@@ -36,11 +37,11 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Mobile Phone *</FormLabel>
                   <FormControl>
-                    <ValidatedInput
-                      placeholder="(555) 123-4567"
+                    <ValidatedPhoneInput
                       fieldState={fieldState}
                       className="bg-background/50 min-h-[44px]"
-                      {...field}
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -55,12 +56,12 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Home Phone</FormLabel>
                   <FormControl>
-                    <ValidatedInput
-                      placeholder="(555) 123-4567"
+                    <ValidatedPhoneInput
                       fieldState={fieldState}
                       showSuccessIndicator={false}
                       className="bg-background/50 min-h-[44px]"
-                      {...field}
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -75,12 +76,12 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Work Phone</FormLabel>
                   <FormControl>
-                    <ValidatedInput
-                      placeholder="(555) 123-4567"
+                    <ValidatedPhoneInput
                       fieldState={fieldState}
                       showSuccessIndicator={false}
                       className="bg-background/50 min-h-[44px]"
-                      {...field}
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
