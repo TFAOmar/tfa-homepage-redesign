@@ -495,14 +495,13 @@ const ApplicationWizard = ({
         console.log("Created draft with ID:", applicationId);
       }
 
-      // Now update to submitted status
-      console.log("Updating application to submitted status, ID:", applicationId);
-      const { error: updateError } = await supabase
+      // First update the form data (while still a draft)
+      console.log("Saving final form data, ID:", applicationId);
+      const { error: saveError } = await supabase
         .from("life_insurance_applications")
         .update({
           form_data: finalFormData as unknown as Json,
           current_step: 9,
-          status: "submitted",
           applicant_name: applicantName,
           applicant_email: applicantEmail,
           applicant_phone: applicantPhone,
@@ -510,9 +509,19 @@ const ApplicationWizard = ({
         })
         .eq("id", applicationId);
 
-      if (updateError) {
-        console.error("Error updating application to submitted:", updateError);
-        throw updateError;
+      if (saveError) {
+        console.error("Error saving final form data:", saveError);
+        throw saveError;
+      }
+
+      // Now submit using the SECURITY DEFINER function to handle the status transition
+      console.log("Submitting application via RPC, ID:", applicationId);
+      const { error: submitError } = await supabase
+        .rpc("submit_life_insurance_application", { application_id: applicationId });
+
+      if (submitError) {
+        console.error("Error submitting application:", submitError);
+        throw submitError;
       }
 
       console.log("Application submitted successfully");
