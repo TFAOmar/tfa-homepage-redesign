@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { jsPDF } from "https://esm.sh/jspdf@2.5.1";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -148,6 +149,12 @@ interface NotificationRequest {
 const ADMIN_EMAIL = "leads@tfainsuranceadvisors.com";
 const FROM_EMAIL = "The Financial Architects <noreply@tfainsuranceadvisors.com>";
 
+// PDF Color Constants (RGB values 0-255)
+const TFA_NAVY = [30, 58, 95];
+const TFA_GOLD = [212, 175, 55];
+const TEXT_DARK = [17, 24, 39];
+const TEXT_GRAY = [107, 114, 128];
+
 const formatCurrency = (amount?: number): string => {
   if (!amount) return "N/A";
   return new Intl.NumberFormat("en-US", {
@@ -219,6 +226,454 @@ const getSourceOfFundsLabel = (source?: string): string => {
   };
   return source ? labels[source] || source : "N/A";
 };
+
+// ============ PDF GENERATION FUNCTIONS ============
+
+const formatPdfValue = (value: unknown): string => {
+  if (value === null || value === undefined || value === "") return "N/A";
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (typeof value === "number") {
+    if (value >= 1000) return formatCurrency(value);
+    return String(value);
+  }
+  if (Array.isArray(value)) return value.join(", ") || "N/A";
+  return String(value);
+};
+
+const formatPdfDate = (date?: string): string => {
+  if (!date) return "N/A";
+  try {
+    return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  } catch {
+    return date;
+  }
+};
+
+const addPdfHeader = (doc: jsPDF, pageWidth: number, margin: number): number => {
+  // Navy header background
+  doc.setFillColor(TFA_NAVY[0], TFA_NAVY[1], TFA_NAVY[2]);
+  doc.rect(0, 0, pageWidth, 45, "F");
+
+  // Company name in gold
+  doc.setTextColor(TFA_GOLD[0], TFA_GOLD[1], TFA_GOLD[2]);
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.text("THE FINANCIAL ARCHITECTS", margin, 20);
+
+  // Document title in white
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "normal");
+  doc.text("Life Insurance Application", margin, 32);
+
+  // Date on right side
+  doc.setFontSize(10);
+  const dateStr = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  doc.text(`Generated: ${dateStr}`, pageWidth - margin, 32, { align: "right" });
+
+  return 55; // Return Y position after header
+};
+
+const addPdfSectionHeader = (
+  doc: jsPDF,
+  title: string,
+  yPos: number,
+  margin: number,
+  pageWidth: number
+): number => {
+  // Section header with navy background
+  doc.setFillColor(TFA_NAVY[0], TFA_NAVY[1], TFA_NAVY[2]);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 10, "F");
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "bold");
+  doc.text(title, margin + 4, yPos + 7);
+
+  return yPos + 15;
+};
+
+const addPdfField = (
+  doc: jsPDF,
+  label: string,
+  value: string,
+  yPos: number,
+  margin: number,
+  pageWidth: number
+): number => {
+  const labelWidth = 70;
+  const valueWidth = pageWidth - margin * 2 - labelWidth - 5;
+
+  doc.setTextColor(TEXT_GRAY[0], TEXT_GRAY[1], TEXT_GRAY[2]);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${label}:`, margin, yPos);
+
+  doc.setTextColor(TEXT_DARK[0], TEXT_DARK[1], TEXT_DARK[2]);
+  doc.setFont("helvetica", "bold");
+
+  // Handle text wrapping for long values
+  const lines = doc.splitTextToSize(value, valueWidth);
+  doc.text(lines, margin + labelWidth, yPos);
+
+  return yPos + Math.max(lines.length * 5, 7);
+};
+
+const checkPdfPageBreak = (
+  doc: jsPDF,
+  yPos: number,
+  margin: number,
+  pageWidth: number,
+  neededSpace: number = 40
+): number => {
+  const pageHeight = doc.internal.pageSize.getHeight();
+  if (yPos + neededSpace > pageHeight - 30) {
+    doc.addPage();
+    return addPdfHeader(doc, pageWidth, margin);
+  }
+  return yPos;
+};
+
+const addPdfFooter = (doc: jsPDF, pageWidth: number): void => {
+  const pageCount = doc.getNumberOfPages();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+
+    // Footer line
+    doc.setDrawColor(TFA_NAVY[0], TFA_NAVY[1], TFA_NAVY[2]);
+    doc.setLineWidth(0.5);
+    doc.line(15, pageHeight - 20, pageWidth - 15, pageHeight - 20);
+
+    // Footer text
+    doc.setTextColor(TEXT_GRAY[0], TEXT_GRAY[1], TEXT_GRAY[2]);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.text("The Financial Architects | www.tfainsuranceadvisors.com | CONFIDENTIAL", 15, pageHeight - 12);
+    doc.text(`Page ${i} of ${pageCount}`, pageWidth - 15, pageHeight - 12, { align: "right" });
+  }
+};
+
+const generateApplicationPdf = (data: NotificationRequest): string => {
+  console.log("Generating PDF for application:", data.applicationId);
+  
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const margin = 15;
+
+  const { applicationId, applicantName, applicantPhone, advisorName, advisorEmail, formData } = data;
+  const step1 = formData.step1 || {};
+  const step2 = formData.step2 || {};
+  const step3 = formData.step3 || {};
+  const step4 = formData.step4 || {};
+  const step5 = formData.step5 || {};
+  const step6 = formData.step6 || {};
+  const step7 = formData.step7 || {};
+  const step8 = formData.step8 || {};
+  const step9 = formData.step9 || {};
+
+  let yPos = addPdfHeader(doc, pageWidth, margin);
+
+  // Application ID box
+  doc.setFillColor(240, 253, 244);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 12, "F");
+  doc.setTextColor(22, 101, 52);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.text(`Application ID: ${applicationId}`, margin + 4, yPos + 8);
+  yPos += 18;
+
+  // ============ STEP 1: Proposed Insured ============
+  yPos = addPdfSectionHeader(doc, "STEP 1: PROPOSED INSURED", yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Full Name", applicantName || "N/A", yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Date of Birth", formatPdfDate(step1.dateOfBirth), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Gender", formatPdfValue(step1.gender), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "SSN", maskSSN(step1.ssn), yPos, margin, pageWidth);
+  const birthPlace = step1.birthCity ? `${step1.birthCity}, ${step1.birthState || ""} ${step1.birthCountry || ""}` : "N/A";
+  yPos = addPdfField(doc, "Birth Place", birthPlace.trim(), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Citizenship", formatPdfValue(step1.citizenship), yPos, margin, pageWidth);
+  yPos += 5;
+
+  // ============ STEP 2: Contact & Employment ============
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 60);
+  yPos = addPdfSectionHeader(doc, "STEP 2: CONTACT & EMPLOYMENT", yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Email", formatPdfValue(step2.email), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Mobile Phone", formatPdfValue(step2.mobilePhone || applicantPhone), yPos, margin, pageWidth);
+  if (step2.homePhone) {
+    yPos = addPdfField(doc, "Home Phone", formatPdfValue(step2.homePhone), yPos, margin, pageWidth);
+  }
+  const address = step2.address ? `${step2.address}${step2.address2 ? ", " + step2.address2 : ""}, ${step2.city}, ${step2.state} ${step2.zipCode}` : "N/A";
+  yPos = addPdfField(doc, "Address", address, yPos, margin, pageWidth);
+  if (step2.mailingAddressDifferent) {
+    const mailAddr = `${step2.mailingAddress}, ${step2.mailingCity}, ${step2.mailingState} ${step2.mailingZipCode}`;
+    yPos = addPdfField(doc, "Mailing Address", mailAddr, yPos, margin, pageWidth);
+  }
+  yPos = addPdfField(doc, "Employer", formatPdfValue(step2.employer), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Occupation", formatPdfValue(step2.occupation), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Annual Income", formatCurrency(step2.annualIncome), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Net Worth", formatCurrency(step2.netWorth), yPos, margin, pageWidth);
+  yPos += 5;
+
+  // ============ STEP 3: Ownership ============
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 50);
+  yPos = addPdfSectionHeader(doc, "STEP 3: OWNERSHIP", yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Insured is Owner", step3.insuredIsOwner ? "Yes" : "No", yPos, margin, pageWidth);
+  
+  if (!step3.insuredIsOwner) {
+    const ownerTypeLabel = step3.ownerType === "individual" ? "Individual" : step3.ownerType === "trust" ? "Trust" : step3.ownerType === "business" ? "Business" : "N/A";
+    yPos = addPdfField(doc, "Owner Type", ownerTypeLabel, yPos, margin, pageWidth);
+    
+    if (step3.ownerType === "individual") {
+      const ownerName = `${step3.ownerFirstName || ""} ${step3.ownerLastName || ""}`.trim() || "N/A";
+      yPos = addPdfField(doc, "Owner Name", ownerName, yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Owner SSN", maskSSN(step3.ownerSsn), yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Owner DOB", formatPdfDate(step3.ownerDateOfBirth), yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Relationship", formatPdfValue(step3.ownerRelationship), yPos, margin, pageWidth);
+    } else if (step3.ownerType === "trust") {
+      yPos = addPdfField(doc, "Trust Name", formatPdfValue(step3.trustName), yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Trust Tax ID", step3.trustTaxId ? maskSSN(step3.trustTaxId) : "N/A", yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Trust Date", formatPdfDate(step3.trustDate), yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Trustee Names", formatPdfValue(step3.trusteeNames), yPos, margin, pageWidth);
+    } else if (step3.ownerType === "business") {
+      yPos = addPdfField(doc, "Business Name", formatPdfValue(step3.businessName), yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Business Tax ID", step3.businessTaxId ? maskSSN(step3.businessTaxId) : "N/A", yPos, margin, pageWidth);
+    }
+    
+    if (step3.ownerAddress) {
+      const ownerAddr = `${step3.ownerAddress}, ${step3.ownerCity}, ${step3.ownerState} ${step3.ownerZipCode}`;
+      yPos = addPdfField(doc, "Owner Address", ownerAddr, yPos, margin, pageWidth);
+    }
+    if (step3.ownerEmail) {
+      yPos = addPdfField(doc, "Owner Email", formatPdfValue(step3.ownerEmail), yPos, margin, pageWidth);
+    }
+    if (step3.ownerPhone) {
+      yPos = addPdfField(doc, "Owner Phone", formatPdfValue(step3.ownerPhone), yPos, margin, pageWidth);
+    }
+  }
+  yPos += 5;
+
+  // ============ STEP 4: Beneficiaries ============
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 50);
+  yPos = addPdfSectionHeader(doc, "STEP 4: BENEFICIARIES", yPos, margin, pageWidth);
+  
+  if (step4.beneficiaries && step4.beneficiaries.length > 0) {
+    step4.beneficiaries.forEach((b: Beneficiary, index: number) => {
+      yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 35);
+      
+      // Beneficiary sub-header
+      doc.setFillColor(249, 250, 251);
+      doc.rect(margin, yPos, pageWidth - margin * 2, 8, "F");
+      doc.setTextColor(TFA_NAVY[0], TFA_NAVY[1], TFA_NAVY[2]);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Beneficiary ${index + 1}: ${b.fullName || "N/A"}`, margin + 4, yPos + 6);
+      yPos += 12;
+      
+      const designation = b.designation === "primary" ? "Primary" : "Contingent";
+      yPos = addPdfField(doc, "Type", designation, yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Share", `${b.sharePercentage || 0}%`, yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Relationship", formatPdfValue(b.relationship), yPos, margin, pageWidth);
+      if (b.ssn) {
+        yPos = addPdfField(doc, "SSN", maskSSN(b.ssn), yPos, margin, pageWidth);
+      }
+      if (b.dateOfBirth) {
+        yPos = addPdfField(doc, "Date of Birth", formatPdfDate(b.dateOfBirth), yPos, margin, pageWidth);
+      }
+      yPos += 3;
+    });
+  } else {
+    doc.setTextColor(TEXT_GRAY[0], TEXT_GRAY[1], TEXT_GRAY[2]);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "italic");
+    doc.text("No beneficiaries specified", margin, yPos);
+    yPos += 7;
+  }
+  yPos += 5;
+
+  // ============ STEP 5: Policy & Riders ============
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 40);
+  yPos = addPdfSectionHeader(doc, "STEP 5: POLICY & RIDERS", yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Plan Type", getPlanLabel(step5.planName), yPos, margin, pageWidth);
+  
+  // Face Amount highlighted
+  doc.setTextColor(TEXT_GRAY[0], TEXT_GRAY[1], TEXT_GRAY[2]);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text("Face Amount:", margin, yPos);
+  doc.setTextColor(TFA_NAVY[0], TFA_NAVY[1], TFA_NAVY[2]);
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.text(formatCurrency(step5.faceAmount), margin + 70, yPos);
+  yPos += 8;
+  
+  if (step5.termDuration) {
+    yPos = addPdfField(doc, "Term Duration", formatPdfValue(step5.termDuration), yPos, margin, pageWidth);
+  }
+  yPos = addPdfField(doc, "Premium Mode", getPaymentFrequencyLabel(step5.premiumMode), yPos, margin, pageWidth);
+  if (step5.riders && step5.riders.length > 0) {
+    yPos = addPdfField(doc, "Riders", step5.riders.join(", "), yPos, margin, pageWidth);
+  }
+  yPos += 5;
+
+  // ============ STEP 6: Existing Coverage ============
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 40);
+  yPos = addPdfSectionHeader(doc, "STEP 6: EXISTING COVERAGE", yPos, margin, pageWidth);
+  
+  if (step6.hasExistingCoverage && step6.existingPolicies && step6.existingPolicies.length > 0) {
+    step6.existingPolicies.forEach((p: ExistingPolicy, index: number) => {
+      yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 25);
+      
+      // Policy sub-header with warning color
+      doc.setFillColor(254, 243, 199);
+      doc.rect(margin, yPos, pageWidth - margin * 2, 8, "F");
+      doc.setTextColor(146, 64, 14);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Policy ${index + 1}: ${p.companyName || "Unknown Company"}`, margin + 4, yPos + 6);
+      yPos += 12;
+      
+      yPos = addPdfField(doc, "Policy Number", formatPdfValue(p.policyNumber), yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Amount", formatCurrency(p.amountOfCoverage), yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Being Replaced", p.isBeingReplaced ? "Yes" : "No", yPos, margin, pageWidth);
+      yPos += 3;
+    });
+  } else {
+    doc.setTextColor(TEXT_GRAY[0], TEXT_GRAY[1], TEXT_GRAY[2]);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "italic");
+    doc.text("No existing coverage", margin, yPos);
+    yPos += 7;
+  }
+  yPos += 5;
+
+  // ============ STEP 7: Medical & Lifestyle ============
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 60);
+  yPos = addPdfSectionHeader(doc, "STEP 7: MEDICAL & LIFESTYLE", yPos, margin, pageWidth);
+  
+  const medicalFlags: string[] = [];
+  if (step7.usesTobacco) medicalFlags.push(`Tobacco Use: ${step7.tobaccoType || "Yes"}`);
+  if (step7.hasAviation) medicalFlags.push("Aviation Activities");
+  if (step7.hasHazardousSports) medicalFlags.push("Hazardous Sports");
+  if (step7.hasForeignTravel) medicalFlags.push("Foreign Travel");
+  if (step7.hasBankruptcy) medicalFlags.push("Bankruptcy History");
+  if (step7.hasCriminalHistory) medicalFlags.push("Criminal History");
+  if (step7.hasDrivingViolations) medicalFlags.push("Driving Violations");
+  if (step7.hasMedicalConditions) medicalFlags.push("Medical Conditions");
+
+  if (medicalFlags.length > 0) {
+    // Warning box
+    doc.setFillColor(254, 242, 242);
+    doc.rect(margin, yPos, pageWidth - margin * 2, 10 + medicalFlags.length * 6, "F");
+    doc.setDrawColor(239, 68, 68);
+    doc.setLineWidth(0.5);
+    doc.line(margin, yPos, margin, yPos + 10 + medicalFlags.length * 6);
+    
+    doc.setTextColor(153, 27, 27);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text("FLAGS REQUIRING REVIEW:", margin + 4, yPos + 7);
+    
+    doc.setFont("helvetica", "normal");
+    medicalFlags.forEach((flag, idx) => {
+      doc.text(`• ${flag}`, margin + 8, yPos + 14 + idx * 6);
+    });
+    yPos += 15 + medicalFlags.length * 6;
+    
+    // Add details if present
+    if (step7.tobaccoLastUsed) {
+      yPos = addPdfField(doc, "Tobacco Last Used", formatPdfValue(step7.tobaccoLastUsed), yPos, margin, pageWidth);
+    }
+    if (step7.aviationDetails) {
+      yPos = addPdfField(doc, "Aviation Details", formatPdfValue(step7.aviationDetails), yPos, margin, pageWidth);
+    }
+    if (step7.hazardousSportsDetails) {
+      yPos = addPdfField(doc, "Hazardous Sports", formatPdfValue(step7.hazardousSportsDetails), yPos, margin, pageWidth);
+    }
+    if (step7.foreignTravelDetails) {
+      yPos = addPdfField(doc, "Foreign Travel", formatPdfValue(step7.foreignTravelDetails), yPos, margin, pageWidth);
+    }
+    if (step7.medicalConditionsDetails) {
+      yPos = addPdfField(doc, "Medical Conditions", formatPdfValue(step7.medicalConditionsDetails), yPos, margin, pageWidth);
+    }
+  } else {
+    doc.setTextColor(22, 163, 74);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text("No medical or lifestyle flags", margin, yPos);
+    yPos += 7;
+  }
+  yPos += 5;
+
+  // ============ STEP 8: Premium Payment ============
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 50);
+  yPos = addPdfSectionHeader(doc, "STEP 8: PREMIUM PAYMENT", yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Payment Method", getPaymentMethodLabel(step8.paymentMethod), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Payment Frequency", getPaymentFrequencyLabel(step8.paymentFrequency), yPos, margin, pageWidth);
+  
+  if (step8.paymentMethod === "eft") {
+    yPos = addPdfField(doc, "Bank Name", formatPdfValue(step8.bankName), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Routing Number", maskRoutingNumber(step8.routingNumber), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Account Number", maskAccountNumber(step8.accountNumber), yPos, margin, pageWidth);
+    const accountType = step8.accountType === "checking" ? "Checking" : step8.accountType === "savings" ? "Savings" : formatPdfValue(step8.accountType);
+    yPos = addPdfField(doc, "Account Type", accountType, yPos, margin, pageWidth);
+  }
+  
+  const sourceOfFunds = step8.sourceOfFunds === "other" && step8.sourceOfFundsOther 
+    ? step8.sourceOfFundsOther 
+    : getSourceOfFundsLabel(step8.sourceOfFunds);
+  yPos = addPdfField(doc, "Source of Funds", sourceOfFunds, yPos, margin, pageWidth);
+  yPos += 5;
+
+  // ============ STEP 9: Signature ============
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 40);
+  yPos = addPdfSectionHeader(doc, "STEP 9: SIGNATURE & ACKNOWLEDGMENT", yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Acknowledgment", step9.acknowledgment ? "Confirmed" : "Not confirmed", yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Electronic Signature", formatPdfValue(step9.electronicSignature), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Signature Date", formatPdfDate(step9.signatureDate), yPos, margin, pageWidth);
+  yPos += 5;
+
+  // ============ Advisor Info ============
+  if (advisorName) {
+    yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 30);
+    yPos = addPdfSectionHeader(doc, "ASSIGNED ADVISOR", yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Advisor Name", advisorName, yPos, margin, pageWidth);
+    if (advisorEmail) {
+      yPos = addPdfField(doc, "Advisor Email", advisorEmail, yPos, margin, pageWidth);
+    }
+  }
+
+  // Add security notice
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 25);
+  yPos += 10;
+  doc.setFillColor(240, 249, 255);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 15, "F");
+  doc.setTextColor(12, 74, 110);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "italic");
+  doc.text("Note: SSNs and bank account details are partially masked for security.", margin + 4, yPos + 6);
+  doc.text("Full details are available in the admin dashboard.", margin + 4, yPos + 12);
+
+  // Add footer to all pages
+  addPdfFooter(doc, pageWidth);
+
+  // Return base64 encoded PDF
+  const pdfOutput = doc.output("datauristring");
+  const base64Data = pdfOutput.split(",")[1];
+  
+  console.log("PDF generated successfully, size:", base64Data.length, "characters");
+  return base64Data;
+};
+
+// ============ EMAIL HTML GENERATION ============
 
 const generateSectionHeader = (title: string): string => {
   return `<h2 style="color: #1e3a5f; font-size: 18px; margin: 25px 0 15px 0; padding-bottom: 10px; border-bottom: 2px solid #e5e7eb;">${title}</h2>`;
@@ -321,6 +776,7 @@ const generateAdminEmail = (data: NotificationRequest): string => {
       <div style="background-color: #f0fdf4; border-left: 4px solid #22c55e; padding: 15px; margin-bottom: 25px; border-radius: 0 4px 4px 0;">
         <p style="margin: 0; color: #166534; font-weight: 600;">Application ID: ${applicationId}</p>
         <p style="margin: 5px 0 0 0; color: #166534; font-size: 14px;">Submitted: ${new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })}</p>
+        <p style="margin: 5px 0 0 0; color: #166534; font-size: 14px;">📎 PDF attachment included for easy filing</p>
       </div>
 
       <!-- STEP 1: Proposed Insured -->
@@ -560,17 +1016,45 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Received notification request for application:", data.applicationId);
     console.log("Form data steps received:", Object.keys(data.formData || {}).join(", "));
 
+    // Generate PDF attachment
+    let pdfBase64: string | null = null;
+    try {
+      pdfBase64 = generateApplicationPdf(data);
+      console.log("PDF generated successfully");
+    } catch (pdfError) {
+      console.error("Failed to generate PDF:", pdfError);
+      // Continue without PDF if generation fails
+    }
+
+    const pdfFilename = `TFA_Life_Insurance_Application_${data.applicationId.slice(0, 8).toUpperCase()}.pdf`;
     const emailResults: { recipient: string; success: boolean; error?: string }[] = [];
 
-    // 1. Send notification to admin team
+    // 1. Send notification to admin team (with PDF)
     try {
       console.log("Sending admin notification to:", ADMIN_EMAIL);
-      const adminResult = await resend.emails.send({
+      const adminEmailOptions: {
+        from: string;
+        to: string[];
+        subject: string;
+        html: string;
+        attachments?: { filename: string; content: string }[];
+      } = {
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
         subject: `New Life Insurance Application - ${data.applicantName}`,
         html: generateAdminEmail(data),
-      });
+      };
+
+      if (pdfBase64) {
+        adminEmailOptions.attachments = [
+          {
+            filename: pdfFilename,
+            content: pdfBase64,
+          },
+        ];
+      }
+
+      const adminResult = await resend.emails.send(adminEmailOptions);
       console.log("Admin email sent successfully:", adminResult);
       emailResults.push({ recipient: "admin", success: true });
     } catch (error: unknown) {
@@ -578,16 +1062,33 @@ const handler = async (req: Request): Promise<Response> => {
       emailResults.push({ recipient: "admin", success: false, error: String(error) });
     }
 
-    // 2. Send notification to advisor (if assigned)
+    // 2. Send notification to advisor (if assigned, with PDF)
     if (data.advisorEmail) {
       try {
         console.log("Sending advisor notification to:", data.advisorEmail);
-        const advisorResult = await resend.emails.send({
+        const advisorEmailOptions: {
+          from: string;
+          to: string[];
+          subject: string;
+          html: string;
+          attachments?: { filename: string; content: string }[];
+        } = {
           from: FROM_EMAIL,
           to: [data.advisorEmail],
           subject: `New Life Insurance Application - ${data.applicantName}`,
           html: generateAdminEmail(data),
-        });
+        };
+
+        if (pdfBase64) {
+          advisorEmailOptions.attachments = [
+            {
+              filename: pdfFilename,
+              content: pdfBase64,
+            },
+          ];
+        }
+
+        const advisorResult = await resend.emails.send(advisorEmailOptions);
         console.log("Advisor email sent successfully:", advisorResult);
         emailResults.push({ recipient: "advisor", success: true });
       } catch (error: unknown) {
@@ -596,7 +1097,7 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
 
-    // 3. Send confirmation to applicant
+    // 3. Send confirmation to applicant (NO PDF for security)
     if (data.applicantEmail) {
       try {
         console.log("Sending confirmation to applicant:", data.applicantEmail);
@@ -617,7 +1118,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Email notification results:", emailResults);
 
     return new Response(
-      JSON.stringify({ success: true, results: emailResults }),
+      JSON.stringify({ success: true, results: emailResults, pdfGenerated: !!pdfBase64 }),
       {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
