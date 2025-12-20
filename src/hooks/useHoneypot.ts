@@ -6,21 +6,21 @@ import { useState, useCallback } from "react";
  * If filled, silently reject the submission
  */
 export const useHoneypot = () => {
-  const [honeypot, setHoneypot] = useState("");
+  const [honeypotValue, setHoneypotValue] = useState("");
 
   const isBot = useCallback(() => {
-    return honeypot.length > 0;
-  }, [honeypot]);
+    return honeypotValue.length > 0;
+  }, [honeypotValue]);
 
   const honeypotProps = {
-    value: honeypot,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => setHoneypot(e.target.value),
+    value: honeypotValue,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => setHoneypotValue(e.target.value),
     tabIndex: -1,
     autoComplete: "off",
     "aria-hidden": true as const,
   };
 
-  return { honeypotProps, isBot };
+  return { honeypotProps, honeypotValue, isBot };
 };
 
 /**
