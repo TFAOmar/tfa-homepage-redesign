@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,8 @@ import {
   Users,
   Building2,
   Briefcase,
-  Award
+  Award,
+  FileText
 } from "lucide-react";
 import manuelImage from "@/assets/advisors/manuel-soto.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
@@ -175,6 +177,16 @@ const AdvisorManuelSoto = () => {
                   <Mail className="mr-2 h-5 w-5" />
                   Contact Me
                 </Button>
+                <Link to="/advisors/manuel-soto/life-insurance">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-accent/50 text-accent hover:bg-accent/10"
+                  >
+                    <FileText className="mr-2 h-5 w-5" />
+                    Start Life Insurance Application
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -346,6 +358,16 @@ const AdvisorManuelSoto = () => {
                   (888) 350-5396
                 </Button>
               </a>
+              <Link to="/advisors/manuel-soto/life-insurance">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white/30 text-white hover:bg-white/10"
+                >
+                  <FileText className="mr-2 h-5 w-5" />
+                  Life Insurance Application
+                </Button>
+              </Link>
             </div>
             <p className="mt-6 text-white/60 text-sm">
               Free consultation. No obligations. Just honest guidance.
