@@ -1,13 +1,14 @@
-import { Check } from "lucide-react";
+import { Check, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { STEPS } from "@/types/lifeInsuranceApplication";
 
 interface ProgressBarProps {
   currentStep: number;
   completedSteps: number[];
+  hasErrors?: boolean;
 }
 
-const ProgressBar = ({ currentStep, completedSteps }: ProgressBarProps) => {
+const ProgressBar = ({ currentStep, completedSteps, hasErrors }: ProgressBarProps) => {
   return (
     <div className="w-full py-4 md:py-6">
       {/* Mobile view - simplified with larger touch area */}
@@ -40,18 +41,27 @@ const ProgressBar = ({ currentStep, completedSteps }: ProgressBarProps) => {
               <div key={step.number} className="flex items-center flex-1">
                 {/* Step indicator */}
                 <div className="flex flex-col items-center">
-                  <div
-                    className={cn(
-                      "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
-                      isCompleted && "bg-primary border-primary text-primary-foreground",
-                      isCurrent && "border-primary bg-primary/10 text-primary",
-                      isUpcoming && "border-muted-foreground/30 text-muted-foreground"
-                    )}
-                  >
-                    {isCompleted ? (
-                      <Check className="w-5 h-5" />
-                    ) : (
-                      <span className="text-sm font-semibold">{step.number}</span>
+                  <div className="relative">
+                    <div
+                      className={cn(
+                        "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
+                        isCompleted && "bg-primary border-primary text-primary-foreground",
+                        isCurrent && !hasErrors && "border-primary bg-primary/10 text-primary",
+                        isCurrent && hasErrors && "border-destructive bg-destructive/10 text-destructive",
+                        isUpcoming && "border-muted-foreground/30 text-muted-foreground"
+                      )}
+                    >
+                      {isCompleted ? (
+                        <Check className="w-5 h-5" />
+                      ) : (
+                        <span className="text-sm font-semibold">{step.number}</span>
+                      )}
+                    </div>
+                    {/* Error indicator badge */}
+                    {isCurrent && hasErrors && (
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-destructive rounded-full flex items-center justify-center animate-pulse">
+                        <AlertCircle className="w-3 h-3 text-destructive-foreground" />
+                      </div>
                     )}
                   </div>
                   <span

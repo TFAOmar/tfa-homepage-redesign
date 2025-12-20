@@ -1,6 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -22,8 +21,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, CheckCircle2 } from "lucide-react";
 import { Step1Data } from "@/types/lifeInsuranceApplication";
+import { ValidatedInput } from "../ValidatedInput";
+import { cn } from "@/lib/utils";
 
 const US_STATES = [
   "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
@@ -54,11 +55,16 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             <FormField
               control={form.control}
               name="firstName"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">First Name *</FormLabel>
                   <FormControl>
-                    <Input placeholder="John" className="min-h-[44px]" {...field} />
+                    <ValidatedInput 
+                      placeholder="John" 
+                      className="min-h-[44px]" 
+                      fieldState={fieldState}
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -68,11 +74,17 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             <FormField
               control={form.control}
               name="middleName"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Middle Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Michael" {...field} />
+                    <ValidatedInput 
+                      placeholder="Michael" 
+                      className="min-h-[44px]"
+                      fieldState={fieldState}
+                      showSuccessIndicator={false}
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -82,11 +94,16 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             <FormField
               control={form.control}
               name="lastName"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Last Name *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Smith" {...field} />
+                    <ValidatedInput 
+                      placeholder="Smith" 
+                      className="min-h-[44px]"
+                      fieldState={fieldState}
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -98,14 +115,23 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             <FormField
               control={form.control}
               name="gender"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Gender *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select gender" />
-                      </SelectTrigger>
+                      <div className="relative">
+                        <SelectTrigger 
+                          hasError={!!fieldState.error}
+                          hasSuccess={fieldState.isDirty && !fieldState.error}
+                          className={cn(fieldState.isDirty && !fieldState.error && "pr-10")}
+                        >
+                          <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                        {fieldState.isDirty && !fieldState.error && (
+                          <CheckCircle2 className="absolute right-8 top-1/2 -translate-y-1/2 w-5 h-5 text-success pointer-events-none" />
+                        )}
+                      </div>
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="male">Male</SelectItem>
@@ -121,11 +147,16 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             <FormField
               control={form.control}
               name="dateOfBirth"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Date of Birth *</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <ValidatedInput 
+                      type="date" 
+                      className="min-h-[44px]"
+                      fieldState={fieldState}
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,7 +166,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             <FormField
               control={form.control}
               name="ssn"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="flex items-center gap-1">
                     Social Security Number *
@@ -149,7 +180,13 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                     </Tooltip>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="XXX-XX-XXXX" {...field} maxLength={11} />
+                    <ValidatedInput 
+                      placeholder="XXX-XX-XXXX" 
+                      className="min-h-[44px]"
+                      fieldState={fieldState}
+                      maxLength={11}
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -161,11 +198,16 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             <FormField
               control={form.control}
               name="birthplaceCountry"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Birthplace Country *</FormLabel>
                   <FormControl>
-                    <Input placeholder="United States" {...field} />
+                    <ValidatedInput 
+                      placeholder="United States" 
+                      className="min-h-[44px]"
+                      fieldState={fieldState}
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
