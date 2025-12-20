@@ -26,6 +26,7 @@ import Partners from "./pages/Partners";
 import AdvisorOnboarding from "./pages/AdvisorOnboarding";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminApplications from "./pages/AdminApplications";
+import AdminFormSubmissions from "./pages/AdminFormSubmissions";
 import CompoundGrowthCalculator from "./pages/CompoundGrowthCalculator";
 import RetirementIncomeCalculator from "./pages/RetirementIncomeCalculator";
 import TaxImpactCalculator from "./pages/TaxImpactCalculator";
@@ -70,7 +71,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/life-insurance-application'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -105,6 +106,11 @@ const AppLayout = () => {
           <Route path="/admin/applications" element={
             <ProtectedRoute requireAdmin>
               <AdminApplications />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/form-submissions" element={
+            <ProtectedRoute requireAdmin>
+              <AdminFormSubmissions />
             </ProtectedRoute>
           } />
           <Route path="/tools" element={<Tools />} />

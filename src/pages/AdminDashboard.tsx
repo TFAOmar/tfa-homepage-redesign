@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Shield, Users, Clock, EyeOff, Archive, Loader2, FileText } from "lucide-react";
+import { Shield, Users, Clock, EyeOff, Archive, Loader2, FileText, Send } from "lucide-react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdvisorTable from "@/components/admin/AdvisorTable";
 import AdvisorEditModal from "@/components/admin/AdvisorEditModal";
@@ -164,6 +164,12 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <Button variant="outline" asChild>
+              <Link to="/admin/form-submissions">
+                <Users className="h-4 w-4 mr-2" />
+                Form Submissions
+              </Link>
+            </Button>
             <Button variant="outline" asChild>
               <Link to="/admin/applications">
                 <FileText className="h-4 w-4 mr-2" />
