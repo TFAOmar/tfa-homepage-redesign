@@ -1,42 +1,43 @@
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { ArrowLeft, Shield } from "lucide-react";
+import { ArrowLeft, Shield, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ApplicationWizard from "@/components/life-insurance-application/ApplicationWizard";
 import tfaLogo from "@/assets/tfa-logo.png";
-
-// Static advisor mapping for now - can be extended with dynamic lookup
-const ADVISOR_SLUGS: Record<string, { name: string; email: string; id: string }> = {
-  "vanessa-sanchez": {
-    id: "vanessa-sanchez",
-    name: "Vanessa Sanchez",
-    email: "vsanchez@tfaconnect.com",
-  },
-  "mariah-lorenzen": {
-    id: "mariah-lorenzen",
-    name: "Mariah Lorenzen",
-    email: "mlorenzen@tfaconnect.com",
-  },
-  "tamara-lee": {
-    id: "tamara-lee",
-    name: "Tamara Lee",
-    email: "tlee@tfaconnect.com",
-  },
-  "ismael-ververa": {
-    id: "ismael-ververa",
-    name: "Ismael Ververa",
-    email: "iververa@tfaconnect.com",
-  },
-  "manuel-soto": {
-    id: "manuel-soto",
-    name: "Manuel Soto",
-    email: "msoto@tfaconnect.com",
-  },
-};
+import { useAdvisorBySlug } from "@/hooks/useDynamicAdvisors";
 
 const LifeInsuranceApplication = () => {
   const { advisorSlug } = useParams<{ advisorSlug: string }>();
-  const advisor = advisorSlug ? ADVISOR_SLUGS[advisorSlug] : undefined;
+  const { data: advisor, isLoading, error } = useAdvisorBySlug(advisorSlug);
+
+  // Show loading state while fetching advisor
+  if (advisorSlug && isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If slug provided but advisor not found, show error
+  if (advisorSlug && !isLoading && !advisor) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Advisor Not Found</h1>
+          <p className="text-muted-foreground mb-6">
+            The advisor you're looking for is not available. They may not be accepting applications at this time.
+          </p>
+          <Link to="/advisors">
+            <Button>Browse All Advisors</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

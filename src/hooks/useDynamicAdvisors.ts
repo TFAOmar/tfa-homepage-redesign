@@ -23,6 +23,7 @@ export interface DynamicAdvisor {
   years_of_experience: number;
   image_url?: string;
   scheduling_link?: string;
+  slug: string;
   status: AdvisorStatus;
   display_priority?: number;
   rejection_reason?: string;
@@ -93,10 +94,13 @@ export const useSubmitAdvisor = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (advisor: Omit<DynamicAdvisor, "id" | "created_at" | "updated_at" | "status">) => {
+    mutationFn: async (advisor: Omit<DynamicAdvisor, "id" | "created_at" | "updated_at" | "status" | "slug">) => {
+      // Generate slug from name
+      const slug = advisor.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      
       const { data, error } = await supabase
         .from("dynamic_advisors")
-        .insert([advisor])
+        .insert([{ ...advisor, slug }])
         .select()
         .single();
 
@@ -170,5 +174,38 @@ export const useBulkUpdateAdvisors = () => {
       queryClient.invalidateQueries({ queryKey: ["admin-advisors"] });
       queryClient.invalidateQueries({ queryKey: ["published-advisors"] });
     },
+  });
+};
+
+// Advisor info returned by slug lookup (for life insurance application)
+export interface AdvisorBySlug {
+  id: string;
+  name: string;
+  email: string;
+  title: string;
+  image_url: string | null;
+  scheduling_link: string | null;
+}
+
+// Fetch advisor by slug (public - for life insurance application linking)
+export const useAdvisorBySlug = (slug: string | undefined) => {
+  return useQuery({
+    queryKey: ["advisor-by-slug", slug],
+    queryFn: async (): Promise<AdvisorBySlug | null> => {
+      if (!slug) return null;
+      
+      const { data, error } = await supabase
+        .rpc("get_advisor_by_slug", { advisor_slug: slug });
+
+      if (error) {
+        console.error("Error fetching advisor by slug:", error);
+        return null;
+      }
+      
+      // RPC returns an array, get first item
+      const advisor = Array.isArray(data) ? data[0] : data;
+      return advisor || null;
+    },
+    enabled: !!slug,
   });
 };
