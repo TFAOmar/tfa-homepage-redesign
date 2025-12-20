@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(50),
@@ -34,7 +34,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export const EstatePlanningForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const {
     register,
@@ -56,20 +56,27 @@ export const EstatePlanningForm = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "estate-planning",
-          formData: {
-            ...data,
-            firstName: data.firstName,
-            fullName: `${data.firstName} ${data.lastName}`,
-            source: window.location.pathname,
-          },
-          recipientEmail: "leads@tfainsuranceadvisors.com",
-        },
+      const notes = [
+        `Marital Status: ${data.maritalStatus}`,
+        `Owns Property: ${data.ownsProperty}`,
+        `Estate Value: ${data.estateValue}`,
+        `Contact Preference: ${data.contactPreference}`,
+        data.bestTimeToCall ? `Best Time to Call: ${data.bestTimeToCall}` : null,
+        data.additionalInfo ? `Additional Info: ${data.additionalInfo}` : null,
+      ].filter(Boolean).join("\n");
+
+      const response = await submitForm({
+        form_name: "Estate Planning Inquiry",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        notes,
+        tags: ["Estate Planning"],
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
 
       toast.success("Thank you! An estate planning specialist will contact you shortly.");
       reset();

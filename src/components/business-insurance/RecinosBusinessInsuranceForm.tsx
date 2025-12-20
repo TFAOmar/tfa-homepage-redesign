@@ -9,8 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const formSchema = z.object({
   businessName: z.string().min(1, "Business name is required").max(100),
@@ -53,7 +53,7 @@ const RecinosBusinessInsuranceForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const {
     register,
@@ -87,28 +87,34 @@ const RecinosBusinessInsuranceForm = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "business-insurance-recinos",
-          formData: {
-            ...data,
-            firstName: data.contactName.split(" ")[0],
-            advisorName: "Rolando and Savannah Recinos",
-            coverageInterests: data.coverageInterests.map(id => 
-              coverageOptions.find(opt => opt.id === id)?.label || id
-            ),
-            source: "Recinos Business Insurance Landing Page",
-            advisor: "Rolando & Savannah Recinos"
-          },
-          recipientEmail: "leads@tfainsuranceadvisors.com",
-          additionalRecipients: [
-            "rrecinos@tfainsuranceadvisors.com",
-            "srecinos@tfainsuranceadvisors.com"
-          ]
-        },
+      const coverageLabels = data.coverageInterests.map(id => 
+        coverageOptions.find(opt => opt.id === id)?.label || id
+      );
+
+      const nameParts = data.contactName.split(" ");
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
+
+      const notes = [
+        `Business Name: ${data.businessName}`,
+        `Business Type: ${data.businessType}`,
+        `Coverage Interests: ${coverageLabels.join(", ")}`,
+        data.message ? `Additional Info: ${data.message}` : null,
+      ].filter(Boolean).join("\n");
+
+      const response = await submitForm({
+        form_name: "Business Insurance Inquiry",
+        first_name: firstName,
+        last_name: lastName,
+        email: data.email,
+        phone: data.phone,
+        company_name: data.businessName,
+        notes,
+        tags: ["Business Insurance", "Recinos"],
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
 
       setIsSubmitted(true);
       toast({

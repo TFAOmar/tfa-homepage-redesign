@@ -22,8 +22,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Send, UserPlus, Building2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const careersFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50, "First name must be less than 50 characters"),
@@ -42,10 +42,23 @@ const careersFormSchema = z.object({
 
 type CareersFormData = z.infer<typeof careersFormSchema>;
 
+const careerInterestLabels: Record<string, string> = {
+  agent: "Licensed Agent",
+  franchise: "Franchise Opportunity",
+  both: "Both Options",
+};
+
+const experienceLabels: Record<string, string> = {
+  none: "No prior experience",
+  "1-2": "1-2 years",
+  "3-5": "3-5 years",
+  "5+": "5+ years",
+};
+
 const CareersInquiryForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const form = useForm<CareersFormData>({
     resolver: zodResolver(careersFormSchema),
@@ -75,14 +88,25 @@ const CareersInquiryForm = () => {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "careers-inquiry",
-          formData: data,
-        },
+      const notes = [
+        `Career Interest: ${careerInterestLabels[data.careerInterest]}`,
+        `Experience: ${experienceLabels[data.experience]}`,
+        data.currentOccupation ? `Current Occupation: ${data.currentOccupation}` : null,
+        data.message ? `Message: ${data.message}` : null,
+      ].filter(Boolean).join("\n");
+
+      const response = await submitForm({
+        form_name: "Careers Inquiry",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        notes,
+        tags: ["Careers", careerInterestLabels[data.careerInterest]],
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
       
       toast({
         title: "Application Submitted!",

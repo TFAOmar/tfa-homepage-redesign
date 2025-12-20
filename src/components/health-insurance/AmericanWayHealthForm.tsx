@@ -21,8 +21,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -35,9 +35,18 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+const insuranceTypeLabels: Record<string, string> = {
+  individual: "Individual Health Insurance",
+  family: "Family Health Plan",
+  business: "Business/Group Health",
+  medicare: "Medicare Supplement",
+  "short-term": "Short-Term Health",
+  "dental-vision": "Dental & Vision",
+};
+
 const AmericanWayHealthForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -61,25 +70,24 @@ const AmericanWayHealthForm = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "health-insurance-inquiry",
-          formData: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            name: `${data.firstName} ${data.lastName}`,
-            email: data.email,
-            phone: data.phone,
-            insuranceType: data.insuranceType,
-            message: data.message || "",
-            partner: "American Way Health",
-            source: "/health-insurance/american-way-health",
-          },
-          additionalRecipients: ["info@awhealthllc.com"],
-        },
+      const notes = [
+        `Insurance Type: ${insuranceTypeLabels[data.insuranceType] || data.insuranceType}`,
+        `Partner: American Way Health`,
+        data.message ? `Message: ${data.message}` : null,
+      ].filter(Boolean).join("\n");
+
+      const response = await submitForm({
+        form_name: "Health Insurance Inquiry",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        notes,
+        tags: ["Health Insurance", insuranceTypeLabels[data.insuranceType] || data.insuranceType, "American Way Health"],
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
 
       toast.success("Thank you! American Way Health will contact you within 24 hours.");
       form.reset();

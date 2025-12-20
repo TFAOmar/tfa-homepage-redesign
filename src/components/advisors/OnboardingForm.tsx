@@ -14,9 +14,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Upload, CheckCircle2, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { uploadAdvisorPhoto, validateImageFile, StorageError } from "@/lib/storage";
+import { submitForm } from "@/lib/formSubmit";
 
 const licenseOptions = ["Life", "Health", "Series 6", "Series 7", "Series 63", "Series 65", "Series 66"];
 const specialtyOptions = [
@@ -88,7 +88,7 @@ const OnboardingForm = () => {
   const [imagePreview, setImagePreview] = useState<string>();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -157,21 +157,38 @@ const OnboardingForm = () => {
       setIsUploading(false);
     }
     
-    // Send email notification
+    // Send to Pipedrive via submitForm
     try {
-      await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "advisor-onboarding",
-          formData: {
-            ...data,
-            firstName: data.name.split(" ")[0],
-            region,
-            image: imageUrl ? "[Image uploaded]" : "No image",
-          },
-        },
+      const nameParts = data.name.split(" ");
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
+
+      const notes = [
+        `Title: ${data.title}`,
+        `Type: ${data.type}`,
+        `Location: ${data.city}, ${data.state} (${region})`,
+        `Years of Experience: ${data.yearsOfExperience}`,
+        `Licenses: ${data.licenses.join(", ")}`,
+        `Specialties: ${data.specialties.join(", ")}`,
+        `Bio: ${data.bio}`,
+        data.passionateBio ? `Passionate Bio: ${data.passionateBio}` : null,
+        data.schedulingLink ? `Scheduling Link: ${data.schedulingLink}` : null,
+        imageUrl ? `Image uploaded` : "No image uploaded",
+      ].filter(Boolean).join("\n");
+
+      await submitForm({
+        form_name: "Advisor Onboarding",
+        first_name: firstName,
+        last_name: lastName,
+        email: data.email,
+        phone: data.phone,
+        state: data.state,
+        notes,
+        tags: ["Advisor Onboarding", "Internal"],
+        honeypot: honeypotValue(),
       });
     } catch (error) {
-      console.error("Email notification error:", error);
+      console.error("Pipedrive notification error:", error);
     }
     
     // Submit to Supabase
@@ -429,10 +446,10 @@ const OnboardingForm = () => {
                     <FormItem>
                       <FormLabel>Years of Experience *</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          min="0"
-                          max="50"
+                        <Input 
+                          type="number" 
+                          min={0} 
+                          max={50}
                           {...field}
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                         />
@@ -448,8 +465,7 @@ const OnboardingForm = () => {
                   render={() => (
                     <FormItem>
                       <FormLabel>Licenses & Certifications *</FormLabel>
-                      <FormDescription>Select all that apply</FormDescription>
-                      <div className="grid md:grid-cols-2 gap-3 mt-2">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                         {licenseOptions.map((license) => (
                           <FormField
                             key={license}
@@ -461,14 +477,14 @@ const OnboardingForm = () => {
                                   <Checkbox
                                     checked={field.value?.includes(license)}
                                     onCheckedChange={(checked) => {
-                                      const newValue = checked
-                                        ? [...field.value, license]
-                                        : field.value.filter((val) => val !== license);
-                                      field.onChange(newValue);
+                                      const updatedLicenses = checked
+                                        ? [...(field.value || []), license]
+                                        : (field.value || []).filter((l) => l !== license);
+                                      field.onChange(updatedLicenses);
                                     }}
                                   />
                                 </FormControl>
-                                <FormLabel className="font-normal cursor-pointer">
+                                <FormLabel className="text-sm font-normal cursor-pointer">
                                   {license}
                                 </FormLabel>
                               </FormItem>
@@ -487,8 +503,7 @@ const OnboardingForm = () => {
                   render={() => (
                     <FormItem>
                       <FormLabel>Specialties *</FormLabel>
-                      <FormDescription>Select your areas of expertise</FormDescription>
-                      <div className="grid md:grid-cols-2 gap-3 mt-2">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                         {specialtyOptions.map((specialty) => (
                           <FormField
                             key={specialty}
@@ -500,79 +515,20 @@ const OnboardingForm = () => {
                                   <Checkbox
                                     checked={field.value?.includes(specialty)}
                                     onCheckedChange={(checked) => {
-                                      const newValue = checked
-                                        ? [...field.value, specialty]
-                                        : field.value.filter((val) => val !== specialty);
-                                      field.onChange(newValue);
+                                      const updatedSpecialties = checked
+                                        ? [...(field.value || []), specialty]
+                                        : (field.value || []).filter((s) => s !== specialty);
+                                      field.onChange(updatedSpecialties);
                                     }}
                                   />
                                 </FormControl>
-                                <FormLabel className="font-normal cursor-pointer">
+                                <FormLabel className="text-sm font-normal cursor-pointer">
                                   {specialty}
                                 </FormLabel>
                               </FormItem>
                             )}
                           />
                         ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Bio Section */}
-            <Card className="glass animate-fade-in" style={{ animationDelay: "300ms" }}>
-              <CardHeader>
-                <CardTitle className="text-navy">About You</CardTitle>
-                <CardDescription>Help clients get to know your approach</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="bio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Professional Bio *</FormLabel>
-                      <FormDescription>
-                        Tell us about your approach to helping families (50-300 characters)
-                      </FormDescription>
-                      <FormControl>
-                        <Textarea
-                          placeholder="I help families build lasting wealth through comprehensive retirement and investment strategies..."
-                          className="resize-none min-h-[100px]"
-                          maxLength={300}
-                          {...field}
-                        />
-                      </FormControl>
-                      <div className="text-xs text-muted-foreground text-right">
-                        {field.value.length}/300
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="passionateBio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>What Makes You Passionate? (Optional)</FormLabel>
-                      <FormDescription>
-                        Share what drives your passion for financial planning (max 300 characters)
-                      </FormDescription>
-                      <FormControl>
-                        <Textarea
-                          placeholder="I'm passionate about empowering families to achieve financial freedom..."
-                          className="resize-none min-h-[100px]"
-                          maxLength={300}
-                          {...field}
-                        />
-                      </FormControl>
-                      <div className="text-xs text-muted-foreground text-right">
-                        {field.value?.length || 0}/300
                       </div>
                       <FormMessage />
                     </FormItem>
@@ -585,16 +541,15 @@ const OnboardingForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Scheduling Link (Optional)</FormLabel>
-                      <FormDescription>
-                        Add your Calendly or booking link
-                      </FormDescription>
                       <FormControl>
-                        <Input
-                          type="url"
-                          placeholder="https://calendly.com/yourname"
-                          {...field}
+                        <Input 
+                          placeholder="https://calendly.com/your-link" 
+                          {...field} 
                         />
                       </FormControl>
+                      <FormDescription>
+                        Add your Calendly or scheduling link for clients to book appointments
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -602,16 +557,79 @@ const OnboardingForm = () => {
               </CardContent>
             </Card>
 
-            {/* Submit */}
-            <div className="flex justify-center animate-fade-in" style={{ animationDelay: "400ms" }}>
+            {/* Bio Section */}
+            <Card className="glass animate-fade-in" style={{ animationDelay: "300ms" }}>
+              <CardHeader>
+                <CardTitle className="text-navy">Your Bio</CardTitle>
+                <CardDescription>Help clients get to know you</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="bio"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Professional Bio *</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Share your experience, approach to financial planning, and what drives you to help clients..."
+                          className="min-h-[120px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        50-300 characters. This appears on your advisor card.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="passionateBio"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>What You're Passionate About (Optional)</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Share what motivates you beyond work - family, hobbies, community involvement..."
+                          className="min-h-[100px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Add a personal touch to connect with clients on a deeper level.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Submit Button */}
+            <div className="flex justify-center">
               <Button
                 type="submit"
-                size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground neuro-button px-12"
-                disabled={isUploading || submitAdvisor.isPending}
+                disabled={submitAdvisor.isPending || isUploading}
+                className="btn-primary-cta px-12 py-6 text-lg"
               >
-                {(isUploading || submitAdvisor.isPending) && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                {isUploading ? "Uploading Photo..." : adminApprovalEnabled ? "Submit for Review" : "Create Profile"}
+                {isUploading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Uploading Image...
+                  </>
+                ) : submitAdvisor.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Submitting...
+                  </>
+                ) : adminApprovalEnabled ? (
+                  "Submit for Approval"
+                ) : (
+                  "Create Your Profile"
+                )}
               </Button>
             </div>
           </form>

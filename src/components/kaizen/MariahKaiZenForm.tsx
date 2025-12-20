@@ -1,10 +1,23 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import KaiZenFormFields, { KaiZenFormData } from "./KaiZenFormFields";
-import type { Json } from "@/integrations/supabase/types";
+import { submitForm } from "@/lib/formSubmit";
+
+const ageRangeLabels: Record<string, string> = {
+  "30-40": "30-40",
+  "41-50": "41-50",
+  "51-60": "51-60",
+  "61+": "61+",
+};
+
+const incomeLabels: Record<string, string> = {
+  "200-300k": "$200,000 - $300,000",
+  "300-500k": "$300,000 - $500,000",
+  "500k-1m": "$500,000 - $1,000,000",
+  "1m+": "$1,000,000+",
+};
 
 const MariahKaiZenForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,7 +29,7 @@ const MariahKaiZenForm = () => {
     ageRange: "",
     householdIncome: "",
   });
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -41,40 +54,25 @@ const MariahKaiZenForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Store in database
-      const { error: dbError } = await supabase
-        .from('form_submissions')
-        .insert([{
-          form_type: 'kai-zen-inquiry',
-          form_data: formData as unknown as Json,
-          email: formData.email,
-          name: `${formData.firstName} ${formData.lastName}`,
-          phone: formData.phone,
-          advisor: 'mariah-lorenzen',
-          source: '/advisors/mariah-lorenzen/kai-zen',
-          status: 'new'
-        }]);
+      const notes = [
+        `Age Range: ${ageRangeLabels[formData.ageRange] || formData.ageRange}`,
+        `Household Income: ${incomeLabels[formData.householdIncome] || formData.householdIncome}`,
+      ].join("\n");
 
-      if (dbError) throw dbError;
-
-      // Send email notification
-      const { error: emailError } = await supabase.functions.invoke('send-form-notification', {
-        body: {
-          formType: 'kai-zen-inquiry',
-          formData: {
-            ...formData,
-            name: `${formData.firstName} ${formData.lastName}`,
-            advisorName: 'Mariah Lorenzen',
-            advisor: 'mariah-lorenzen',
-            source: '/advisors/mariah-lorenzen/kai-zen'
-          },
-          additionalRecipients: ['mariah@tfainsuranceadvisors.com']
-        }
+      const response = await submitForm({
+        form_name: "Kai-Zen Inquiry - Mariah",
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        notes,
+        tags: ["Kai-Zen", "Mariah Lorenzen"],
+        advisor_slug: "mariah-lorenzen",
+        advisor_email: "mariah@tfainsuranceadvisors.com",
+        honeypot: honeypotValue(),
       });
 
-      if (emailError) {
-        console.error('Email notification error:', emailError);
-      }
+      if (!response.ok) throw new Error(response.error);
 
       toast({
         title: "Thank you for your interest!",

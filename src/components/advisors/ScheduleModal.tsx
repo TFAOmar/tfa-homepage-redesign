@@ -6,8 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Calendar, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 interface ScheduleModalProps {
   open: boolean;
@@ -16,6 +16,7 @@ interface ScheduleModalProps {
   advisorEmail?: string;
   advisorImage?: string;
   schedulingLink?: string;
+  advisorSlug?: string;
 }
 
 const ScheduleModal = ({ 
@@ -24,7 +25,8 @@ const ScheduleModal = ({
   advisorName, 
   advisorEmail,
   advisorImage,
-  schedulingLink 
+  schedulingLink,
+  advisorSlug,
 }: ScheduleModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -35,7 +37,7 @@ const ScheduleModal = ({
     message: "",
   });
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -63,27 +65,26 @@ const ScheduleModal = ({
     setIsSubmitting(true);
 
     try {
-      const submissionData = {
-        formType: "schedule-inquiry",
-        formData: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          message: formData.message,
-          advisorName: advisorName,
-          hasSchedulingLink: !!schedulingLink,
-          submittedAt: new Date().toISOString(),
-        },
-        recipientEmail: "leads@tfainsuranceadvisors.com",
-        ...(advisorEmail && { additionalRecipients: [advisorEmail] }),
-      };
+      const notes = [
+        `Advisor: ${advisorName}`,
+        `Has Scheduling Link: ${schedulingLink ? "Yes" : "No"}`,
+        formData.message ? `Message: ${formData.message}` : null,
+      ].filter(Boolean).join("\n");
 
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: submissionData,
+      const response = await submitForm({
+        form_name: "Schedule Request",
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        notes,
+        tags: ["Schedule Request", advisorName],
+        advisor_slug: advisorSlug,
+        advisor_email: advisorEmail,
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
 
       toast({
         title: "Request Submitted!",
