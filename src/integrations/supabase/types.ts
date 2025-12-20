@@ -48,6 +48,9 @@ export type Database = {
           name: string
           passionate_bio: string | null
           phone: string
+          pipedrive_pipeline_id: number | null
+          pipedrive_stage_id: number | null
+          pipedrive_user_id: number | null
           region: string
           rejection_reason: string | null
           scheduling_link: string | null
@@ -72,6 +75,9 @@ export type Database = {
           name: string
           passionate_bio?: string | null
           phone: string
+          pipedrive_pipeline_id?: number | null
+          pipedrive_stage_id?: number | null
+          pipedrive_user_id?: number | null
           region: string
           rejection_reason?: string | null
           scheduling_link?: string | null
@@ -96,6 +102,9 @@ export type Database = {
           name?: string
           passionate_bio?: string | null
           phone?: string
+          pipedrive_pipeline_id?: number | null
+          pipedrive_stage_id?: number | null
+          pipedrive_user_id?: number | null
           region?: string
           rejection_reason?: string | null
           scheduling_link?: string | null
@@ -113,51 +122,105 @@ export type Database = {
       form_submissions: {
         Row: {
           advisor: string | null
+          advisor_slug: string | null
           created_at: string | null
           email: string | null
           email_sent: boolean | null
+          error_message: string | null
+          first_name: string | null
           form_data: Json
           form_type: string
           id: string
+          last_name: string | null
           name: string | null
           notes: string | null
           partner: string | null
           phone: string | null
+          pipedrive_deal_id: number | null
+          pipedrive_lead_id: string | null
+          pipedrive_org_id: number | null
+          pipedrive_owner_id: number | null
+          pipedrive_person_id: number | null
+          preferred_language: string | null
+          routing_result: string | null
           source: string | null
+          source_url: string | null
+          state_location: string | null
           status: string | null
           updated_at: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
         }
         Insert: {
           advisor?: string | null
+          advisor_slug?: string | null
           created_at?: string | null
           email?: string | null
           email_sent?: boolean | null
+          error_message?: string | null
+          first_name?: string | null
           form_data: Json
           form_type: string
           id?: string
+          last_name?: string | null
           name?: string | null
           notes?: string | null
           partner?: string | null
           phone?: string | null
+          pipedrive_deal_id?: number | null
+          pipedrive_lead_id?: string | null
+          pipedrive_org_id?: number | null
+          pipedrive_owner_id?: number | null
+          pipedrive_person_id?: number | null
+          preferred_language?: string | null
+          routing_result?: string | null
           source?: string | null
+          source_url?: string | null
+          state_location?: string | null
           status?: string | null
           updated_at?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
         Update: {
           advisor?: string | null
+          advisor_slug?: string | null
           created_at?: string | null
           email?: string | null
           email_sent?: boolean | null
+          error_message?: string | null
+          first_name?: string | null
           form_data?: Json
           form_type?: string
           id?: string
+          last_name?: string | null
           name?: string | null
           notes?: string | null
           partner?: string | null
           phone?: string | null
+          pipedrive_deal_id?: number | null
+          pipedrive_lead_id?: string | null
+          pipedrive_org_id?: number | null
+          pipedrive_owner_id?: number | null
+          pipedrive_person_id?: number | null
+          preferred_language?: string | null
+          routing_result?: string | null
           source?: string | null
+          source_url?: string | null
+          state_location?: string | null
           status?: string | null
           updated_at?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
         Relationships: []
       }
@@ -209,6 +272,60 @@ export type Database = {
           resume_token?: string | null
           status?: Database["public"]["Enums"]["application_status"]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      pipedrive_custom_fields: {
+        Row: {
+          created_at: string | null
+          entity_type: string
+          field_name: string
+          id: string
+          pipedrive_key: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          entity_type: string
+          field_name: string
+          id?: string
+          pipedrive_key: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          entity_type?: string
+          field_name?: string
+          id?: string
+          pipedrive_key?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      system_settings: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          key: string
+          updated_at: string | null
+          value: Json
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          key: string
+          updated_at?: string | null
+          value: Json
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: Json
         }
         Relationships: []
       }
