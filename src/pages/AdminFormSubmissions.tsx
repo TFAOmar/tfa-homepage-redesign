@@ -56,7 +56,6 @@ interface FormSubmission {
   advisor: string | null;
   pipedrive_person_id: number | null;
   pipedrive_lead_id: string | null;
-  pipedrive_deal_id: number | null;
   pipedrive_owner_id: number | null;
   error_message: string | null;
   source_url: string | null;
@@ -341,12 +340,8 @@ const AdminFormSubmissions = () => {
                           {submission.pipedrive_lead_id && (
                             <p>Lead: {submission.pipedrive_lead_id.slice(0, 8)}...</p>
                           )}
-                          {submission.pipedrive_deal_id && (
-                            <p>Deal: {submission.pipedrive_deal_id}</p>
-                          )}
                           {!submission.pipedrive_person_id &&
-                            !submission.pipedrive_lead_id &&
-                            !submission.pipedrive_deal_id && (
+                            !submission.pipedrive_lead_id && (
                               <span className="text-muted-foreground">—</span>
                             )}
                         </div>
@@ -454,10 +449,6 @@ const AdminFormSubmissions = () => {
                       <div>
                         <span className="text-muted-foreground">Lead ID:</span>{" "}
                         {selectedSubmission.pipedrive_lead_id || "—"}
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Deal ID:</span>{" "}
-                        {selectedSubmission.pipedrive_deal_id || "—"}
                       </div>
                       <div>
                         <span className="text-muted-foreground">Owner ID:</span>{" "}

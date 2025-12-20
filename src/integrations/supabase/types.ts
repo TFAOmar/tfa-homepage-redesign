@@ -48,8 +48,6 @@ export type Database = {
           name: string
           passionate_bio: string | null
           phone: string
-          pipedrive_pipeline_id: number | null
-          pipedrive_stage_id: number | null
           pipedrive_user_id: number | null
           region: string
           rejection_reason: string | null
@@ -75,8 +73,6 @@ export type Database = {
           name: string
           passionate_bio?: string | null
           phone: string
-          pipedrive_pipeline_id?: number | null
-          pipedrive_stage_id?: number | null
           pipedrive_user_id?: number | null
           region: string
           rejection_reason?: string | null
@@ -102,8 +98,6 @@ export type Database = {
           name?: string
           passionate_bio?: string | null
           phone?: string
-          pipedrive_pipeline_id?: number | null
-          pipedrive_stage_id?: number | null
           pipedrive_user_id?: number | null
           region?: string
           rejection_reason?: string | null
@@ -136,7 +130,6 @@ export type Database = {
           notes: string | null
           partner: string | null
           phone: string | null
-          pipedrive_deal_id: number | null
           pipedrive_lead_id: string | null
           pipedrive_org_id: number | null
           pipedrive_owner_id: number | null
@@ -170,7 +163,6 @@ export type Database = {
           notes?: string | null
           partner?: string | null
           phone?: string | null
-          pipedrive_deal_id?: number | null
           pipedrive_lead_id?: string | null
           pipedrive_org_id?: number | null
           pipedrive_owner_id?: number | null
@@ -204,7 +196,6 @@ export type Database = {
           notes?: string | null
           partner?: string | null
           phone?: string | null
-          pipedrive_deal_id?: number | null
           pipedrive_lead_id?: string | null
           pipedrive_org_id?: number | null
           pipedrive_owner_id?: number | null

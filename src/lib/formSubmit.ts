@@ -31,7 +31,6 @@ export interface FormSubmitResponse {
     person_id?: number;
     org_id?: number;
     lead_id?: string;
-    deal_id?: number;
   };
   submission_id?: string;
   duplicate?: boolean;
