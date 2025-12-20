@@ -24,6 +24,7 @@ import {
 import { HelpCircle, CheckCircle2 } from "lucide-react";
 import { Step1Data } from "@/types/lifeInsuranceApplication";
 import { ValidatedInput } from "../ValidatedInput";
+import { ValidatedSSNInput } from "../ValidatedSSNInput";
 import { cn } from "@/lib/utils";
 
 const US_STATES = [
@@ -180,12 +181,11 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                     </Tooltip>
                   </FormLabel>
                   <FormControl>
-                    <ValidatedInput 
-                      placeholder="XXX-XX-XXXX" 
-                      className="min-h-[44px]"
+                    <ValidatedSSNInput
                       fieldState={fieldState}
-                      maxLength={11}
-                      {...field} 
+                      className="min-h-[44px]"
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />

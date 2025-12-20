@@ -19,6 +19,8 @@ import { Step3Data } from "@/types/lifeInsuranceApplication";
 import { UserCheck, Building2, FileText, User } from "lucide-react";
 import { ValidatedInput } from "../ValidatedInput";
 import { ValidatedSelectTrigger } from "../ValidatedSelect";
+import { ValidatedSSNInput } from "../ValidatedSSNInput";
+import { ValidatedPhoneInput } from "../ValidatedPhoneInput";
 
 interface Step3Props {
   form: UseFormReturn<Step3Data>;
@@ -164,11 +166,11 @@ const Step3Ownership = ({ form }: Step3Props) => {
                       <FormItem>
                         <FormLabel>Social Security Number *</FormLabel>
                         <FormControl>
-                          <ValidatedInput
-                            placeholder="XXX-XX-XXXX"
+                          <ValidatedSSNInput
                             fieldState={fieldState}
                             className="bg-background/50"
-                            {...field}
+                            value={field.value}
+                            onChange={field.onChange}
                           />
                         </FormControl>
                         <FormMessage />
@@ -489,11 +491,11 @@ const Step3Ownership = ({ form }: Step3Props) => {
                         <FormItem>
                           <FormLabel>Phone *</FormLabel>
                           <FormControl>
-                            <ValidatedInput
-                              placeholder="(555) 123-4567"
+                            <ValidatedPhoneInput
                               fieldState={fieldState}
                               className="bg-background/50"
-                              {...field}
+                              value={field.value}
+                              onChange={field.onChange}
                             />
                           </FormControl>
                           <FormMessage />

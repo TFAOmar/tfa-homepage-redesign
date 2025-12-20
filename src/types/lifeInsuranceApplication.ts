@@ -1,6 +1,52 @@
 import { z } from "zod";
 
 // ==========================================
+// Validation Helpers
+// ==========================================
+
+// Phone validation - accepts 10-digit numbers (stored unformatted)
+const phoneSchema = z.string()
+  .transform(val => val.replace(/\D/g, '')) // Strip formatting for storage
+  .refine(val => val.length === 0 || val.length === 10, {
+    message: "Phone number must be 10 digits"
+  });
+
+const requiredPhoneSchema = z.string()
+  .transform(val => val.replace(/\D/g, ''))
+  .refine(val => val.length === 10, {
+    message: "Phone number must be 10 digits"
+  });
+
+// SSN validation - accepts 9-digit numbers (stored unformatted)
+const ssnSchema = z.string()
+  .transform(val => val.replace(/\D/g, ''))
+  .refine(val => val.length === 9, {
+    message: "SSN must be 9 digits"
+  })
+  .refine(val => !val.startsWith('000') && !val.startsWith('666') && !val.startsWith('9'), {
+    message: "Invalid SSN format"
+  })
+  .refine(val => val.substring(3, 5) !== '00', {
+    message: "Invalid SSN format"
+  })
+  .refine(val => val.substring(5) !== '0000', {
+    message: "Invalid SSN format"
+  });
+
+const optionalSsnSchema = z.string()
+  .transform(val => val.replace(/\D/g, ''))
+  .refine(val => val.length === 0 || val.length === 9, {
+    message: "SSN must be 9 digits"
+  })
+  .refine(val => {
+    if (val.length === 0) return true;
+    return !val.startsWith('000') && !val.startsWith('666') && !val.startsWith('9');
+  }, {
+    message: "Invalid SSN format"
+  })
+  .optional();
+
+// ==========================================
 // Step 1: Proposed Insured Information
 // ==========================================
 export const step1Schema = z.object({
@@ -9,7 +55,7 @@ export const step1Schema = z.object({
   middleName: z.string().optional(),
   lastName: z.string().min(1, "Last name is required"),
   gender: z.enum(["male", "female", "other"], { required_error: "Gender is required" }),
-  ssn: z.string().min(9, "Valid SSN is required").max(11),
+  ssn: ssnSchema,
   dateOfBirth: z.string().min(1, "Date of birth is required"),
   birthplaceState: z.string().optional(),
   birthplaceCountry: z.string().min(1, "Birthplace country is required"),
@@ -18,7 +64,7 @@ export const step1Schema = z.object({
   homeStreet: z.string().min(1, "Street address is required"),
   homeCity: z.string().min(1, "City is required"),
   homeState: z.string().min(1, "State is required"),
-  homeZip: z.string().min(5, "Valid ZIP code is required"),
+  homeZip: z.string().min(5, "Valid ZIP code is required").max(10),
 
   // Mailing Address (conditional)
   mailingAddressDifferent: z.boolean().default(false),
@@ -62,10 +108,10 @@ export type Step1Data = z.infer<typeof step1Schema>;
 // Step 2: Contact & Employment
 // ==========================================
 export const step2Schema = z.object({
-  // Contact
-  homePhone: z.string().optional(),
-  mobilePhone: z.string().min(10, "Mobile phone is required"),
-  workPhone: z.string().optional(),
+  // Contact - using phone schemas for proper validation
+  homePhone: phoneSchema.optional(),
+  mobilePhone: requiredPhoneSchema,
+  workPhone: phoneSchema.optional(),
   email: z.string().email("Valid email is required"),
 
   // Employment
@@ -97,7 +143,7 @@ export const step3Schema = z.object({
   // Owner Information (if different from insured)
   ownerType: z.enum(["individual", "trust", "business"]).optional(),
   ownerName: z.string().optional(),
-  ownerSSN: z.string().optional(),
+  ownerSSN: optionalSsnSchema, // SSN/TIN/EIN with validation
   ownerDateOfBirth: z.string().optional(),
   ownerTrustDate: z.string().optional(),
   ownerRelationshipToInsured: z.string().optional(),
@@ -106,7 +152,7 @@ export const step3Schema = z.object({
   ownerState: z.string().optional(),
   ownerZip: z.string().optional(),
   ownerEmail: z.string().optional(),
-  ownerPhone: z.string().optional(),
+  ownerPhone: phoneSchema.optional(), // Phone with validation
   ownerCitizenshipStatus: z.enum(["usa", "other"]).optional(),
   ownerCountryOfCitizenship: z.string().optional(),
   trusteeNames: z.string().optional(), // For trust owners
@@ -121,13 +167,13 @@ export const beneficiarySchema = z.object({
   id: z.string(),
   fullName: z.string().min(1, "Beneficiary name is required"),
   relationship: z.string().min(1, "Relationship is required"),
-  ssn: z.string().optional(),
+  ssn: optionalSsnSchema, // SSN with validation
   dateOfBirth: z.string().optional(),
   street: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
   zip: z.string().optional(),
-  phone: z.string().optional(),
+  phone: phoneSchema.optional(), // Phone with validation
   email: z.string().optional(),
   sharePercentage: z.number().min(0).max(100, "Share must be between 0-100%"),
   designation: z.enum(["primary", "contingent"]),
