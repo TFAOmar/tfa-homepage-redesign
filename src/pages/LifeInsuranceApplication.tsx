@@ -69,13 +69,13 @@ const LifeInsuranceApplication = () => {
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30">
-        {/* Header */}
-        <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-4">
+        {/* Header - Sticky with safe area support */}
+        <header className="border-b border-border bg-background/95 backdrop-blur-md sticky top-0 z-50 safe-area-inset">
+          <div className="container mx-auto px-3 md:px-4 py-3 md:py-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 md:gap-4">
                 <Link to={advisor ? `/advisors/${advisorSlug}` : "/"}>
-                  <img src={tfaLogo} alt="TFA" className="h-10 w-auto" />
+                  <img src={tfaLogo} alt="TFA" className="h-8 md:h-10 w-auto" />
                 </Link>
                 <div className="hidden md:block h-6 w-px bg-border" />
                 <div className="hidden md:block">
@@ -84,16 +84,17 @@ const LifeInsuranceApplication = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 md:gap-3">
                 <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
                   <Shield className="w-4 h-4 text-primary" />
-                  <span>256-bit SSL Encrypted</span>
+                  <span className="hidden md:inline">256-bit SSL Encrypted</span>
+                  <span className="md:hidden">Secure</span>
                 </div>
                 {advisor && (
                   <Link to={`/advisors/${advisorSlug}`}>
-                    <Button variant="ghost" size="sm" className="gap-2">
+                    <Button variant="ghost" size="sm" className="gap-1 md:gap-2 min-h-[44px] px-2 md:px-3">
                       <ArrowLeft className="w-4 h-4" />
-                      Back to {advisor.name}
+                      <span className="hidden sm:inline">Back to {advisor.name}</span>
                     </Button>
                   </Link>
                 )}
@@ -102,14 +103,14 @@ const LifeInsuranceApplication = () => {
           </div>
         </header>
 
-        {/* Main Content */}
-        <main className="container mx-auto px-4 py-8">
-          {/* Page Title */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+        {/* Main Content - Mobile optimized padding */}
+        <main className="container mx-auto px-3 md:px-4 py-4 md:py-8 pb-safe">
+          {/* Page Title - Smaller on mobile */}
+          <div className="text-center mb-6 md:mb-8">
+            <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-2">
               Life Insurance Application
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto px-2">
               Complete this secure application to get started with your life insurance coverage.
               {advisor && (
                 <span className="block mt-1">

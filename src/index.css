@@ -165,6 +165,25 @@ All colors MUST be HSL.
   input[type="number"] {
     -moz-appearance: textfield;
   }
+  
+  /* Mobile safe area support for notched devices */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 16px);
+  }
+  
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  /* Touch-friendly minimum heights */
+  .touch-target {
+    min-height: 44px;
+  }
 }
 
 @layer base {

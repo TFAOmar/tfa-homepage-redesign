@@ -43,22 +43,22 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
 
   return (
     <Form {...form}>
-      <div className="space-y-8">
+      <div className="space-y-6 md:space-y-8">
         {/* Personal ID Section */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+        <div className="space-y-3 md:space-y-4">
+          <h3 className="text-base md:text-lg font-semibold text-foreground border-b border-border pb-2">
             Personal Information
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">First Name *</FormLabel>
                   <FormControl>
-                    <Input placeholder="John" {...field} />
+                    <Input placeholder="John" className="min-h-[44px]" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,7 +94,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
             <FormField
               control={form.control}
               name="gender"
@@ -157,7 +157,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
             <FormField
               control={form.control}
               name="birthplaceCountry"
@@ -200,8 +200,8 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
         </div>
 
         {/* Home Address Section */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+        <div className="space-y-3 md:space-y-4">
+          <h3 className="text-base md:text-lg font-semibold text-foreground border-b border-border pb-2">
             Home Address
           </h3>
 
@@ -219,7 +219,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
             <FormField
               control={form.control}
               name="homeCity"
@@ -274,12 +274,11 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             />
           </div>
 
-          {/* Mailing Address Different Checkbox */}
           <FormField
             control={form.control}
             name="mailingAddressDifferent"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-4 bg-muted/30">
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-3 md:p-4 bg-muted/30 min-h-[52px]">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -293,9 +292,8 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             )}
           />
 
-          {/* Conditional Mailing Address Fields */}
           {watchMailingDifferent && (
-            <div className="space-y-4 p-4 border border-border rounded-lg bg-muted/20">
+            <div className="space-y-3 md:space-y-4 p-3 md:p-4 border border-border rounded-lg bg-muted/20">
               <h4 className="font-medium text-foreground">Mailing Address</h4>
 
               <FormField
@@ -312,7 +310,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                 )}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
                 <FormField
                   control={form.control}
                   name="mailingCity"
@@ -371,8 +369,8 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
         </div>
 
         {/* Citizenship Section */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+        <div className="space-y-3 md:space-y-4">
+          <h3 className="text-base md:text-lg font-semibold text-foreground border-b border-border pb-2">
             Citizenship
           </h3>
 
@@ -398,12 +396,11 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
             )}
           />
 
-          {/* Conditional Immigration Fields */}
           {watchCitizenship === "other" && (
-            <div className="space-y-4 p-4 border border-border rounded-lg bg-muted/20">
+            <div className="space-y-3 md:space-y-4 p-3 md:p-4 border border-border rounded-lg bg-muted/20">
               <h4 className="font-medium text-foreground">Immigration Details</h4>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                 <FormField
                   control={form.control}
                   name="countryOfCitizenship"
@@ -433,7 +430,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                 <FormField
                   control={form.control}
                   name="visaType"

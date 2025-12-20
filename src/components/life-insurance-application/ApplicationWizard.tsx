@@ -569,13 +569,13 @@ const ApplicationWizard = ({
 
       {/* Main Card */}
       <Card className="border-border bg-card/50 backdrop-blur-sm">
-        <CardHeader className="border-b border-border">
-          <div className="flex items-center justify-between">
+        <CardHeader className="border-b border-border px-4 py-4 md:px-6 md:py-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <CardTitle className="text-2xl">
+              <CardTitle className="text-xl md:text-2xl">
                 Step {currentStep}: {currentStepInfo?.title}
               </CardTitle>
-              <CardDescription className="mt-1">
+              <CardDescription className="mt-1 text-sm">
                 {currentStep === 9 
                   ? "Review all information carefully before submitting"
                   : "Complete all required fields marked with *"
@@ -583,7 +583,7 @@ const ApplicationWizard = ({
               </CardDescription>
             </div>
             {advisorName && (
-              <div className="text-right text-sm">
+              <div className="text-left sm:text-right text-sm border-t sm:border-t-0 pt-2 sm:pt-0">
                 <p className="text-muted-foreground">Your Advisor</p>
                 <p className="font-medium text-foreground">{advisorName}</p>
               </div>
@@ -591,22 +591,23 @@ const ApplicationWizard = ({
           </div>
         </CardHeader>
 
-        <CardContent className="p-6">
+        <CardContent className="p-4 md:p-6">
           {/* Step Content */}
           {renderStep()}
 
-          {/* Navigation Buttons */}
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-            <div className="flex gap-2">
+          {/* Navigation Buttons - Mobile optimized */}
+          <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between mt-6 md:mt-8 pt-4 md:pt-6 border-t border-border">
+            {/* Secondary actions */}
+            <div className="flex flex-row gap-2">
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleBack}
                 disabled={currentStep === 1}
-                className="gap-2"
+                className="flex-1 sm:flex-auto min-h-[44px] gap-1 sm:gap-2"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Back
+                <span className="hidden sm:inline">Back</span>
               </Button>
 
               <Button
@@ -614,14 +615,14 @@ const ApplicationWizard = ({
                 variant="ghost"
                 onClick={handleSaveDraft}
                 disabled={isSaving}
-                className="gap-2"
+                className="flex-1 sm:flex-auto min-h-[44px] gap-1 sm:gap-2"
               >
                 {isSaving ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <Save className="w-4 h-4" />
                 )}
-                Save Draft
+                <span className="hidden sm:inline">Save Draft</span>
               </Button>
 
               <Button
@@ -629,18 +630,19 @@ const ApplicationWizard = ({
                 variant="ghost"
                 onClick={handleSaveAndExit}
                 disabled={isSaving}
-                className="gap-2 text-muted-foreground hover:text-foreground"
+                className="flex-1 sm:flex-auto min-h-[44px] gap-1 sm:gap-2 text-muted-foreground hover:text-foreground"
               >
                 <LogOut className="w-4 h-4" />
-                Save & Exit
+                <span className="hidden sm:inline">Save & Exit</span>
               </Button>
             </div>
 
+            {/* Primary action - full width on mobile */}
             <Button
               type="button"
               onClick={handleNext}
               disabled={isSubmitting}
-              className="gap-2"
+              className="w-full sm:w-auto min-h-[48px] sm:min-h-[44px] gap-2 text-base sm:text-sm"
             >
               {isSubmitting ? (
                 <>
