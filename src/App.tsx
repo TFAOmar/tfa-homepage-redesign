@@ -70,7 +70,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/services/estate-planning', '/services/income-planning', '/services/investment-management', '/services/tax-planning', '/services/healthcare-planning', '/services/annuities', '/services/401k-rollovers', '/services/insurance', '/services/group-retirement', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/life-insurance-application'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/life-insurance-application'];
 
 const AppLayout = () => {
   const location = useLocation();

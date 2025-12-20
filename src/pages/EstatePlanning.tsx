@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
+import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Phone, Shield, Lock, Users, FileText, Scale, CheckCircle, ChevronRight } from "lucide-react";
-import tfaLogo from "@/assets/tfa-logo.png";
+import { Shield, Lock, Users, FileText, Scale, CheckCircle, ChevronRight } from "lucide-react";
 import { EstatePlanningForm } from "@/components/estate-planning/EstatePlanningForm";
 import {
   Accordion,
@@ -48,28 +47,8 @@ const EstatePlanning = () => {
         generateFAQSchema(estatePlanningFaqs)
       ]} />
     <div className="min-h-screen bg-background">
-      {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-xl border-b border-white/10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <img src={tfaLogo} alt="The Financial Architects" className="h-10 w-auto" />
-            </Link>
-            <div className="flex items-center gap-4">
-              <a href="tel:8883505396" className="hidden sm:flex items-center gap-2 text-white/80 hover:text-white transition-colors">
-                <Phone className="h-4 w-4" />
-                <span className="text-sm font-medium">(888) 350-5396</span>
-              </a>
-              <Button onClick={scrollToForm} className="btn-primary-cta">
-                Start Your Plan
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-40 md:pb-32 bg-gradient-to-b from-navy via-primary to-navy relative overflow-hidden">
+      <section className="pt-24 pb-20 md:pt-32 md:pb-32 bg-gradient-to-b from-navy via-primary to-navy relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(228,181,72,0.08),transparent_50%)]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -441,22 +420,6 @@ const EstatePlanning = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-8 bg-navy text-white/60">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <img src={tfaLogo} alt="The Financial Architects" className="h-8 w-auto" />
-            <p className="text-sm text-center md:text-right">
-              © {new Date().getFullYear()} The Financial Architects. All rights reserved.
-            </p>
-          </div>
-          <p className="text-xs text-white/40 mt-6 max-w-3xl mx-auto text-center">
-            The information provided on this page is for educational purposes only and does not constitute 
-            legal advice. Please consult with a qualified attorney for advice specific to your situation.
-          </p>
-        </div>
-      </footer>
     </div>
     </>
   );
