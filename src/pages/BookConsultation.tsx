@@ -6,11 +6,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
+import { submitForm } from "@/lib/formSubmit";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 
 // Carrier logos
 import allianzLogo from "@/assets/carriers/allianz.png";
@@ -20,8 +21,18 @@ import massmutualLogo from "@/assets/carriers/massmutual.png";
 import principalLogo from "@/assets/carriers/principal.png";
 import nationalLifeLogo from "@/assets/carriers/national-life.png";
 
+const interestLabels: Record<string, string> = {
+  retirement: "Retirement Planning",
+  insurance: "Life Insurance",
+  investment: "Investment Management",
+  tax: "Tax Strategy",
+  estate: "Estate Planning",
+  business: "Business Insurance",
+};
+
 const consultationSchema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100),
+  firstName: z.string().trim().min(1, "First name is required").max(50),
+  lastName: z.string().trim().min(1, "Last name is required").max(50),
   email: z.string().trim().email("Please enter a valid email").max(255),
   phone: z.string().trim().min(1, "Phone number is required").max(20),
   interestCategory: z.string().min(1, "Please select an interest category"),
@@ -33,6 +44,7 @@ const BookConsultation = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { honeypotProps, honeypotValue, isBot } = useHoneypot();
 
   const { register, handleSubmit, formState: { errors } } = useForm<ConsultationFormData>({
     resolver: zodResolver(consultationSchema),
@@ -50,19 +62,28 @@ const BookConsultation = () => {
   }, []);
 
   const onSubmit = async (data: ConsultationFormData) => {
+    // Silently reject bot submissions
+    if (isBot()) {
+      navigate("/thank-you");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "book-consultation",
-          formData: {
-            ...data,
-            source: "book-consultation-page",
-          },
-        },
+      const interestLabel = interestLabels[data.interestCategory] || data.interestCategory;
+      
+      const result = await submitForm({
+        form_name: "Book Consultation",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        notes: `Interest: ${interestLabel}\nSource: book-consultation-page`,
+        tags: [interestLabel, "Consultation Request"],
+        honeypot: honeypotValue,
       });
 
-      if (error) throw error;
+      if (!result.ok) throw new Error(result.error);
 
       // Analytics: Track Schedule event
       if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -210,14 +231,31 @@ const BookConsultation = () => {
                       
                       {/* Form Fields */}
                       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto mb-8">
-                        <div>
-                          <input 
-                            type="text" 
-                            placeholder="Your Full Name" 
-                            {...register("name")}
-                            className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
-                          />
-                          {errors.name && <p className="text-red-500 text-sm mt-1 text-left">{errors.name.message}</p>}
+                        {/* Honeypot field */}
+                        <div className={honeypotClassName}>
+                          <label htmlFor="website_url">Website</label>
+                          <input type="text" id="website_url" name="website_url" {...honeypotProps} />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <input 
+                              type="text" 
+                              placeholder="First Name" 
+                              {...register("firstName")}
+                              className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
+                            />
+                            {errors.firstName && <p className="text-red-500 text-sm mt-1 text-left">{errors.firstName.message}</p>}
+                          </div>
+                          <div>
+                            <input 
+                              type="text" 
+                              placeholder="Last Name" 
+                              {...register("lastName")}
+                              className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all"
+                            />
+                            {errors.lastName && <p className="text-red-500 text-sm mt-1 text-left">{errors.lastName.message}</p>}
+                          </div>
                         </div>
                         <div>
                           <input 
