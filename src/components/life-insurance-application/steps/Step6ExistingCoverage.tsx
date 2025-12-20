@@ -8,12 +8,12 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { CurrencyInput } from "@/components/ui/currency-input";
 import { FileStack, Plus, Trash2 } from "lucide-react";
 import { Step6Data } from "@/types/lifeInsuranceApplication";
+import { ValidatedInput } from "../ValidatedInput";
 
 interface Step6ExistingCoverageProps {
   form: UseFormReturn<Step6Data>;
@@ -129,11 +129,16 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                       <FormField
                         control={form.control}
                         name={`existingPolicies.${index}.companyName`}
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                           <FormItem>
                             <FormLabel className="text-sm md:text-base">Company Name *</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Insurance company name" className="min-h-[44px]" />
+                              <ValidatedInput
+                                placeholder="Insurance company name"
+                                fieldState={fieldState}
+                                className="min-h-[44px]"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -143,11 +148,16 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                       <FormField
                         control={form.control}
                         name={`existingPolicies.${index}.policyNumber`}
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                           <FormItem>
                             <FormLabel className="text-sm md:text-base">Policy Number *</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Policy number" className="min-h-[44px]" />
+                              <ValidatedInput
+                                placeholder="Policy number"
+                                fieldState={fieldState}
+                                className="min-h-[44px]"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

@@ -8,17 +8,17 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Step3Data } from "@/types/lifeInsuranceApplication";
 import { UserCheck, Building2, FileText, User } from "lucide-react";
+import { ValidatedInput } from "../ValidatedInput";
+import { ValidatedSelectTrigger } from "../ValidatedSelect";
 
 interface Step3Props {
   form: UseFormReturn<Step3Data>;
@@ -94,14 +94,14 @@ const Step3Ownership = ({ form }: Step3Props) => {
               <FormField
                 control={form.control}
                 name="ownerType"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel>Select Owner Type *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger className="bg-background/50">
+                        <ValidatedSelectTrigger fieldState={fieldState} className="bg-background/50">
                           <SelectValue placeholder="Select owner type" />
-                        </SelectTrigger>
+                        </ValidatedSelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="individual">
@@ -141,14 +141,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerName"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Full Name *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             placeholder="Full legal name"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -159,14 +160,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerSSN"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Social Security Number *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             placeholder="XXX-XX-XXXX"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -177,14 +179,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerDateOfBirth"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Date of Birth *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             type="date"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -195,14 +198,14 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerRelationshipToInsured"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Relationship to Insured *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="bg-background/50">
+                            <ValidatedSelectTrigger fieldState={fieldState} className="bg-background/50">
                               <SelectValue placeholder="Select relationship" />
-                            </SelectTrigger>
+                            </ValidatedSelectTrigger>
                           </FormControl>
                           <SelectContent>
                             {RELATIONSHIPS.map((rel) => (
@@ -231,14 +234,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerName"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Trust Name *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             placeholder="Name of Trust"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -249,14 +253,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerSSN"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Tax ID Number *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             placeholder="XX-XXXXXXX"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -267,14 +272,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerTrustDate"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Trust Date *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             type="date"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -285,14 +291,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="trusteeNames"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Trustee Name(s) *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             placeholder="Names of trustees"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -314,14 +321,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerName"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Business Name *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             placeholder="Legal entity name"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -332,14 +340,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                   <FormField
                     control={form.control}
                     name="ownerSSN"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Tax ID (EIN) *</FormLabel>
                         <FormControl>
-                          <Input
+                          <ValidatedInput
                             placeholder="XX-XXXXXXX"
-                            {...field}
+                            fieldState={fieldState}
                             className="bg-background/50"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -363,14 +372,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                     <FormField
                       control={form.control}
                       name="ownerStreet"
-                      render={({ field }) => (
+                      render={({ field, fieldState }) => (
                         <FormItem className="md:col-span-2">
                           <FormLabel>Street Address *</FormLabel>
                           <FormControl>
-                            <Input
+                            <ValidatedInput
                               placeholder="123 Main St"
-                              {...field}
+                              fieldState={fieldState}
                               className="bg-background/50"
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -381,14 +391,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                     <FormField
                       control={form.control}
                       name="ownerCity"
-                      render={({ field }) => (
+                      render={({ field, fieldState }) => (
                         <FormItem>
                           <FormLabel>City *</FormLabel>
                           <FormControl>
-                            <Input
+                            <ValidatedInput
                               placeholder="City"
-                              {...field}
+                              fieldState={fieldState}
                               className="bg-background/50"
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -400,14 +411,14 @@ const Step3Ownership = ({ form }: Step3Props) => {
                       <FormField
                         control={form.control}
                         name="ownerState"
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                           <FormItem>
                             <FormLabel>State *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger className="bg-background/50">
+                                <ValidatedSelectTrigger fieldState={fieldState} className="bg-background/50">
                                   <SelectValue placeholder="State" />
-                                </SelectTrigger>
+                                </ValidatedSelectTrigger>
                               </FormControl>
                               <SelectContent>
                                 {US_STATES.map((state) => (
@@ -425,14 +436,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                       <FormField
                         control={form.control}
                         name="ownerZip"
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                           <FormItem>
                             <FormLabel>ZIP *</FormLabel>
                             <FormControl>
-                              <Input
+                              <ValidatedInput
                                 placeholder="12345"
-                                {...field}
+                                fieldState={fieldState}
                                 className="bg-background/50"
+                                {...field}
                               />
                             </FormControl>
                             <FormMessage />
@@ -453,15 +465,16 @@ const Step3Ownership = ({ form }: Step3Props) => {
                     <FormField
                       control={form.control}
                       name="ownerEmail"
-                      render={({ field }) => (
+                      render={({ field, fieldState }) => (
                         <FormItem>
                           <FormLabel>Email *</FormLabel>
                           <FormControl>
-                            <Input
+                            <ValidatedInput
                               type="email"
                               placeholder="email@example.com"
-                              {...field}
+                              fieldState={fieldState}
                               className="bg-background/50"
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -472,14 +485,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                     <FormField
                       control={form.control}
                       name="ownerPhone"
-                      render={({ field }) => (
+                      render={({ field, fieldState }) => (
                         <FormItem>
                           <FormLabel>Phone *</FormLabel>
                           <FormControl>
-                            <Input
+                            <ValidatedInput
                               placeholder="(555) 123-4567"
-                              {...field}
+                              fieldState={fieldState}
                               className="bg-background/50"
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -499,14 +513,14 @@ const Step3Ownership = ({ form }: Step3Props) => {
                     <FormField
                       control={form.control}
                       name="ownerCitizenshipStatus"
-                      render={({ field }) => (
+                      render={({ field, fieldState }) => (
                         <FormItem>
                           <FormLabel>Citizenship Status *</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="bg-background/50">
+                              <ValidatedSelectTrigger fieldState={fieldState} className="bg-background/50">
                                 <SelectValue placeholder="Select citizenship status" />
-                              </SelectTrigger>
+                              </ValidatedSelectTrigger>
                             </FormControl>
                             <SelectContent>
                               <SelectItem value="usa">U.S. Citizen</SelectItem>
@@ -522,14 +536,15 @@ const Step3Ownership = ({ form }: Step3Props) => {
                       <FormField
                         control={form.control}
                         name="ownerCountryOfCitizenship"
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                           <FormItem>
                             <FormLabel>Country of Citizenship *</FormLabel>
                             <FormControl>
-                              <Input
+                              <ValidatedInput
                                 placeholder="Country"
-                                {...field}
+                                fieldState={fieldState}
                                 className="bg-background/50"
+                                {...field}
                               />
                             </FormControl>
                             <FormMessage />

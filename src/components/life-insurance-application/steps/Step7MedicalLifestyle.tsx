@@ -8,19 +8,19 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Cigarette, Plane, Scale, Stethoscope, AlertTriangle } from "lucide-react";
 import { Step7Data } from "@/types/lifeInsuranceApplication";
+import { ValidatedInput } from "../ValidatedInput";
+import { ValidatedSelectTrigger } from "../ValidatedSelect";
+import { ValidatedTextarea } from "../ValidatedTextarea";
 
 interface Step7MedicalLifestyleProps {
   form: UseFormReturn<Step7Data>;
@@ -90,14 +90,14 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="tobaccoType"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="text-sm md:text-base">Type of Tobacco</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger className="min-h-[44px]">
+                        <ValidatedSelectTrigger fieldState={fieldState} className="min-h-[44px]">
                           <SelectValue placeholder="Select type" />
-                        </SelectTrigger>
+                        </ValidatedSelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {TOBACCO_TYPES.map((option) => (
@@ -115,14 +115,14 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="tobaccoFrequency"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="text-sm md:text-base">Frequency</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger className="min-h-[44px]">
+                        <ValidatedSelectTrigger fieldState={fieldState} className="min-h-[44px]">
                           <SelectValue placeholder="Select frequency" />
-                        </SelectTrigger>
+                        </ValidatedSelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {TOBACCO_FREQUENCY.map((option) => (
@@ -140,11 +140,16 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="tobaccoLastUsed"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="text-sm md:text-base">Date Last Used</FormLabel>
                     <FormControl>
-                      <Input {...field} type="date" className="min-h-[44px]" />
+                      <ValidatedInput
+                        type="date"
+                        fieldState={fieldState}
+                        className="min-h-[44px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -189,14 +194,15 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="aviationDetails"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
                     <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
+                      <ValidatedTextarea
                         placeholder="Describe your aviation activities, certifications, and frequency"
+                        fieldState={fieldState}
                         className="min-h-[80px] md:min-h-[100px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -232,14 +238,15 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="hazardousSportsDetails"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
                     <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
+                      <ValidatedTextarea
                         placeholder="List the activities and frequency of participation"
+                        fieldState={fieldState}
                         className="min-h-[80px] md:min-h-[100px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -275,14 +282,15 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="foreignTravelDetails"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
                     <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
+                      <ValidatedTextarea
                         placeholder="List destinations, duration, and purpose of travel"
+                        fieldState={fieldState}
                         className="min-h-[80px] md:min-h-[100px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -328,14 +336,15 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="bankruptcyDetails"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
                     <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
+                      <ValidatedTextarea
                         placeholder="Provide chapter type, date filed, and current status"
+                        fieldState={fieldState}
                         className="min-h-[80px] md:min-h-[100px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -371,14 +380,15 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="criminalHistoryDetails"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
                     <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
+                      <ValidatedTextarea
                         placeholder="Describe the nature of offense, date, and resolution"
+                        fieldState={fieldState}
                         className="min-h-[80px] md:min-h-[100px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -414,14 +424,15 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
               <FormField
                 control={form.control}
                 name="drivingViolationsDetails"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
                     <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
+                      <ValidatedTextarea
                         placeholder="Describe the violation(s), date(s), and any court outcomes"
+                        fieldState={fieldState}
                         className="min-h-[80px] md:min-h-[100px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -473,14 +484,15 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
             <FormField
               control={form.control}
               name="medicalConditionsDetails"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem className="pl-0 sm:pl-4 border-l-0 sm:border-l-2 sm:border-primary/20">
                   <FormLabel className="text-sm md:text-base">Please provide details</FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
+                    <ValidatedTextarea
                       placeholder="List conditions, dates of diagnosis, treatments, and current status"
+                      fieldState={fieldState}
                       className="min-h-[100px] md:min-h-[120px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription className="text-xs md:text-sm">

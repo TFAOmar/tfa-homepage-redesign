@@ -1,12 +1,12 @@
 import { UseFormReturn } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CheckCircle, Edit, User, Briefcase, Users, Heart, FileText, Shield, Stethoscope, CreditCard } from "lucide-react";
 import { Step9Data, LifeInsuranceApplicationData } from "@/types/lifeInsuranceApplication";
+import { ValidatedInput } from "../ValidatedInput";
 
 interface Step9ReviewSubmitProps {
   form: UseFormReturn<Step9Data>;
@@ -363,12 +363,13 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
             <FormField
               control={form.control}
               name="electronicSignature"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Electronic Signature (Type your full legal name) *</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       placeholder="John Michael Smith"
+                      fieldState={fieldState}
                       className="font-serif italic text-base md:text-lg min-h-[48px]"
                       {...field}
                     />
@@ -385,7 +386,12 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Date</FormLabel>
                   <FormControl>
-                    <Input {...field} readOnly className="bg-muted min-h-[48px]" />
+                    <ValidatedInput
+                      readOnly
+                      showSuccessIndicator={false}
+                      className="bg-muted min-h-[48px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

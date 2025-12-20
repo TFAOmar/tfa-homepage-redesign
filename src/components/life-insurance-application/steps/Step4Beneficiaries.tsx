@@ -7,14 +7,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
@@ -26,6 +24,8 @@ import {
 import { PercentageInput } from "@/components/ui/percentage-input";
 import { Step4Data } from "@/types/lifeInsuranceApplication";
 import { Users, Plus, Trash2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ValidatedInput } from "../ValidatedInput";
+import { ValidatedSelectTrigger } from "../ValidatedSelect";
 
 interface Step4Props {
   form: UseFormReturn<Step4Data>;
@@ -181,14 +181,15 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.fullName`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>Full Name *</FormLabel>
                               <FormControl>
-                                <Input
+                                <ValidatedInput
                                   placeholder="Full legal name"
-                                  {...field}
+                                  fieldState={fieldState}
                                   className="bg-background/50"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -199,14 +200,14 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.relationship`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>Relationship *</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="bg-background/50">
+                                  <ValidatedSelectTrigger fieldState={fieldState} className="bg-background/50">
                                     <SelectValue placeholder="Select" />
-                                  </SelectTrigger>
+                                  </ValidatedSelectTrigger>
                                 </FormControl>
                                 <SelectContent>
                                   {RELATIONSHIPS.map((rel) => (
@@ -279,14 +280,16 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.ssn`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>SSN</FormLabel>
                               <FormControl>
-                                <Input
+                                <ValidatedInput
                                   placeholder="XXX-XX-XXXX"
-                                  {...field}
+                                  fieldState={fieldState}
+                                  showSuccessIndicator={false}
                                   className="bg-background/50"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -297,14 +300,16 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.dateOfBirth`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>Date of Birth</FormLabel>
                               <FormControl>
-                                <Input
+                                <ValidatedInput
                                   type="date"
-                                  {...field}
+                                  fieldState={fieldState}
+                                  showSuccessIndicator={false}
                                   className="bg-background/50"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -315,14 +320,16 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.phone`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>Phone</FormLabel>
                               <FormControl>
-                                <Input
+                                <ValidatedInput
                                   placeholder="(555) 123-4567"
-                                  {...field}
+                                  fieldState={fieldState}
+                                  showSuccessIndicator={false}
                                   className="bg-background/50"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -335,15 +342,17 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.email`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>Email</FormLabel>
                               <FormControl>
-                                <Input
+                                <ValidatedInput
                                   type="email"
                                   placeholder="email@example.com"
-                                  {...field}
+                                  fieldState={fieldState}
+                                  showSuccessIndicator={false}
                                   className="bg-background/50"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -354,14 +363,16 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.street`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>Street Address</FormLabel>
                               <FormControl>
-                                <Input
+                                <ValidatedInput
                                   placeholder="123 Main St"
-                                  {...field}
+                                  fieldState={fieldState}
+                                  showSuccessIndicator={false}
                                   className="bg-background/50"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -374,14 +385,16 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.city`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>City</FormLabel>
                               <FormControl>
-                                <Input
+                                <ValidatedInput
                                   placeholder="City"
-                                  {...field}
+                                  fieldState={fieldState}
+                                  showSuccessIndicator={false}
                                   className="bg-background/50"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -392,14 +405,14 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.state`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>State</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="bg-background/50">
+                                  <ValidatedSelectTrigger fieldState={fieldState} showSuccessIndicator={false} className="bg-background/50">
                                     <SelectValue placeholder="State" />
-                                  </SelectTrigger>
+                                  </ValidatedSelectTrigger>
                                 </FormControl>
                                 <SelectContent>
                                   {US_STATES.map((state) => (
@@ -417,14 +430,16 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                         <FormField
                           control={form.control}
                           name={`beneficiaries.${index}.zip`}
-                          render={({ field }) => (
+                          render={({ field, fieldState }) => (
                             <FormItem>
                               <FormLabel>ZIP</FormLabel>
                               <FormControl>
-                                <Input
+                                <ValidatedInput
                                   placeholder="12345"
-                                  {...field}
+                                  fieldState={fieldState}
+                                  showSuccessIndicator={false}
                                   className="bg-background/50"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormMessage />

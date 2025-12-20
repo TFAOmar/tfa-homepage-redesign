@@ -7,11 +7,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { CurrencyInput } from "@/components/ui/currency-input";
 import { Step2Data } from "@/types/lifeInsuranceApplication";
 import { Phone, Briefcase, DollarSign, Users } from "lucide-react";
+import { ValidatedInput } from "../ValidatedInput";
+import { ValidatedTextarea } from "../ValidatedTextarea";
 
 interface Step2Props {
   form: UseFormReturn<Step2Data>;
@@ -32,14 +32,15 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             <FormField
               control={form.control}
               name="mobilePhone"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Mobile Phone *</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       placeholder="(555) 123-4567"
-                      {...field}
+                      fieldState={fieldState}
                       className="bg-background/50 min-h-[44px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -50,14 +51,16 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             <FormField
               control={form.control}
               name="homePhone"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Home Phone</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       placeholder="(555) 123-4567"
-                      {...field}
+                      fieldState={fieldState}
+                      showSuccessIndicator={false}
                       className="bg-background/50 min-h-[44px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -68,14 +71,16 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             <FormField
               control={form.control}
               name="workPhone"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Work Phone</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       placeholder="(555) 123-4567"
-                      {...field}
+                      fieldState={fieldState}
+                      showSuccessIndicator={false}
                       className="bg-background/50 min-h-[44px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -86,15 +91,16 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Email Address *</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       type="email"
                       placeholder="email@example.com"
-                      {...field}
+                      fieldState={fieldState}
                       className="bg-background/50 min-h-[44px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -115,14 +121,15 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             <FormField
               control={form.control}
               name="employerName"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Employer Name *</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       placeholder="Company Name"
-                      {...field}
+                      fieldState={fieldState}
                       className="bg-background/50 min-h-[44px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -133,14 +140,15 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             <FormField
               control={form.control}
               name="occupation"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Occupation *</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       placeholder="Job Title"
-                      {...field}
+                      fieldState={fieldState}
                       className="bg-background/50 min-h-[44px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -151,14 +159,16 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             <FormField
               control={form.control}
               name="industry"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Industry</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       placeholder="e.g., Technology, Healthcare"
-                      {...field}
+                      fieldState={fieldState}
+                      showSuccessIndicator={false}
                       className="bg-background/50 min-h-[44px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -169,15 +179,16 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
             <FormField
               control={form.control}
               name="yearsEmployed"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-sm md:text-base">Years Employed</FormLabel>
                   <FormControl>
-                    <Input
+                    <ValidatedInput
                       type="number"
                       min={0}
                       placeholder="0"
-                      {...field}
+                      fieldState={fieldState}
+                      showSuccessIndicator={false}
                       onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
                       value={field.value ?? ""}
                       className="bg-background/50 min-h-[44px]"
@@ -192,14 +203,16 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
           <FormField
             control={form.control}
             name="jobDuties"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel className="text-sm md:text-base">Job Duties</FormLabel>
                 <FormControl>
-                  <Textarea
+                  <ValidatedTextarea
                     placeholder="Briefly describe your job responsibilities..."
-                    {...field}
+                    fieldState={fieldState}
+                    showSuccessIndicator={false}
                     className="bg-background/50 min-h-[100px]"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
