@@ -47,7 +47,6 @@ import {
 interface ApplicationWizardProps {
   advisorId?: string;
   advisorName?: string;
-  advisorEmail?: string;
 }
 
 // Generate a cryptographically secure resume token
@@ -60,7 +59,6 @@ const generateResumeToken = () => {
 const ApplicationWizard = ({
   advisorId,
   advisorName,
-  advisorEmail,
 }: ApplicationWizardProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -153,7 +151,6 @@ const ApplicationWizard = ({
       completedSteps,
       advisorId,
       advisorName,
-      advisorEmail,
       lastSaved: new Date().toISOString(),
       draftId,
       resumeToken: token,
@@ -186,7 +183,6 @@ const ApplicationWizard = ({
             status: "draft",
             advisor_id: advisorId || null,
             advisor_name: advisorName || null,
-            advisor_email: advisorEmail || null,
             applicant_name: applicantName || null,
             applicant_email: applicantEmail,
             applicant_phone: applicantPhone,
@@ -217,7 +213,7 @@ const ApplicationWizard = ({
       console.error("Error saving draft to server:", error);
       // Still saved to localStorage, so don't show error
     }
-  }, [getCurrentFormData, currentStep, completedSteps, advisorId, advisorName, advisorEmail, draftId, resumeToken, toast]);
+  }, [getCurrentFormData, currentStep, completedSteps, advisorId, advisorName, draftId, resumeToken, toast]);
 
   // Check for resume token in URL
   useEffect(() => {
@@ -476,7 +472,6 @@ const ApplicationWizard = ({
             status: "draft",
             advisor_id: advisorId || null,
             advisor_name: advisorName || null,
-            advisor_email: advisorEmail || null,
             applicant_name: applicantName,
             applicant_email: applicantEmail,
             applicant_phone: applicantPhone,
@@ -526,7 +521,7 @@ const ApplicationWizard = ({
 
       console.log("Application submitted successfully");
 
-      // Send email notifications
+      // Send email notifications (advisor email is fetched server-side using advisorId)
       try {
         console.log("Sending life insurance notification emails...");
         const { error: emailError } = await supabase.functions.invoke(
@@ -537,8 +532,8 @@ const ApplicationWizard = ({
               applicantName,
               applicantEmail,
               applicantPhone,
+              advisorId: advisorId || null,
               advisorName: advisorName || null,
-              advisorEmail: advisorEmail || null,
               formData: finalFormData,
             },
           }

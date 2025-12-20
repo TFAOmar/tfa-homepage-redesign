@@ -2,8 +2,14 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import jsPDF from "https://esm.sh/jspdf@2.5.1?bundle";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+// Create Supabase client with service role for fetching advisor email
+const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -34,8 +40,8 @@ const notificationRequestSchema = z.object({
   applicantName: z.string().min(1).max(200),
   applicantEmail: z.string().email().max(255),
   applicantPhone: z.string().max(30).optional(),
+  advisorId: z.string().uuid().optional().or(z.literal("")).or(z.null()),
   advisorName: z.string().max(200).optional(),
-  advisorEmail: z.string().email().max(255).optional().or(z.literal("")),
   formData: z.object({
     step1: z.object({
       firstName: z.string().max(100).optional(),
@@ -385,7 +391,12 @@ const addPdfFooter = (doc: jsPDF, pageWidth: number): void => {
   }
 };
 
-const generateApplicationPdf = (data: NotificationRequest): string => {
+// Extended type that includes advisor email (fetched server-side)
+interface NotificationDataWithEmail extends NotificationRequest {
+  advisorEmail?: string;
+}
+
+const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   console.log("Generating PDF for application:", data.applicationId);
   
   const doc = new jsPDF();
@@ -718,7 +729,7 @@ const generateDataRow = (label: string, value: string, isLink: boolean = false, 
   `;
 };
 
-const generateAdminEmail = (data: NotificationRequest): string => {
+const generateAdminEmail = (data: NotificationDataWithEmail): string => {
   const { applicationId, applicantName, applicantPhone, advisorName, advisorEmail, formData } = data;
   const step1 = formData.step1 || {};
   const step2 = formData.step2 || {};
@@ -945,7 +956,7 @@ const generateAdminEmail = (data: NotificationRequest): string => {
   `;
 };
 
-const generateApplicantEmail = (data: NotificationRequest): string => {
+const generateApplicantEmail = (data: NotificationDataWithEmail): string => {
   const { applicationId, applicantName, advisorName, advisorEmail } = data;
   const firstName = applicantName.split(" ")[0] || "Valued Customer";
 
@@ -1057,10 +1068,32 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Received notification request for application:", data.applicationId);
     console.log("Form data steps received:", Object.keys(data.formData || {}).join(", "));
 
+    // Fetch advisor email server-side using advisorId (keeps PII secure)
+    let advisorEmail: string | undefined;
+    if (data.advisorId) {
+      try {
+        const { data: advisorData, error: advisorError } = await supabaseAdmin
+          .from("dynamic_advisors")
+          .select("email")
+          .eq("id", data.advisorId)
+          .single();
+        
+        if (advisorData && !advisorError) {
+          advisorEmail = advisorData.email;
+          console.log("Fetched advisor email for ID:", data.advisorId);
+        }
+      } catch (e) {
+        console.error("Error fetching advisor email:", e);
+      }
+    }
+
+    // Create extended data with advisor email for internal use
+    const dataWithEmail: NotificationDataWithEmail = { ...data, advisorEmail };
+
     // Generate PDF attachment
     let pdfBase64: string | null = null;
     try {
-      pdfBase64 = generateApplicationPdf(data);
+      pdfBase64 = generateApplicationPdf(dataWithEmail);
       console.log("PDF generated successfully");
     } catch (pdfError) {
       console.error("Failed to generate PDF:", pdfError);
@@ -1083,7 +1116,7 @@ const handler = async (req: Request): Promise<Response> => {
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
         subject: `New Life Insurance Application - ${data.applicantName}`,
-        html: generateAdminEmail(data),
+        html: generateAdminEmail(dataWithEmail),
       };
 
       if (pdfBase64) {
@@ -1104,9 +1137,9 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // 2. Send notification to advisor (if assigned, with PDF)
-    if (data.advisorEmail) {
+    if (advisorEmail) {
       try {
-        console.log("Sending advisor notification to:", data.advisorEmail);
+        console.log("Sending advisor notification to:", advisorEmail);
         const advisorEmailOptions: {
           from: string;
           to: string[];
@@ -1115,9 +1148,9 @@ const handler = async (req: Request): Promise<Response> => {
           attachments?: { filename: string; content: string }[];
         } = {
           from: FROM_EMAIL,
-          to: [data.advisorEmail],
+          to: [advisorEmail],
           subject: `New Life Insurance Application - ${data.applicantName}`,
-          html: generateAdminEmail(data),
+          html: generateAdminEmail(dataWithEmail),
         };
 
         if (pdfBase64) {
@@ -1146,7 +1179,7 @@ const handler = async (req: Request): Promise<Response> => {
           from: FROM_EMAIL,
           to: [data.applicantEmail],
           subject: "Your Life Insurance Application Has Been Received",
-          html: generateApplicantEmail(data),
+          html: generateApplicantEmail(dataWithEmail),
         });
         console.log("Applicant email sent successfully:", applicantResult);
         emailResults.push({ recipient: "applicant", success: true });

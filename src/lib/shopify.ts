@@ -1,9 +1,5 @@
 import { toast } from "sonner";
-
-const SHOPIFY_API_VERSION = '2025-07';
-const SHOPIFY_STORE_PERMANENT_DOMAIN = 'lovable-project-onufb.myshopify.com';
-const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-const SHOPIFY_STOREFRONT_TOKEN = '25a573f81f47b58ad5e5efd0b015ad99';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface ShopifyProduct {
   node: {
@@ -100,32 +96,22 @@ const STOREFRONT_QUERY = `
 `;
 
 export async function storefrontApiRequest(query: string, variables: any = {}) {
-  const response = await fetch(SHOPIFY_STOREFRONT_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
+  // Use edge function proxy for rate limiting and token security
+  const { data, error } = await supabase.functions.invoke("shopify-proxy", {
+    body: { query, variables },
   });
 
-  if (response.status === 402) {
-    toast.error("Shopify: Payment required", {
-      description: "Shopify API access requires an active Shopify billing plan. Visit https://admin.shopify.com to upgrade your store.",
-    });
-    return;
+  if (error) {
+    if (error.message?.includes("402")) {
+      toast.error("Shopify: Payment required", {
+        description: "Shopify API access requires an active Shopify billing plan.",
+      });
+      return;
+    }
+    throw new Error(`Shopify API error: ${error.message}`);
   }
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const data = await response.json();
-  
-  if (data.errors) {
+  if (data?.errors) {
     throw new Error(`Error calling Shopify: ${data.errors.map((e: any) => e.message).join(', ')}`);
   }
 
@@ -134,7 +120,7 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
 
 export async function fetchProducts(first: number = 50): Promise<ShopifyProduct[]> {
   const data = await storefrontApiRequest(STOREFRONT_QUERY, { first });
-  return data.data.products.edges;
+  return data?.data?.products?.edges || [];
 }
 
 const PRODUCT_BY_HANDLE_QUERY = `

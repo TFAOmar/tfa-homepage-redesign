@@ -304,7 +304,6 @@ export type Database = {
       get_advisor_by_slug: {
         Args: { advisor_slug: string }
         Returns: {
-          email: string
           id: string
           image_url: string
           name: string
