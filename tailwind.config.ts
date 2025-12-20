@@ -61,6 +61,10 @@ export default {
         gold: "hsl(var(--gold))",
         "navy-light": "hsl(var(--navy-light))",
         "gold-light": "hsl(var(--gold-light))",
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],

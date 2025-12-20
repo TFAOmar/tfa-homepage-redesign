@@ -68,6 +68,7 @@ const ApplicationWizard = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<LifeInsuranceApplicationData>(defaultApplicationData);
+  const [hasValidationErrors, setHasValidationErrors] = useState(false);
   
   // Server-side draft state
   const [draftId, setDraftId] = useState<string | null>(null);
@@ -366,6 +367,7 @@ const ApplicationWizard = ({
     }
 
     if (isValid) {
+      setHasValidationErrors(false);
       if (!completedSteps.includes(currentStep)) setCompletedSteps((prev) => [...prev, currentStep]);
       
       // If on step 9 and valid, submit the application
@@ -374,8 +376,16 @@ const ApplicationWizard = ({
         return;
       }
       
+      // Show success toast for step completion
+      toast({
+        title: `Step ${currentStep} Complete ✓`,
+        description: `${STEPS[currentStep - 1]?.title} saved successfully.`,
+        className: "bg-success/10 border-success text-success-foreground dark:bg-success/20",
+      });
+      
       setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
     } else {
+      setHasValidationErrors(true);
       toast({ title: "Validation Error", description: "Please complete all required fields before continuing.", variant: "destructive" });
     }
   };
@@ -514,12 +524,14 @@ const ApplicationWizard = ({
       case 8: setFormData((prev) => ({ ...prev, step8: step8Form.getValues() })); break;
       case 9: setFormData((prev) => ({ ...prev, step9: step9Form.getValues() })); break;
     }
+    setHasValidationErrors(false);
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   const handleEditStep = (stepNumber: number) => {
     // Save current step 9 data before navigating
     setFormData((prev) => ({ ...prev, step9: step9Form.getValues() }));
+    setHasValidationErrors(false);
     setCurrentStep(stepNumber);
   };
 
@@ -565,7 +577,7 @@ const ApplicationWizard = ({
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Progress Bar */}
-      <ProgressBar currentStep={currentStep} completedSteps={completedSteps} />
+      <ProgressBar currentStep={currentStep} completedSteps={completedSteps} hasErrors={hasValidationErrors} />
 
       {/* Main Card */}
       <Card className="border-border bg-card/50 backdrop-blur-sm">
