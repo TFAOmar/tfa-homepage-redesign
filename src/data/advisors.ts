@@ -333,6 +333,7 @@ export const advisors: Advisor[] = [
     specialties: ["Mortgage Financing", "Estate Planning", "Retirement Planning"],
     licenses: ["Life & Health"],
     image: conradOlveraImg,
+    email: "conradolvera21@gmail.com",
     yearsOfExperience: 11,
     landingPage: "/advisors/conrad-olvera"
   }
