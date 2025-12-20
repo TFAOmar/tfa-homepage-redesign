@@ -59,24 +59,24 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
 
   return (
     <Form {...form}>
-      <form className="space-y-8">
+      <form className="space-y-6 md:space-y-8">
         {/* Product Selection Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <FileText className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Product Selection</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Product Selection</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="planName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Plan Name *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Plan Name *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="min-h-[44px]">
                         <SelectValue placeholder="Select a plan" />
                       </SelectTrigger>
                     </FormControl>
@@ -99,10 +99,10 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                 name="termDuration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Term Duration *</FormLabel>
+                    <FormLabel className="text-sm md:text-base">Term Duration *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="min-h-[44px]">
                           <SelectValue placeholder="Select term length" />
                         </SelectTrigger>
                       </FormControl>
@@ -126,16 +126,17 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
             name="faceAmount"
             render={({ field }) => (
               <FormItem className="max-w-md">
-                <FormLabel>Face Amount (Death Benefit) *</FormLabel>
+                <FormLabel className="text-sm md:text-base">Face Amount (Death Benefit) *</FormLabel>
                 <FormControl>
                   <CurrencyInput
                     value={field.value || 0}
                     onChange={field.onChange}
                     showPrefix
                     placeholder="Enter face amount"
+                    className="min-h-[44px]"
                   />
                 </FormControl>
-                <FormDescription>Minimum face amount is $1,000</FormDescription>
+                <FormDescription className="text-xs md:text-sm">Minimum face amount is $1,000</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -143,31 +144,32 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
         </div>
 
         {/* Riders Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-border">
             <Shield className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Optional Riders</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground">Optional Riders</h3>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs md:text-sm text-muted-foreground">
             Select any additional riders you'd like to add to your policy.
           </p>
 
           <TooltipProvider>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <FormField
                 control={form.control}
                 name="ridersChildrenTerm"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-4">
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-3 md:p-4 min-h-[72px]">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        className="mt-0.5"
                       />
                     </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="cursor-pointer">Children's Term Rider</FormLabel>
-                      <FormDescription>
+                    <div className="space-y-1 leading-none flex-1">
+                      <FormLabel className="cursor-pointer text-sm md:text-base">Children's Term Rider</FormLabel>
+                      <FormDescription className="text-xs md:text-sm">
                         Provides term coverage for eligible children
                       </FormDescription>
                     </div>
@@ -179,16 +181,17 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                 control={form.control}
                 name="ridersWaiverOfPremium"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-4">
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-3 md:p-4 min-h-[72px]">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        className="mt-0.5"
                       />
                     </FormControl>
-                    <div className="space-y-1 leading-none">
+                    <div className="space-y-1 leading-none flex-1">
                       <div className="flex items-center gap-2">
-                        <FormLabel className="cursor-pointer">Waiver of Premium</FormLabel>
+                        <FormLabel className="cursor-pointer text-sm md:text-base">Waiver of Premium</FormLabel>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-3 h-3 text-muted-foreground cursor-help" />
@@ -198,7 +201,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                           </TooltipContent>
                         </Tooltip>
                       </div>
-                      <FormDescription>
+                      <FormDescription className="text-xs md:text-sm">
                         Waives premiums if you become disabled
                       </FormDescription>
                     </div>
@@ -210,16 +213,17 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                 control={form.control}
                 name="ridersAcceleratedBenefits"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-4">
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-3 md:p-4 min-h-[72px]">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        className="mt-0.5"
                       />
                     </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="cursor-pointer">Accelerated Benefits Rider</FormLabel>
-                      <FormDescription>
+                    <div className="space-y-1 leading-none flex-1">
+                      <FormLabel className="cursor-pointer text-sm md:text-base">Accelerated Benefits Rider</FormLabel>
+                      <FormDescription className="text-xs md:text-sm">
                         Access death benefit if diagnosed with terminal illness
                       </FormDescription>
                     </div>
@@ -231,16 +235,17 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                 control={form.control}
                 name="ridersChronicIllness"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-4">
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-3 md:p-4 min-h-[72px]">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        className="mt-0.5"
                       />
                     </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="cursor-pointer">Chronic Illness Rider</FormLabel>
-                      <FormDescription>
+                    <div className="space-y-1 leading-none flex-1">
+                      <FormLabel className="cursor-pointer text-sm md:text-base">Chronic Illness Rider</FormLabel>
+                      <FormDescription className="text-xs md:text-sm">
                         Access benefits if you cannot perform daily living activities
                       </FormDescription>
                     </div>
@@ -252,16 +257,17 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                 control={form.control}
                 name="ridersAccidentalDeath"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-4">
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-3 md:p-4 min-h-[72px]">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        className="mt-0.5"
                       />
                     </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="cursor-pointer">Accidental Death Benefit</FormLabel>
-                      <FormDescription>
+                    <div className="space-y-1 leading-none flex-1">
+                      <FormLabel className="cursor-pointer text-sm md:text-base">Accidental Death Benefit</FormLabel>
+                      <FormDescription className="text-xs md:text-sm">
                         Additional benefit if death is due to an accident
                       </FormDescription>
                     </div>
@@ -274,29 +280,29 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
 
         {/* Children Details (Conditional) */}
         {watchChildrenRider && (
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-border">
               <Baby className="w-5 h-5 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">Children's Information</h3>
+              <h3 className="text-base md:text-lg font-semibold text-foreground">Children's Information</h3>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs md:text-sm text-muted-foreground">
               Please provide information for each child to be covered under the Children's Term Rider.
             </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-lg border border-border bg-muted/30"
+                  className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 p-3 md:p-4 rounded-lg border border-border bg-muted/30"
                 >
                   <FormField
                     control={form.control}
                     name={`childrenDetails.${index}.name`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Child's Name</FormLabel>
+                        <FormLabel className="text-sm md:text-base">Child's Name</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Full name" />
+                          <Input {...field} placeholder="Full name" className="min-h-[44px]" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -308,9 +314,9 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                     name={`childrenDetails.${index}.dateOfBirth`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Date of Birth</FormLabel>
+                        <FormLabel className="text-sm md:text-base">Date of Birth</FormLabel>
                         <FormControl>
-                          <Input {...field} type="date" />
+                          <Input {...field} type="date" className="min-h-[44px]" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -323,7 +329,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                       variant="destructive"
                       size="sm"
                       onClick={() => remove(index)}
-                      className="gap-2"
+                      className="gap-2 min-h-[44px] w-full md:w-auto"
                     >
                       <Trash2 className="w-4 h-4" />
                       Remove
@@ -336,7 +342,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                 type="button"
                 variant="outline"
                 onClick={() => append({ name: "", dateOfBirth: "" })}
-                className="gap-2"
+                className="gap-2 min-h-[44px] w-full sm:w-auto"
               >
                 <Plus className="w-4 h-4" />
                 Add Child

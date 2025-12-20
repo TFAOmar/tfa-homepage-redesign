@@ -41,9 +41,9 @@ const formatAccountNumber = (value?: string) => {
 };
 
 const DataRow = ({ label, value }: { label: string; value?: string | number | null }) => (
-  <div>
-    <p className="text-xs text-muted-foreground">{label}</p>
-    <p className="font-medium text-foreground">{value || "—"}</p>
+  <div className="min-w-0">
+    <p className="text-xs text-muted-foreground truncate">{label}</p>
+    <p className="font-medium text-foreground text-sm md:text-base break-words">{value || "—"}</p>
   </div>
 );
 
@@ -60,14 +60,14 @@ const SectionHeader = ({
   isComplete: boolean;
   onEdit: () => void;
 }) => (
-  <div className="flex items-center justify-between w-full pr-4">
-    <div className="flex items-center gap-3">
+  <div className="flex items-center justify-between w-full pr-2 md:pr-4">
+    <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
       {isComplete ? (
-        <CheckCircle className="w-5 h-5 text-green-500" />
+        <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-green-500 flex-shrink-0" />
       ) : (
-        <Icon className="w-5 h-5 text-muted-foreground" />
+        <Icon className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground flex-shrink-0" />
       )}
-      <span className="font-medium">Step {stepNumber}: {title}</span>
+      <span className="font-medium text-sm md:text-base truncate">Step {stepNumber}: {title}</span>
     </div>
     <Button
       variant="ghost"
@@ -76,10 +76,10 @@ const SectionHeader = ({
         e.stopPropagation();
         onEdit();
       }}
-      className="gap-1 text-primary hover:text-primary"
+      className="gap-1 text-primary hover:text-primary min-h-[36px] flex-shrink-0"
     >
       <Edit className="w-3 h-3" />
-      Edit
+      <span className="hidden sm:inline">Edit</span>
     </Button>
   </div>
 );
@@ -89,18 +89,18 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
 
   return (
     <Form {...form}>
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <div className="text-center pb-4 border-b border-border">
-          <h3 className="text-lg font-semibold text-foreground">Review Your Application</h3>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h3 className="text-base md:text-lg font-semibold text-foreground">Review Your Application</h3>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             Please review all information carefully before submitting. Click "Edit" to make changes.
           </p>
         </div>
 
         <Accordion type="multiple" defaultValue={["step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8"]} className="space-y-2">
           {/* Step 1: Proposed Insured */}
-          <AccordionItem value="step1" className="border border-border rounded-lg px-4">
-            <AccordionTrigger className="hover:no-underline py-4">
+          <AccordionItem value="step1" className="border border-border rounded-lg px-3 md:px-4">
+            <AccordionTrigger className="hover:no-underline py-3 md:py-4 min-h-[56px]">
               <SectionHeader
                 icon={User}
                 title="Proposed Insured"
@@ -110,7 +110,7 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               />
             </AccordionTrigger>
             <AccordionContent className="pb-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <DataRow label="Full Name" value={`${formData.step1?.firstName || ""} ${formData.step1?.middleName || ""} ${formData.step1?.lastName || ""}`.trim()} />
                 <DataRow label="Gender" value={formData.step1?.gender} />
                 <DataRow label="Date of Birth" value={formData.step1?.dateOfBirth} />
@@ -120,14 +120,14 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               </div>
               <div className="mt-4 pt-4 border-t border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Home Address</p>
-                <p className="text-sm text-foreground">
+                <p className="text-sm text-foreground break-words">
                   {formData.step1?.homeStreet}, {formData.step1?.homeCity}, {formData.step1?.homeState} {formData.step1?.homeZip}
                 </p>
               </div>
               {formData.step1?.mailingAddressDifferent && (
                 <div className="mt-3">
                   <p className="text-xs text-muted-foreground mb-2">Mailing Address</p>
-                  <p className="text-sm text-foreground">
+                  <p className="text-sm text-foreground break-words">
                     {formData.step1?.mailingStreet}, {formData.step1?.mailingCity}, {formData.step1?.mailingState} {formData.step1?.mailingZip}
                   </p>
                 </div>
@@ -136,8 +136,8 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
           </AccordionItem>
 
           {/* Step 2: Contact & Employment */}
-          <AccordionItem value="step2" className="border border-border rounded-lg px-4">
-            <AccordionTrigger className="hover:no-underline py-4">
+          <AccordionItem value="step2" className="border border-border rounded-lg px-3 md:px-4">
+            <AccordionTrigger className="hover:no-underline py-3 md:py-4 min-h-[56px]">
               <SectionHeader
                 icon={Briefcase}
                 title="Contact & Employment"
@@ -147,7 +147,7 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               />
             </AccordionTrigger>
             <AccordionContent className="pb-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <DataRow label="Mobile Phone" value={formatPhone(formData.step2?.mobilePhone)} />
                 <DataRow label="Email" value={formData.step2?.email} />
                 <DataRow label="Employer" value={formData.step2?.employerName} />
@@ -159,8 +159,8 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
           </AccordionItem>
 
           {/* Step 3: Ownership */}
-          <AccordionItem value="step3" className="border border-border rounded-lg px-4">
-            <AccordionTrigger className="hover:no-underline py-4">
+          <AccordionItem value="step3" className="border border-border rounded-lg px-3 md:px-4">
+            <AccordionTrigger className="hover:no-underline py-3 md:py-4 min-h-[56px]">
               <SectionHeader
                 icon={Users}
                 title="Ownership"
@@ -171,9 +171,9 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
             </AccordionTrigger>
             <AccordionContent className="pb-4">
               {formData.step3?.insuredIsOwner ? (
-                <p className="text-foreground">The proposed insured is the policy owner.</p>
+                <p className="text-foreground text-sm md:text-base">The proposed insured is the policy owner.</p>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                   <DataRow label="Owner Type" value={formData.step3?.ownerType} />
                   <DataRow label="Owner Name" value={formData.step3?.ownerName} />
                   <DataRow label="Relationship to Insured" value={formData.step3?.ownerRelationshipToInsured} />
@@ -185,8 +185,8 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
           </AccordionItem>
 
           {/* Step 4: Beneficiaries */}
-          <AccordionItem value="step4" className="border border-border rounded-lg px-4">
-            <AccordionTrigger className="hover:no-underline py-4">
+          <AccordionItem value="step4" className="border border-border rounded-lg px-3 md:px-4">
+            <AccordionTrigger className="hover:no-underline py-3 md:py-4 min-h-[56px]">
               <SectionHeader
                 icon={Heart}
                 title="Beneficiaries"
@@ -199,29 +199,29 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               {formData.step4?.beneficiaries && formData.step4.beneficiaries.length > 0 ? (
                 <div className="space-y-3">
                   {formData.step4.beneficiaries.map((ben, idx) => (
-                    <div key={ben.id || idx} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <Badge variant={ben.designation === "primary" ? "default" : "secondary"}>
+                    <div key={ben.id || idx} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-muted/30 rounded-lg">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Badge variant={ben.designation === "primary" ? "default" : "secondary"} className="flex-shrink-0">
                           {ben.designation === "primary" ? "Primary" : "Contingent"}
                         </Badge>
-                        <div>
-                          <p className="font-medium text-foreground">{ben.fullName}</p>
+                        <div className="min-w-0">
+                          <p className="font-medium text-foreground text-sm md:text-base truncate">{ben.fullName}</p>
                           <p className="text-xs text-muted-foreground">{ben.relationship}</p>
                         </div>
                       </div>
-                      <p className="font-semibold text-foreground">{ben.sharePercentage}%</p>
+                      <p className="font-semibold text-foreground text-sm md:text-base">{ben.sharePercentage}%</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground">No beneficiaries added.</p>
+                <p className="text-muted-foreground text-sm">No beneficiaries added.</p>
               )}
             </AccordionContent>
           </AccordionItem>
 
           {/* Step 5: Policy & Riders */}
-          <AccordionItem value="step5" className="border border-border rounded-lg px-4">
-            <AccordionTrigger className="hover:no-underline py-4">
+          <AccordionItem value="step5" className="border border-border rounded-lg px-3 md:px-4">
+            <AccordionTrigger className="hover:no-underline py-3 md:py-4 min-h-[56px]">
               <SectionHeader
                 icon={FileText}
                 title="Policy & Riders"
@@ -231,7 +231,7 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               />
             </AccordionTrigger>
             <AccordionContent className="pb-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <DataRow label="Plan Name" value={formData.step5?.planName} />
                 <DataRow label="Face Amount" value={formatCurrency(formData.step5?.faceAmount)} />
               </div>
@@ -252,8 +252,8 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
           </AccordionItem>
 
           {/* Step 6: Existing Coverage */}
-          <AccordionItem value="step6" className="border border-border rounded-lg px-4">
-            <AccordionTrigger className="hover:no-underline py-4">
+          <AccordionItem value="step6" className="border border-border rounded-lg px-3 md:px-4">
+            <AccordionTrigger className="hover:no-underline py-3 md:py-4 min-h-[56px]">
               <SectionHeader
                 icon={Shield}
                 title="Existing Coverage"
@@ -267,13 +267,13 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
                 <div className="space-y-3">
                   {formData.step6.existingPolicies?.map((policy, idx) => (
                     <div key={policy.id || idx} className="p-3 bg-muted/30 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium text-foreground">{policy.companyName}</p>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="font-medium text-foreground text-sm md:text-base truncate">{policy.companyName}</p>
                           <p className="text-xs text-muted-foreground">Policy #{policy.policyNumber}</p>
                         </div>
-                        <div className="text-right">
-                          <p className="font-semibold text-foreground">{formatCurrency(policy.amountOfCoverage)}</p>
+                        <div className="text-left sm:text-right">
+                          <p className="font-semibold text-foreground text-sm md:text-base">{formatCurrency(policy.amountOfCoverage)}</p>
                           {policy.isBeingReplaced && <Badge variant="destructive" className="text-xs">Being Replaced</Badge>}
                         </div>
                       </div>
@@ -281,14 +281,14 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
                   ))}
                 </div>
               ) : (
-                <p className="text-foreground">No existing life insurance coverage.</p>
+                <p className="text-foreground text-sm">No existing life insurance coverage.</p>
               )}
             </AccordionContent>
           </AccordionItem>
 
           {/* Step 7: Medical & Lifestyle */}
-          <AccordionItem value="step7" className="border border-border rounded-lg px-4">
-            <AccordionTrigger className="hover:no-underline py-4">
+          <AccordionItem value="step7" className="border border-border rounded-lg px-3 md:px-4">
+            <AccordionTrigger className="hover:no-underline py-3 md:py-4 min-h-[56px]">
               <SectionHeader
                 icon={Stethoscope}
                 title="Medical & Lifestyle"
@@ -298,7 +298,7 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               />
             </AccordionTrigger>
             <AccordionContent className="pb-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <DataRow label="Tobacco Use" value={formData.step7?.usedTobacco ? `Yes - ${formData.step7?.tobaccoType}` : "No"} />
                 <DataRow label="Aviation" value={formData.step7?.aviation ? "Yes" : "No"} />
                 <DataRow label="Hazardous Sports" value={formData.step7?.hazardousSports ? "Yes" : "No"} />
@@ -310,8 +310,8 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
           </AccordionItem>
 
           {/* Step 8: Premium Payment */}
-          <AccordionItem value="step8" className="border border-border rounded-lg px-4">
-            <AccordionTrigger className="hover:no-underline py-4">
+          <AccordionItem value="step8" className="border border-border rounded-lg px-3 md:px-4">
+            <AccordionTrigger className="hover:no-underline py-3 md:py-4 min-h-[56px]">
               <SectionHeader
                 icon={CreditCard}
                 title="Premium Payment"
@@ -321,7 +321,7 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               />
             </AccordionTrigger>
             <AccordionContent className="pb-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <DataRow label="Payment Method" value={formData.step8?.paymentMethod === "eft" ? "Electronic Funds Transfer (EFT)" : "Check"} />
                 <DataRow label="Payment Frequency" value={formData.step8?.paymentFrequency?.replace("-", " ")} />
                 <DataRow label="Source of Funds" value={formData.step8?.sourceOfFunds} />
@@ -338,8 +338,8 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
         </Accordion>
 
         {/* Signature Section */}
-        <div className="mt-8 p-6 border-2 border-primary/30 rounded-lg bg-primary/5 space-y-6">
-          <h3 className="text-lg font-semibold text-foreground">Authorization & Electronic Signature</h3>
+        <div className="mt-6 md:mt-8 p-4 md:p-6 border-2 border-primary/30 rounded-lg bg-primary/5 space-y-4 md:space-y-6">
+          <h3 className="text-base md:text-lg font-semibold text-foreground">Authorization & Electronic Signature</h3>
 
           <FormField
             control={form.control}
@@ -347,10 +347,10 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                 <FormControl>
-                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} className="mt-0.5" />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel className="text-sm font-normal text-foreground">
+                  <FormLabel className="text-xs md:text-sm font-normal text-foreground leading-relaxed">
                     I certify that all information provided in this application is true, complete, and accurate to the best of my knowledge. I understand that any false statements or material misrepresentations may result in denial of coverage or cancellation of the policy.
                   </FormLabel>
                   <FormMessage />
@@ -359,17 +359,17 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
             <FormField
               control={form.control}
               name="electronicSignature"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Electronic Signature (Type your full legal name) *</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Electronic Signature (Type your full legal name) *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="John Michael Smith"
-                      className="font-serif italic text-lg"
+                      className="font-serif italic text-base md:text-lg min-h-[48px]"
                       {...field}
                     />
                   </FormControl>
@@ -383,9 +383,9 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
               name="signatureDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel className="text-sm md:text-base">Date</FormLabel>
                   <FormControl>
-                    <Input {...field} readOnly className="bg-muted" />
+                    <Input {...field} readOnly className="bg-muted min-h-[48px]" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
