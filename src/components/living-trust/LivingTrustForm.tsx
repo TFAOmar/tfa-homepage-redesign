@@ -24,8 +24,8 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, CheckCircle } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const livingTrustFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -59,7 +59,7 @@ export default function LivingTrustForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const form = useForm<LivingTrustFormData>({
     resolver: zodResolver(livingTrustFormSchema),
@@ -82,21 +82,29 @@ export default function LivingTrustForm() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "living-trust",
-          formData: {
-            ...data,
-            advisorName: "Vanessa Sanchez",
-            source: "living-trust-landing-page",
-            partner: "the-brandon-group",
-            advisor: "vanessa-sanchez",
-          },
-          additionalRecipients: ["vsanchez@tfainsuranceadvisors.com"],
-        },
+      const notes = [
+        `Marital Status: ${data.maritalStatus}`,
+        `Owns Property: ${data.ownsProperty}`,
+        `Estate Value: ${data.estateValue}`,
+        `Preferred Contact: ${data.preferredContact}`,
+        `Best Time to Reach: ${data.bestTimeToReach}`,
+        data.notes ? `Notes: ${data.notes}` : null,
+      ].filter(Boolean).join("\n");
+
+      const response = await submitForm({
+        form_name: "Living Trust Inquiry - Vanessa",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        notes,
+        tags: ["Living Trust", "Vanessa Sanchez", "The Brandon Group"],
+        advisor_slug: "vanessa-sanchez",
+        advisor_email: "vsanchez@tfainsuranceadvisors.com",
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
       
       setIsSubmitted(true);
       toast({

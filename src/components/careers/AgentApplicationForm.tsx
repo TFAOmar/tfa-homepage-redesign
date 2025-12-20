@@ -24,8 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Send, UserPlus, Phone, Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const agentFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -53,10 +53,29 @@ const agentFormSchema = z.object({
 
 type AgentFormData = z.infer<typeof agentFormSchema>;
 
+const licenseLabels: Record<string, string> = {
+  yes: "Yes, I'm licensed",
+  no: "No, not yet",
+  "in-progress": "Currently in progress",
+};
+
+const experienceLabels: Record<string, string> = {
+  none: "No prior experience",
+  "1-2": "1-2 years",
+  "3-5": "3-5 years",
+  "5+": "5+ years",
+};
+
+const availabilityLabels: Record<string, string> = {
+  "full-time": "Full-time (30+ hours/week)",
+  "part-time": "Part-time (10-30 hours/week)",
+  flexible: "Flexible / Variable",
+};
+
 const AgentApplicationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const form = useForm<AgentFormData>({
     resolver: zodResolver(agentFormSchema),
@@ -91,14 +110,29 @@ const AgentApplicationForm = () => {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "agent-application",
-          formData: data,
-        },
+      const notes = [
+        `Location: ${data.city}, ${data.state}`,
+        `License Status: ${licenseLabels[data.hasLicense]}`,
+        `Experience: ${experienceLabels[data.experience]}`,
+        `Availability: ${availabilityLabels[data.availability]}`,
+        data.currentOccupation ? `Current Occupation: ${data.currentOccupation}` : null,
+        data.referralSource ? `Referral Source: ${data.referralSource}` : null,
+        `Why Interested: ${data.whyInterested}`,
+      ].filter(Boolean).join("\n");
+
+      const response = await submitForm({
+        form_name: "Agent Application",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        state: data.state,
+        notes,
+        tags: ["Careers", "Agent Application"],
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
       
       toast({
         title: "Application Submitted Successfully!",

@@ -21,9 +21,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { Loader2 } from "lucide-react";
+import { submitForm } from "@/lib/formSubmit";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(50),
@@ -50,7 +50,7 @@ export const ServiceConsultationForm = ({
   ctaText = "Get Your Free Consultation",
 }: ServiceConsultationFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -78,19 +78,26 @@ export const ServiceConsultationForm = ({
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: serviceType,
-          formData: {
-            ...data,
-            service: serviceName,
-            source: window.location.pathname,
-          },
-          recipientEmail: "leads@tfainsuranceadvisors.com",
-        },
+      const notes = [
+        `Service: ${serviceName}`,
+        `Age Range: ${data.ageRange}`,
+        `Investment Range: ${data.investmentRange}`,
+        `Contact Preference: ${data.contactPreference}`,
+        data.message ? `Message: ${data.message}` : null,
+      ].filter(Boolean).join("\n");
+
+      const response = await submitForm({
+        form_name: serviceName,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        notes,
+        tags: [serviceName, "Consultation Request"],
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
 
       toast({
         title: "Thank you for your interest!",

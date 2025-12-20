@@ -13,8 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -55,7 +55,7 @@ const interestOptions = [
 export function TamaraLeeMedicareForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const {
     register,
@@ -79,45 +79,30 @@ export function TamaraLeeMedicareForm() {
     setIsSubmitting(true);
 
     try {
-      // Store in database
-      const { error: dbError } = await supabase.from("form_submissions").insert({
-        form_type: "medicare-inquiry",
-        form_data: data,
+      const ageRangeLabel = ageRanges.find(r => r.value === data.ageRange)?.label || data.ageRange;
+      const coverageLabel = coverageOptions.find(c => c.value === data.currentCoverage)?.label || data.currentCoverage;
+      const interestLabel = interestOptions.find(i => i.value === data.interest)?.label || data.interest;
+
+      const notes = [
+        `Age Range: ${ageRangeLabel}`,
+        `Current Coverage: ${coverageLabel}`,
+        `Primary Interest: ${interestLabel}`,
+      ].join("\n");
+
+      const response = await submitForm({
+        form_name: "Medicare Inquiry - Tamara",
+        first_name: data.firstName,
+        last_name: data.lastName,
         email: data.email,
-        name: `${data.firstName} ${data.lastName}`,
         phone: data.phone,
-        source: "/advisors/tamara-lee/medicare",
-        advisor: "tamara-lee",
+        notes,
+        tags: ["Medicare", "Tamara Lee"],
+        advisor_slug: "tamara-lee",
+        advisor_email: "tlee@tfainsuranceadvisors.com",
+        honeypot: honeypotValue(),
       });
 
-      if (dbError) throw dbError;
-
-      // Send email notification
-      const { error: emailError } = await supabase.functions.invoke(
-        "send-form-notification",
-        {
-          body: {
-            formType: "medicare-inquiry",
-            formData: {
-              firstName: data.firstName,
-              lastName: data.lastName,
-              name: `${data.firstName} ${data.lastName}`,
-              email: data.email,
-              phone: data.phone,
-              ageRange: data.ageRange,
-              currentCoverage: data.currentCoverage,
-              interest: data.interest,
-              advisorName: "Tamara Lee",
-              source: "/advisors/tamara-lee/medicare",
-            },
-            additionalRecipients: ["tlee@tfainsuranceadvisors.com"],
-          },
-        }
-      );
-
-      if (emailError) {
-        console.error("Email notification error:", emailError);
-      }
+      if (!response.ok) throw new Error(response.error);
 
       toast({
         title: "Thank you for your inquiry!",

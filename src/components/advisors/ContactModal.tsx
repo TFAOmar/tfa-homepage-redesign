@@ -6,8 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 interface ContactModalProps {
   open: boolean;
@@ -15,6 +15,7 @@ interface ContactModalProps {
   advisorName: string;
   advisorEmail?: string;
   advisorImage?: string;
+  advisorSlug?: string;
 }
 
 const ContactModal = ({ 
@@ -23,6 +24,7 @@ const ContactModal = ({
   advisorName, 
   advisorEmail,
   advisorImage,
+  advisorSlug,
 }: ContactModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -33,7 +35,7 @@ const ContactModal = ({
     message: "",
   });
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -58,26 +60,25 @@ const ContactModal = ({
     setIsSubmitting(true);
 
     try {
-      const submissionData = {
-        formType: "contact-inquiry",
-        formData: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          message: formData.message,
-          advisorName: advisorName,
-          submittedAt: new Date().toISOString(),
-        },
-        recipientEmail: "leads@tfainsuranceadvisors.com",
-        ...(advisorEmail && { additionalRecipients: [advisorEmail] }),
-      };
+      const notes = [
+        `Advisor: ${advisorName}`,
+        formData.message ? `Message: ${formData.message}` : null,
+      ].filter(Boolean).join("\n");
 
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: submissionData,
+      const response = await submitForm({
+        form_name: "Advisor Contact",
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        notes,
+        tags: ["Advisor Inquiry", advisorName],
+        advisor_slug: advisorSlug,
+        advisor_email: advisorEmail,
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
 
       toast({
         title: "Message Sent!",

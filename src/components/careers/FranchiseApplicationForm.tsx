@@ -24,8 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Send, Building2, Phone, Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { submitForm } from "@/lib/formSubmit";
 
 const franchiseFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -63,10 +63,42 @@ const franchiseFormSchema = z.object({
 
 type FranchiseFormData = z.infer<typeof franchiseFormSchema>;
 
+const experienceLabels: Record<string, string> = {
+  none: "No experience",
+  "1-3": "1-3 years",
+  "3-5": "3-5 years",
+  "5-10": "5-10 years",
+  "10+": "10+ years",
+};
+
+const capitalLabels: Record<string, string> = {
+  "under-25k": "Under $25,000",
+  "25k-50k": "$25,000 - $50,000",
+  "50k-100k": "$50,000 - $100,000",
+  "100k-250k": "$100,000 - $250,000",
+  "250k+": "$250,000+",
+};
+
+const netWorthLabels: Record<string, string> = {
+  "under-100k": "Under $100,000",
+  "100k-250k": "$100,000 - $250,000",
+  "250k-500k": "$250,000 - $500,000",
+  "500k-1m": "$500,000 - $1,000,000",
+  "1m+": "$1,000,000+",
+};
+
+const timelineLabels: Record<string, string> = {
+  asap: "As soon as possible",
+  "1-3-months": "1-3 months",
+  "3-6-months": "3-6 months",
+  "6-12-months": "6-12 months",
+  exploring: "Just exploring options",
+};
+
 const FranchiseApplicationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const form = useForm<FranchiseFormData>({
     resolver: zodResolver(franchiseFormSchema),
@@ -105,14 +137,33 @@ const FranchiseApplicationForm = () => {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase.functions.invoke("send-form-notification", {
-        body: {
-          formType: "franchise-application",
-          formData: data,
-        },
+      const notes = [
+        `Location: ${data.city}, ${data.state}`,
+        `Current Occupation: ${data.currentOccupation}`,
+        `Insurance License: ${data.hasInsuranceLicense === "yes" ? "Yes" : "No"}`,
+        `Insurance Experience: ${experienceLabels[data.insuranceExperience]}`,
+        `Leadership Experience: ${experienceLabels[data.leadershipExperience]}`,
+        `Liquid Capital: ${capitalLabels[data.liquidCapital]}`,
+        `Net Worth: ${netWorthLabels[data.netWorth]}`,
+        `Preferred Territory: ${data.preferredTerritory}`,
+        `Timeline: ${timelineLabels[data.timeline]}`,
+        data.referralSource ? `Referral Source: ${data.referralSource}` : null,
+        `Why Franchise: ${data.whyFranchise}`,
+      ].filter(Boolean).join("\n");
+
+      const response = await submitForm({
+        form_name: "Franchise Application",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        state: data.state,
+        notes,
+        tags: ["Careers", "Franchise Application"],
+        honeypot: honeypotValue(),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(response.error);
       
       toast({
         title: "Franchise Application Submitted!",
@@ -414,56 +465,55 @@ const FranchiseApplicationForm = () => {
                   </div>
                 </div>
 
-                {/* Territory & Timeline */}
+                {/* Territory & Timeline Section */}
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/50">
                     Territory & Timeline
                   </h3>
                   <div className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="preferredTerritory"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Preferred Territory/Market *</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g. Orange County, CA or Phoenix Metro Area" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            List your top 1-3 preferred geographic areas
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="timeline"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Target Timeline to Open *</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="preferredTerritory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Preferred Territory/Location *</FormLabel>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select timeline" />
-                              </SelectTrigger>
+                              <Input placeholder="e.g. Southern California, Dallas/Fort Worth" {...field} />
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="asap">As soon as possible</SelectItem>
-                              <SelectItem value="1-3-months">1-3 months</SelectItem>
-                              <SelectItem value="3-6-months">3-6 months</SelectItem>
-                              <SelectItem value="6-12-months">6-12 months</SelectItem>
-                              <SelectItem value="exploring">Just exploring options</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="timeline"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Target Start Timeline *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select timeline" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="asap">As soon as possible</SelectItem>
+                                <SelectItem value="1-3-months">1-3 months</SelectItem>
+                                <SelectItem value="3-6-months">3-6 months</SelectItem>
+                                <SelectItem value="6-12-months">6-12 months</SelectItem>
+                                <SelectItem value="exploring">Just exploring options</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* Additional Info */}
+                {/* Additional Information Section */}
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/50">
                     Additional Information
@@ -474,14 +524,15 @@ const FranchiseApplicationForm = () => {
                       name="referralSource"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>How did you hear about TFA franchising?</FormLabel>
+                          <FormLabel>How did you hear about TFA franchise opportunities?</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. Referral, LinkedIn, Google, Event" {...field} />
+                            <Input placeholder="e.g. Current franchisee, website, industry event" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
                       name="whyFranchise"
@@ -490,8 +541,8 @@ const FranchiseApplicationForm = () => {
                           <FormLabel>Why are you interested in a TFA franchise? *</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Tell us about your goals, relevant experience, and what attracts you to franchise ownership..."
-                              className="min-h-[140px] resize-none"
+                              placeholder="Tell us about your entrepreneurial goals, why you're interested in the insurance industry, and what makes TFA the right fit for you..."
+                              className="min-h-[150px] resize-none"
                               {...field}
                             />
                           </FormControl>
@@ -502,33 +553,34 @@ const FranchiseApplicationForm = () => {
                         </FormItem>
                       )}
                     />
+
+                    {/* Agreement Checkbox */}
+                    <FormField
+                      control={form.control}
+                      name="agreeToDisclosure"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-lg border border-border/50 p-4 bg-muted/30">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="cursor-pointer">
+                              I agree to receive the Franchise Disclosure Document (FDD) *
+                            </FormLabel>
+                            <FormDescription>
+                              By checking this box, you agree to be contacted by The Financial Architects regarding franchise opportunities 
+                              and to receive the FDD for review. All information is kept confidential.
+                            </FormDescription>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
-
-                {/* Agreement Checkbox */}
-                <FormField
-                  control={form.control}
-                  name="agreeToDisclosure"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-lg border border-border/50 p-4 bg-muted/30">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel className="cursor-pointer">
-                          I agree to receive the Franchise Disclosure Document (FDD) and related materials *
-                        </FormLabel>
-                        <FormDescription>
-                          Your information will be kept strictly confidential and used only for franchise development purposes.
-                        </FormDescription>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 {/* Submit Button */}
                 <div className="pt-4">
@@ -553,15 +605,15 @@ const FranchiseApplicationForm = () => {
 
           {/* Contact Info */}
           <div className="mt-8 text-center">
-            <p className="text-muted-foreground mb-4">Prefer to speak with someone first?</p>
+            <p className="text-muted-foreground mb-4">Have questions about franchise opportunities?</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="tel:+18883505396" className="inline-flex items-center gap-2 text-foreground hover:text-accent transition-colors">
                 <Phone className="h-4 w-4" />
                 (888) 350-5396
               </a>
-              <a href="mailto:info@tfainsuranceadvisors.com" className="inline-flex items-center gap-2 text-foreground hover:text-accent transition-colors">
+              <a href="mailto:franchise@tfainsuranceadvisors.com" className="inline-flex items-center gap-2 text-foreground hover:text-accent transition-colors">
                 <Mail className="h-4 w-4" />
-                info@tfainsuranceadvisors.com
+                franchise@tfainsuranceadvisors.com
               </a>
             </div>
           </div>

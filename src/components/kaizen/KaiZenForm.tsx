@@ -1,15 +1,28 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { Loader2, Send } from "lucide-react";
 import KaiZenFormFields, { KaiZenFormData } from "./KaiZenFormFields";
-import type { Json } from "@/integrations/supabase/types";
+import { submitForm } from "@/lib/formSubmit";
+
+const ageRangeLabels: Record<string, string> = {
+  "30-40": "30-40",
+  "41-50": "41-50",
+  "51-60": "51-60",
+  "61+": "61+",
+};
+
+const incomeLabels: Record<string, string> = {
+  "200-300k": "$200,000 - $300,000",
+  "300-500k": "$300,000 - $500,000",
+  "500k-1m": "$500,000 - $1,000,000",
+  "1m+": "$1,000,000+",
+};
 
 const KaiZenForm = () => {
   const { toast } = useToast();
-  const { honeypotProps, isBot } = useHoneypot();
+  const { honeypotProps, isBot, honeypotValue } = useHoneypot();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<KaiZenFormData>({
     firstName: "",
@@ -43,38 +56,23 @@ const KaiZenForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Store in database
-      const { error: dbError } = await supabase
-        .from('form_submissions')
-        .insert([{
-          form_type: 'kai-zen-inquiry',
-          form_data: formData as unknown as Json,
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          phone: formData.phone,
-          source: '/services/kai-zen',
-        }]);
+      const notes = [
+        `Age Range: ${ageRangeLabels[formData.ageRange] || formData.ageRange}`,
+        `Household Income: ${incomeLabels[formData.householdIncome] || formData.householdIncome}`,
+      ].join("\n");
 
-      if (dbError) throw dbError;
-
-      // Send email notification
-      const { error: emailError } = await supabase.functions.invoke('send-form-notification', {
-        body: {
-          formType: 'kai-zen-inquiry',
-          formData: {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            phone: formData.phone,
-            ageRange: formData.ageRange,
-            householdIncome: formData.householdIncome,
-            Name: `${formData.firstName} ${formData.lastName}`,
-            source: '/services/kai-zen',
-          },
-        },
+      const response = await submitForm({
+        form_name: "Kai-Zen Inquiry",
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        notes,
+        tags: ["Kai-Zen", "High Income"],
+        honeypot: honeypotValue(),
       });
 
-      if (emailError) console.error('Email notification error:', emailError);
+      if (!response.ok) throw new Error(response.error);
 
       toast({
         title: "Thank you for your interest!",
