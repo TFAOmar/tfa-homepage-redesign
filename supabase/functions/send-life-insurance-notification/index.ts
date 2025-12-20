@@ -226,7 +226,7 @@ const generateApplicantEmail = (data: NotificationRequest): string => {
           If you have any questions about your application, please don't hesitate to contact us:
         </p>
         <p style="margin: 10px 0 0 0;">
-          <a href="mailto:leads@tfainsuranceadvisors.com" style="color: #2563eb;">leads@tfainsuranceadvisors.com</a>
+          <a href="mailto:clients@tfainsuranceadvisors.com" style="color: #2563eb;">clients@tfainsuranceadvisors.com</a>
         </p>
       </div>
 
