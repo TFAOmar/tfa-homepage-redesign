@@ -103,7 +103,7 @@ const CareersInquiryForm = () => {
         phone: data.phone,
         notes,
         tags: ["Careers", careerInterestLabels[data.careerInterest]],
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

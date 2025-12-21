@@ -101,7 +101,7 @@ export default function LivingTrustForm() {
         tags: ["Living Trust", "Vanessa Sanchez", "The Brandon Group"],
         advisor_slug: "vanessa-sanchez",
         advisor_email: "vsanchez@tfainsuranceadvisors.com",
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

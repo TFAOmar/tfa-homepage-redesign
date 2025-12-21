@@ -99,7 +99,7 @@ export function TamaraLeeMedicareForm() {
         tags: ["Medicare", "Tamara Lee"],
         advisor_slug: "tamara-lee",
         advisor_email: "tlee@tfainsuranceadvisors.com",
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

@@ -84,7 +84,7 @@ const AmericanWayHealthForm = () => {
         phone: data.phone,
         notes,
         tags: ["Health Insurance", insuranceTypeLabels[data.insuranceType] || data.insuranceType, "American Way Health"],
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

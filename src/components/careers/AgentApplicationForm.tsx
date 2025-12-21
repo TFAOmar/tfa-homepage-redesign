@@ -129,7 +129,7 @@ const AgentApplicationForm = () => {
         state: data.state,
         notes,
         tags: ["Careers", "Agent Application"],
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

@@ -111,7 +111,7 @@ const RecinosBusinessInsuranceForm = () => {
         company_name: data.businessName,
         notes,
         tags: ["Business Insurance", "Recinos"],
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

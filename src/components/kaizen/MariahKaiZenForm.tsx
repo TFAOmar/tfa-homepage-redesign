@@ -69,7 +69,7 @@ const MariahKaiZenForm = () => {
         tags: ["Kai-Zen", "Mariah Lorenzen"],
         advisor_slug: "mariah-lorenzen",
         advisor_email: "mariah@tfainsuranceadvisors.com",
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);
