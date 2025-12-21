@@ -357,62 +357,6 @@ const generateTeamNotificationHtml = (
   `;
 };
 
-const generateProspectConfirmationHtml = (formData: FormSubmitData): string => {
-  return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
-      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
-        <tr>
-          <td style="padding: 40px 30px; background: linear-gradient(135deg, #1a365d 0%, #2d4a77 100%); text-align: center;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;">
-              Thank You, ${formData.first_name}!
-            </h1>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding: 40px 30px;">
-            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-              We've received your inquiry and appreciate you reaching out to TFA Insurance Advisors.
-            </p>
-            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-              One of our experienced advisors will be in touch with you shortly to discuss your needs and answer any questions you may have.
-            </p>
-            <div style="background-color: #f7fafc; border-left: 4px solid #1a365d; padding: 20px; margin: 30px 0;">
-              <p style="color: #2d3748; font-size: 14px; margin: 0; font-weight: 600;">
-                What happens next?
-              </p>
-              <ul style="color: #4a5568; font-size: 14px; margin: 10px 0 0 0; padding-left: 20px;">
-                <li style="margin-bottom: 8px;">Our team will review your information</li>
-                <li style="margin-bottom: 8px;">An advisor will reach out within 1-2 business days</li>
-                <li>We'll work together to find the right solution for you</li>
-              </ul>
-            </div>
-            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 20px 0 0 0;">
-              If you have any urgent questions, feel free to call us at <strong>(800) 555-1234</strong>.
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding: 30px; background-color: #1a365d; text-align: center;">
-            <p style="color: #e2e8f0; font-size: 14px; margin: 0 0 10px 0;">
-              TFA Insurance Advisors
-            </p>
-            <p style="color: #a0aec0; font-size: 12px; margin: 0;">
-              Protecting what matters most
-            </p>
-          </td>
-        </tr>
-      </table>
-    </body>
-    </html>
-  `;
-};
-
 // Send emails function
 const sendEmails = async (
   resend: InstanceType<typeof Resend>,
@@ -420,14 +364,12 @@ const sendEmails = async (
   submissionId: string,
   advisorEmail?: string,
   advisorName?: string
-): Promise<{ teamSent: boolean; advisorSent: boolean; prospectSent: boolean; errors: string[] }> => {
+): Promise<{ teamSent: boolean; advisorSent: boolean; errors: string[] }> => {
   const errors: string[] = [];
   let teamSent = false;
   let advisorSent = false;
-  let prospectSent = false;
 
   const teamHtml = generateTeamNotificationHtml(formData, submissionId, advisorName);
-  const prospectHtml = generateProspectConfirmationHtml(formData);
   const subject = `New ${getFormDisplayName(formData.form_name)} - ${formData.first_name} ${formData.last_name}`;
 
   // 1. Send to team email
@@ -472,27 +414,7 @@ const sendEmails = async (
     }
   }
 
-  // 3. Send confirmation to prospect
-  try {
-    const prospectResult = await resend.emails.send({
-      from: "TFA Insurance Advisors <hello@tfainsuranceadvisors.com>",
-      to: [formData.email],
-      subject: `Thank you for contacting TFA Insurance Advisors`,
-      html: prospectHtml,
-    });
-    if (prospectResult.error) {
-      console.error("[Email Error - Prospect]", prospectResult.error);
-      errors.push(`Prospect email: ${prospectResult.error.message}`);
-    } else {
-      prospectSent = true;
-      console.log("[Email Sent - Prospect]", formData.email);
-    }
-  } catch (e) {
-    console.error("[Email Exception - Prospect]", e);
-    errors.push(`Prospect email exception: ${e instanceof Error ? e.message : "Unknown error"}`);
-  }
-
-  return { teamSent, advisorSent, prospectSent, errors };
+  return { teamSent, advisorSent, errors };
 };
 
 serve(async (req) => {
@@ -689,7 +611,7 @@ serve(async (req) => {
     const submissionId = submission.id;
     
     // ============ EMAIL NOTIFICATIONS ============
-    let emailResult = { teamSent: false, advisorSent: false, prospectSent: false, errors: [] as string[] };
+    let emailResult = { teamSent: false, advisorSent: false, errors: [] as string[] };
     
     if (resend) {
       emailResult = await sendEmails(
@@ -754,11 +676,11 @@ serve(async (req) => {
         pipedrive_lead_id: leadId,
         status: finalStatus,
         error_message: pipedriveError || (emailResult.errors.length > 0 ? emailResult.errors.join("; ") : null),
-        email_sent: emailResult.teamSent || emailResult.prospectSent,
+        email_sent: emailResult.teamSent,
       })
       .eq("id", submissionId);
     
-    console.log(`[Success] Form: ${formData.form_name}, Email: ${formData.email}, Routed: ${routedToName}, Emails: team=${emailResult.teamSent} advisor=${emailResult.advisorSent} prospect=${emailResult.prospectSent}, Pipedrive: ${isAdvisorSpecificForm ? "skipped" : (leadId ? "created" : "failed")}`);
+    console.log(`[Success] Form: ${formData.form_name}, Email: ${formData.email}, Routed: ${routedToName}, Emails: team=${emailResult.teamSent} advisor=${emailResult.advisorSent}, Pipedrive: ${isAdvisorSpecificForm ? "skipped" : (leadId ? "created" : "failed")}`);
     
     return new Response(
       JSON.stringify({
@@ -774,7 +696,6 @@ serve(async (req) => {
         emails: {
           team_sent: emailResult.teamSent,
           advisor_sent: emailResult.advisorSent,
-          prospect_sent: emailResult.prospectSent,
         },
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
