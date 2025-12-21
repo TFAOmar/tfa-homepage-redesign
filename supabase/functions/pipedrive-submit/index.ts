@@ -1,10 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const PIPEDRIVE_API_TOKEN = Deno.env.get("PIPEDRIVE_API_TOKEN");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+
+const TEAM_EMAIL = "leads@tfainsuranceadvisors.com";
 
 // CORS headers
 const corsHeaders = {
@@ -235,6 +239,262 @@ const addNote = async (
   return result.success;
 };
 
+// ============ EMAIL TEMPLATES ============
+
+const getFormDisplayName = (formName: string): string => {
+  const displayNames: Record<string, string> = {
+    "book-consultation": "Consultation Request",
+    "contact": "Contact Form",
+    "kai-zen-inquiry": "Kai-Zen Inquiry",
+    "kai-zen-mariah": "Kai-Zen Inquiry (Mariah)",
+    "living-trust-vanessa": "Living Trust Inquiry",
+    "medicare-tamara": "Medicare Inquiry",
+    "schedule-advisor": "Advisor Scheduling Request",
+    "contact-advisor": "Advisor Contact Request",
+    "service-consultation": "Service Consultation",
+    "estate-planning": "Estate Planning Inquiry",
+    "american-way-health": "American Way Health Inquiry",
+    "business-insurance-recinos": "Business Insurance Inquiry",
+    "agent-application": "Agent Application",
+    "franchise-application": "Franchise Application",
+    "careers-inquiry": "Career Inquiry",
+    "advisor-onboarding": "Advisor Onboarding",
+  };
+  return displayNames[formName] || formName;
+};
+
+const generateTeamNotificationHtml = (
+  formData: FormSubmitData,
+  submissionId: string,
+  advisorName?: string
+): string => {
+  const formRows = [
+    { label: "Name", value: `${formData.first_name} ${formData.last_name}` },
+    { label: "Email", value: formData.email },
+    formData.phone && { label: "Phone", value: formData.phone },
+    formData.state && { label: "State", value: formData.state },
+    formData.preferred_language && { label: "Language", value: formData.preferred_language },
+    formData.company_name && { label: "Company", value: formData.company_name },
+    formData.notes && { label: "Message/Notes", value: formData.notes },
+    advisorName && { label: "Assigned Advisor", value: advisorName },
+    formData.source_url && { label: "Source URL", value: formData.source_url },
+  ].filter(Boolean) as { label: string; value: string }[];
+
+  const utmRows = [
+    formData.utm_source && { label: "UTM Source", value: formData.utm_source },
+    formData.utm_medium && { label: "UTM Medium", value: formData.utm_medium },
+    formData.utm_campaign && { label: "UTM Campaign", value: formData.utm_campaign },
+    formData.utm_content && { label: "UTM Content", value: formData.utm_content },
+    formData.utm_term && { label: "UTM Term", value: formData.utm_term },
+  ].filter(Boolean) as { label: string; value: string }[];
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+        <tr>
+          <td style="padding: 40px 30px; background: linear-gradient(135deg, #1a365d 0%, #2d4a77 100%);">
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">
+              New ${getFormDisplayName(formData.form_name)}
+            </h1>
+            <p style="color: #e2e8f0; margin: 10px 0 0 0; font-size: 14px;">
+              Submission ID: ${submissionId}
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 30px;">
+            <h2 style="color: #1a365d; font-size: 18px; margin: 0 0 20px 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+              Contact Information
+            </h2>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+              ${formRows.map(row => `
+                <tr>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0; color: #718096; font-size: 14px; width: 35%; vertical-align: top;">
+                    ${row.label}
+                  </td>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0; color: #1a202c; font-size: 14px; vertical-align: top;">
+                    ${row.value}
+                  </td>
+                </tr>
+              `).join('')}
+            </table>
+            
+            ${utmRows.length > 0 ? `
+              <h2 style="color: #1a365d; font-size: 18px; margin: 30px 0 20px 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                Attribution Data
+              </h2>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                ${utmRows.map(row => `
+                  <tr>
+                    <td style="padding: 8px 0; color: #718096; font-size: 13px; width: 35%;">
+                      ${row.label}
+                    </td>
+                    <td style="padding: 8px 0; color: #1a202c; font-size: 13px;">
+                      ${row.value}
+                    </td>
+                  </tr>
+                `).join('')}
+              </table>
+            ` : ''}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 30px; background-color: #f7fafc; text-align: center;">
+            <p style="color: #718096; font-size: 12px; margin: 0;">
+              This notification was sent from the TFA Insurance Advisors website.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+};
+
+const generateProspectConfirmationHtml = (formData: FormSubmitData): string => {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+        <tr>
+          <td style="padding: 40px 30px; background: linear-gradient(135deg, #1a365d 0%, #2d4a77 100%); text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;">
+              Thank You, ${formData.first_name}!
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 40px 30px;">
+            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+              We've received your inquiry and appreciate you reaching out to TFA Insurance Advisors.
+            </p>
+            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+              One of our experienced advisors will be in touch with you shortly to discuss your needs and answer any questions you may have.
+            </p>
+            <div style="background-color: #f7fafc; border-left: 4px solid #1a365d; padding: 20px; margin: 30px 0;">
+              <p style="color: #2d3748; font-size: 14px; margin: 0; font-weight: 600;">
+                What happens next?
+              </p>
+              <ul style="color: #4a5568; font-size: 14px; margin: 10px 0 0 0; padding-left: 20px;">
+                <li style="margin-bottom: 8px;">Our team will review your information</li>
+                <li style="margin-bottom: 8px;">An advisor will reach out within 1-2 business days</li>
+                <li>We'll work together to find the right solution for you</li>
+              </ul>
+            </div>
+            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 20px 0 0 0;">
+              If you have any urgent questions, feel free to call us at <strong>(800) 555-1234</strong>.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 30px; background-color: #1a365d; text-align: center;">
+            <p style="color: #e2e8f0; font-size: 14px; margin: 0 0 10px 0;">
+              TFA Insurance Advisors
+            </p>
+            <p style="color: #a0aec0; font-size: 12px; margin: 0;">
+              Protecting what matters most
+            </p>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+};
+
+// Send emails function
+const sendEmails = async (
+  resend: InstanceType<typeof Resend>,
+  formData: FormSubmitData,
+  submissionId: string,
+  advisorEmail?: string,
+  advisorName?: string
+): Promise<{ teamSent: boolean; advisorSent: boolean; prospectSent: boolean; errors: string[] }> => {
+  const errors: string[] = [];
+  let teamSent = false;
+  let advisorSent = false;
+  let prospectSent = false;
+
+  const teamHtml = generateTeamNotificationHtml(formData, submissionId, advisorName);
+  const prospectHtml = generateProspectConfirmationHtml(formData);
+  const subject = `New ${getFormDisplayName(formData.form_name)} - ${formData.first_name} ${formData.last_name}`;
+
+  // 1. Send to team email
+  try {
+    const teamResult = await resend.emails.send({
+      from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
+      to: [TEAM_EMAIL],
+      subject,
+      html: teamHtml,
+    });
+    if (teamResult.error) {
+      console.error("[Email Error - Team]", teamResult.error);
+      errors.push(`Team email: ${teamResult.error.message}`);
+    } else {
+      teamSent = true;
+      console.log("[Email Sent - Team]", TEAM_EMAIL);
+    }
+  } catch (e) {
+    console.error("[Email Exception - Team]", e);
+    errors.push(`Team email exception: ${e instanceof Error ? e.message : "Unknown error"}`);
+  }
+
+  // 2. Send to advisor if this is an advisor-specific form
+  if (advisorEmail) {
+    try {
+      const advisorResult = await resend.emails.send({
+        from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
+        to: [advisorEmail],
+        subject: `[Your Lead] ${subject}`,
+        html: teamHtml,
+      });
+      if (advisorResult.error) {
+        console.error("[Email Error - Advisor]", advisorResult.error);
+        errors.push(`Advisor email: ${advisorResult.error.message}`);
+      } else {
+        advisorSent = true;
+        console.log("[Email Sent - Advisor]", advisorEmail);
+      }
+    } catch (e) {
+      console.error("[Email Exception - Advisor]", e);
+      errors.push(`Advisor email exception: ${e instanceof Error ? e.message : "Unknown error"}`);
+    }
+  }
+
+  // 3. Send confirmation to prospect
+  try {
+    const prospectResult = await resend.emails.send({
+      from: "TFA Insurance Advisors <hello@tfainsuranceadvisors.com>",
+      to: [formData.email],
+      subject: `Thank you for contacting TFA Insurance Advisors`,
+      html: prospectHtml,
+    });
+    if (prospectResult.error) {
+      console.error("[Email Error - Prospect]", prospectResult.error);
+      errors.push(`Prospect email: ${prospectResult.error.message}`);
+    } else {
+      prospectSent = true;
+      console.log("[Email Sent - Prospect]", formData.email);
+    }
+  } catch (e) {
+    console.error("[Email Exception - Prospect]", e);
+    errors.push(`Prospect email exception: ${e instanceof Error ? e.message : "Unknown error"}`);
+  }
+
+  return { teamSent, advisorSent, prospectSent, errors };
+};
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
@@ -249,12 +509,18 @@ serve(async (req) => {
   }
   
   // Check required env vars
-  if (!PIPEDRIVE_API_TOKEN || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    console.error("[Config Error] Missing required environment variables");
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+    console.error("[Config Error] Missing required Supabase environment variables");
     return new Response(
       JSON.stringify({ ok: false, error: "Server configuration error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
+  }
+
+  // Initialize Resend (optional - emails will be skipped if not configured)
+  const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
+  if (!resend) {
+    console.warn("[Config Warning] RESEND_API_KEY not configured - emails will be skipped");
   }
   
   // Rate limiting
@@ -310,7 +576,7 @@ serve(async (req) => {
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
     const { data: recentSubmission } = await supabase
       .from("form_submissions")
-      .select("id, pipedrive_lead_id, pipedrive_person_id")
+      .select("id, pipedrive_lead_id, pipedrive_person_id, email_sent")
       .eq("email", formData.email)
       .eq("form_type", formData.form_name)
       .gte("created_at", tenMinutesAgo)
@@ -318,7 +584,7 @@ serve(async (req) => {
       .limit(1)
       .maybeSingle();
     
-    if (recentSubmission?.pipedrive_person_id) {
+    if (recentSubmission?.id) {
       console.log(`[Idempotency] Duplicate detected for ${formData.email}, returning existing`);
       return new Response(
         JSON.stringify({
@@ -335,9 +601,9 @@ serve(async (req) => {
       );
     }
     
-    // Resolve advisor routing - only need pipedrive_user_id now
-    let advisor = null;
-    let routingResult: "advisor_match" | "default_manny" = "default_manny";
+    // Resolve advisor - check if this is an advisor-specific form
+    let advisor: { id: string; name: string; email: string; slug: string; pipedrive_user_id: number | null } | null = null;
+    let isAdvisorSpecificForm = false;
     
     if (formData.advisor_id || formData.advisor_slug || formData.advisor_email) {
       let query = supabase
@@ -355,31 +621,31 @@ serve(async (req) => {
       
       const { data: advisorData } = await query.limit(1).maybeSingle();
       
-      if (advisorData?.pipedrive_user_id) {
+      if (advisorData) {
         advisor = advisorData;
-        routingResult = "advisor_match";
+        isAdvisorSpecificForm = true;
+        console.log(`[Advisor Form] Matched advisor: ${advisor.name} (${advisor.email})`);
       }
     }
     
-    // Get Manny Soto default user ID from system_settings
-    const { data: settings } = await supabase
-      .from("system_settings")
-      .select("key, value")
-      .eq("key", "manny_pipedrive_user_id")
-      .maybeSingle();
+    // Determine routing for Pipedrive (only for non-advisor forms)
+    let routingResult: "advisor_match" | "default_manny" | "advisor_direct" = "default_manny";
+    let ownerId: number | null = null;
+    let routedToName = "Manny Soto";
     
-    const mannyUserId = parseInt(settings?.value as string || "0");
-    
-    // Determine final owner
-    const ownerId = advisor?.pipedrive_user_id || mannyUserId;
-    const routedToName = advisor?.name || "Manny Soto";
-    
-    if (ownerId === 0) {
-      console.error("[Config Error] Pipedrive owner ID not configured");
-      return new Response(
-        JSON.stringify({ ok: false, error: "CRM integration not configured. Please contact support." }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    if (isAdvisorSpecificForm) {
+      routingResult = "advisor_direct";
+      routedToName = advisor?.name || "Advisor";
+      // Skip Pipedrive for advisor-specific forms
+    } else {
+      // Get Manny Soto default user ID from system_settings for Pipedrive
+      const { data: settings } = await supabase
+        .from("system_settings")
+        .select("key, value")
+        .eq("key", "manny_pipedrive_user_id")
+        .maybeSingle();
+      
+      ownerId = parseInt(settings?.value as string || "0");
     }
     
     // Create submission record first (in-progress state)
@@ -401,7 +667,7 @@ serve(async (req) => {
         utm_campaign: formData.utm_campaign,
         utm_content: formData.utm_content,
         utm_term: formData.utm_term,
-        advisor_slug: formData.advisor_slug,
+        advisor_slug: formData.advisor_slug || advisor?.slug,
         advisor: advisor?.name || null,
         routing_result: routingResult,
         pipedrive_owner_id: ownerId,
@@ -422,43 +688,64 @@ serve(async (req) => {
     
     const submissionId = submission.id;
     
-    // Pipedrive operations
+    // ============ EMAIL NOTIFICATIONS ============
+    let emailResult = { teamSent: false, advisorSent: false, prospectSent: false, errors: [] as string[] };
+    
+    if (resend) {
+      emailResult = await sendEmails(
+        resend,
+        formData,
+        submissionId,
+        advisor?.email,
+        advisor?.name
+      );
+    }
+    
+    // ============ PIPEDRIVE (only for non-advisor forms) ============
     let personId: number | null = null;
     let orgId: number | null = null;
     let leadId: string | null = null;
-    let errorMessage: string | null = null;
+    let pipedriveError: string | null = null;
     
-    try {
-      // 1. Upsert Person
-      const personResult = await upsertPerson(formData, ownerId);
-      personId = personResult.personId;
-      
-      if (!personId) {
-        throw new Error("Failed to create/update person in Pipedrive");
+    if (!isAdvisorSpecificForm && PIPEDRIVE_API_TOKEN && ownerId && ownerId > 0) {
+      try {
+        // 1. Upsert Person
+        const personResult = await upsertPerson(formData, ownerId);
+        personId = personResult.personId;
+        
+        if (!personId) {
+          throw new Error("Failed to create/update person in Pipedrive");
+        }
+        
+        // 2. Upsert Organization (if company provided)
+        if (formData.company_name) {
+          orgId = await upsertOrganization(formData.company_name, ownerId);
+        }
+        
+        // 3. Create Lead in Leads Inbox
+        leadId = await createLead(formData, personId, orgId, ownerId);
+        
+        if (!leadId) {
+          throw new Error("Failed to create lead in Pipedrive");
+        }
+        
+        // 4. Add note with attribution
+        await addNote(formData, leadId, personId);
+        
+        console.log(`[Pipedrive] Lead created: ${leadId} for ${formData.email}`);
+        
+      } catch (error) {
+        console.error("[Pipedrive Error]", error);
+        pipedriveError = error instanceof Error ? error.message : "Pipedrive API error";
       }
-      
-      // 2. Upsert Organization (if company provided)
-      if (formData.company_name) {
-        orgId = await upsertOrganization(formData.company_name, ownerId);
-      }
-      
-      // 3. Create Lead in Leads Inbox
-      leadId = await createLead(formData, personId, orgId, ownerId);
-      
-      if (!leadId) {
-        throw new Error("Failed to create lead in Pipedrive");
-      }
-      
-      // 4. Add note with attribution
-      await addNote(formData, leadId, personId);
-      
-    } catch (pipedriveError) {
-      console.error("[Pipedrive Error]", pipedriveError);
-      errorMessage = pipedriveError instanceof Error ? pipedriveError.message : "Pipedrive API error";
+    } else if (!isAdvisorSpecificForm && !PIPEDRIVE_API_TOKEN) {
+      console.warn("[Config Warning] PIPEDRIVE_API_TOKEN not configured - skipping Pipedrive");
+    } else if (isAdvisorSpecificForm) {
+      console.log(`[Pipedrive Skipped] Advisor-specific form for ${advisor?.name}`);
     }
     
-    // Update submission with Pipedrive IDs
-    const finalStatus = errorMessage ? "failed" : "created";
+    // Update submission with results
+    const finalStatus = pipedriveError ? "failed" : "created";
     await supabase
       .from("form_submissions")
       .update({
@@ -466,35 +753,29 @@ serve(async (req) => {
         pipedrive_org_id: orgId,
         pipedrive_lead_id: leadId,
         status: finalStatus,
-        error_message: errorMessage,
+        error_message: pipedriveError || (emailResult.errors.length > 0 ? emailResult.errors.join("; ") : null),
+        email_sent: emailResult.teamSent || emailResult.prospectSent,
       })
       .eq("id", submissionId);
     
-    if (errorMessage) {
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: "Partial failure - form saved but CRM sync failed",
-          submission_id: submissionId,
-          pipedrive_ids: { person_id: personId },
-        }),
-        { status: 207, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-    
-    console.log(`[Success] Form submitted: ${formData.form_name} by ${formData.email}, routed to ${routedToName}`);
+    console.log(`[Success] Form: ${formData.form_name}, Email: ${formData.email}, Routed: ${routedToName}, Emails: team=${emailResult.teamSent} advisor=${emailResult.advisorSent} prospect=${emailResult.prospectSent}, Pipedrive: ${isAdvisorSpecificForm ? "skipped" : (leadId ? "created" : "failed")}`);
     
     return new Response(
       JSON.stringify({
         ok: true,
         routed_to: routedToName,
         routing_result: routingResult,
-        pipedrive_ids: {
+        pipedrive_ids: isAdvisorSpecificForm ? null : {
           person_id: personId,
           org_id: orgId,
           lead_id: leadId,
         },
         submission_id: submissionId,
+        emails: {
+          team_sent: emailResult.teamSent,
+          advisor_sent: emailResult.advisorSent,
+          prospect_sent: emailResult.prospectSent,
+        },
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
