@@ -81,7 +81,7 @@ const ScheduleModal = ({
         tags: ["Schedule Request", advisorName],
         advisor_slug: advisorSlug,
         advisor_email: advisorEmail,
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

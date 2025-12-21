@@ -73,7 +73,7 @@ export const EstatePlanningForm = () => {
         phone: data.phone,
         notes,
         tags: ["Estate Planning"],
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

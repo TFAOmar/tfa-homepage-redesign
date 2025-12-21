@@ -160,7 +160,7 @@ const FranchiseApplicationForm = () => {
         state: data.state,
         notes,
         tags: ["Careers", "Franchise Application"],
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
 
       if (!response.ok) throw new Error(response.error);

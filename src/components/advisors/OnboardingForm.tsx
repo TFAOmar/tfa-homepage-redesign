@@ -185,7 +185,7 @@ const OnboardingForm = () => {
         state: data.state,
         notes,
         tags: ["Advisor Onboarding", "Internal"],
-        honeypot: honeypotValue(),
+        honeypot: honeypotValue,
       });
     } catch (error) {
       console.error("Pipedrive notification error:", error);
