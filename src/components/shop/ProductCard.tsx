@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Palette } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -15,9 +15,12 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const { node } = product;
   const addItem = useCartStore(state => state.addItem);
+  const navigate = useNavigate();
   
   const [selectedVariant, setSelectedVariant] = useState(node.variants.edges[0].node);
   const hasMultipleVariants = node.variants.edges.length > 1;
+  
+  const isBusinessCardProduct = node.handle === "tfa-custom-business-cards";
 
   const handleAddToCart = () => {
     const cartItem = {
@@ -34,6 +37,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
     toast.success("Added to cart", {
       description: `${node.title} has been added to your cart.`,
     });
+  };
+
+  const handleButtonClick = () => {
+    if (isBusinessCardProduct) {
+      navigate(`/shop/${node.handle}`);
+    } else {
+      handleAddToCart();
+    }
   };
 
   const imageUrl = node.images.edges[0]?.node.url;
@@ -102,12 +113,21 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
       <CardFooter>
         <Button 
-          onClick={handleAddToCart}
-          disabled={!selectedVariant.availableForSale}
+          onClick={handleButtonClick}
+          disabled={!isBusinessCardProduct && !selectedVariant.availableForSale}
           className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
         >
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          {selectedVariant.availableForSale ? "Add to Cart" : "Out of Stock"}
+          {isBusinessCardProduct ? (
+            <>
+              <Palette className="mr-2 h-4 w-4" />
+              Customize & Order
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              {selectedVariant.availableForSale ? "Add to Cart" : "Out of Stock"}
+            </>
+          )}
         </Button>
       </CardFooter>
     </Card>
