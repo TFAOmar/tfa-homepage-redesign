@@ -142,12 +142,12 @@ const ProductDetail = () => {
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Image */}
-          <div className="rounded-2xl overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg">
+          <div className="rounded-2xl overflow-hidden bg-white border border-white/20 shadow-lg">
             {imageUrl ? (
               <img 
                 src={imageUrl} 
                 alt={node.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             ) : (
               <div className="w-full aspect-square flex items-center justify-center bg-secondary/20">
@@ -263,12 +263,12 @@ const ProductDetail = () => {
                     className="group cursor-pointer overflow-hidden bg-white/10 backdrop-blur-xl border-white/20 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--primary),0.3)]"
                     onClick={() => navigate(`/shop/${relatedProduct.node.handle}`)}
                   >
-                    <div className="aspect-square overflow-hidden bg-secondary/20">
+                    <div className="aspect-square overflow-hidden bg-white">
                       {imageUrl ? (
                         <img
                           src={imageUrl}
                           alt={relatedProduct.node.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">

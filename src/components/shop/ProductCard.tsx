@@ -42,12 +42,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Card className="glass hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col">
       <Link to={`/shop/${node.handle}`} className="cursor-pointer">
-        <div className="aspect-square overflow-hidden rounded-t-lg bg-secondary/10">
+        <div className="aspect-square overflow-hidden rounded-t-lg bg-white">
           {imageUrl ? (
             <img 
               src={imageUrl} 
               alt={node.title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-secondary/20">
