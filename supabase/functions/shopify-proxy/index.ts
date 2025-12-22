@@ -9,9 +9,13 @@ const ALLOWED_ORIGINS = [
 ];
 
 const getCorsHeaders = (origin: string | null): Record<string, string> => {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) 
-    ? origin 
-    : ALLOWED_ORIGINS[0];
+  // Check if origin matches allowed patterns (including Lovable preview domains)
+  const isAllowed = origin && (
+    ALLOWED_ORIGINS.includes(origin) ||
+    origin.endsWith('.lovableproject.com')
+  );
+  
+  const allowedOrigin = isAllowed ? origin : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
