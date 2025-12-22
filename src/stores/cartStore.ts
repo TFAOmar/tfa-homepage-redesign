@@ -2,6 +2,18 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createStorefrontCheckout, ShopifyProduct } from '@/lib/shopify';
 
+export interface BusinessCardDetails {
+  fullName: string;
+  jobTitle: string;
+  phoneNumber: string;
+  emailAddress: string;
+  website?: string;
+  companyAddress?: string;
+  specialInstructions?: string;
+  headshotUrl?: string;
+  headshotFileName?: string;
+}
+
 export interface CartItem {
   product: ShopifyProduct;
   variantId: string;
@@ -15,6 +27,7 @@ export interface CartItem {
     name: string;
     value: string;
   }>;
+  businessCardDetails?: BusinessCardDetails;
 }
 
 interface CartStore {
