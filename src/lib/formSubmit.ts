@@ -21,6 +21,7 @@ export interface FormSubmitPayload {
   utm_term?: string;
   tags?: string[];
   honeypot?: string; // Bot trap field - should always be empty
+  interest_category?: string; // For Pipedrive lead labels
 }
 
 export interface FormSubmitResponse {

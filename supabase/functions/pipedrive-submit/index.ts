@@ -70,6 +70,7 @@ const formSubmitSchema = z.object({
   utm_term: z.string().max(200).optional(),
   tags: z.array(z.string().max(50)).max(20).optional(),
   honeypot: z.string().optional(), // Bot trap - should be empty
+  interest_category: z.string().max(100).optional(), // For Pipedrive lead labels
 });
 
 type FormSubmitData = z.infer<typeof formSubmitSchema>;
@@ -182,12 +183,65 @@ const upsertOrganization = async (
   return (result.data as { id?: number })?.id || null;
 };
 
+// Fetch all lead labels from Pipedrive
+const fetchLeadLabels = async (): Promise<Map<string, string>> => {
+  const result = await pipedriveApi("/leadLabels");
+  const labelMap = new Map<string, string>();
+  
+  if (result.success && Array.isArray(result.data)) {
+    for (const label of result.data as { name: string; id: string }[]) {
+      // Store label name (lowercase) → label id mapping
+      labelMap.set(label.name.toLowerCase(), label.id);
+    }
+    console.log(`[Pipedrive] Fetched ${labelMap.size} lead labels`);
+  } else {
+    console.warn("[Pipedrive] Failed to fetch lead labels:", result.error);
+  }
+  
+  return labelMap;
+};
+
+// Determine label name from form context
+const determineLabelName = (formData: FormSubmitData): string | null => {
+  // Book Consultation - use interest category
+  if (formData.form_name === "Book Consultation" && formData.interest_category) {
+    const interestLabels: Record<string, string> = {
+      retirement: "Retirement Planning",
+      insurance: "Life Insurance",
+      investment: "Investment Management",
+      tax: "Tax Strategy",
+      estate: "Estate Planning",
+      business: "Business Insurance",
+    };
+    return interestLabels[formData.interest_category] || null;
+  }
+  
+  // Form-specific labels
+  const formLabelMap: Record<string, string> = {
+    "Kai-Zen Inquiry": "Kai-Zen",
+    "Kai-Zen Inquiry - Mariah": "Kai-Zen",
+    "Estate Planning Inquiry": "Estate Planning",
+    "Living Trust Inquiry - Vanessa": "Estate Planning",
+    "Medicare Inquiry - Tamara": "Medicare",
+    "Health Insurance Inquiry": "Health Insurance",
+    "Business Insurance Inquiry": "Business Insurance",
+    "Contact Form": "General Inquiry",
+    "Careers Inquiry": "Careers",
+    "Agent Application": "Careers",
+    "Franchise Application": "Franchise",
+    "Service Consultation": "General Inquiry",
+  };
+  
+  return formLabelMap[formData.form_name] || null;
+};
+
 // Create lead in Pipedrive Leads Inbox
 const createLead = async (
   formData: FormSubmitData,
   personId: number,
   orgId: number | null,
-  ownerId: number
+  ownerId: number,
+  labelIds?: string[]
 ): Promise<string | null> => {
   const title = `[${formData.form_name}] - ${formData.first_name} ${formData.last_name}${formData.state ? ` - ${formData.state}` : ""}`;
   
@@ -198,6 +252,7 @@ const createLead = async (
   };
   
   if (orgId) leadData.organization_id = orgId;
+  if (labelIds && labelIds.length > 0) leadData.label_ids = labelIds;
   
   const result = await pipedriveApi("/leads", "POST", leadData);
   return (result.data as { id?: string })?.id || null;
@@ -644,17 +699,33 @@ serve(async (req) => {
           orgId = await upsertOrganization(formData.company_name, ownerId);
         }
         
-        // 3. Create Lead in Leads Inbox
-        leadId = await createLead(formData, personId, orgId, ownerId);
+        // 3. Fetch lead labels and determine which to apply
+        const labelMap = await fetchLeadLabels();
+        const labelName = determineLabelName(formData);
+        const labelIds: string[] = [];
+        
+        if (labelName) {
+          const labelId = labelMap.get(labelName.toLowerCase());
+          if (labelId) {
+            labelIds.push(labelId);
+            console.log(`[Pipedrive] Applying label: ${labelName} (${labelId})`);
+          } else {
+            console.warn(`[Pipedrive] Label not found in Pipedrive: ${labelName}`);
+          }
+        }
+        
+        // 4. Create Lead in Leads Inbox with label
+        leadId = await createLead(formData, personId, orgId, ownerId, labelIds);
         
         if (!leadId) {
           throw new Error("Failed to create lead in Pipedrive");
         }
         
-        // 4. Add note with attribution
+        // 5. Add note with attribution
         await addNote(formData, leadId, personId);
         
-        console.log(`[Pipedrive] Lead created: ${leadId} for ${formData.email}`);
+        console.log(`[Pipedrive] Lead created: ${leadId} for ${formData.email}${labelName ? ` with label: ${labelName}` : ""}`);
+        
         
       } catch (error) {
         console.error("[Pipedrive Error]", error);

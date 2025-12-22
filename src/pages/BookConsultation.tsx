@@ -81,6 +81,7 @@ const BookConsultation = () => {
         notes: `Interest: ${interestLabel}\nSource: book-consultation-page`,
         tags: [interestLabel, "Consultation Request"],
         honeypot: honeypotValue,
+        interest_category: data.interestCategory,
       });
 
       if (!result.ok) throw new Error(result.error);
