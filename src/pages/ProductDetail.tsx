@@ -6,11 +6,12 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ShoppingCart, ArrowLeft, Loader2, Minus, Plus } from "lucide-react";
 import { ShopifyProduct, fetchProductByHandle, fetchProducts } from "@/lib/shopify";
-import { useCartStore } from "@/stores/cartStore";
+import { useCartStore, BusinessCardDetails } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
+import { BusinessCardOrderForm, BusinessCardFormData } from "@/components/shop/BusinessCardOrderForm";
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
@@ -20,7 +21,11 @@ const ProductDetail = () => {
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [relatedProducts, setRelatedProducts] = useState<ShopifyProduct[]>([]);
   const [quantity, setQuantity] = useState(1);
+  const [isSubmittingBusinessCard, setIsSubmittingBusinessCard] = useState(false);
   const addItem = useCartStore(state => state.addItem);
+
+  // Check if this is the business cards product
+  const isBusinessCardProduct = handle === "tfa-custom-business-cards";
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -52,7 +57,7 @@ const ProductDetail = () => {
     loadProduct();
   }, [handle]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (businessCardDetails?: BusinessCardDetails) => {
     if (!product || !selectedVariant || quantity < 1) return;
 
     const cartItem = {
@@ -61,7 +66,8 @@ const ProductDetail = () => {
       variantTitle: selectedVariant.title,
       price: selectedVariant.price,
       quantity: Math.max(1, Math.min(99, quantity)),
-      selectedOptions: selectedVariant.selectedOptions
+      selectedOptions: selectedVariant.selectedOptions,
+      businessCardDetails,
     };
     
     addItem(cartItem);
@@ -71,6 +77,25 @@ const ProductDetail = () => {
     });
     
     setQuantity(1);
+  };
+
+  const handleBusinessCardSubmit = (formData: BusinessCardFormData) => {
+    setIsSubmittingBusinessCard(true);
+    
+    const businessCardDetails: BusinessCardDetails = {
+      fullName: formData.fullName,
+      jobTitle: formData.jobTitle,
+      phoneNumber: formData.phoneNumber,
+      emailAddress: formData.emailAddress,
+      website: formData.website || undefined,
+      companyAddress: formData.companyAddress || undefined,
+      specialInstructions: formData.specialInstructions || undefined,
+      headshotUrl: formData.headshotUrl,
+      headshotFileName: formData.headshotFileName,
+    };
+
+    handleAddToCart(businessCardDetails);
+    setIsSubmittingBusinessCard(false);
   };
 
   const handleQuantityChange = (value: number) => {
@@ -199,52 +224,65 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-white/90">
-                Quantity
-              </label>
-              <div className="flex items-center gap-3">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleQuantityChange(quantity - 1)}
-                  disabled={quantity <= 1}
-                  className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white disabled:opacity-50"
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <Input
-                  type="number"
-                  min="1"
-                  max="99"
-                  value={quantity}
-                  onChange={(e) => {
-                    const val = e.target.value === '' ? 1 : parseInt(e.target.value);
-                    handleQuantityChange(val);
-                  }}
-                  className="w-20 text-center bg-white/10 border-white/20 text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                />
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleQuantityChange(quantity + 1)}
-                  disabled={quantity >= 99}
-                  className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white disabled:opacity-50"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+            {/* Show business card form for business cards product */}
+            {isBusinessCardProduct ? (
+              <BusinessCardOrderForm
+                onSubmit={handleBusinessCardSubmit}
+                isSubmitting={isSubmittingBusinessCard}
+                variantTitle={selectedVariant?.title}
+                price={selectedVariant?.price.amount}
+                currencyCode={selectedVariant?.price.currencyCode}
+              />
+            ) : (
+              <>
+                <div className="space-y-3">
+                  <label className="text-sm font-medium text-white/90">
+                    Quantity
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleQuantityChange(quantity - 1)}
+                      disabled={quantity <= 1}
+                      className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white disabled:opacity-50"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <Input
+                      type="number"
+                      min="1"
+                      max="99"
+                      value={quantity}
+                      onChange={(e) => {
+                        const val = e.target.value === '' ? 1 : parseInt(e.target.value);
+                        handleQuantityChange(val);
+                      }}
+                      className="w-20 text-center bg-white/10 border-white/20 text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleQuantityChange(quantity + 1)}
+                      disabled={quantity >= 99}
+                      className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white disabled:opacity-50"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
 
-            <Button
-              onClick={handleAddToCart}
-              disabled={!selectedVariant?.availableForSale || quantity < 1}
-              size="lg"
-              className="w-full md:w-auto px-8 rounded-full bg-primary text-primary-foreground font-semibold hover:shadow-[0_0_15px_rgba(var(--primary),0.5)] transition-all"
-            >
-              <ShoppingCart className="mr-2 h-5 w-5" />
-              {selectedVariant?.availableForSale ? "Add to Cart" : "Out of Stock"}
-            </Button>
+                <Button
+                  onClick={() => handleAddToCart()}
+                  disabled={!selectedVariant?.availableForSale || quantity < 1}
+                  size="lg"
+                  className="w-full md:w-auto px-8 rounded-full bg-primary text-primary-foreground font-semibold hover:shadow-[0_0_15px_rgba(var(--primary),0.5)] transition-all"
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  {selectedVariant?.availableForSale ? "Add to Cart" : "Out of Stock"}
+                </Button>
+              </>
+            )}
           </div>
         </div>
 

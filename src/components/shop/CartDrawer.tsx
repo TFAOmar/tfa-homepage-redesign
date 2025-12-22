@@ -28,6 +28,26 @@ export const CartDrawer = () => {
 
   const handleCheckout = async () => {
     try {
+      // Send notifications for business card orders before checkout
+      const businessCardItems = items.filter(item => item.businessCardDetails);
+      
+      for (const item of businessCardItems) {
+        if (item.businessCardDetails) {
+          await fetch("https://cstkeblqqyjwlrbppucu.supabase.co/functions/v1/send-business-card-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...item.businessCardDetails,
+              productTitle: item.product.node.title,
+              variantTitle: item.variantTitle,
+              price: item.price.amount,
+              currencyCode: item.price.currencyCode,
+              quantity: item.quantity,
+            }),
+          });
+        }
+      }
+
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
       if (checkoutUrl) {

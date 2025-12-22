@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.pipedrive-submit]
 verify_jwt = false
+
+[functions.send-business-card-order]
+verify_jwt = false
