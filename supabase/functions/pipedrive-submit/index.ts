@@ -218,18 +218,48 @@ const determineLabelName = (formData: FormSubmitData): string | null => {
   
   // Form-specific labels
   const formLabelMap: Record<string, string> = {
+    // Kai-Zen forms
     "Kai-Zen Inquiry": "Kai-Zen",
     "Kai-Zen Inquiry - Mariah": "Kai-Zen",
+    
+    // Estate Planning forms
     "Estate Planning Inquiry": "Estate Planning",
     "Living Trust Inquiry - Vanessa": "Estate Planning",
+    
+    // Health & Medicare forms
     "Medicare Inquiry - Tamara": "Medicare",
     "Health Insurance Inquiry": "Health Insurance",
+    "American Way Health Inquiry": "Health Insurance",
+    
+    // Business forms
     "Business Insurance Inquiry": "Business Insurance",
+    "Recinos Business Insurance Inquiry": "Business Insurance",
+    
+    // General contact forms
     "Contact Form": "General Inquiry",
+    "Service Consultation": "General Inquiry",
+    "Schedule Request": "General Inquiry",
+    "Advisor Contact": "General Inquiry",
+    
+    // Careers forms
     "Careers Inquiry": "Careers",
     "Agent Application": "Careers",
     "Franchise Application": "Franchise",
-    "Service Consultation": "General Inquiry",
+    
+    // Advisor onboarding
+    "Advisor Onboarding": "Advisor Onboarding",
+    
+    // Service-specific forms (from ServiceConsultationForm)
+    "Life Insurance": "Life Insurance",
+    "Annuities": "Retirement Planning",
+    "Retirement Planning": "Retirement Planning",
+    "401(k) Rollovers": "Retirement Planning",
+    "Tax Planning": "Tax Strategy",
+    "Estate Planning": "Estate Planning",
+    "Investment Management": "Investment Management",
+    "Healthcare Planning": "Health Insurance",
+    "Business Insurance": "Business Insurance",
+    "Group Retirement Plans": "Retirement Planning",
   };
   
   return formLabelMap[formData.form_name] || null;
