@@ -22,6 +22,7 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState<ShopifyProduct[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [isSubmittingBusinessCard, setIsSubmittingBusinessCard] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const addItem = useCartStore(state => state.addItem);
 
   // Check if this is the business cards product
@@ -125,7 +126,8 @@ const ProductDetail = () => {
   }
 
   const { node } = product;
-  const imageUrl = node.images.edges[0]?.node.url;
+  const productImages = node.images.edges;
+  const currentImage = productImages[selectedImageIndex]?.node;
   const price = selectedVariant ? parseFloat(selectedVariant.price.amount) : 0;
   const hasMultipleVariants = node.variants.edges.length > 1;
 
@@ -143,7 +145,7 @@ const ProductDetail = () => {
             node.description || "TFA branded merchandise",
             selectedVariant?.price.amount || "0",
             selectedVariant?.price.currencyCode || "USD",
-            imageUrl || "",
+            productImages[0]?.node.url || "",
             `${siteConfig.url}/shop/${handle}`,
             selectedVariant?.availableForSale ? "InStock" : "OutOfStock"
           ),
@@ -166,17 +168,43 @@ const ProductDetail = () => {
         </Button>
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-          {/* Product Image */}
-          <div className="rounded-2xl overflow-hidden bg-white border border-white/20 shadow-lg">
-            {imageUrl ? (
-              <img 
-                src={imageUrl} 
-                alt={node.title}
-                className="w-full h-full object-contain"
-              />
-            ) : (
-              <div className="w-full aspect-square flex items-center justify-center bg-secondary/20">
-                <ShoppingCart className="h-24 w-24 text-muted-foreground" />
+          {/* Product Image Gallery */}
+          <div className="space-y-4">
+            {/* Main Image */}
+            <div className="rounded-2xl overflow-hidden bg-white border border-white/20 shadow-lg aspect-square">
+              {currentImage ? (
+                <img 
+                  src={currentImage.url} 
+                  alt={currentImage.altText || node.title}
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                  <ShoppingCart className="h-24 w-24 text-muted-foreground" />
+                </div>
+              )}
+            </div>
+
+            {/* Thumbnails */}
+            {productImages.length > 1 && (
+              <div className="flex gap-3 overflow-x-auto pb-2">
+                {productImages.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                      selectedImageIndex === index
+                        ? "border-primary ring-2 ring-primary/30"
+                        : "border-white/20 hover:border-white/50"
+                    }`}
+                  >
+                    <img
+                      src={image.node.url}
+                      alt={image.node.altText || `${node.title} image ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
               </div>
             )}
           </div>
