@@ -117,8 +117,8 @@ const LivingTrustQuestionnaire = () => {
           </div>
           <div className="text-right text-sm">
             <p className="text-slate-500">Need help?</p>
-            <a href="tel:+1234567890" className="text-primary font-medium hover:underline">
-              (123) 456-7890
+            <a href="tel:+18883505396" className="text-primary font-medium hover:underline">
+              (888) 350-5396
             </a>
           </div>
         </div>
@@ -147,11 +147,11 @@ const LivingTrustQuestionnaire = () => {
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
-                  href="tel:+1234567890"
+                  href="tel:+18883505396"
                   className="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
                 >
                   <Phone className="h-4 w-4" />
-                  <span>(123) 456-7890</span>
+                  <span>(888) 350-5396</span>
                 </a>
                 <a
                   href={`mailto:contact@tfagroup.com`}
