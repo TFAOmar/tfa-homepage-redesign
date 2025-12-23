@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions.send-business-card-order]
 verify_jwt = false
+
+[functions.send-estate-planning-notification]
+verify_jwt = false
