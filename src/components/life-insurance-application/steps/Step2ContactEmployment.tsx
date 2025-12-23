@@ -44,7 +44,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       onChange={field.onChange}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -64,7 +64,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       onChange={field.onChange}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -84,7 +84,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       onChange={field.onChange}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -104,7 +104,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -133,7 +133,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -152,7 +152,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -172,7 +172,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -195,7 +195,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -244,7 +244,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -263,7 +263,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -282,7 +282,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -314,7 +314,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -333,7 +333,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -352,7 +352,7 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
                       className="bg-background/50 min-h-[44px]"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />

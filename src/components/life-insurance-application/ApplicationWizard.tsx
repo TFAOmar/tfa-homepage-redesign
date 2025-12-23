@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Save, Loader2, Send, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useConfetti } from "@/hooks/useConfetti";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import ProgressBar from "./ProgressBar";
@@ -61,6 +62,7 @@ const ApplicationWizard = ({
   advisorName,
 }: ApplicationWizardProps) => {
   const { toast } = useToast();
+  const { fireConfetti } = useConfetti();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   
@@ -439,7 +441,12 @@ const ApplicationWizard = ({
       setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
     } else {
       setHasValidationErrors(true);
-      toast({ title: "Validation Error", description: "Please complete all required fields before continuing.", variant: "destructive" });
+      toast({ 
+        title: "Validation Error", 
+        description: "Please complete all required fields before continuing.", 
+        variant: "destructive",
+        className: "animate-shake motion-reduce:animate-none",
+      });
     }
   };
 
@@ -548,9 +555,17 @@ const ApplicationWizard = ({
       // Clear the draft from localStorage
       localStorage.removeItem("lifeInsuranceApplication");
 
+      // Fire confetti celebration!
+      fireConfetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.7 },
+      });
+
       toast({
-        title: "Application Submitted!",
+        title: "🎉 Application Submitted!",
         description: "Your life insurance application has been submitted successfully. We'll be in touch soon.",
+        className: "animate-pop-in motion-reduce:animate-none",
       });
 
       navigate("/thank-you");
@@ -708,24 +723,32 @@ const ApplicationWizard = ({
               type="button"
               onClick={handleNext}
               disabled={isSubmitting}
-              className="w-full sm:w-auto min-h-[48px] sm:min-h-[44px] gap-2 text-base sm:text-sm"
+              className="relative w-full sm:w-auto min-h-[48px] sm:min-h-[44px] gap-2 text-base sm:text-sm overflow-hidden"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Submitting...
-                </>
-              ) : currentStep === STEPS.length ? (
-                <>
-                  <Send className="w-4 h-4" />
-                  Submit Application
-                </>
-              ) : (
-                <>
-                  Continue
-                  <ArrowRight className="w-4 h-4" />
-                </>
+              {/* Shimmer overlay - only visible when submitting */}
+              {isSubmitting && (
+                <div className="absolute inset-0 -translate-x-full animate-shimmer motion-reduce:animate-none bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               )}
+              
+              {/* Button content */}
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : currentStep === STEPS.length ? (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Submit Application
+                  </>
+                ) : (
+                  <>
+                    Continue
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </span>
             </Button>
           </div>
         </CardContent>

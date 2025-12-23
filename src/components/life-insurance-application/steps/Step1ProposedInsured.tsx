@@ -67,7 +67,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                       {...field} 
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -87,7 +87,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                       {...field} 
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -106,7 +106,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                       {...field} 
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -140,7 +140,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                       <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -159,7 +159,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                       {...field} 
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -188,7 +188,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                       onChange={field.onChange}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -209,7 +209,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                       {...field} 
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -234,7 +234,7 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
