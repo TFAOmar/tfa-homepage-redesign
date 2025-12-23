@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRight, Building2, Heart, Briefcase } from "lucide-react";
+import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRight, Building2, Heart, Briefcase, FileCheck } from "lucide-react";
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
@@ -139,6 +139,16 @@ const AdvisorVanessaSanchez = () => {
                     Living Trust Planning
                   </Button>
                 </Link>
+                <Link to="/advisors/vanessa-sanchez/living-trust-questionnaire">
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="border-white/30 text-white hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto"
+                  >
+                    <FileCheck className="mr-2 h-5 w-5" />
+                    Start Living Trust Questionnaire
+                  </Button>
+                </Link>
               </div>
 
               {/* Quick Info */}
@@ -228,13 +238,22 @@ const AdvisorVanessaSanchez = () => {
                 <h3 className="text-xl font-semibold text-foreground mb-3">{service.title}</h3>
                 <p className="text-muted-foreground">{service.description}</p>
                 {service.title === "Estate Planning" && (
-                  <Link 
-                    to="/advisors/vanessa-sanchez/living-trust" 
-                    className="inline-flex items-center text-accent hover:text-accent/80 mt-4 font-medium transition-colors"
-                  >
-                    Learn about Living Trusts
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </Link>
+                  <div className="flex flex-col gap-2 mt-4">
+                    <Link 
+                      to="/advisors/vanessa-sanchez/living-trust" 
+                      className="inline-flex items-center text-accent hover:text-accent/80 font-medium transition-colors"
+                    >
+                      Learn about Living Trusts
+                      <ChevronRight className="h-4 w-4 ml-1" />
+                    </Link>
+                    <Link 
+                      to="/advisors/vanessa-sanchez/living-trust-questionnaire" 
+                      className="inline-flex items-center text-accent hover:text-accent/80 font-medium transition-colors"
+                    >
+                      <FileCheck className="h-4 w-4 mr-1" />
+                      Start Questionnaire
+                    </Link>
+                  </div>
                 )}
               </Card>
             ))}
@@ -286,7 +305,7 @@ const AdvisorVanessaSanchez = () => {
               Schedule a complimentary consultation and let's create a plan tailored to your goals.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
               <Button 
                 size="lg" 
                 className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-8 py-6 w-full sm:w-auto"
@@ -295,6 +314,12 @@ const AdvisorVanessaSanchez = () => {
                 <Calendar className="mr-2 h-5 w-5" />
                 Book Your Free Consultation
               </Button>
+              <Link to="/advisors/vanessa-sanchez/living-trust-questionnaire">
+                <Button size="lg" variant="hero" className="text-lg px-8 py-6 w-full sm:w-auto">
+                  <FileCheck className="mr-2 h-5 w-5" />
+                  Start Living Trust Questionnaire
+                </Button>
+              </Link>
             </div>
 
             <p className="text-white/60 mt-6 text-sm">
