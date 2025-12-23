@@ -222,7 +222,7 @@ const ProductDetail = () => {
 
             <div className="h-1.5 w-16 bg-primary rounded-full"></div>
 
-            <div className="text-4xl font-bold text-primary">
+            <div className="text-4xl font-bold text-accent">
               {selectedVariant?.price.currencyCode} ${price.toFixed(2)}
             </div>
 

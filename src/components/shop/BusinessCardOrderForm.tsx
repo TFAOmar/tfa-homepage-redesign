@@ -327,7 +327,7 @@ export const BusinessCardOrderForm = ({
           </div>
           <div className="text-right">
             <p className="text-white/70 text-sm">Price</p>
-            <p className="text-primary font-bold text-xl">
+            <p className="text-accent font-bold text-xl">
               {currencyCode} ${parseFloat(price || "0").toFixed(2)}
             </p>
           </div>
