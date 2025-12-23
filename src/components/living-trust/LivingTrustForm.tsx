@@ -23,9 +23,10 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, CheckCircle } from "lucide-react";
+import { Loader2, CheckCircle, CheckCircle2 } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
+import { cn } from "@/lib/utils";
 
 const livingTrustFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -55,6 +56,19 @@ const livingTrustFormSchema = z.object({
 
 type LivingTrustFormData = z.infer<typeof livingTrustFormSchema>;
 
+// Helper function to get input classes based on field state
+const getInputClasses = (hasError: boolean, hasSuccess: boolean) => cn(
+  "bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base transition-colors duration-200",
+  hasError && "border-red-400 focus-visible:ring-red-400/50",
+  hasSuccess && "border-emerald-400 focus-visible:ring-emerald-400/50"
+);
+
+const getSelectClasses = (hasError: boolean, hasSuccess: boolean) => cn(
+  "bg-white/5 border-white/20 text-white min-h-[44px] text-base transition-colors duration-200",
+  hasError && "border-red-400",
+  hasSuccess && "border-emerald-400"
+);
+
 export default function LivingTrustForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -63,6 +77,7 @@ export default function LivingTrustForm() {
 
   const form = useForm<LivingTrustFormData>({
     resolver: zodResolver(livingTrustFormSchema),
+    mode: "onTouched", // Validate on blur, then onChange after touched
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -169,34 +184,44 @@ export default function LivingTrustForm() {
             <FormField
               control={form.control}
               name="firstName"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-white/90 text-sm md:text-base">First Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="John"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        placeholder="John"
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error)}
+                        {...field}
+                      />
+                      {fieldState.isDirty && !fieldState.error && (
+                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                      )}
+                    </div>
                   </FormControl>
-                  <FormMessage className="text-xs md:text-sm" />
+                  <FormMessage className="text-sm text-red-300 mt-1" />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
               name="lastName"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-white/90 text-sm md:text-base">Last Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Smith"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        placeholder="Smith"
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error)}
+                        {...field}
+                      />
+                      {fieldState.isDirty && !fieldState.error && (
+                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                      )}
+                    </div>
                   </FormControl>
-                  <FormMessage className="text-xs md:text-sm" />
+                  <FormMessage className="text-sm text-red-300 mt-1" />
                 </FormItem>
               )}
             />
@@ -207,36 +232,46 @@ export default function LivingTrustForm() {
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-white/90 text-sm md:text-base">Email</FormLabel>
                   <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="john@example.com"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type="email"
+                        placeholder="john@example.com"
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error)}
+                        {...field}
+                      />
+                      {fieldState.isDirty && !fieldState.error && (
+                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                      )}
+                    </div>
                   </FormControl>
-                  <FormMessage className="text-xs md:text-sm" />
+                  <FormMessage className="text-sm text-red-300 mt-1" />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
               name="phone"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-white/90 text-sm md:text-base">Phone</FormLabel>
                   <FormControl>
-                    <Input
-                      type="tel"
-                      placeholder="(555) 123-4567"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type="tel"
+                        placeholder="(555) 123-4567"
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error)}
+                        {...field}
+                      />
+                      {fieldState.isDirty && !fieldState.error && (
+                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                      )}
+                    </div>
                   </FormControl>
-                  <FormMessage className="text-xs md:text-sm" />
+                  <FormMessage className="text-sm text-red-300 mt-1" />
                 </FormItem>
               )}
             />
@@ -246,12 +281,12 @@ export default function LivingTrustForm() {
           <FormField
             control={form.control}
             name="maritalStatus"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel className="text-white/90 text-sm md:text-base">Marital Status</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="bg-white/5 border-white/20 text-white min-h-[44px] text-base">
+                    <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error)}>
                       <SelectValue placeholder="Select your marital status" />
                     </SelectTrigger>
                   </FormControl>
@@ -262,7 +297,7 @@ export default function LivingTrustForm() {
                     <SelectItem value="widowed">Widowed</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage className="text-xs md:text-sm" />
+                <FormMessage className="text-sm text-red-300 mt-1" />
               </FormItem>
             )}
           />
@@ -271,14 +306,18 @@ export default function LivingTrustForm() {
           <FormField
             control={form.control}
             name="ownsProperty"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem className="space-y-3">
                 <FormLabel className="text-white/90 text-sm md:text-base">Do you own property?</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    className="flex flex-wrap gap-4 md:gap-6"
+                    className={cn(
+                      "flex flex-wrap gap-4 md:gap-6 p-2 rounded-lg transition-colors duration-200",
+                      fieldState.error && "ring-1 ring-red-400",
+                      field.value && !fieldState.error && "ring-1 ring-emerald-400"
+                    )}
                   >
                     <div className="flex items-center space-x-2 min-h-[44px]">
                       <RadioGroupItem value="yes" id="property-yes" className="border-white/40 text-accent w-5 h-5" />
@@ -290,7 +329,7 @@ export default function LivingTrustForm() {
                     </div>
                   </RadioGroup>
                 </FormControl>
-                <FormMessage className="text-xs md:text-sm" />
+                <FormMessage className="text-sm text-red-300 mt-1" />
               </FormItem>
             )}
           />
@@ -299,12 +338,12 @@ export default function LivingTrustForm() {
           <FormField
             control={form.control}
             name="estateValue"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel className="text-white/90 text-sm md:text-base">Estimated Estate Value</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="bg-white/5 border-white/20 text-white min-h-[44px] text-base">
+                    <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error)}>
                       <SelectValue placeholder="Select an estimated range" />
                     </SelectTrigger>
                   </FormControl>
@@ -316,7 +355,7 @@ export default function LivingTrustForm() {
                     <SelectItem value="over-2m">Over $2,000,000</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage className="text-xs md:text-sm" />
+                <FormMessage className="text-sm text-red-300 mt-1" />
               </FormItem>
             )}
           />
@@ -326,12 +365,12 @@ export default function LivingTrustForm() {
             <FormField
               control={form.control}
               name="preferredContact"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-white/90 text-sm md:text-base">Preferred Contact Method</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="bg-white/5 border-white/20 text-white min-h-[44px] text-base">
+                      <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error)}>
                         <SelectValue placeholder="Select method" />
                       </SelectTrigger>
                     </FormControl>
@@ -341,19 +380,19 @@ export default function LivingTrustForm() {
                       <SelectItem value="text">Text Message</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage className="text-xs md:text-sm" />
+                  <FormMessage className="text-sm text-red-300 mt-1" />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
               name="bestTimeToReach"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel className="text-white/90 text-sm md:text-base">Best Time to Reach You</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="bg-white/5 border-white/20 text-white min-h-[44px] text-base">
+                      <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error)}>
                         <SelectValue placeholder="Select time" />
                       </SelectTrigger>
                     </FormControl>
@@ -363,7 +402,7 @@ export default function LivingTrustForm() {
                       <SelectItem value="evening">Evening (5pm - 8pm)</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage className="text-xs md:text-sm" />
+                  <FormMessage className="text-sm text-red-300 mt-1" />
                 </FormItem>
               )}
             />
@@ -373,7 +412,7 @@ export default function LivingTrustForm() {
           <FormField
             control={form.control}
             name="notes"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel className="text-white/90 text-sm md:text-base">
                   Additional Notes <span className="text-white/50">(Optional)</span>
@@ -381,11 +420,14 @@ export default function LivingTrustForm() {
                 <FormControl>
                   <Textarea
                     placeholder="Any specific questions or concerns about Living Trusts?"
-                    className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[100px] text-base"
+                    className={cn(
+                      "bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[100px] text-base transition-colors duration-200",
+                      fieldState.error && "border-red-400 focus-visible:ring-red-400/50"
+                    )}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className="text-xs md:text-sm" />
+                <FormMessage className="text-sm text-red-300 mt-1" />
               </FormItem>
             )}
           />
@@ -394,13 +436,20 @@ export default function LivingTrustForm() {
           <FormField
             control={form.control}
             name="agreeToContact"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+            render={({ field, fieldState }) => (
+              <FormItem className={cn(
+                "flex flex-row items-start space-x-3 space-y-0 p-3 rounded-lg transition-colors duration-200",
+                fieldState.error && "ring-1 ring-red-400 bg-red-400/5",
+                field.value && !fieldState.error && "ring-1 ring-emerald-400 bg-emerald-400/5"
+              )}>
                 <FormControl>
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="border-white/40 data-[state=checked]:bg-accent data-[state=checked]:border-accent mt-0.5 w-5 h-5"
+                    className={cn(
+                      "border-white/40 data-[state=checked]:bg-accent data-[state=checked]:border-accent mt-0.5 w-5 h-5",
+                      fieldState.error && "border-red-400"
+                    )}
                   />
                 </FormControl>
                 <div className="space-y-1 leading-tight">
@@ -408,7 +457,7 @@ export default function LivingTrustForm() {
                     I agree to be contacted by Vanessa Sanchez regarding Living Trust services. 
                     I understand this is a free, no-obligation consultation.
                   </FormLabel>
-                  <FormMessage className="text-xs" />
+                  <FormMessage className="text-sm text-red-300" />
                 </div>
               </FormItem>
             )}
