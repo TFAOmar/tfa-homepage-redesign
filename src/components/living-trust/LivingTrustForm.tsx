@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -260,13 +261,13 @@ export default function LivingTrustForm() {
                   <FormLabel className="text-white/90 text-sm md:text-base">Phone</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input
-                        type="tel"
-                        placeholder="(555) 123-4567"
-                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error)}
-                        {...field}
+                      <PhoneInput
+                        value={field.value}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error && field.value?.length === 10)}
                       />
-                      {fieldState.isDirty && !fieldState.error && (
+                      {fieldState.isDirty && !fieldState.error && field.value?.length === 10 && (
                         <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
                       )}
                     </div>
