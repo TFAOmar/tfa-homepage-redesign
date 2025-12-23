@@ -201,9 +201,11 @@ const fetchLeadLabels = async (): Promise<Map<string, string>> => {
   return labelMap;
 };
 
-// Determine label name from form context
-const determineLabelName = (formData: FormSubmitData): string | null => {
-  // Book Consultation - use interest category
+// Determine label names from form context (supports multiple for Book Consultation)
+const determineLabelNames = (formData: FormSubmitData): string[] => {
+  const labels: string[] = [];
+  
+  // Book Consultation - handle multiple interest categories (comma-separated)
   if (formData.form_name === "Book Consultation" && formData.interest_category) {
     const interestLabels: Record<string, string> = {
       retirement: "Retirement Planning",
@@ -213,10 +215,19 @@ const determineLabelName = (formData: FormSubmitData): string | null => {
       estate: "Estate Planning",
       business: "Business Insurance",
     };
-    return interestLabels[formData.interest_category] || null;
+    
+    // Split comma-separated categories and map each to a label
+    const categories = formData.interest_category.split(",");
+    for (const category of categories) {
+      const label = interestLabels[category.trim()];
+      if (label) {
+        labels.push(label);
+      }
+    }
+    return labels;
   }
   
-  // Form-specific labels
+  // Form-specific labels (single label)
   const formLabelMap: Record<string, string> = {
     // Kai-Zen forms
     "Kai-Zen Inquiry": "Kai-Zen",
@@ -262,7 +273,12 @@ const determineLabelName = (formData: FormSubmitData): string | null => {
     "Group Retirement Plans": "Retirement Planning",
   };
   
-  return formLabelMap[formData.form_name] || null;
+  const formLabel = formLabelMap[formData.form_name];
+  if (formLabel) {
+    labels.push(formLabel);
+  }
+  
+  return labels;
 };
 
 // Create lead in Pipedrive Leads Inbox
@@ -731,10 +747,10 @@ serve(async (req) => {
         
         // 3. Fetch lead labels and determine which to apply
         const labelMap = await fetchLeadLabels();
-        const labelName = determineLabelName(formData);
+        const labelNames = determineLabelNames(formData);
         const labelIds: string[] = [];
         
-        if (labelName) {
+        for (const labelName of labelNames) {
           const labelId = labelMap.get(labelName.toLowerCase());
           if (labelId) {
             labelIds.push(labelId);
@@ -744,7 +760,7 @@ serve(async (req) => {
           }
         }
         
-        // 4. Create Lead in Leads Inbox with label
+        // 4. Create Lead in Leads Inbox with all matching labels
         leadId = await createLead(formData, personId, orgId, ownerId, labelIds);
         
         if (!leadId) {
@@ -754,7 +770,7 @@ serve(async (req) => {
         // 5. Add note with attribution
         await addNote(formData, leadId, personId);
         
-        console.log(`[Pipedrive] Lead created: ${leadId} for ${formData.email}${labelName ? ` with label: ${labelName}` : ""}`);
+        console.log(`[Pipedrive] Lead created: ${leadId} for ${formData.email}${labelNames.length > 0 ? ` with labels: ${labelNames.join(", ")}` : ""}`);
         
         
       } catch (error) {
