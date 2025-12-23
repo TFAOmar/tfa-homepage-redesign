@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import EstatePlanningProgressBar from "./EstatePlanningProgressBar";
 import Step1ClientIdentity from "./steps/Step1ClientIdentity";
 import Step2FamilyHeirs from "./steps/Step2FamilyHeirs";
@@ -105,7 +106,28 @@ const EstatePlanningWizard = ({ onComplete }: EstatePlanningWizardProps) => {
       step8: step8Data,
     };
 
+    const step1 = finalData.step1 || {};
+
     try {
+      const { error } = await supabase.functions.invoke("send-estate-planning-notification", {
+        body: {
+          applicantName: `${step1.trustor1FirstName || ""} ${step1.trustor1LastName || ""}`.trim(),
+          applicantEmail: step1.trustor1Email || "",
+          applicantPhone: step1.trustor1Phone || "",
+          spouseName: step1.hasTrustor2 
+            ? `${step1.trustor2FirstName || ""} ${step1.trustor2LastName || ""}`.trim() 
+            : null,
+          formData: finalData,
+          advisorEmail: "scagle@tfainsuranceadvisors.com",
+          advisorName: "Sean Cagle",
+          sourceUrl: window.location.href,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
       // Clear draft on successful submit
       localStorage.removeItem(STORAGE_KEY);
       

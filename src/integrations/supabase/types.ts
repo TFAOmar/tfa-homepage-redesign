@@ -113,6 +113,69 @@ export type Database = {
         }
         Relationships: []
       }
+      estate_planning_applications: {
+        Row: {
+          advisor_email: string | null
+          advisor_id: string | null
+          advisor_name: string | null
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_phone: string | null
+          created_at: string
+          current_step: number
+          form_data: Json
+          id: string
+          source_url: string | null
+          spouse_name: string | null
+          status: Database["public"]["Enums"]["estate_planning_status"]
+          submitted_at: string | null
+          updated_at: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          advisor_email?: string | null
+          advisor_id?: string | null
+          advisor_name?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          current_step?: number
+          form_data?: Json
+          id?: string
+          source_url?: string | null
+          spouse_name?: string | null
+          status?: Database["public"]["Enums"]["estate_planning_status"]
+          submitted_at?: string | null
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          advisor_email?: string | null
+          advisor_id?: string | null
+          advisor_name?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          current_step?: number
+          form_data?: Json
+          id?: string
+          source_url?: string | null
+          spouse_name?: string | null
+          status?: Database["public"]["Enums"]["estate_planning_status"]
+          submitted_at?: string | null
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       form_submissions: {
         Row: {
           advisor: string | null
@@ -501,6 +564,7 @@ export type Database = {
         | "approved"
         | "needs_info"
         | "rejected"
+      estate_planning_status: "draft" | "submitted" | "in_review" | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -639,6 +703,7 @@ export const Constants = {
         "needs_info",
         "rejected",
       ],
+      estate_planning_status: ["draft", "submitted", "in_review", "completed"],
     },
   },
 } as const
