@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,8 @@ import {
   Users,
   FileText,
   Scale,
-  Award
+  Award,
+  FileCheck
 } from "lucide-react";
 import seanImage from "@/assets/advisors/sean-cagle.jpg";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
@@ -175,6 +177,16 @@ const AdvisorSeanCagle = () => {
                   <Mail className="mr-2 h-5 w-5" />
                   Contact Me
                 </Button>
+                <Link to="/advisors/sean-cagle/living-trust-questionnaire">
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="border-white/30 text-white hover:bg-white/10"
+                  >
+                    <FileCheck className="mr-2 h-5 w-5" />
+                    Start Living Trust Questionnaire
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -275,6 +287,17 @@ const AdvisorSeanCagle = () => {
                   <p className="text-muted-foreground">
                     {service.description}
                   </p>
+                  {service.title === "Living Trusts" && (
+                    <Link to="/advisors/sean-cagle/living-trust-questionnaire">
+                      <Button 
+                        variant="link" 
+                        className="mt-4 p-0 h-auto text-accent hover:text-accent/80"
+                      >
+                        <FileCheck className="mr-2 h-4 w-4" />
+                        Start Questionnaire
+                      </Button>
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -341,6 +364,12 @@ const AdvisorSeanCagle = () => {
                 <Calendar className="mr-2 h-5 w-5" />
                 Book Your Free Consultation
               </Button>
+              <Link to="/advisors/sean-cagle/living-trust-questionnaire">
+                <Button size="lg" variant="hero">
+                  <FileCheck className="mr-2 h-5 w-5" />
+                  Start Living Trust Questionnaire
+                </Button>
+              </Link>
               <a href="tel:8883505396">
                 <Button size="lg" variant="hero">
                   <Phone className="mr-2 h-5 w-5" />
