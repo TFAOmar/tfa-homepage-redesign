@@ -93,7 +93,7 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
               </FormItem>
             )}
           />
@@ -129,7 +129,7 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
                 <FormDescription className="text-xs md:text-sm">
                   Annual payments typically offer the best value with premium discounts
                 </FormDescription>
-                <FormMessage />
+                <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
               </FormItem>
             )}
           />
@@ -161,7 +161,7 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -184,7 +184,7 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
                     <FormDescription className="text-xs">
                       9-digit number on the bottom left of your check
                     </FormDescription>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -205,7 +205,7 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -240,7 +240,7 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
                         </FormItem>
                       </RadioGroup>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -279,7 +279,7 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
                   <FormDescription className="text-xs md:text-sm">
                     Required for regulatory compliance
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -299,7 +299,7 @@ const Step8PremiumPayment = ({ form }: Step8PremiumPaymentProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />

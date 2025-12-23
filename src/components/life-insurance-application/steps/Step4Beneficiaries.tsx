@@ -194,7 +194,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   {...field}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -219,7 +219,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -239,7 +239,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   className="bg-background/50"
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -272,7 +272,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                 </div>
                               </RadioGroup>
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                           </FormItem>
                         )}
                       />
@@ -294,7 +294,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   onChange={field.onChange}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -314,7 +314,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   {...field}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -334,7 +334,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   onChange={field.onChange}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -357,7 +357,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   {...field}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -377,7 +377,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   {...field}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -399,7 +399,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   {...field}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -424,7 +424,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />
@@ -444,7 +444,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
                                   {...field}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                             </FormItem>
                           )}
                         />

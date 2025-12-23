@@ -126,7 +126,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                         </SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -154,7 +154,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -173,7 +173,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             onChange={field.onChange}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -192,7 +192,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -217,7 +217,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             ))}
                           </SelectContent>
                         </Select>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -247,7 +247,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -266,7 +266,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -285,7 +285,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -304,7 +304,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -334,7 +334,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -353,7 +353,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -385,7 +385,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                         </FormItem>
                       )}
                     />
@@ -404,7 +404,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                         </FormItem>
                       )}
                     />
@@ -430,7 +430,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                                 ))}
                               </SelectContent>
                             </Select>
-                            <FormMessage />
+                            <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                           </FormItem>
                         )}
                       />
@@ -449,7 +449,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                                 {...field}
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                           </FormItem>
                         )}
                       />
@@ -479,7 +479,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                         </FormItem>
                       )}
                     />
@@ -498,7 +498,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                               onChange={field.onChange}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                         </FormItem>
                       )}
                     />
@@ -529,7 +529,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                               <SelectItem value="other">Non-U.S. Citizen</SelectItem>
                             </SelectContent>
                           </Select>
-                          <FormMessage />
+                          <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                         </FormItem>
                       )}
                     />
@@ -549,7 +549,7 @@ const Step3Ownership = ({ form }: Step3Props) => {
                                 {...field}
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                           </FormItem>
                         )}
                       />
