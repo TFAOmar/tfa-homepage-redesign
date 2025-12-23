@@ -125,14 +125,14 @@ export default function LivingTrustForm() {
 
   if (isSubmitted) {
     return (
-      <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/15 p-8 md:p-12 text-center">
-        <div className="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle className="w-8 h-8 text-accent" />
+      <div className="bg-white/10 backdrop-blur-xl rounded-xl md:rounded-2xl border border-white/15 p-6 md:p-8 lg:p-12 text-center">
+        <div className="w-14 h-14 md:w-16 md:h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+          <CheckCircle className="w-7 h-7 md:w-8 md:h-8 text-accent" />
         </div>
-        <h3 className="text-2xl font-semibold text-white mb-4">
+        <h3 className="text-xl md:text-2xl font-semibold text-white mb-3 md:mb-4">
           Thank You for Your Interest!
         </h3>
-        <p className="text-white/70 max-w-md mx-auto">
+        <p className="text-white/70 max-w-md mx-auto text-sm md:text-base">
           Vanessa will review your information and contact you within 24-48 hours 
           to schedule your free consultation.
         </p>
@@ -141,18 +141,18 @@ export default function LivingTrustForm() {
   }
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/15 p-6 md:p-8">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-semibold text-white mb-2">
+    <div className="bg-white/10 backdrop-blur-xl rounded-xl md:rounded-2xl border border-white/15 p-4 sm:p-6 md:p-8">
+      <div className="text-center mb-6 md:mb-8">
+        <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">
           Request Your Free Consultation
         </h3>
-        <p className="text-white/70">
+        <p className="text-white/70 text-sm md:text-base">
           Fill out this quick questionnaire and Vanessa will be in touch.
         </p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
           {/* Honeypot field - hidden from humans, traps bots */}
           <div className={honeypotClassName}>
             <label htmlFor="trust_website">Website</label>
@@ -165,21 +165,21 @@ export default function LivingTrustForm() {
           </div>
 
           {/* Name Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white/90">First Name</FormLabel>
+                  <FormLabel className="text-white/90 text-sm md:text-base">First Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="John"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs md:text-sm" />
                 </FormItem>
               )}
             />
@@ -188,37 +188,37 @@ export default function LivingTrustForm() {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white/90">Last Name</FormLabel>
+                  <FormLabel className="text-white/90 text-sm md:text-base">Last Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Smith"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs md:text-sm" />
                 </FormItem>
               )}
             />
           </div>
 
           {/* Contact Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white/90">Email</FormLabel>
+                  <FormLabel className="text-white/90 text-sm md:text-base">Email</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder="john@example.com"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs md:text-sm" />
                 </FormItem>
               )}
             />
@@ -227,16 +227,16 @@ export default function LivingTrustForm() {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white/90">Phone</FormLabel>
+                  <FormLabel className="text-white/90 text-sm md:text-base">Phone</FormLabel>
                   <FormControl>
                     <Input
                       type="tel"
                       placeholder="(555) 123-4567"
-                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs md:text-sm" />
                 </FormItem>
               )}
             />
@@ -248,21 +248,21 @@ export default function LivingTrustForm() {
             name="maritalStatus"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white/90">Marital Status</FormLabel>
+                <FormLabel className="text-white/90 text-sm md:text-base">Marital Status</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                    <SelectTrigger className="bg-white/5 border-white/20 text-white min-h-[44px] text-base">
                       <SelectValue placeholder="Select your marital status" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="bg-background border-border">
                     <SelectItem value="single">Single</SelectItem>
                     <SelectItem value="married">Married</SelectItem>
                     <SelectItem value="divorced">Divorced</SelectItem>
                     <SelectItem value="widowed">Widowed</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-xs md:text-sm" />
               </FormItem>
             )}
           />
@@ -273,24 +273,24 @@ export default function LivingTrustForm() {
             name="ownsProperty"
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel className="text-white/90">Do you own property?</FormLabel>
+                <FormLabel className="text-white/90 text-sm md:text-base">Do you own property?</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    className="flex gap-6"
+                    className="flex flex-wrap gap-4 md:gap-6"
                   >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="yes" id="property-yes" className="border-white/40 text-accent" />
-                      <label htmlFor="property-yes" className="text-white/90 cursor-pointer">Yes</label>
+                    <div className="flex items-center space-x-2 min-h-[44px]">
+                      <RadioGroupItem value="yes" id="property-yes" className="border-white/40 text-accent w-5 h-5" />
+                      <label htmlFor="property-yes" className="text-white/90 cursor-pointer text-base">Yes</label>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="no" id="property-no" className="border-white/40 text-accent" />
-                      <label htmlFor="property-no" className="text-white/90 cursor-pointer">No</label>
+                    <div className="flex items-center space-x-2 min-h-[44px]">
+                      <RadioGroupItem value="no" id="property-no" className="border-white/40 text-accent w-5 h-5" />
+                      <label htmlFor="property-no" className="text-white/90 cursor-pointer text-base">No</label>
                     </div>
                   </RadioGroup>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs md:text-sm" />
               </FormItem>
             )}
           />
@@ -301,14 +301,14 @@ export default function LivingTrustForm() {
             name="estateValue"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white/90">Estimated Estate Value</FormLabel>
+                <FormLabel className="text-white/90 text-sm md:text-base">Estimated Estate Value</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                    <SelectTrigger className="bg-white/5 border-white/20 text-white min-h-[44px] text-base">
                       <SelectValue placeholder="Select an estimated range" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="bg-background border-border">
                     <SelectItem value="under-250k">Under $250,000</SelectItem>
                     <SelectItem value="250k-500k">$250,000 - $500,000</SelectItem>
                     <SelectItem value="500k-1m">$500,000 - $1,000,000</SelectItem>
@@ -316,32 +316,32 @@ export default function LivingTrustForm() {
                     <SelectItem value="over-2m">Over $2,000,000</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-xs md:text-sm" />
               </FormItem>
             )}
           />
 
           {/* Contact Preferences */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="preferredContact"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white/90">Preferred Contact Method</FormLabel>
+                  <FormLabel className="text-white/90 text-sm md:text-base">Preferred Contact Method</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                      <SelectTrigger className="bg-white/5 border-white/20 text-white min-h-[44px] text-base">
                         <SelectValue placeholder="Select method" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-background border-border">
                       <SelectItem value="phone">Phone Call</SelectItem>
                       <SelectItem value="email">Email</SelectItem>
                       <SelectItem value="text">Text Message</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-xs md:text-sm" />
                 </FormItem>
               )}
             />
@@ -350,20 +350,20 @@ export default function LivingTrustForm() {
               name="bestTimeToReach"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white/90">Best Time to Reach You</FormLabel>
+                  <FormLabel className="text-white/90 text-sm md:text-base">Best Time to Reach You</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                      <SelectTrigger className="bg-white/5 border-white/20 text-white min-h-[44px] text-base">
                         <SelectValue placeholder="Select time" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-background border-border">
                       <SelectItem value="morning">Morning (9am - 12pm)</SelectItem>
                       <SelectItem value="afternoon">Afternoon (12pm - 5pm)</SelectItem>
                       <SelectItem value="evening">Evening (5pm - 8pm)</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-xs md:text-sm" />
                 </FormItem>
               )}
             />
@@ -375,17 +375,17 @@ export default function LivingTrustForm() {
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white/90">
+                <FormLabel className="text-white/90 text-sm md:text-base">
                   Additional Notes <span className="text-white/50">(Optional)</span>
                 </FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Any specific questions or concerns about Living Trusts?"
-                    className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[100px]"
+                    className="bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[100px] text-base"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs md:text-sm" />
               </FormItem>
             )}
           />
@@ -400,15 +400,15 @@ export default function LivingTrustForm() {
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="border-white/40 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
+                    className="border-white/40 data-[state=checked]:bg-accent data-[state=checked]:border-accent mt-0.5 w-5 h-5"
                   />
                 </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel className="text-white/70 text-sm font-normal cursor-pointer">
+                <div className="space-y-1 leading-tight">
+                  <FormLabel className="text-white/70 text-xs md:text-sm font-normal cursor-pointer leading-relaxed">
                     I agree to be contacted by Vanessa Sanchez regarding Living Trust services. 
                     I understand this is a free, no-obligation consultation.
                   </FormLabel>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </div>
               </FormItem>
             )}
@@ -418,7 +418,7 @@ export default function LivingTrustForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-accent hover:bg-accent/90 text-primary font-semibold py-6 text-lg rounded-full shadow-lg hover:shadow-accent/25 transition-all duration-300"
+            className="w-full bg-accent hover:bg-accent/90 text-primary font-semibold py-4 md:py-6 text-base md:text-lg rounded-full shadow-lg hover:shadow-accent/25 transition-all duration-300 touch-manipulation min-h-[52px] md:min-h-[60px]"
           >
             {isSubmitting ? (
               <>
