@@ -72,8 +72,14 @@ export const submitForm = async (
   // Get UTM params from URL if not provided
   const utmParams = extractUTMParams();
   
-  // Get current page URL as source
-  const sourceUrl = typeof window !== "undefined" ? window.location.href : undefined;
+  // Get current page URL as source (strip query params to avoid length issues with preview tokens)
+  const getCleanSourceUrl = (): string | undefined => {
+    if (typeof window === "undefined") return undefined;
+    const url = new URL(window.location.href);
+    // Remove query params and keep just origin + pathname
+    return `${url.origin}${url.pathname}`.slice(0, 500);
+  };
+  const sourceUrl = getCleanSourceUrl();
   
   const fullPayload: FormSubmitPayload = {
     ...payload,
