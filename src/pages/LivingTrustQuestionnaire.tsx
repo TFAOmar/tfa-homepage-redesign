@@ -7,11 +7,9 @@ import { useAdvisorBySlug } from "@/hooks/useDynamicAdvisors";
 import { advisors } from "@/data/advisors";
 import tfaLogo from "@/assets/tfa-logo.png";
 
-// Helper to find static advisor data
+// Helper to find static advisor data by id
 const findStaticAdvisor = (slug: string) => {
-  return advisors.find(
-    (a) => a.name.toLowerCase().replace(/\s+/g, "-") === slug
-  );
+  return advisors.find((a) => a.id === slug);
 };
 
 const LivingTrustQuestionnaire = () => {
