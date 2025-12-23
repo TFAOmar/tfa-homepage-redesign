@@ -105,6 +105,29 @@ export default {
           "70%": { transform: "translateY(-50%) scale(1.1)" },
           "100%": { opacity: "1", transform: "translateY(-50%) scale(1)" },
         },
+        "success-pulse": {
+          "0%": { 
+            transform: "scale(1)", 
+            opacity: "0.8",
+            boxShadow: "0 0 0 0 hsl(var(--success) / 0.4)"
+          },
+          "50%": { 
+            transform: "scale(1.05)", 
+            opacity: "1",
+            boxShadow: "0 0 0 12px hsl(var(--success) / 0)"
+          },
+          "100%": { 
+            transform: "scale(1)", 
+            opacity: "0.8",
+            boxShadow: "0 0 0 0 hsl(var(--success) / 0)"
+          },
+        },
+        "checkmark-appear": {
+          "0%": { transform: "scale(0)", opacity: "0" },
+          "50%": { transform: "scale(1.2)" },
+          "70%": { transform: "scale(0.9)" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -112,6 +135,8 @@ export default {
         "shake": "shake 0.5s ease-in-out",
         "slide-down-fade": "slide-down-fade 0.2s ease-out forwards",
         "pop-in": "pop-in 0.3s ease-out forwards",
+        "success-pulse": "success-pulse 2s ease-in-out infinite",
+        "checkmark-appear": "checkmark-appear 0.5s ease-out forwards",
       },
     },
   },
