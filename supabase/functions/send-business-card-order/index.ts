@@ -443,7 +443,7 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "TFA Shop <onboarding@resend.dev>",
+        from: "TFA Shop <noreply@tfainsuranceadvisors.com>",
         to: ["orders@tfainsuranceadvisors.com"],
         subject: `New Business Card Order - ${orderData.fullName}`,
         html: emailHtml,
@@ -467,7 +467,7 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "TFA Shop <onboarding@resend.dev>",
+        from: "TFA Shop <noreply@tfainsuranceadvisors.com>",
         to: [orderData.emailAddress],
         subject: `Order Confirmation - TFA Custom Business Cards`,
         html: customerEmailHtml,
