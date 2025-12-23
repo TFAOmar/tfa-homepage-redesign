@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
+import { useConfetti } from "@/hooks/useConfetti";
 import { Loader2, CheckCircle, CheckCircle2 } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
@@ -106,6 +107,7 @@ export default function LivingTrustForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
+  const { fireConfetti } = useConfetti();
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
   const form = useForm<LivingTrustFormData>({
@@ -155,6 +157,13 @@ export default function LivingTrustForm() {
       });
 
       if (!response.ok) throw new Error(response.error);
+      
+      // Fire confetti celebration!
+      fireConfetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.7 },
+      });
       
       setIsSubmitted(true);
       toast({
