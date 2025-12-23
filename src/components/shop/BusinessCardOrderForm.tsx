@@ -18,7 +18,7 @@ const businessCardSchema = z.object({
   jobTitle: z.string().min(1, "Job title is required").max(100),
   phoneNumber: z.string().min(1, "Phone number is required").max(20),
   emailAddress: z.string().email("Invalid email address"),
-  website: z.string().url("Invalid URL").optional().or(z.literal("")),
+  website: z.string().max(255, "Website must be less than 255 characters").optional().or(z.literal("")),
   companyAddress: z.string().max(500).optional(),
   specialInstructions: z.string().max(1000).optional(),
 });
@@ -280,7 +280,7 @@ export const BusinessCardOrderForm = ({
             <Input
               id="website"
               {...register("website")}
-              placeholder="https://www.yourwebsite.com"
+              placeholder="www.yourwebsite.com"
               className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
             />
             {errors.website && (
