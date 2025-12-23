@@ -142,8 +142,8 @@ const AdvisorVanessaSanchez = () => {
                 <Link to="/advisors/vanessa-sanchez/living-trust-questionnaire">
                   <Button 
                     size="lg" 
-                    variant="outline"
-                    className="border-white/30 text-white hover:bg-white/10 text-lg px-8 py-6 w-full sm:w-auto"
+                    variant="hero"
+                    className="text-lg px-8 py-6 w-full sm:w-auto"
                   >
                     <FileCheck className="mr-2 h-5 w-5" />
                     Start Living Trust Questionnaire
