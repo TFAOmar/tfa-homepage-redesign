@@ -185,8 +185,15 @@ export default function LivingTrustForm() {
   if (isSubmitted) {
     return (
       <div className="bg-white/10 backdrop-blur-xl rounded-xl md:rounded-2xl border border-white/15 p-6 md:p-8 lg:p-12 text-center">
-        <div className="w-14 h-14 md:w-16 md:h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-          <CheckCircle className="w-7 h-7 md:w-8 md:h-8 text-accent" />
+        <div className="relative w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 md:mb-6">
+          {/* Pulsing ring effect */}
+          <div className="absolute inset-0 bg-success/20 rounded-full animate-success-pulse motion-reduce:animate-none" />
+          {/* Static background circle */}
+          <div className="absolute inset-0 bg-success/20 rounded-full" />
+          {/* Checkmark icon with appear animation */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <CheckCircle className="w-7 h-7 md:w-8 md:h-8 text-success animate-checkmark-appear motion-reduce:animate-none" />
+          </div>
         </div>
         <h3 className="text-xl md:text-2xl font-semibold text-white mb-3 md:mb-4">
           Thank You for Your Interest!
