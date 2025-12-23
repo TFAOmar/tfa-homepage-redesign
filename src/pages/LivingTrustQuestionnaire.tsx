@@ -6,6 +6,7 @@ import { EstatePlanningApplicationData } from "@/types/estatePlanningApplication
 import { useAdvisorBySlug } from "@/hooks/useDynamicAdvisors";
 import { advisors } from "@/data/advisors";
 import tfaLogo from "@/assets/tfa-logo.png";
+import ContactModal from "@/components/advisors/ContactModal";
 
 // Helper to find static advisor data by id
 const findStaticAdvisor = (slug: string) => {
@@ -16,6 +17,7 @@ const LivingTrustQuestionnaire = () => {
   const navigate = useNavigate();
   const { advisorSlug } = useParams<{ advisorSlug: string }>();
   const [isCompleted, setIsCompleted] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
 
   // Fetch advisor from database if slug provided
   const { data: dbAdvisor, isLoading: isLoadingAdvisor } = useAdvisorBySlug(advisorSlug);
@@ -155,13 +157,13 @@ const LivingTrustQuestionnaire = () => {
                   <Phone className="h-4 w-4" />
                   <span>(888) 350-5396</span>
                 </a>
-                <a
-                  href={`mailto:contact@tfagroup.com`}
+                <button
+                  onClick={() => setContactModalOpen(true)}
                   className="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
                 >
                   <Mail className="h-4 w-4" />
                   <span>Contact</span>
-                </a>
+                </button>
               </div>
             </div>
           )}
@@ -171,6 +173,18 @@ const LivingTrustQuestionnaire = () => {
           </div>
         </div>
       </footer>
+
+      {/* Contact Modal */}
+      {advisor && (
+        <ContactModal
+          open={contactModalOpen}
+          onOpenChange={setContactModalOpen}
+          advisorName={advisor.name}
+          advisorEmail={advisorEmail}
+          advisorImage={staticAdvisor?.image || advisor.image_url || undefined}
+          advisorSlug={advisorSlug}
+        />
+      )}
     </div>
   );
 };
