@@ -520,16 +520,24 @@ export default function LivingTrustForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-accent hover:bg-accent/90 text-primary font-semibold py-4 md:py-6 text-base md:text-lg rounded-full shadow-lg hover:shadow-accent/25 transition-all duration-300 touch-manipulation min-h-[52px] md:min-h-[60px]"
+            className="relative w-full bg-accent hover:bg-accent/90 text-primary font-semibold py-4 md:py-6 text-base md:text-lg rounded-full shadow-lg hover:shadow-accent/25 transition-all duration-300 touch-manipulation min-h-[52px] md:min-h-[60px] overflow-hidden"
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              "Request Your Free Consultation"
+            {/* Shimmer overlay - only visible when submitting */}
+            {isSubmitting && (
+              <div className="absolute inset-0 -translate-x-full animate-shimmer motion-reduce:animate-none bg-gradient-to-r from-transparent via-white/30 to-transparent" />
             )}
+            
+            {/* Button content */}
+            <span className="relative z-10 flex items-center justify-center">
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                "Request Your Free Consultation"
+              )}
+            </span>
           </Button>
         </form>
       </Form>
