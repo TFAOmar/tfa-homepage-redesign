@@ -42,8 +42,8 @@ const handler = async (req: Request): Promise<Response> => {
       applicantPhone,
       spouseName,
       formData,
-      advisorEmail = "scagle@tfainsuranceadvisors.com",
-      advisorName = "Sean Cagle",
+      advisorEmail = "info@tfainsuranceadvisors.com",
+      advisorName = "TFA Advisor",
       sourceUrl,
     } = requestData;
 
@@ -271,13 +271,13 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send email to advisor
-    console.log("Sending email notification to:", advisorEmail);
+    // Send email to advisor with CC to clients inbox
+    console.log("Sending email notification to:", advisorEmail, "CC: clients@tfainsuranceadvisors.com");
     const { error: emailError } = await resend.emails.send({
       from: "TFA Estate Planning <onboarding@resend.dev>",
       to: [advisorEmail],
-      cc: ["leads@tfainsuranceadvisors.com"],
-      subject: `New Estate Planning Intake - ${applicantName}`,
+      cc: ["clients@tfainsuranceadvisors.com"],
+      subject: `New Estate Planning Intake - ${applicantName} (Advisor: ${advisorName})`,
       html: emailHtml,
     });
 
