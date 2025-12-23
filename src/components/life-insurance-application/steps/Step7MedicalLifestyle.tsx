@@ -107,7 +107,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -132,7 +132,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -151,7 +151,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -205,7 +205,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -249,7 +249,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -293,7 +293,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -347,7 +347,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -391,7 +391,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -435,7 +435,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -498,7 +498,7 @@ const Step7MedicalLifestyle = ({ form }: Step7MedicalLifestyleProps) => {
                   <FormDescription className="text-xs md:text-sm">
                     Include all relevant medical history, medications, and treating physicians
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />

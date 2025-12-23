@@ -353,7 +353,7 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
                   <FormLabel className="text-xs md:text-sm font-normal text-foreground leading-relaxed">
                     I certify that all information provided in this application is true, complete, and accurate to the best of my knowledge. I understand that any false statements or material misrepresentations may result in denial of coverage or cancellation of the policy.
                   </FormLabel>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </div>
               </FormItem>
             )}
@@ -374,7 +374,7 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -393,7 +393,7 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />

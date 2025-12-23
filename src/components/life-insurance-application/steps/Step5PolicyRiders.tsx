@@ -88,7 +88,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -114,7 +114,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                   </FormItem>
                 )}
               />
@@ -137,7 +137,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                   />
                 </FormControl>
                 <FormDescription className="text-xs md:text-sm">Minimum face amount is $1,000</FormDescription>
-                <FormMessage />
+                <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
               </FormItem>
             )}
           />
@@ -309,7 +309,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
@@ -328,7 +328,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                       </FormItem>
                     )}
                   />
