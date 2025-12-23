@@ -132,6 +132,14 @@ export default {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
         },
+        "focus-ring": {
+          "0%": { 
+            boxShadow: "0 0 0 0 hsl(var(--ring) / 0.5)",
+          },
+          "100%": { 
+            boxShadow: "0 0 0 3px hsl(var(--ring) / 0.25)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -141,6 +149,7 @@ export default {
         "pop-in": "pop-in 0.3s ease-out forwards",
         "success-pulse": "success-pulse 2s ease-in-out infinite",
         "checkmark-appear": "checkmark-appear 0.5s ease-out forwards",
+        "focus-ring": "focus-ring 0.3s ease-out forwards",
         "shimmer": "shimmer 1.5s infinite",
       },
     },
