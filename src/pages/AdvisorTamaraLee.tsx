@@ -26,10 +26,11 @@ import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema }
 import { siteConfig } from "@/lib/seo/siteConfig";
 
 const specialties = [
-  "Medicare Planning",
-  "Retirement Planning", 
-  "Business Planning",
-  "Healthcare Planning"
+  "Business Strategy",
+  "Financial Planning", 
+  "Retirement Strategy",
+  "Employee Benefits",
+  "Healthcare Solutions"
 ];
 
 const services = [
@@ -69,22 +70,22 @@ const processSteps = [
   {
     number: "01",
     title: "Discovery Call",
-    description: "We start by understanding your unique healthcare needs, current situation, and financial goals."
+    description: "We start by understanding your unique business or personal goals, current situation, and long-term vision."
   },
   {
     number: "02",
-    title: "Medicare Review",
-    description: "Comprehensive analysis of your Medicare options, eligibility, and available plans in your area."
+    title: "Strategy Assessment",
+    description: "Comprehensive analysis of your financial landscape, retirement plans, and business needs."
   },
   {
     number: "03",
-    title: "Strategy Presentation",
-    description: "Clear presentation of your personalized healthcare plan with transparent options and recommendations."
+    title: "Solution Presentation",
+    description: "Clear presentation of your personalized strategy with transparent options and actionable recommendations."
   },
   {
     number: "04",
-    title: "Implementation",
-    description: "Guided enrollment process with ongoing support to ensure your coverage meets your needs."
+    title: "Implementation & Support",
+    description: "Guided execution of your strategy with ongoing support to ensure your goals are achieved."
   }
 ];
 
@@ -99,22 +100,22 @@ const AdvisorTamaraLee = () => {
   return (
     <>
       <SEOHead
-        title="Tamara Lee - Medicare & Retirement Healthcare Expert"
-        description="Work with Tamara Lee, Medicare Specialist in Claremont, CA. Over 11 years of experience helping clients navigate Medicare and retirement healthcare planning."
+        title="Tamara Lee - Finance and Business Strategist"
+        description="Work with Tamara Lee, Finance and Business Strategist in Claremont, CA. Over 11 years of experience helping individuals and businesses with retirement strategies, financial planning, and healthcare solutions."
         canonical={`${siteConfig.url}/advisors/tamara-lee`}
         ogType="profile"
-        keywords="Medicare specialist Claremont, Medicare planning, retirement healthcare, healthcare planning California"
+        keywords="business strategist Claremont, financial planning, retirement strategy, employee benefits, business consulting California"
       />
       <JsonLd data={[
         generateWebPageSchema(
-          "Tamara Lee - Medicare & Retirement Healthcare Expert | The Financial Architects",
-          "Work with Tamara Lee, Medicare Specialist in Claremont, CA. Over 11 years of experience in Medicare and retirement healthcare planning.",
+          "Tamara Lee - Finance and Business Strategist | The Financial Architects",
+          "Work with Tamara Lee, Finance and Business Strategist in Claremont, CA. Over 11 years of experience helping individuals and businesses with financial planning and retirement strategies.",
           `${siteConfig.url}/advisors/tamara-lee`
         ),
         generatePersonSchema(
           "Tamara Lee",
-          "Medicare Specialist",
-          "Tamara Lee is a Medicare and Retirement Healthcare Expert at The Financial Architects in Claremont, CA, with over 11 years of experience helping clients navigate Medicare options.",
+          "Finance and Business Strategist",
+          "Tamara Lee is a Finance and Business Strategist at The Financial Architects in Claremont, CA, with over 11 years of experience helping individuals and businesses with retirement strategies, financial planning, and healthcare solutions.",
           tamaraLeeImg,
           `${siteConfig.url}/advisors/tamara-lee`,
           specialties
