@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -29,6 +29,36 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { cn } from "@/lib/utils";
 
+// Custom hook for shake animation on validation errors
+const useShakeOnError = (form: ReturnType<typeof useForm<LivingTrustFormData>>) => {
+  const [shakingFields, setShakingFields] = useState<Set<string>>(new Set());
+
+  const triggerShake = useCallback((fieldName: string) => {
+    setShakingFields(prev => new Set([...prev, fieldName]));
+    setTimeout(() => {
+      setShakingFields(prev => {
+        const next = new Set(prev);
+        next.delete(fieldName);
+        return next;
+      });
+    }, 500);
+  }, []);
+
+  useEffect(() => {
+    const subscription = form.watch((_, { name, type }) => {
+      if (type === "change" && name) {
+        const fieldError = form.formState.errors[name as keyof LivingTrustFormData];
+        if (fieldError && form.formState.touchedFields[name as keyof LivingTrustFormData]) {
+          triggerShake(name);
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, triggerShake]);
+
+  return { shakingFields, triggerShake };
+};
+
 const livingTrustFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
   lastName: z.string().trim().min(1, "Last name is required").max(50),
@@ -58,16 +88,18 @@ const livingTrustFormSchema = z.object({
 type LivingTrustFormData = z.infer<typeof livingTrustFormSchema>;
 
 // Helper function to get input classes based on field state
-const getInputClasses = (hasError: boolean, hasSuccess: boolean) => cn(
-  "bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base transition-colors duration-200",
+const getInputClasses = (hasError: boolean, hasSuccess: boolean, isShaking: boolean = false) => cn(
+  "bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[44px] text-base transition-all duration-200 ease-out",
   hasError && "border-red-400 focus-visible:ring-red-400/50",
-  hasSuccess && "border-emerald-400 focus-visible:ring-emerald-400/50"
+  hasSuccess && "border-emerald-400 focus-visible:ring-emerald-400/50",
+  isShaking && "animate-shake motion-reduce:animate-none"
 );
 
-const getSelectClasses = (hasError: boolean, hasSuccess: boolean) => cn(
-  "bg-white/5 border-white/20 text-white min-h-[44px] text-base transition-colors duration-200",
+const getSelectClasses = (hasError: boolean, hasSuccess: boolean, isShaking: boolean = false) => cn(
+  "bg-white/5 border-white/20 text-white min-h-[44px] text-base transition-all duration-200 ease-out",
   hasError && "border-red-400",
-  hasSuccess && "border-emerald-400"
+  hasSuccess && "border-emerald-400",
+  isShaking && "animate-shake motion-reduce:animate-none"
 );
 
 export default function LivingTrustForm() {
@@ -88,6 +120,8 @@ export default function LivingTrustForm() {
       agreeToContact: false,
     },
   });
+
+  const { shakingFields } = useShakeOnError(form);
 
   const onSubmit = async (data: LivingTrustFormData) => {
     // Silently reject bot submissions
@@ -192,15 +226,15 @@ export default function LivingTrustForm() {
                     <div className="relative">
                       <Input
                         placeholder="John"
-                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error)}
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error, shakingFields.has("firstName"))}
                         {...field}
                       />
                       {fieldState.isDirty && !fieldState.error && (
-                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                        <CheckCircle2 className="absolute right-3 top-1/2 w-5 h-5 text-emerald-400 animate-pop-in motion-reduce:animate-none" />
                       )}
                     </div>
                   </FormControl>
-                  <FormMessage className="text-sm text-red-300 mt-1" />
+                  <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -214,15 +248,15 @@ export default function LivingTrustForm() {
                     <div className="relative">
                       <Input
                         placeholder="Smith"
-                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error)}
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error, shakingFields.has("lastName"))}
                         {...field}
                       />
                       {fieldState.isDirty && !fieldState.error && (
-                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                        <CheckCircle2 className="absolute right-3 top-1/2 w-5 h-5 text-emerald-400 animate-pop-in motion-reduce:animate-none" />
                       )}
                     </div>
                   </FormControl>
-                  <FormMessage className="text-sm text-red-300 mt-1" />
+                  <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -241,15 +275,15 @@ export default function LivingTrustForm() {
                       <Input
                         type="email"
                         placeholder="john@example.com"
-                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error)}
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error, shakingFields.has("email"))}
                         {...field}
                       />
                       {fieldState.isDirty && !fieldState.error && (
-                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                        <CheckCircle2 className="absolute right-3 top-1/2 w-5 h-5 text-emerald-400 animate-pop-in motion-reduce:animate-none" />
                       )}
                     </div>
                   </FormControl>
-                  <FormMessage className="text-sm text-red-300 mt-1" />
+                  <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -265,14 +299,14 @@ export default function LivingTrustForm() {
                         value={field.value}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
-                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error && field.value?.length === 10)}
+                        className={getInputClasses(!!fieldState.error, fieldState.isDirty && !fieldState.error && field.value?.length === 10, shakingFields.has("phone"))}
                       />
                       {fieldState.isDirty && !fieldState.error && field.value?.length === 10 && (
-                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                        <CheckCircle2 className="absolute right-3 top-1/2 w-5 h-5 text-emerald-400 animate-pop-in motion-reduce:animate-none" />
                       )}
                     </div>
                   </FormControl>
-                  <FormMessage className="text-sm text-red-300 mt-1" />
+                  <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -287,7 +321,7 @@ export default function LivingTrustForm() {
                 <FormLabel className="text-white/90 text-sm md:text-base">Marital Status</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error)}>
+                    <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error, shakingFields.has("maritalStatus"))}>
                       <SelectValue placeholder="Select your marital status" />
                     </SelectTrigger>
                   </FormControl>
@@ -298,7 +332,7 @@ export default function LivingTrustForm() {
                     <SelectItem value="widowed">Widowed</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage className="text-sm text-red-300 mt-1" />
+                <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
               </FormItem>
             )}
           />
@@ -315,9 +349,10 @@ export default function LivingTrustForm() {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     className={cn(
-                      "flex flex-wrap gap-4 md:gap-6 p-2 rounded-lg transition-colors duration-200",
+                      "flex flex-wrap gap-4 md:gap-6 p-2 rounded-lg transition-all duration-200 ease-out",
                       fieldState.error && "ring-1 ring-red-400",
-                      field.value && !fieldState.error && "ring-1 ring-emerald-400"
+                      field.value && !fieldState.error && "ring-1 ring-emerald-400",
+                      shakingFields.has("ownsProperty") && "animate-shake motion-reduce:animate-none"
                     )}
                   >
                     <div className="flex items-center space-x-2 min-h-[44px]">
@@ -330,7 +365,7 @@ export default function LivingTrustForm() {
                     </div>
                   </RadioGroup>
                 </FormControl>
-                <FormMessage className="text-sm text-red-300 mt-1" />
+                <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
               </FormItem>
             )}
           />
@@ -344,7 +379,7 @@ export default function LivingTrustForm() {
                 <FormLabel className="text-white/90 text-sm md:text-base">Estimated Estate Value</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error)}>
+                    <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error, shakingFields.has("estateValue"))}>
                       <SelectValue placeholder="Select an estimated range" />
                     </SelectTrigger>
                   </FormControl>
@@ -356,7 +391,7 @@ export default function LivingTrustForm() {
                     <SelectItem value="over-2m">Over $2,000,000</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage className="text-sm text-red-300 mt-1" />
+                <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
               </FormItem>
             )}
           />
@@ -371,7 +406,7 @@ export default function LivingTrustForm() {
                   <FormLabel className="text-white/90 text-sm md:text-base">Preferred Contact Method</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error)}>
+                      <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error, shakingFields.has("preferredContact"))}>
                         <SelectValue placeholder="Select method" />
                       </SelectTrigger>
                     </FormControl>
@@ -381,7 +416,7 @@ export default function LivingTrustForm() {
                       <SelectItem value="text">Text Message</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage className="text-sm text-red-300 mt-1" />
+                  <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -393,7 +428,7 @@ export default function LivingTrustForm() {
                   <FormLabel className="text-white/90 text-sm md:text-base">Best Time to Reach You</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error)}>
+                      <SelectTrigger className={getSelectClasses(!!fieldState.error, !!field.value && !fieldState.error, shakingFields.has("bestTimeToReach"))}>
                         <SelectValue placeholder="Select time" />
                       </SelectTrigger>
                     </FormControl>
@@ -403,7 +438,7 @@ export default function LivingTrustForm() {
                       <SelectItem value="evening">Evening (5pm - 8pm)</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage className="text-sm text-red-300 mt-1" />
+                  <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
                 </FormItem>
               )}
             />
@@ -422,13 +457,13 @@ export default function LivingTrustForm() {
                   <Textarea
                     placeholder="Any specific questions or concerns about Living Trusts?"
                     className={cn(
-                      "bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[100px] text-base transition-colors duration-200",
+                      "bg-white/5 border-white/20 text-white placeholder:text-white/40 min-h-[100px] text-base transition-all duration-200 ease-out",
                       fieldState.error && "border-red-400 focus-visible:ring-red-400/50"
                     )}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className="text-sm text-red-300 mt-1" />
+                <FormMessage className="text-sm text-red-300 mt-1 animate-slide-down-fade motion-reduce:animate-none" />
               </FormItem>
             )}
           />
@@ -439,9 +474,10 @@ export default function LivingTrustForm() {
             name="agreeToContact"
             render={({ field, fieldState }) => (
               <FormItem className={cn(
-                "flex flex-row items-start space-x-3 space-y-0 p-3 rounded-lg transition-colors duration-200",
+                "flex flex-row items-start space-x-3 space-y-0 p-3 rounded-lg transition-all duration-200 ease-out",
                 fieldState.error && "ring-1 ring-red-400 bg-red-400/5",
-                field.value && !fieldState.error && "ring-1 ring-emerald-400 bg-emerald-400/5"
+                field.value && !fieldState.error && "ring-1 ring-emerald-400 bg-emerald-400/5",
+                shakingFields.has("agreeToContact") && "animate-shake motion-reduce:animate-none"
               )}>
                 <FormControl>
                   <Checkbox
@@ -458,7 +494,7 @@ export default function LivingTrustForm() {
                     I agree to be contacted by Vanessa Sanchez regarding Living Trust services. 
                     I understand this is a free, no-obligation consultation.
                   </FormLabel>
-                  <FormMessage className="text-sm text-red-300" />
+                  <FormMessage className="text-sm text-red-300 animate-slide-down-fade motion-reduce:animate-none" />
                 </div>
               </FormItem>
             )}
