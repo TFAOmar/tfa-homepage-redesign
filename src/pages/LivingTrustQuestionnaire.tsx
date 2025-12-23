@@ -32,6 +32,9 @@ const LivingTrustQuestionnaire = () => {
     scheduling_link: null,
   } : null);
 
+  // Get advisor email from static data (db advisor doesn't expose email for privacy)
+  const advisorEmail = staticAdvisor?.email || undefined;
+
   // Loading state
   if (advisorSlug && isLoadingAdvisor) {
     return (
@@ -131,6 +134,7 @@ const LivingTrustQuestionnaire = () => {
             onComplete={handleComplete}
             advisorId={advisor?.id}
             advisorName={advisor?.name}
+            advisorEmail={advisorEmail}
           />
         </div>
       </main>
