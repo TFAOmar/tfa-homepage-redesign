@@ -66,12 +66,13 @@ import InsuranceServices from "./pages/InsuranceServices";
 import GroupRetirement from "./pages/GroupRetirement";
 import AmericanWayHealth from "./pages/AmericanWayHealth";
 import LifeInsuranceApplication from "./pages/LifeInsuranceApplication";
+import EstatePlanningIntake from "./pages/EstatePlanningIntake";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/estate-guru'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -153,6 +154,7 @@ const AppLayout = () => {
           <Route path="/health-insurance/american-way-health" element={<AmericanWayHealth />} />
           <Route path="/advisors/:advisorSlug/life-insurance" element={<LifeInsuranceApplication />} />
           <Route path="/life-insurance-application" element={<LifeInsuranceApplication />} />
+          <Route path="/estate-guru" element={<EstatePlanningIntake />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
