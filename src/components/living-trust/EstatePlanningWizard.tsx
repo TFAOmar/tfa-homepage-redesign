@@ -27,9 +27,11 @@ const STORAGE_KEY = "estate-planning-draft";
 
 interface EstatePlanningWizardProps {
   onComplete?: (data: EstatePlanningApplicationData) => void;
+  advisorId?: string;
+  advisorName?: string;
 }
 
-const EstatePlanningWizard = ({ onComplete }: EstatePlanningWizardProps) => {
+const EstatePlanningWizard = ({ onComplete, advisorId, advisorName }: EstatePlanningWizardProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [formData, setFormData] = useState<EstatePlanningApplicationData>(defaultApplicationData);
@@ -118,8 +120,9 @@ const EstatePlanningWizard = ({ onComplete }: EstatePlanningWizardProps) => {
             ? `${step1.trustor2FirstName || ""} ${step1.trustor2LastName || ""}`.trim() 
             : null,
           formData: finalData,
-          advisorEmail: "scagle@tfainsuranceadvisors.com",
-          advisorName: "Sean Cagle",
+          advisorId: advisorId,
+          advisorName: advisorName || "TFA Advisor",
+          advisorEmail: "scagle@tfainsuranceadvisors.com", // Default, could be dynamic
           sourceUrl: window.location.href,
         },
       });
