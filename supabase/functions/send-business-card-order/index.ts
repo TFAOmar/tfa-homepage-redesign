@@ -238,7 +238,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
       body: JSON.stringify({
         from: "TFA Shop <onboarding@resend.dev>",
-        to: ["lulloa@tfainsuranceadvisors.com"],
+        to: ["orders@tfainsuranceadvisors.com"],
         subject: `New Business Card Order - ${orderData.fullName}`,
         html: emailHtml,
       }),
