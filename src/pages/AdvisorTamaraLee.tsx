@@ -135,7 +135,7 @@ const AdvisorTamaraLee = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <Badge className="bg-accent/20 text-accent border-accent/30 hover:bg-accent/30">
-                Medicare Specialist
+                Finance and Business Strategist
               </Badge>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
@@ -147,7 +147,7 @@ const AdvisorTamaraLee = () => {
               </p>
               
               <p className="text-lg text-primary-foreground/70 max-w-xl">
-                With over 11 years of experience in the healthcare field, I help clients navigate the complexities of Medicare and retirement healthcare while aligning their long-term financial strategies.
+                With over 11 years of experience in the healthcare field, I help clients and businesses navigate the complexities of retirement strategies aligning long-term financial and healthcare goals.
               </p>
               
               <div className="flex flex-wrap gap-4 text-sm text-primary-foreground/70">
