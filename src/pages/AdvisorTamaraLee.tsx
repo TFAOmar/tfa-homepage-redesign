@@ -34,34 +34,34 @@ const specialties = [
 
 const services = [
   {
+    icon: Building2,
+    title: "Business Strategy",
+    description: "Strategic planning and solutions for businesses looking to optimize their financial and healthcare benefits for employees."
+  },
+  {
     icon: Shield,
-    title: "Medicare Planning",
-    description: "Expert guidance through Medicare options, enrollment periods, and plan selection to ensure you have the coverage you need."
+    title: "Retirement Planning",
+    description: "Comprehensive retirement strategies that align your long-term financial goals with healthcare needs."
   },
   {
     icon: Heart,
-    title: "Retirement Healthcare",
-    description: "Aligning your healthcare needs with your retirement financial strategies for comprehensive protection."
-  },
-  {
-    icon: Building2,
-    title: "Employer Benefits",
-    description: "B2B solutions for employer and employee healthcare relationships, helping businesses care for their teams."
+    title: "Healthcare Planning",
+    description: "Navigate the complexities of healthcare options to ensure you and your team have the coverage you need."
   },
   {
     icon: ClipboardCheck,
-    title: "Retirement Planning",
-    description: "Long-term retirement strategies that integrate seamlessly with your healthcare needs and goals."
+    title: "Financial Strategy",
+    description: "Long-term financial strategies tailored to individuals and businesses for sustainable growth."
   },
   {
     icon: Users,
-    title: "Business Planning",
-    description: "Healthcare solutions designed for business owners and their employees' wellbeing."
+    title: "Employee Benefits",
+    description: "B2B solutions helping businesses create comprehensive benefits packages that attract and retain talent."
   },
   {
     icon: Handshake,
     title: "Individual Guidance",
-    description: "Personalized support and education to help you make informed healthcare decisions with confidence."
+    description: "Personalized support to help you make informed decisions about your financial and healthcare future."
   }
 ];
 
@@ -143,7 +143,7 @@ const AdvisorTamaraLee = () => {
               </h1>
               
               <p className="text-xl md:text-2xl text-primary-foreground/80 font-light">
-                Your Medicare & Retirement Healthcare Expert
+                Your Finance & Business Strategy Expert
               </p>
               
               <p className="text-lg text-primary-foreground/70 max-w-xl">
@@ -196,11 +196,11 @@ const AdvisorTamaraLee = () => {
                 <div className="absolute -inset-4 bg-gradient-to-br from-accent/30 to-accent/10 rounded-2xl blur-2xl" />
                 <img
                   src={tamaraLeeImg}
-                  alt="Tamara Lee - Medicare Specialist"
+                  alt="Tamara Lee - Finance and Business Strategist"
                   className="relative rounded-2xl shadow-2xl w-full max-w-md object-cover aspect-[3/4]"
                 />
                 <div className="absolute -bottom-4 -right-4 bg-accent text-accent-foreground px-4 py-2 rounded-lg shadow-lg">
-                  <span className="font-semibold">Medicare Expert</span>
+                  <span className="font-semibold">Business Strategist</span>
                 </div>
               </div>
             </div>
@@ -248,7 +248,7 @@ const AdvisorTamaraLee = () => {
               How I Can Help You
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive healthcare and retirement planning services tailored to your unique needs.
+              Comprehensive financial and business strategy services tailored to individuals and businesses.
             </p>
             <Link 
               to="/advisors/tamara-lee/medicare" 
@@ -287,7 +287,7 @@ const AdvisorTamaraLee = () => {
               Working Together
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A simple, guided process to help you navigate Medicare with confidence.
+              A simple, guided process to help you achieve your financial and healthcare goals with confidence.
             </p>
           </div>
           
@@ -316,10 +316,10 @@ const AdvisorTamaraLee = () => {
       <section className="py-20 md:py-28 bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Navigate Medicare with Confidence?
+            Ready to Elevate Your Financial Strategy?
           </h2>
           <p className="text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
-            Let's discuss your healthcare needs and create a plan that protects your health and financial future.
+            Let's discuss your business and financial goals and create a strategy that secures your future.
           </p>
           
           <div className="flex flex-wrap justify-center gap-4">
@@ -354,7 +354,7 @@ const AdvisorTamaraLee = () => {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-accent" />
-              <span>Expert Medicare Guidance</span>
+              <span>Expert Business Strategy</span>
             </div>
           </div>
         </div>
