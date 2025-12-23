@@ -140,7 +140,7 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                                 {...field}
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                           </FormItem>
                         )}
                       />
@@ -159,7 +159,7 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                                 {...field}
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                           </FormItem>
                         )}
                       />
@@ -179,7 +179,7 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                                 className="min-h-[44px]"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
                           </FormItem>
                         )}
                       />

@@ -10,10 +10,11 @@ interface ValidatedInputProps extends React.ComponentProps<typeof Input> {
     isTouched?: boolean;
   };
   showSuccessIndicator?: boolean;
+  isShaking?: boolean;
 }
 
 const ValidatedInput = React.forwardRef<HTMLInputElement, ValidatedInputProps>(
-  ({ className, fieldState, showSuccessIndicator = true, ...props }, ref) => {
+  ({ className, fieldState, showSuccessIndicator = true, isShaking = false, ...props }, ref) => {
     const hasError = !!fieldState?.error;
     const showSuccess = showSuccessIndicator && fieldState?.isDirty && !hasError;
 
@@ -23,11 +24,15 @@ const ValidatedInput = React.forwardRef<HTMLInputElement, ValidatedInputProps>(
           ref={ref}
           hasError={hasError}
           hasSuccess={showSuccess}
-          className={cn(showSuccess && "pr-10", className)}
+          className={cn(
+            showSuccess && "pr-10",
+            isShaking && "animate-shake motion-reduce:animate-none",
+            className
+          )}
           {...props}
         />
         {showSuccess && (
-          <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-success pointer-events-none" />
+          <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-success pointer-events-none animate-pop-in motion-reduce:animate-none" />
         )}
       </div>
     );
