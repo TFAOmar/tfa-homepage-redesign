@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar, CheckCircle, Users, FileText, Clock, Shield, Award, Star, ArrowRight, Phone, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +22,15 @@ import massmutualLogo from "@/assets/carriers/massmutual.png";
 import principalLogo from "@/assets/carriers/principal.png";
 import nationalLifeLogo from "@/assets/carriers/national-life.png";
 
+const interestOptions = [
+  { value: "retirement", label: "Retirement Planning" },
+  { value: "insurance", label: "Life Insurance" },
+  { value: "investment", label: "Investment Management" },
+  { value: "tax", label: "Tax Strategy" },
+  { value: "estate", label: "Estate Planning" },
+  { value: "business", label: "Business Insurance" },
+];
+
 const interestLabels: Record<string, string> = {
   retirement: "Retirement Planning",
   insurance: "Life Insurance",
@@ -35,7 +45,7 @@ const consultationSchema = z.object({
   lastName: z.string().trim().min(1, "Last name is required").max(50),
   email: z.string().trim().email("Please enter a valid email").max(255),
   phone: z.string().trim().min(1, "Phone number is required").max(20),
-  interestCategory: z.string().min(1, "Please select an interest category"),
+  interestCategories: z.array(z.string()).min(1, "Please select at least one interest"),
 });
 
 type ConsultationFormData = z.infer<typeof consultationSchema>;
@@ -46,8 +56,11 @@ const BookConsultation = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { honeypotProps, honeypotValue, isBot } = useHoneypot();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ConsultationFormData>({
+  const { register, handleSubmit, control, formState: { errors } } = useForm<ConsultationFormData>({
     resolver: zodResolver(consultationSchema),
+    defaultValues: {
+      interestCategories: [],
+    },
   });
 
   // Track page view
@@ -70,7 +83,12 @@ const BookConsultation = () => {
 
     setIsSubmitting(true);
     try {
-      const interestLabel = interestLabels[data.interestCategory] || data.interestCategory;
+      // Format multiple interests for notes and tags
+      const selectedInterests = data.interestCategories
+        .map(key => interestLabels[key] || key)
+        .join(", ");
+      
+      const interestTags = data.interestCategories.map(key => interestLabels[key] || key);
       
       const result = await submitForm({
         form_name: "Book Consultation",
@@ -78,10 +96,10 @@ const BookConsultation = () => {
         last_name: data.lastName,
         email: data.email,
         phone: data.phone,
-        notes: `Interest: ${interestLabel}\nSource: book-consultation-page`,
-        tags: [interestLabel, "Consultation Request"],
+        notes: `Interests: ${selectedInterests}\nSource: book-consultation-page`,
+        tags: [...interestTags, "Consultation Request"],
         honeypot: honeypotValue,
-        interest_category: data.interestCategory,
+        interest_category: data.interestCategories.join(","),
       });
 
       if (!result.ok) throw new Error(result.error);
@@ -277,19 +295,44 @@ const BookConsultation = () => {
                           {errors.phone && <p className="text-red-500 text-sm mt-1 text-left">{errors.phone.message}</p>}
                         </div>
                         <div>
-                          <select 
-                            {...register("interestCategory")}
-                            className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#E4B548] focus:ring-2 focus:ring-[#E4B548]/20 outline-none transition-all text-muted-foreground"
-                          >
-                            <option value="">Select Interest Category</option>
-                            <option value="retirement">Retirement Planning</option>
-                            <option value="insurance">Life Insurance</option>
-                            <option value="investment">Investment Management</option>
-                            <option value="tax">Tax Strategy</option>
-                            <option value="estate">Estate Planning</option>
-                            <option value="business">Business Insurance</option>
-                          </select>
-                          {errors.interestCategory && <p className="text-red-500 text-sm mt-1 text-left">{errors.interestCategory.message}</p>}
+                          <p className="text-sm font-medium text-foreground text-left mb-3">What topics interest you? (Select all that apply)</p>
+                          <Controller
+                            name="interestCategories"
+                            control={control}
+                            render={({ field }) => (
+                              <div className="grid grid-cols-2 gap-3">
+                                {interestOptions.map((option) => {
+                                  const isSelected = field.value.includes(option.value);
+                                  return (
+                                    <label
+                                      key={option.value}
+                                      className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                                        isSelected
+                                          ? "border-[#E4B548] bg-[#E4B548]/10"
+                                          : "border-border hover:border-[#E4B548]/50 hover:bg-secondary/50"
+                                      }`}
+                                    >
+                                      <Checkbox
+                                        checked={isSelected}
+                                        onCheckedChange={(checked) => {
+                                          if (checked) {
+                                            field.onChange([...field.value, option.value]);
+                                          } else {
+                                            field.onChange(field.value.filter((v) => v !== option.value));
+                                          }
+                                        }}
+                                        className="data-[state=checked]:bg-[#E4B548] data-[state=checked]:border-[#E4B548]"
+                                      />
+                                      <span className={`text-sm ${isSelected ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                                        {option.label}
+                                      </span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          />
+                          {errors.interestCategories && <p className="text-red-500 text-sm mt-2 text-left">{errors.interestCategories.message}</p>}
                         </div>
 
                         <Button 
