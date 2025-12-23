@@ -31,26 +31,62 @@ export const CartDrawer = () => {
       // Send notifications for business card orders before checkout
       const businessCardItems = items.filter(item => item.businessCardDetails);
       
+      // Track if all emails were sent successfully
+      const failedOrders: string[] = [];
+      
       for (const item of businessCardItems) {
         if (item.businessCardDetails) {
-          await fetch("https://cstkeblqqyjwlrbppucu.supabase.co/functions/v1/send-business-card-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ...item.businessCardDetails,
-              productTitle: item.product.node.title,
-              variantTitle: item.variantTitle,
-              price: item.price.amount,
-              currencyCode: item.price.currencyCode,
-              quantity: item.quantity,
-            }),
-          });
+          try {
+            const response = await fetch("https://cstkeblqqyjwlrbppucu.supabase.co/functions/v1/send-business-card-order", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                ...item.businessCardDetails,
+                productTitle: item.product.node.title,
+                variantTitle: item.variantTitle,
+                price: item.price.amount,
+                currencyCode: item.price.currencyCode,
+                quantity: item.quantity,
+              }),
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              console.error("Failed to send business card order notification:", errorData);
+              failedOrders.push(item.businessCardDetails.fullName || item.product.node.title);
+            } else {
+              const result = await response.json();
+              if (result.error) {
+                console.error("Business card order notification error:", result.error);
+                failedOrders.push(item.businessCardDetails.fullName || item.product.node.title);
+              } else {
+                console.log("Business card order notification sent successfully for:", item.businessCardDetails.fullName);
+              }
+            }
+          } catch (emailError) {
+            console.error("Error sending business card order notification:", emailError);
+            failedOrders.push(item.businessCardDetails.fullName || item.product.node.title);
+          }
         }
       }
 
+      // If any business card emails failed, show error and don't proceed to checkout
+      if (failedOrders.length > 0) {
+        toast.error("Order notification failed", {
+          description: `We couldn't send the order details for: ${failedOrders.join(", ")}. Please try again or contact support.`,
+        });
+        return;
+      }
+
+      // All emails sent successfully, proceed to checkout
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
       if (checkoutUrl) {
+        if (businessCardItems.length > 0) {
+          toast.success("Order details sent!", {
+            description: "Your business card information has been submitted. Proceeding to payment...",
+          });
+        }
         window.open(checkoutUrl, '_blank');
         setIsOpen(false);
       }
