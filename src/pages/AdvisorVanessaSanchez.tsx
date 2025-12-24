@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRight, Building2, Heart, Briefcase, FileCheck } from "lucide-react";
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
-import ScheduleModal from "@/components/advisors/ScheduleModal";
+import VanessaScheduleModal from "@/components/advisors/VanessaScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
@@ -330,12 +330,9 @@ const AdvisorVanessaSanchez = () => {
       </section>
 
       {/* Modals */}
-      <ScheduleModal
+      <VanessaScheduleModal
         open={scheduleModalOpen}
         onOpenChange={setScheduleModalOpen}
-        advisorName="Vanessa Sanchez"
-        advisorEmail="vsanchez@tfainsuranceadvisors.com"
-        advisorImage={vanessaSanchezImg}
       />
       <ContactModal
         open={contactModalOpen}
