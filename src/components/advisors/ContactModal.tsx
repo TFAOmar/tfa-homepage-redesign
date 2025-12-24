@@ -80,6 +80,29 @@ const ContactModal = ({
 
       if (!response.ok) throw new Error(response.error);
 
+      // If this is Vanessa's contact form, also submit to her Pipedrive
+      if (advisorSlug === "vanessa-sanchez" || 
+          advisorEmail === "vsanchez@tfainsuranceadvisors.com") {
+        try {
+          const { supabase } = await import("@/integrations/supabase/client");
+          await supabase.functions.invoke("vanessa-pipedrive-submit", {
+            body: {
+              submission_type: "contact",
+              first_name: formData.firstName,
+              last_name: formData.lastName,
+              email: formData.email,
+              phone: formData.phone,
+              notes: formData.message,
+              tags: ["Advisor Inquiry"],
+              source_url: window.location.href,
+            },
+          });
+          console.log("Successfully submitted to Vanessa's Pipedrive as Lead");
+        } catch (pipedriveError) {
+          console.error("Pipedrive submission error (non-blocking):", pipedriveError);
+        }
+      }
+
       toast({
         title: "Message Sent!",
         description: `${advisorName} has been notified and will reach out soon.`,
