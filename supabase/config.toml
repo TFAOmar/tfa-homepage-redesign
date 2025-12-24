@@ -26,3 +26,6 @@ verify_jwt = false
 
 [functions.send-estate-planning-notification]
 verify_jwt = false
+
+[functions.vanessa-pipedrive-submit]
+verify_jwt = false

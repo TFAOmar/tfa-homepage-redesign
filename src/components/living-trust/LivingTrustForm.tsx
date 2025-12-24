@@ -143,6 +143,7 @@ export default function LivingTrustForm() {
         data.notes ? `Notes: ${data.notes}` : null,
       ].filter(Boolean).join("\n");
 
+      // Submit to general form handler (for email notification)
       const response = await submitForm({
         form_name: "Living Trust Inquiry - Vanessa",
         first_name: data.firstName,
@@ -157,6 +158,31 @@ export default function LivingTrustForm() {
       });
 
       if (!response.ok) throw new Error(response.error);
+
+      // Also submit to Vanessa's Pipedrive as a Lead
+      try {
+        const { supabase } = await import("@/integrations/supabase/client");
+        await supabase.functions.invoke("vanessa-pipedrive-submit", {
+          body: {
+            submission_type: "living_trust_landing",
+            first_name: data.firstName,
+            last_name: data.lastName,
+            email: data.email,
+            phone: data.phone,
+            marital_status: data.maritalStatus,
+            owns_property: data.ownsProperty,
+            estate_value: data.estateValue,
+            preferred_contact: data.preferredContact,
+            best_time: data.bestTimeToReach,
+            notes: data.notes,
+            tags: ["Living Trust", "The Brandon Group"],
+            source_url: window.location.href,
+          },
+        });
+        console.log("Successfully submitted to Vanessa's Pipedrive");
+      } catch (pipedriveError) {
+        console.error("Pipedrive submission error (non-blocking):", pipedriveError);
+      }
       
       // Fire confetti celebration!
       fireConfetti({

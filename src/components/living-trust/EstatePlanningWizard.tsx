@@ -110,16 +110,21 @@ const EstatePlanningWizard = ({ onComplete, advisorId, advisorName, advisorEmail
     };
 
     const step1 = finalData.step1 || {};
+    const applicantName = `${step1.trustor1FirstName || ""} ${step1.trustor1LastName || ""}`.trim();
+    const applicantEmail = step1.trustor1Email || "";
+    const applicantPhone = step1.trustor1Phone || "";
+    const spouseName = step1.hasTrustor2 
+      ? `${step1.trustor2FirstName || ""} ${step1.trustor2LastName || ""}`.trim() 
+      : null;
 
     try {
+      // Send email notification
       const { error } = await supabase.functions.invoke("send-estate-planning-notification", {
         body: {
-          applicantName: `${step1.trustor1FirstName || ""} ${step1.trustor1LastName || ""}`.trim(),
-          applicantEmail: step1.trustor1Email || "",
-          applicantPhone: step1.trustor1Phone || "",
-          spouseName: step1.hasTrustor2 
-            ? `${step1.trustor2FirstName || ""} ${step1.trustor2LastName || ""}`.trim() 
-            : null,
+          applicantName,
+          applicantEmail,
+          applicantPhone,
+          spouseName,
           formData: finalData,
           advisorId: advisorId,
           advisorName: advisorName || "TFA Advisor",
@@ -130,6 +135,27 @@ const EstatePlanningWizard = ({ onComplete, advisorId, advisorName, advisorEmail
 
       if (error) {
         throw error;
+      }
+
+      // If this is Vanessa's form, also submit to her Pipedrive as a Deal
+      if (advisorEmail === "vsanchez@tfainsuranceadvisors.com" || 
+          advisorName?.toLowerCase().includes("vanessa")) {
+        try {
+          await supabase.functions.invoke("vanessa-pipedrive-submit", {
+            body: {
+              submission_type: "living_trust_questionnaire",
+              applicant_name: applicantName,
+              applicant_email: applicantEmail,
+              applicant_phone: applicantPhone,
+              spouse_name: spouseName,
+              form_data: finalData,
+              source_url: window.location.href,
+            },
+          });
+          console.log("Successfully submitted to Vanessa's Pipedrive as Deal");
+        } catch (pipedriveError) {
+          console.error("Pipedrive submission error (non-blocking):", pipedriveError);
+        }
       }
 
       // Clear draft on successful submit
