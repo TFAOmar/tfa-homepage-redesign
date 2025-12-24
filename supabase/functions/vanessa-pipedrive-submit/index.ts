@@ -1,4 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { Resend } from "https://esm.sh/resend@2.0.0";
+
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -467,6 +470,75 @@ serve(async (req) => {
       });
 
       console.log("Successfully created lead for", submission_type);
+
+      // Send email notification to Vanessa
+      try {
+        const emailSubject = submission_type === "living_trust_landing"
+          ? `New Living Trust Inquiry - ${name} (Brandon Drew Group)`
+          : `New Contact Inquiry - ${name}`;
+
+        const emailHtml = submission_type === "living_trust_landing"
+          ? `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #1a365d;">New Living Trust Inquiry</h2>
+              <p style="color: #666;">A new prospect has submitted the Living Trust inquiry form from The Brandon Drew Group landing page.</p>
+              
+              <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: #2d3748; margin-top: 0;">Contact Information</h3>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email || "Not provided"}</p>
+                <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+              </div>
+              
+              <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: #2d3748; margin-top: 0;">Inquiry Details</h3>
+                <p><strong>Marital Status:</strong> ${requestData.marital_status || "N/A"}</p>
+                <p><strong>Owns Property:</strong> ${requestData.owns_property || "N/A"}</p>
+                <p><strong>Estate Value:</strong> ${requestData.estate_value || "N/A"}</p>
+                <p><strong>Preferred Contact Method:</strong> ${requestData.preferred_contact || "N/A"}</p>
+                <p><strong>Best Time to Reach:</strong> ${requestData.best_time || "N/A"}</p>
+                ${requestData.notes ? `<p><strong>Additional Notes:</strong> ${requestData.notes}</p>` : ""}
+              </div>
+              
+              ${requestData.source_url ? `<p style="color: #718096; font-size: 12px;">Source: ${requestData.source_url}</p>` : ""}
+              <p style="color: #718096; font-size: 12px;">Submitted: ${new Date().toLocaleString()}</p>
+            </div>
+          `
+          : `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #1a365d;">New Contact Inquiry</h2>
+              <p style="color: #666;">Someone has reached out to you through your advisor profile contact form.</p>
+              
+              <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: #2d3748; margin-top: 0;">Contact Information</h3>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email || "Not provided"}</p>
+                <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+              </div>
+              
+              ${requestData.notes ? `
+              <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: #2d3748; margin-top: 0;">Message</h3>
+                <p>${requestData.notes}</p>
+              </div>
+              ` : ""}
+              
+              ${requestData.source_url ? `<p style="color: #718096; font-size: 12px;">Source: ${requestData.source_url}</p>` : ""}
+              <p style="color: #718096; font-size: 12px;">Submitted: ${new Date().toLocaleString()}</p>
+            </div>
+          `;
+
+        await resend.emails.send({
+          from: "TFA Insurance Advisors <noreply@tfainsuranceadvisors.com>",
+          to: ["vsanchez@tfainsuranceadvisors.com"],
+          subject: emailSubject,
+          html: emailHtml,
+        });
+        console.log("Email notification sent to Vanessa");
+      } catch (emailError) {
+        console.error("Failed to send email notification:", emailError);
+        // Don't fail the request if email fails
+      }
 
       return new Response(
         JSON.stringify({ 
