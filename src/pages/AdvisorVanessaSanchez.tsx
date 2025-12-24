@@ -133,12 +133,6 @@ const AdvisorVanessaSanchez = () => {
                   <Mail className="mr-2 h-5 w-5" />
                   Contact Me
                 </Button>
-                <Link to="/advisors/vanessa-sanchez/living-trust">
-                  <Button size="lg" variant="outline" className="border-accent bg-transparent text-accent hover:bg-accent/20 text-lg px-8 py-6 w-full sm:w-auto">
-                    <Shield className="mr-2 h-5 w-5" />
-                    Living Trust Planning
-                  </Button>
-                </Link>
                 <Link to="/advisors/vanessa-sanchez/living-trust-questionnaire">
                   <Button 
                     size="lg" 
@@ -239,13 +233,6 @@ const AdvisorVanessaSanchez = () => {
                 <p className="text-muted-foreground">{service.description}</p>
                 {service.title === "Estate Planning" && (
                   <div className="flex flex-col gap-2 mt-4">
-                    <Link 
-                      to="/advisors/vanessa-sanchez/living-trust" 
-                      className="inline-flex items-center text-accent hover:text-accent/80 font-medium transition-colors"
-                    >
-                      Learn about Living Trusts
-                      <ChevronRight className="h-4 w-4 ml-1" />
-                    </Link>
                     <Link 
                       to="/advisors/vanessa-sanchez/living-trust-questionnaire" 
                       className="inline-flex items-center text-accent hover:text-accent/80 font-medium transition-colors"
