@@ -274,7 +274,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send email to advisor with CC to clients inbox
     console.log("Sending email notification to:", advisorEmail, "CC: clients@tfainsuranceadvisors.com");
     const { error: emailError } = await resend.emails.send({
-      from: "TFA Estate Planning <onboarding@resend.dev>",
+      from: "TFA Estate Planning <noreply@tfainsuranceadvisors.com>",
       to: [advisorEmail],
       cc: ["clients@tfainsuranceadvisors.com"],
       subject: `New Estate Planning Intake - ${applicantName} (Advisor: ${advisorName})`,
