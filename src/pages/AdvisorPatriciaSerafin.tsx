@@ -20,12 +20,13 @@ const AdvisorPatriciaSerafin = () => {
   }, []);
 
   const specialties = [
-    "Financial Literacy & Education",
-    "Retirement Planning",
-    "Estate Planning",
-    "Tax Strategies",
-    "Life Insurance",
-    "Family Financial Planning"
+    { name: "Bilingual • Bilingüe", isBilingual: true },
+    { name: "Financial Literacy & Education", isBilingual: false },
+    { name: "Retirement Planning", isBilingual: false },
+    { name: "Estate Planning", isBilingual: false },
+    { name: "Tax Strategies", isBilingual: false },
+    { name: "Life Insurance", isBilingual: false },
+    { name: "Family Financial Planning", isBilingual: false }
   ];
 
   const services = [
@@ -105,7 +106,7 @@ const AdvisorPatriciaSerafin = () => {
           "Patricia Serafin is a bilingual Financial Strategist at The Financial Architects in Chino Hills, CA, specializing in retirement planning, estate planning, tax strategies, and family financial planning. Fluent in English and Spanish.",
           patriciaSerafinImg,
           `${siteConfig.url}/advisors/patricia-serafin`,
-          specialties
+          specialties.map(s => s.name)
         ),
         generateBreadcrumbSchema([
           { name: "Home", url: siteConfig.url },
@@ -231,8 +232,15 @@ const AdvisorPatriciaSerafin = () => {
                 <h3 className="text-xl font-semibold text-foreground mb-6">Areas of Expertise</h3>
                 <div className="flex flex-wrap gap-3 justify-center">
                   {specialties.map(specialty => (
-                    <Badge key={specialty} className="bg-accent/10 text-accent border-accent/30 px-4 py-2 text-sm">
-                      {specialty}
+                    <Badge 
+                      key={specialty.name} 
+                      className={specialty.isBilingual 
+                        ? "bg-amber-500/20 text-amber-600 border-amber-500/40 px-4 py-2 text-sm font-semibold" 
+                        : "bg-accent/10 text-accent border-accent/30 px-4 py-2 text-sm"
+                      }
+                    >
+                      {specialty.isBilingual && <Globe className="w-4 h-4 mr-1.5 inline" />}
+                      {specialty.name}
                     </Badge>
                   ))}
                 </div>
