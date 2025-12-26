@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { MapPin, Shield, Calendar, ExternalLink, Award } from "lucide-react";
+import { MapPin, Shield, Calendar, ExternalLink, Award, Globe } from "lucide-react";
 import { Advisor } from "@/data/advisors";
 import { Link } from "react-router-dom";
 import ScheduleModal from "./ScheduleModal";
@@ -82,15 +82,23 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
               Specialties
             </p>
             <div className="flex flex-wrap gap-1.5">
-              {advisor.specialties.slice(0, 3).map((specialty, idx) => (
-                <Badge 
-                  key={idx}
-                  variant="secondary"
-                  className="text-xs bg-accent/10 text-accent border-accent/20 hover:bg-accent/20"
-                >
-                  {specialty}
-                </Badge>
-              ))}
+              {advisor.specialties.slice(0, 3).map((specialty, idx) => {
+                const isBilingual = specialty.toLowerCase().includes("bilingual") || 
+                                    specialty.toLowerCase().includes("bilingüe");
+                return (
+                  <Badge 
+                    key={idx}
+                    variant="secondary"
+                    className={isBilingual 
+                      ? "text-xs bg-amber-500/20 text-amber-600 border-amber-500/40 hover:bg-amber-500/30 font-semibold"
+                      : "text-xs bg-accent/10 text-accent border-accent/20 hover:bg-accent/20"
+                    }
+                  >
+                    {isBilingual && <Globe className="w-3 h-3 mr-1 inline" />}
+                    {specialty}
+                  </Badge>
+                );
+              })}
             </div>
           </div>
 
