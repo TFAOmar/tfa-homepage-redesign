@@ -17,6 +17,7 @@ import tamaraLeeImg from "@/assets/advisors/tamara-lee.jpg";
 import ismaelVerveraImg from "@/assets/advisors/ismael-ververa.jpg";
 import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
 import conradOlveraImg from "@/assets/advisors/conrad-olvera.jpg";
+import patriciaSerafinImg from "@/assets/advisors/patricia-serafin.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -336,6 +337,21 @@ export const advisors: Advisor[] = [
     email: "conradolvera21@gmail.com",
     yearsOfExperience: 11,
     landingPage: "/advisors/conrad-olvera"
+  },
+  {
+    id: "patricia-serafin",
+    name: "Patricia Serafin",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "With nearly a decade of experience, Patricia is known for her ability to identify the right solutions for each client—never one-size-fits-all, always intentional. Fluent in both English and Spanish, she proudly serves bilingual communities, ensuring every client feels understood, protected, and prepared. Her passion lies in helping people build clarity, security, and peace of mind through thoughtful financial architecture.",
+    specialties: ["Financial Literacy", "Retirement Planning", "Estate Planning", "Tax Strategies", "Life Insurance", "Family Financial Planning"],
+    licenses: ["Life & Health"],
+    image: patriciaSerafinImg,
+    email: "patricia@tfainsuranceadvisors.com",
+    landingPage: "/advisors/patricia-serafin"
   }
 ];
 
