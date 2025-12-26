@@ -18,7 +18,7 @@ import ismaelVerveraImg from "@/assets/advisors/ismael-ververa.jpg";
 import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
 import conradOlveraImg from "@/assets/advisors/conrad-olvera.jpg";
 import patriciaSerafinImg from "@/assets/advisors/patricia-serafin.jpg";
-import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
+import omarSanchezImg from "@/assets/advisors/omar-sanchez.jpg";
 
 export interface Advisor {
   id: number | string;
