@@ -368,7 +368,8 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health"],
     image: omarSanchezImg,
     email: "omar@tfainsuranceadvisors.com",
-    schedulingLink: "https://tfa.pipedrive.com/scheduler/M93alkfo/strategic-call-with-omar-sanchez-the-financial-architects"
+    schedulingLink: "https://tfa.pipedrive.com/scheduler/M93alkfo/strategic-call-with-omar-sanchez-the-financial-architects",
+    landingPage: "/advisors/omar-sanchez"
   }
 ];
 
