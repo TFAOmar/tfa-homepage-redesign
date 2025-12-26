@@ -18,6 +18,7 @@ import ismaelVerveraImg from "@/assets/advisors/ismael-ververa.jpg";
 import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
 import conradOlveraImg from "@/assets/advisors/conrad-olvera.jpg";
 import patriciaSerafinImg from "@/assets/advisors/patricia-serafin.jpg";
+import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -352,6 +353,20 @@ export const advisors: Advisor[] = [
     image: patriciaSerafinImg,
     email: "patricia@tfainsuranceadvisors.com",
     landingPage: "/advisors/patricia-serafin"
+  },
+  {
+    id: "omar-sanchez",
+    name: "Omar Sanchez",
+    title: "Life Insurance Specialist",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Omar specializes in life insurance solutions, helping families protect their loved ones and build financial security. With a client-focused approach, he guides individuals through choosing the right coverage for their unique needs.",
+    specialties: ["Bilingual • Bilingüe", "Life Insurance", "Retirement Planning", "Estate Planning"],
+    licenses: ["Life & Health"],
+    image: omarSanchezImg,
+    email: "omar@tfainsuranceadvisors.com"
   }
 ];
 
