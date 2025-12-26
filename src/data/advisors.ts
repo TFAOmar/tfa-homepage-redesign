@@ -36,6 +36,7 @@ export interface Advisor {
   phone?: string;
   yearsOfExperience?: number;
   landingPage?: string;
+  schedulingLink?: string;
 }
 
 export const advisors: Advisor[] = [
@@ -366,7 +367,8 @@ export const advisors: Advisor[] = [
     specialties: ["Bilingual • Bilingüe", "Life Insurance", "Retirement Planning", "Estate Planning"],
     licenses: ["Life & Health"],
     image: omarSanchezImg,
-    email: "omar@tfainsuranceadvisors.com"
+    email: "omar@tfainsuranceadvisors.com",
+    schedulingLink: "https://tfa.pipedrive.com/scheduler/M93alkfo/strategic-call-with-omar-sanchez-the-financial-architects"
   }
 ];
 
