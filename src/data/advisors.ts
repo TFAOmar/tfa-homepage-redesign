@@ -347,7 +347,7 @@ export const advisors: Advisor[] = [
     city: "Chino Hills",
     region: "West",
     bio: "With nearly a decade of experience, Patricia is known for her ability to identify the right solutions for each client—never one-size-fits-all, always intentional. Fluent in both English and Spanish, she proudly serves bilingual communities, ensuring every client feels understood, protected, and prepared. Her passion lies in helping people build clarity, security, and peace of mind through thoughtful financial architecture.",
-    specialties: ["Financial Literacy", "Retirement Planning", "Estate Planning", "Tax Strategies", "Life Insurance", "Family Financial Planning"],
+    specialties: ["Bilingual • Bilingüe", "Financial Literacy", "Retirement Planning", "Estate Planning", "Tax Strategies", "Life Insurance", "Family Financial Planning"],
     licenses: ["Life & Health"],
     image: patriciaSerafinImg,
     email: "patricia@tfainsuranceadvisors.com",
