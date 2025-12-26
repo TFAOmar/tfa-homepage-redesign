@@ -38,12 +38,13 @@ const AdvisorPatriciaSerafinSpanish = () => {
   }, []);
 
   const specialties = [
-    "Educación Financiera",
-    "Planificación para el Retiro",
-    "Planificación Patrimonial",
-    "Estrategias Fiscales",
-    "Seguros de Vida",
-    "Planificación Financiera Familiar"
+    { name: "Bilingüe • Bilingual", isBilingual: true },
+    { name: "Educación Financiera", isBilingual: false },
+    { name: "Planificación para el Retiro", isBilingual: false },
+    { name: "Planificación Patrimonial", isBilingual: false },
+    { name: "Estrategias Fiscales", isBilingual: false },
+    { name: "Seguros de Vida", isBilingual: false },
+    { name: "Planificación Financiera Familiar", isBilingual: false }
   ];
 
   const services = [
@@ -122,7 +123,7 @@ const AdvisorPatriciaSerafinSpanish = () => {
           "Patricia Serafin es una estratega financiera bilingüe sirviendo a la comunidad hispana con casi una década de experiencia en planificación de retiro, planificación patrimonial y seguros de vida.",
           patriciaSerafinImg,
           `${siteConfig.url}/advisors/patricia-serafin/es`,
-          specialties
+          specialties.map(s => s.name)
         ),
         generateBreadcrumbSchema([
           { name: "Inicio", url: siteConfig.url },
@@ -267,9 +268,13 @@ const AdvisorPatriciaSerafinSpanish = () => {
                   <Badge 
                     key={index} 
                     variant="secondary" 
-                    className="px-4 py-2 text-sm bg-primary/10 text-primary border-primary/20"
+                    className={specialty.isBilingual 
+                      ? "px-4 py-2 text-sm font-semibold bg-amber-500/20 text-amber-600 border-amber-500/40" 
+                      : "px-4 py-2 text-sm bg-primary/10 text-primary border-primary/20"
+                    }
                   >
-                    {specialty}
+                    {specialty.isBilingual && <Globe className="w-4 h-4 mr-1.5 inline" />}
+                    {specialty.name}
                   </Badge>
                 ))}
               </div>
