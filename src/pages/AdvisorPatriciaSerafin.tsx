@@ -121,9 +121,18 @@ const AdvisorPatriciaSerafin = () => {
           
           <div className="container mx-auto px-4 relative z-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Content */}
+            {/* Content */}
               <div className="text-center lg:text-left">
-                <Badge className="bg-accent/20 text-accent border-accent/30 mb-6">
+                {/* Language Switcher */}
+                <Link 
+                  to="/advisors/patricia-serafin/es" 
+                  className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors mb-4"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span>Ver en Español</span>
+                </Link>
+                
+                <Badge className="bg-accent/20 text-accent border-accent/30 mb-6 block w-fit mx-auto lg:mx-0">
                   Financial Strategist • Bilingual
                 </Badge>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
