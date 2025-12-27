@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Save, Loader2, Send, LogOut } from "lucide-react";
+import { ArrowLeft, ArrowRight, Save, Loader2, Send, LogOut, RefreshCw, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useConfetti } from "@/hooks/useConfetti";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,6 +57,78 @@ const generateResumeToken = () => {
   return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 };
 
+// Error categorization and user-friendly messages
+type SubmissionStage = 'save' | 'submit' | 'email';
+
+interface SubmissionErrorDetails {
+  title: string;
+  description: string;
+  canRetry: boolean;
+}
+
+const getErrorDetails = (error: unknown, stage: SubmissionStage): SubmissionErrorDetails => {
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  
+  // Network/connection errors
+  if (errorMessage.toLowerCase().includes('network') || 
+      errorMessage.toLowerCase().includes('fetch') ||
+      errorMessage.toLowerCase().includes('failed to fetch') ||
+      errorMessage.toLowerCase().includes('connection')) {
+    return {
+      title: "Connection Problem",
+      description: "Unable to connect to our servers. Please check your internet connection and try again.",
+      canRetry: true,
+    };
+  }
+  
+  // RLS/Permission errors
+  if (errorMessage.includes('row-level security') || 
+      errorMessage.includes('policy') ||
+      errorMessage.includes('permission denied')) {
+    return {
+      title: "Session Issue",
+      description: "There was a problem with your session. Please try again, or refresh the page if the issue persists.",
+      canRetry: true,
+    };
+  }
+  
+  // Application not found (token mismatch)
+  if (errorMessage.includes('not found') || errorMessage.includes('already submitted')) {
+    return {
+      title: "Application Issue",
+      description: "This application may have already been submitted or the session has expired. Please start a new application if needed.",
+      canRetry: false,
+    };
+  }
+
+  // Timeout errors
+  if (errorMessage.toLowerCase().includes('timeout') || errorMessage.toLowerCase().includes('timed out')) {
+    return {
+      title: "Request Timeout",
+      description: "The server took too long to respond. Please try again.",
+      canRetry: true,
+    };
+  }
+  
+  // Stage-specific fallbacks
+  const stageMessages: Record<SubmissionStage, { title: string; description: string }> = {
+    save: {
+      title: "Unable to Save Application",
+      description: "We couldn't save your application data. Your information is safe locally - please try again.",
+    },
+    submit: {
+      title: "Submission Failed",
+      description: "We couldn't complete your submission. Your data has been saved - please try again in a moment.",
+    },
+    email: {
+      title: "Notification Issue",
+      description: "Your application was submitted but we couldn't send the confirmation email. Don't worry - we still received your application!",
+    },
+  };
+  
+  return { ...stageMessages[stage], canRetry: true };
+};
+
 const ApplicationWizard = ({
   advisorId,
   advisorName,
@@ -72,6 +144,12 @@ const ApplicationWizard = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<LifeInsuranceApplicationData>(defaultApplicationData);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
+  
+  // Submission error state for retry functionality
+  const [submissionError, setSubmissionError] = useState<{
+    stage: SubmissionStage;
+    details: SubmissionErrorDetails;
+  } | null>(null);
   
   // Server-side draft state
   const [draftId, setDraftId] = useState<string | null>(null);
@@ -452,21 +530,26 @@ const ApplicationWizard = ({
 
   const handleSubmitApplication = async () => {
     setIsSubmitting(true);
-    try {
-      const finalFormData = getCurrentFormData();
-      const applicantName = `${finalFormData.step1?.firstName || ""} ${finalFormData.step1?.lastName || ""}`.trim();
-      const applicantEmail = finalFormData.step2?.email || null;
-      const applicantPhone = finalFormData.step2?.mobilePhone || null;
+    setSubmissionError(null);
+    
+    const finalFormData = getCurrentFormData();
+    const applicantName = `${finalFormData.step1?.firstName || ""} ${finalFormData.step1?.lastName || ""}`.trim();
+    const applicantEmail = finalFormData.step2?.email || null;
+    const applicantPhone = finalFormData.step2?.mobilePhone || null;
 
-      console.log("Starting submission, draftId:", draftId);
+    console.log("Starting submission, draftId:", draftId);
 
-      // Ensure we have a draftId before submission
-      let applicationId = draftId;
-      
-      if (!applicationId) {
-        // Create a draft first to get an ID
+    // Ensure we have a draftId before submission
+    let applicationId = draftId;
+    
+    // Stage 1: Create draft if needed
+    if (!applicationId) {
+      try {
         console.log("No draftId found, creating draft first...");
         const token = resumeToken || generateResumeToken();
+        if (!resumeToken) {
+          setResumeToken(token);
+        }
         
         const { data: newDraft, error: createError } = await supabase
           .from("life_insurance_applications")
@@ -486,16 +569,36 @@ const ApplicationWizard = ({
 
         if (createError) {
           console.error("Error creating draft before submission:", createError);
-          throw createError;
+          const details = getErrorDetails(createError, 'save');
+          setSubmissionError({ stage: 'save', details });
+          toast({
+            title: details.title,
+            description: details.description,
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
         }
 
         applicationId = newDraft.id;
         setDraftId(applicationId);
         console.log("Created draft with ID:", applicationId);
+      } catch (error) {
+        console.error("Unexpected error creating draft:", error);
+        const details = getErrorDetails(error, 'save');
+        setSubmissionError({ stage: 'save', details });
+        toast({
+          title: details.title,
+          description: details.description,
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
       }
+    }
 
-      // First update the form data using the secure RPC function (bypasses RLS)
-      // We need the resumeToken to update via RPC
+    // Stage 2: Save final form data using secure RPC
+    try {
       const token = resumeToken || generateResumeToken();
       if (!resumeToken) {
         setResumeToken(token);
@@ -513,75 +616,109 @@ const ApplicationWizard = ({
 
       if (saveError) {
         console.error("Error saving final form data:", saveError);
-        throw saveError;
+        const details = getErrorDetails(saveError, 'save');
+        setSubmissionError({ stage: 'save', details });
+        toast({
+          title: details.title,
+          description: details.description,
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
       }
+    } catch (error) {
+      console.error("Unexpected error saving form data:", error);
+      const details = getErrorDetails(error, 'save');
+      setSubmissionError({ stage: 'save', details });
+      toast({
+        title: details.title,
+        description: details.description,
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
-      // Now submit using the SECURITY DEFINER function to handle the status transition
+    // Stage 3: Submit application
+    try {
       console.log("Submitting application via RPC, ID:", applicationId);
       const { error: submitError } = await supabase
         .rpc("submit_life_insurance_application", { application_id: applicationId });
 
       if (submitError) {
         console.error("Error submitting application:", submitError);
-        throw submitError;
+        const details = getErrorDetails(submitError, 'submit');
+        setSubmissionError({ stage: 'submit', details });
+        toast({
+          title: details.title,
+          description: details.description,
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
       }
-
-      console.log("Application submitted successfully");
-
-      // Send email notifications (advisor email is fetched server-side using advisorId)
-      try {
-        console.log("Sending life insurance notification emails...");
-        const { error: emailError } = await supabase.functions.invoke(
-          "send-life-insurance-notification",
-          {
-            body: {
-              applicationId,
-              applicantName,
-              applicantEmail,
-              applicantPhone,
-              advisorId: advisorId || null,
-              advisorName: advisorName || null,
-              formData: finalFormData,
-            },
-          }
-        );
-
-        if (emailError) {
-          console.error("Failed to send notification emails:", emailError);
-        } else {
-          console.log("Notification emails sent successfully");
-        }
-      } catch (emailError) {
-        console.error("Error invoking email function:", emailError);
-      }
-
-      // Clear the draft from localStorage
-      localStorage.removeItem("lifeInsuranceApplication");
-
-      // Fire confetti celebration!
-      fireConfetti({
-        particleCount: 150,
-        spread: 100,
-        origin: { y: 0.7 },
-      });
-
-      toast({
-        title: "🎉 Application Submitted!",
-        description: "Your life insurance application has been submitted successfully. We'll be in touch soon.",
-        className: "animate-pop-in motion-reduce:animate-none",
-      });
-
-      navigate("/thank-you");
     } catch (error) {
-      console.error("Error submitting application:", error);
+      console.error("Unexpected error submitting application:", error);
+      const details = getErrorDetails(error, 'submit');
+      setSubmissionError({ stage: 'submit', details });
       toast({
-        title: "Submission Failed",
-        description: "There was an error submitting your application. Please try again.",
+        title: details.title,
+        description: details.description,
         variant: "destructive",
       });
-    } finally {
       setIsSubmitting(false);
+      return;
     }
+
+    console.log("Application submitted successfully");
+
+    // Stage 4: Send email notifications (non-blocking - don't fail submission)
+    try {
+      console.log("Sending life insurance notification emails...");
+      const { error: emailError } = await supabase.functions.invoke(
+        "send-life-insurance-notification",
+        {
+          body: {
+            applicationId,
+            applicantName,
+            applicantEmail,
+            applicantPhone,
+            advisorId: advisorId || null,
+            advisorName: advisorName || null,
+            formData: finalFormData,
+          },
+        }
+      );
+
+      if (emailError) {
+        console.error("Failed to send notification emails:", emailError);
+        // Don't block success, just log the error
+      } else {
+        console.log("Notification emails sent successfully");
+      }
+    } catch (emailError) {
+      console.error("Error invoking email function:", emailError);
+      // Don't block success, just log the error
+    }
+
+    // Clear the draft from localStorage
+    localStorage.removeItem("lifeInsuranceApplication");
+
+    // Fire confetti celebration!
+    fireConfetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.7 },
+    });
+
+    toast({
+      title: "🎉 Application Submitted!",
+      description: "Your life insurance application has been submitted successfully. We'll be in touch soon.",
+      className: "animate-pop-in motion-reduce:animate-none",
+    });
+
+    setIsSubmitting(false);
+    navigate("/thank-you");
   };
 
   const handleBack = () => {
@@ -678,6 +815,62 @@ const ApplicationWizard = ({
         <CardContent className="p-4 md:p-6">
           {/* Step Content */}
           {renderStep()}
+
+          {/* Submission Error Banner with Retry */}
+          {submissionError && (
+            <div className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 rounded-lg border mt-6 ${
+              submissionError.details.canRetry 
+                ? 'bg-destructive/10 border-destructive/30' 
+                : 'bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800'
+            }`}>
+              <div className="flex items-start gap-3 flex-1">
+                <AlertTriangle className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
+                  submissionError.details.canRetry ? 'text-destructive' : 'text-amber-600 dark:text-amber-500'
+                }`} />
+                <div className="flex-1">
+                  <p className={`font-medium text-sm ${
+                    submissionError.details.canRetry ? 'text-destructive' : 'text-amber-800 dark:text-amber-200'
+                  }`}>
+                    {submissionError.details.title}
+                  </p>
+                  <p className={`text-sm mt-0.5 ${
+                    submissionError.details.canRetry ? 'text-destructive/80' : 'text-amber-700 dark:text-amber-300'
+                  }`}>
+                    {submissionError.details.description}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2 w-full sm:w-auto">
+                {submissionError.details.canRetry ? (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    onClick={handleSubmitApplication}
+                    disabled={isSubmitting}
+                    className="flex-1 sm:flex-none gap-2"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <RefreshCw className="w-4 h-4" />
+                    )}
+                    Try Again
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="flex-1 sm:flex-none"
+                  >
+                    <Link to="/contact">Contact Support</Link>
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Navigation Buttons - Mobile optimized */}
           <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between mt-6 md:mt-8 pt-4 md:pt-6 border-t border-border">
