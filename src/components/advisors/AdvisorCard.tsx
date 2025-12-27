@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { MapPin, Shield, Calendar, ExternalLink, Award, Globe } from "lucide-react";
 import { Advisor } from "@/data/advisors";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ScheduleModal from "./ScheduleModal";
 
 interface ExtendedAdvisor extends Advisor {
@@ -19,8 +19,18 @@ interface AdvisorCardProps {
 
 const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const navigate = useNavigate();
   
   const schedulingLink = 'schedulingLink' in advisor ? advisor.schedulingLink : undefined;
+  const landingPage = 'landingPage' in advisor ? advisor.landingPage : undefined;
+
+  const handleScheduleClick = () => {
+    if (landingPage) {
+      navigate(`${landingPage}#book`);
+    } else {
+      setScheduleModalOpen(true);
+    }
+  };
   
   return (
     <>
@@ -129,14 +139,13 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
             </Link>
           )}
           
-          {/* Scheduling Button - now opens modal */}
+          {/* Scheduling Button */}
           <Button 
             className="w-full bg-accent hover:bg-accent/90 text-accent-foreground neuro-button group/btn"
-            onClick={() => setScheduleModalOpen(true)}
+            onClick={handleScheduleClick}
           >
             <Calendar className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-            {schedulingLink ? `Meet ${advisor.name.split(' ')[0]}` : `Schedule with ${advisor.name.split(' ')[0]}`}
-            {schedulingLink && <ExternalLink className="ml-2 h-3 w-3 opacity-70" />}
+            {landingPage ? `Meet ${advisor.name.split(' ')[0]}` : `Schedule with ${advisor.name.split(' ')[0]}`}
           </Button>
         </CardFooter>
       </Card>
