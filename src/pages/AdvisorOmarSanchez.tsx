@@ -97,7 +97,14 @@ const AdvisorOmarSanchez = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Handle hash scroll on page load
+    if (window.location.hash === '#book') {
+      setTimeout(() => {
+        document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   return (
