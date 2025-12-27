@@ -4,11 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Save, Loader2, Send, LogOut, RefreshCw, AlertTriangle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Save, Loader2, Send, LogOut, RefreshCw, AlertTriangle, ChevronDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useConfetti } from "@/hooks/useConfetti";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
+import { generateUUID } from "@/lib/uuid";
 import ProgressBar from "./ProgressBar";
 import SaveProgressModal from "./SaveProgressModal";
 import ResumeApplicationModal from "./ResumeApplicationModal";
@@ -64,9 +65,27 @@ interface SubmissionErrorDetails {
   title: string;
   description: string;
   canRetry: boolean;
+  rawError?: string; // For debugging
 }
 
 const getErrorDetails = (error: unknown, stage: SubmissionStage): SubmissionErrorDetails => {
+  // Build raw error string for diagnostics
+  let rawError = '';
+  if (error instanceof Error) {
+    rawError = `${error.name}: ${error.message}`;
+  } else if (typeof error === 'object' && error !== null) {
+    // Supabase errors often have code, message, details, hint
+    const e = error as Record<string, unknown>;
+    rawError = JSON.stringify({ 
+      code: e.code, 
+      message: e.message, 
+      details: e.details, 
+      hint: e.hint 
+    });
+  } else {
+    rawError = String(error);
+  }
+
   const errorMessage = error instanceof Error ? error.message : String(error);
   
   // Network/connection errors
@@ -78,6 +97,7 @@ const getErrorDetails = (error: unknown, stage: SubmissionStage): SubmissionErro
       title: "Connection Problem",
       description: "Unable to connect to our servers. Please check your internet connection and try again.",
       canRetry: true,
+      rawError,
     };
   }
   
@@ -89,6 +109,7 @@ const getErrorDetails = (error: unknown, stage: SubmissionStage): SubmissionErro
       title: "Session Issue",
       description: "There was a problem with your session. Please try again, or refresh the page if the issue persists.",
       canRetry: true,
+      rawError,
     };
   }
   
@@ -98,6 +119,7 @@ const getErrorDetails = (error: unknown, stage: SubmissionStage): SubmissionErro
       title: "Application Issue",
       description: "This application may have already been submitted or the session has expired. Please start a new application if needed.",
       canRetry: false,
+      rawError,
     };
   }
 
@@ -107,6 +129,7 @@ const getErrorDetails = (error: unknown, stage: SubmissionStage): SubmissionErro
       title: "Request Timeout",
       description: "The server took too long to respond. Please try again.",
       canRetry: true,
+      rawError,
     };
   }
   
@@ -126,7 +149,110 @@ const getErrorDetails = (error: unknown, stage: SubmissionStage): SubmissionErro
     },
   };
   
-  return { ...stageMessages[stage], canRetry: true };
+  return { ...stageMessages[stage], canRetry: true, rawError };
+};
+
+// Error banner component with expandable technical details
+const ErrorBanner = ({
+  error,
+  isSubmitting,
+  onStartFresh,
+  onRetry,
+}: {
+  error: { stage: SubmissionStage; details: SubmissionErrorDetails };
+  isSubmitting: boolean;
+  onStartFresh: () => void;
+  onRetry: () => void;
+}) => {
+  const [showDetails, setShowDetails] = useState(false);
+  
+  return (
+    <div className={`flex flex-col gap-3 p-4 rounded-lg border mt-6 ${
+      error.details.canRetry 
+        ? 'bg-destructive/10 border-destructive/30' 
+        : 'bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800'
+    }`}>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+        <div className="flex items-start gap-3 flex-1">
+          <AlertTriangle className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
+            error.details.canRetry ? 'text-destructive' : 'text-amber-600 dark:text-amber-500'
+          }`} />
+          <div className="flex-1">
+            <p className={`font-medium text-sm ${
+              error.details.canRetry ? 'text-destructive' : 'text-amber-800 dark:text-amber-200'
+            }`}>
+              {error.details.title}
+            </p>
+            <p className={`text-sm mt-0.5 ${
+              error.details.canRetry ? 'text-destructive/80' : 'text-amber-700 dark:text-amber-300'
+            }`}>
+              {error.details.description}
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-2 w-full sm:w-auto">
+          {error.details.canRetry ? (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onStartFresh}
+                disabled={isSubmitting}
+                className="flex-1 sm:flex-none gap-2"
+              >
+                Start Fresh
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                onClick={onRetry}
+                disabled={isSubmitting}
+                className="flex-1 sm:flex-none gap-2"
+              >
+                {isSubmitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <RefreshCw className="w-4 h-4" />
+                )}
+                Try Again
+              </Button>
+            </>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              asChild
+              className="flex-1 sm:flex-none"
+            >
+              <Link to="/contact">Contact Support</Link>
+            </Button>
+          )}
+        </div>
+      </div>
+      
+      {/* Technical details toggle */}
+      {error.details.rawError && (
+        <div className="border-t border-destructive/20 pt-2 mt-1">
+          <button
+            type="button"
+            onClick={() => setShowDetails(!showDetails)}
+            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ChevronDown className={`w-3 h-3 transition-transform ${showDetails ? 'rotate-180' : ''}`} />
+            {showDetails ? 'Hide' : 'Show'} technical details
+          </button>
+          {showDetails && (
+            <pre className="mt-2 p-2 bg-muted/50 rounded text-xs text-muted-foreground overflow-x-auto max-w-full break-all whitespace-pre-wrap">
+              {error.details.rawError}
+            </pre>
+          )}
+        </div>
+      )}
+    </div>
+  );
 };
 
 const ApplicationWizard = ({
@@ -275,7 +401,7 @@ const ApplicationWizard = ({
           if (error) throw error;
         } else {
           // Create new draft (insert only; avoid SELECT under RLS)
-          const newId = crypto.randomUUID();
+          const newId = generateUUID();
 
           const { error } = await supabase
             .from("life_insurance_applications")
@@ -611,7 +737,7 @@ const ApplicationWizard = ({
       try {
         console.log("No draftId found, creating draft first...");
 
-        const newId = crypto.randomUUID();
+        const newId = generateUUID();
 
         const { error: createError } = await supabase
           .from("life_insurance_applications")
@@ -916,70 +1042,12 @@ const ApplicationWizard = ({
 
           {/* Submission Error Banner with Retry */}
           {submissionError && (
-            <div className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 rounded-lg border mt-6 ${
-              submissionError.details.canRetry 
-                ? 'bg-destructive/10 border-destructive/30' 
-                : 'bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800'
-            }`}>
-              <div className="flex items-start gap-3 flex-1">
-                <AlertTriangle className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
-                  submissionError.details.canRetry ? 'text-destructive' : 'text-amber-600 dark:text-amber-500'
-                }`} />
-                <div className="flex-1">
-                  <p className={`font-medium text-sm ${
-                    submissionError.details.canRetry ? 'text-destructive' : 'text-amber-800 dark:text-amber-200'
-                  }`}>
-                    {submissionError.details.title}
-                  </p>
-                  <p className={`text-sm mt-0.5 ${
-                    submissionError.details.canRetry ? 'text-destructive/80' : 'text-amber-700 dark:text-amber-300'
-                  }`}>
-                    {submissionError.details.description}
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-2 w-full sm:w-auto">
-                {submissionError.details.canRetry ? (
-                  <>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={handleStartFresh}
-                      disabled={isSubmitting}
-                      className="flex-1 sm:flex-none gap-2"
-                    >
-                      Start Fresh
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      onClick={handleSubmitApplication}
-                      disabled={isSubmitting}
-                      className="flex-1 sm:flex-none gap-2"
-                    >
-                      {isSubmitting ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <RefreshCw className="w-4 h-4" />
-                      )}
-                      Try Again
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    asChild
-                    className="flex-1 sm:flex-none"
-                  >
-                    <Link to="/contact">Contact Support</Link>
-                  </Button>
-                )}
-              </div>
-            </div>
+            <ErrorBanner
+              error={submissionError}
+              isSubmitting={isSubmitting}
+              onStartFresh={handleStartFresh}
+              onRetry={handleSubmitApplication}
+            />
           )}
 
           {/* Navigation Buttons - Mobile optimized */}
