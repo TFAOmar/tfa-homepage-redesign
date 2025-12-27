@@ -11,6 +11,7 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import { SSNInput } from "@/components/ui/ssn-input";
 import { Shield, Plus, Trash2, Users, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { generateUUID } from "@/lib/uuid";
 
 interface Step3SuccessorTrusteesProps {
   data: Partial<Step3Data>;
@@ -47,7 +48,7 @@ const Step3SuccessorTrustees = ({ data, onNext, onBack }: Step3SuccessorTrustees
 
   const addTrustee = (role: "primary" | "alternate") => {
     append({
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       fullName: "",
       ssn: "",
       dob: "",

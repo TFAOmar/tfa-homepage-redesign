@@ -24,6 +24,7 @@ import {
 import { PercentageInput } from "@/components/ui/percentage-input";
 import { Step4Data } from "@/types/lifeInsuranceApplication";
 import { Users, Plus, Trash2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { generateUUID } from "@/lib/uuid";
 import { ValidatedInput } from "../ValidatedInput";
 import { ValidatedSelectTrigger } from "../ValidatedSelect";
 import { ValidatedSSNInput } from "../ValidatedSSNInput";
@@ -73,7 +74,7 @@ const Step4Beneficiaries = ({ form }: Step4Props) => {
 
   const addBeneficiary = () => {
     append({
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       fullName: "",
       relationship: "",
       ssn: "",

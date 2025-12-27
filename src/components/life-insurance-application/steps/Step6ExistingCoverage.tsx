@@ -14,6 +14,7 @@ import { CurrencyInput } from "@/components/ui/currency-input";
 import { FileStack, Plus, Trash2 } from "lucide-react";
 import { Step6Data } from "@/types/lifeInsuranceApplication";
 import { ValidatedInput } from "../ValidatedInput";
+import { generateUUID } from "@/lib/uuid";
 
 interface Step6ExistingCoverageProps {
   form: UseFormReturn<Step6Data>;
@@ -29,7 +30,7 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
 
   const addPolicy = () => {
     append({
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       companyName: "",
       policyNumber: "",
       amountOfCoverage: 0,
