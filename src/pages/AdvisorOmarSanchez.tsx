@@ -19,7 +19,6 @@ import {
   Globe
 } from "lucide-react";
 import omarImage from "@/assets/advisors/omar-sanchez.jpg";
-import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
@@ -91,8 +90,11 @@ const processSteps = [
 ];
 
 const AdvisorOmarSanchez = () => {
-  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
+
+  const scrollToCalendar = () => {
+    document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -171,7 +173,7 @@ const AdvisorOmarSanchez = () => {
                   <Button 
                     size="lg" 
                     className="bg-accent hover:bg-accent/90 text-primary font-semibold"
-                    onClick={() => setScheduleModalOpen(true)}
+                    onClick={scrollToCalendar}
                   >
                     <Calendar className="mr-2 h-5 w-5" />
                     Book a Consultation
@@ -339,6 +341,36 @@ const AdvisorOmarSanchez = () => {
           </div>
         </section>
 
+        {/* Calendar Booking Section */}
+        <section id="book" className="py-20 lg:py-28 bg-secondary/30">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <Badge className="mb-4 bg-accent/10 text-accent border-accent/20">
+                Book Now
+              </Badge>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+                Schedule Your Free Consultation
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Choose a time that works best for you. Omar will personally review your 
+                financial goals and discuss how to help you achieve them.
+              </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto bg-card rounded-2xl shadow-lg overflow-hidden border border-border">
+              <iframe
+                src="https://tfa.pipedrive.com/scheduler/M93alkfo/strategic-call-with-omar-sanchez-the-financial-architects"
+                title="Schedule a consultation with Omar Sanchez"
+                width="100%"
+                height="700"
+                frameBorder="0"
+                className="w-full min-h-[600px] lg:min-h-[700px]"
+                allow="camera; microphone"
+              />
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="py-20 lg:py-28 bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-white">
           <div className="container mx-auto px-4">
@@ -354,7 +386,7 @@ const AdvisorOmarSanchez = () => {
                 <Button 
                   size="lg" 
                   className="bg-accent hover:bg-accent/90 text-primary font-semibold"
-                  onClick={() => setScheduleModalOpen(true)}
+                  onClick={scrollToCalendar}
                 >
                   <Calendar className="mr-2 h-5 w-5" />
                   Book Your Free Consultation
@@ -383,15 +415,6 @@ const AdvisorOmarSanchez = () => {
         </section>
 
         {/* Modals */}
-        <ScheduleModal
-          open={scheduleModalOpen}
-          onOpenChange={setScheduleModalOpen}
-          advisorName="Omar Sanchez"
-          advisorEmail="omar@tfainsuranceadvisors.com"
-          advisorImage={omarImage}
-          schedulingLink="https://tfa.pipedrive.com/scheduler/M93alkfo/strategic-call-with-omar-sanchez-the-financial-architects"
-          advisorSlug="omar-sanchez"
-        />
         <ContactModal
           open={contactModalOpen}
           onOpenChange={setContactModalOpen}
