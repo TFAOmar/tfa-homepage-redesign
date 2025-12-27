@@ -213,84 +213,111 @@ const ApplicationWizard = ({
 
   // Save draft to both localStorage and database
   // overrideFormData allows passing form data directly to avoid race conditions with state updates
-  const saveDraftToServer = useCallback(async (showToast = false, overrideFormData?: LifeInsuranceApplicationData) => {
-    const currentFormData = overrideFormData || getCurrentFormData();
-    const applicantName = `${currentFormData.step1?.firstName || ""} ${currentFormData.step1?.lastName || ""}`.trim();
-    const applicantEmail = currentFormData.step2?.email || null;
-    const applicantPhone = currentFormData.step2?.mobilePhone || null;
-    
-    // Generate resume token if not exists
-    const token = resumeToken || generateResumeToken();
-    if (!resumeToken) {
-      setResumeToken(token);
-    }
-    
-    // Save only non-sensitive metadata to localStorage (no PII)
-    const localDraft = {
+  const saveDraftToServer = useCallback(
+    async (showToast = false, overrideFormData?: LifeInsuranceApplicationData) => {
+      const currentFormData = overrideFormData || getCurrentFormData();
+      const applicantName = `${currentFormData.step1?.firstName || ""} ${currentFormData.step1?.lastName || ""}`.trim();
+      const applicantEmail = currentFormData.step2?.email || null;
+      const applicantPhone = currentFormData.step2?.mobilePhone || null;
+
+      // Get (and persist) a stable resume token (avoid token drift between stages)
+      const token = (() => {
+        if (resumeToken) return resumeToken;
+
+        const saved = localStorage.getItem("lifeInsuranceApplication");
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed?.resumeToken) return String(parsed.resumeToken);
+          } catch {
+            // ignore
+          }
+        }
+
+        return generateResumeToken();
+      })();
+
+      if (!resumeToken) {
+        setResumeToken(token);
+      }
+
+      // Save only non-sensitive metadata to localStorage (no PII)
+      const localDraft = {
+        currentStep,
+        completedSteps,
+        advisorId,
+        advisorName,
+        lastSaved: new Date().toISOString(),
+        draftId,
+        resumeToken: token,
+      };
+      localStorage.setItem("lifeInsuranceApplication", JSON.stringify(localDraft));
+
+      try {
+        if (draftId) {
+          // Update existing draft using secure RPC function (token-based)
+          const { error } = await supabase.rpc("update_draft_application_by_token", {
+            p_resume_token: token,
+            p_form_data: currentFormData as unknown as Json,
+            p_current_step: currentStep,
+            p_applicant_name: applicantName || null,
+            p_applicant_email: applicantEmail,
+            p_applicant_phone: applicantPhone,
+          });
+
+          if (error) throw error;
+        } else {
+          // Create new draft (insert only; avoid SELECT under RLS)
+          const newId = crypto.randomUUID();
+
+          const { error } = await supabase
+            .from("life_insurance_applications")
+            .insert({
+              id: newId,
+              form_data: currentFormData as unknown as Json,
+              current_step: currentStep,
+              status: "draft",
+              advisor_id: advisorId || null,
+              advisor_name: advisorName || null,
+              applicant_name: applicantName || null,
+              applicant_email: applicantEmail,
+              applicant_phone: applicantPhone,
+              resume_token: token,
+            });
+
+          if (error) throw error;
+
+          setDraftId(newId);
+
+          // Update localStorage with new draftId
+          localDraft.draftId = newId;
+          localStorage.setItem("lifeInsuranceApplication", JSON.stringify(localDraft));
+        }
+
+        setLastSaved(new Date().toISOString());
+
+        if (showToast) {
+          toast({
+            title: "Draft Saved",
+            description: "Your application has been saved. You can return to complete it later.",
+          });
+        }
+      } catch (error) {
+        console.error("Error saving draft to server:", error);
+        // Still saved to localStorage, so don't show error
+      }
+    },
+    [
+      getCurrentFormData,
       currentStep,
       completedSteps,
       advisorId,
       advisorName,
-      lastSaved: new Date().toISOString(),
       draftId,
-      resumeToken: token,
-    };
-    localStorage.setItem("lifeInsuranceApplication", JSON.stringify(localDraft));
-    
-    try {
-      if (draftId && resumeToken) {
-        // Update existing draft using secure RPC function (token-based)
-        const { error } = await supabase.rpc("update_draft_application_by_token", {
-          p_resume_token: token,
-          p_form_data: currentFormData as unknown as Json,
-          p_current_step: currentStep,
-          p_applicant_name: applicantName || null,
-          p_applicant_email: applicantEmail,
-          p_applicant_phone: applicantPhone,
-        });
-        
-        if (error) throw error;
-      } else {
-        // Create new draft
-        const { data, error } = await supabase
-          .from("life_insurance_applications")
-          .insert({
-            form_data: currentFormData as unknown as Json,
-            current_step: currentStep,
-            status: "draft",
-            advisor_id: advisorId || null,
-            advisor_name: advisorName || null,
-            applicant_name: applicantName || null,
-            applicant_email: applicantEmail,
-            applicant_phone: applicantPhone,
-            resume_token: token,
-          })
-          .select("id")
-          .single();
-        
-        if (error) throw error;
-        
-        if (data) {
-          setDraftId(data.id);
-          // Update localStorage with new draftId
-          localDraft.draftId = data.id;
-          localStorage.setItem("lifeInsuranceApplication", JSON.stringify(localDraft));
-        }
-      }
-      
-      setLastSaved(new Date().toISOString());
-      
-      if (showToast) {
-        toast({
-          title: "Draft Saved",
-          description: "Your application has been saved. You can return to complete it later.",
-        });
-      }
-    } catch (error) {
-      console.error("Error saving draft to server:", error);
-      // Still saved to localStorage, so don't show error
-    }
-  }, [getCurrentFormData, currentStep, completedSteps, advisorId, advisorName, draftId, resumeToken, toast]);
+      resumeToken,
+      toast,
+    ]
+  );
 
   // Check for resume token in URL
   useEffect(() => {
@@ -541,36 +568,54 @@ const ApplicationWizard = ({
 
     // Ensure we have a draftId before submission
     let applicationId = draftId;
+
+    // Use a stable token for the entire submission attempt (avoid state timing issues)
+    const token = (() => {
+      if (resumeToken) return resumeToken;
+
+      const saved = localStorage.getItem("lifeInsuranceApplication");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed?.resumeToken) return String(parsed.resumeToken);
+        } catch {
+          // ignore
+        }
+      }
+
+      return generateResumeToken();
+    })();
+
+    if (!resumeToken) {
+      setResumeToken(token);
+    }
     
     // Stage 1: Create draft if needed
     if (!applicationId) {
       try {
         console.log("No draftId found, creating draft first...");
-        const token = resumeToken || generateResumeToken();
-        if (!resumeToken) {
-          setResumeToken(token);
-        }
-        
-        const { data: newDraft, error: createError } = await supabase
+
+        const newId = crypto.randomUUID();
+
+        const { error: createError } = await supabase
           .from("life_insurance_applications")
           .insert({
+            id: newId,
             form_data: finalFormData as unknown as Json,
             current_step: 9,
             status: "draft",
             advisor_id: advisorId || null,
             advisor_name: advisorName || null,
-            applicant_name: applicantName,
+            applicant_name: applicantName || null,
             applicant_email: applicantEmail,
             applicant_phone: applicantPhone,
             resume_token: token,
-          })
-          .select("id")
-          .single();
+          });
 
         if (createError) {
           console.error("Error creating draft before submission:", createError);
-          const details = getErrorDetails(createError, 'save');
-          setSubmissionError({ stage: 'save', details });
+          const details = getErrorDetails(createError, "save");
+          setSubmissionError({ stage: "save", details });
           toast({
             title: details.title,
             description: details.description,
@@ -580,13 +625,28 @@ const ApplicationWizard = ({
           return;
         }
 
-        applicationId = newDraft.id;
+        applicationId = newId;
         setDraftId(applicationId);
+
+        // Persist non-sensitive metadata for retry/resume
+        localStorage.setItem(
+          "lifeInsuranceApplication",
+          JSON.stringify({
+            currentStep,
+            completedSteps,
+            advisorId,
+            advisorName,
+            lastSaved: new Date().toISOString(),
+            draftId: applicationId,
+            resumeToken: token,
+          })
+        );
+
         console.log("Created draft with ID:", applicationId);
       } catch (error) {
         console.error("Unexpected error creating draft:", error);
-        const details = getErrorDetails(error, 'save');
-        setSubmissionError({ stage: 'save', details });
+        const details = getErrorDetails(error, "save");
+        setSubmissionError({ stage: "save", details });
         toast({
           title: details.title,
           description: details.description,
@@ -599,25 +659,23 @@ const ApplicationWizard = ({
 
     // Stage 2: Save final form data using secure RPC
     try {
-      const token = resumeToken || generateResumeToken();
-      if (!resumeToken) {
-        setResumeToken(token);
-      }
-      
       console.log("Saving final form data via RPC, token:", token);
-      const { error: saveError } = await supabase.rpc("update_draft_application_by_token", {
-        p_resume_token: token,
-        p_form_data: finalFormData as unknown as Json,
-        p_current_step: 9,
-        p_applicant_name: applicantName || null,
-        p_applicant_email: applicantEmail,
-        p_applicant_phone: applicantPhone,
-      });
+      const { data: updatedId, error: saveError } = await supabase.rpc(
+        "update_draft_application_by_token",
+        {
+          p_resume_token: token,
+          p_form_data: finalFormData as unknown as Json,
+          p_current_step: 9,
+          p_applicant_name: applicantName || null,
+          p_applicant_email: applicantEmail,
+          p_applicant_phone: applicantPhone,
+        }
+      );
 
       if (saveError) {
         console.error("Error saving final form data:", saveError);
-        const details = getErrorDetails(saveError, 'save');
-        setSubmissionError({ stage: 'save', details });
+        const details = getErrorDetails(saveError, "save");
+        setSubmissionError({ stage: "save", details });
         toast({
           title: details.title,
           description: details.description,
@@ -626,10 +684,33 @@ const ApplicationWizard = ({
         setIsSubmitting(false);
         return;
       }
+
+      if (!updatedId) {
+        const details: SubmissionErrorDetails = {
+          title: "Draft Not Found",
+          description:
+            "We couldn't find your saved draft to update. Please refresh the page and try again (or start a new application).",
+          canRetry: true,
+        };
+        setSubmissionError({ stage: "save", details });
+        toast({
+          title: details.title,
+          description: details.description,
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Keep draftId in sync (should match applicationId)
+      if (typeof updatedId === "string" && updatedId !== applicationId) {
+        applicationId = updatedId;
+        setDraftId(updatedId);
+      }
     } catch (error) {
       console.error("Unexpected error saving form data:", error);
-      const details = getErrorDetails(error, 'save');
-      setSubmissionError({ stage: 'save', details });
+      const details = getErrorDetails(error, "save");
+      setSubmissionError({ stage: "save", details });
       toast({
         title: details.title,
         description: details.description,
@@ -638,6 +719,7 @@ const ApplicationWizard = ({
       setIsSubmitting(false);
       return;
     }
+
 
     // Stage 3: Submit application
     try {
