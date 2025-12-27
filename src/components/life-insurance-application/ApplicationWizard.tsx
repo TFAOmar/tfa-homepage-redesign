@@ -221,6 +221,7 @@ const ApplicationWizard = ({
       const applicantPhone = currentFormData.step2?.mobilePhone || null;
 
       // Get (and persist) a stable resume token (avoid token drift between stages)
+      // Only reuse a stored token when it matches the current advisor context.
       const token = (() => {
         if (resumeToken) return resumeToken;
 
@@ -228,7 +229,13 @@ const ApplicationWizard = ({
         if (saved) {
           try {
             const parsed = JSON.parse(saved);
-            if (parsed?.resumeToken) return String(parsed.resumeToken);
+            const isAdvisorScoped = Boolean(advisorId || advisorName);
+            const matchesAdvisor =
+              !isAdvisorScoped ||
+              ((advisorId ? parsed?.advisorId === advisorId : true) &&
+                (advisorName ? parsed?.advisorName === advisorName : true));
+
+            if (matchesAdvisor && parsed?.resumeToken) return String(parsed.resumeToken);
           } catch {
             // ignore
           }
@@ -439,6 +446,8 @@ const ApplicationWizard = ({
   // Handle start fresh
   const handleStartFresh = () => {
     localStorage.removeItem("lifeInsuranceApplication");
+    setSubmissionError(null);
+    setHasValidationErrors(false);
     setFormData(defaultApplicationData);
     setCurrentStep(1);
     setCompletedSteps([]);
@@ -570,6 +579,7 @@ const ApplicationWizard = ({
     let applicationId = draftId;
 
     // Use a stable token for the entire submission attempt (avoid state timing issues)
+    // Only reuse a stored token when it matches the current advisor context.
     const token = (() => {
       if (resumeToken) return resumeToken;
 
@@ -577,7 +587,13 @@ const ApplicationWizard = ({
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (parsed?.resumeToken) return String(parsed.resumeToken);
+          const isAdvisorScoped = Boolean(advisorId || advisorName);
+          const matchesAdvisor =
+            !isAdvisorScoped ||
+            ((advisorId ? parsed?.advisorId === advisorId : true) &&
+              (advisorName ? parsed?.advisorName === advisorName : true));
+
+          if (matchesAdvisor && parsed?.resumeToken) return String(parsed.resumeToken);
         } catch {
           // ignore
         }
@@ -924,21 +940,33 @@ const ApplicationWizard = ({
               </div>
               <div className="flex gap-2 w-full sm:w-auto">
                 {submissionError.details.canRetry ? (
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    onClick={handleSubmitApplication}
-                    disabled={isSubmitting}
-                    className="flex-1 sm:flex-none gap-2"
-                  >
-                    {isSubmitting ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <RefreshCw className="w-4 h-4" />
-                    )}
-                    Try Again
-                  </Button>
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleStartFresh}
+                      disabled={isSubmitting}
+                      className="flex-1 sm:flex-none gap-2"
+                    >
+                      Start Fresh
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={handleSubmitApplication}
+                      disabled={isSubmitting}
+                      className="flex-1 sm:flex-none gap-2"
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <RefreshCw className="w-4 h-4" />
+                      )}
+                      Try Again
+                    </Button>
+                  </>
                 ) : (
                   <Button
                     type="button"
