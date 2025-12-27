@@ -20,6 +20,7 @@ import {
   Step7Data,
   US_STATES,
 } from "@/types/estatePlanningApplication";
+import { generateUUID } from "@/lib/uuid";
 
 interface Step7AssetsProps {
   data: Step7Data;
@@ -85,7 +86,7 @@ const Step7Assets = ({ data, onNext, onBack }: Step7AssetsProps) => {
 
   const addProperty = () => {
     appendProperty({
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       address: "",
       city: "",
       state: "",
@@ -98,7 +99,7 @@ const Step7Assets = ({ data, onNext, onBack }: Step7AssetsProps) => {
 
   const addAccount = () => {
     appendAccount({
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       institutionName: "",
       accountType: "checking",
       approximateValue: undefined,

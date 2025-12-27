@@ -11,6 +11,7 @@ import { Plus, Trash2, Users, AlertCircle, Percent } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import { generateUUID } from "@/lib/uuid";
 
 interface Step4BeneficiariesProps {
   data: Step4Data;
@@ -34,7 +35,7 @@ const Step4Beneficiaries = ({ data, onNext, onBack }: Step4BeneficiariesProps) =
 
   const addBeneficiary = () => {
     append({
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       fullName: "",
       relationship: "",
       percentage: 0,
