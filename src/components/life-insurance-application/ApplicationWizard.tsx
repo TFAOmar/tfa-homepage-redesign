@@ -494,19 +494,22 @@ const ApplicationWizard = ({
         console.log("Created draft with ID:", applicationId);
       }
 
-      // First update the form data (while still a draft)
-      console.log("Saving final form data, ID:", applicationId);
-      const { error: saveError } = await supabase
-        .from("life_insurance_applications")
-        .update({
-          form_data: finalFormData as unknown as Json,
-          current_step: 9,
-          applicant_name: applicantName,
-          applicant_email: applicantEmail,
-          applicant_phone: applicantPhone,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", applicationId);
+      // First update the form data using the secure RPC function (bypasses RLS)
+      // We need the resumeToken to update via RPC
+      const token = resumeToken || generateResumeToken();
+      if (!resumeToken) {
+        setResumeToken(token);
+      }
+      
+      console.log("Saving final form data via RPC, token:", token);
+      const { error: saveError } = await supabase.rpc("update_draft_application_by_token", {
+        p_resume_token: token,
+        p_form_data: finalFormData as unknown as Json,
+        p_current_step: 9,
+        p_applicant_name: applicantName || null,
+        p_applicant_email: applicantEmail,
+        p_applicant_phone: applicantPhone,
+      });
 
       if (saveError) {
         console.error("Error saving final form data:", saveError);
