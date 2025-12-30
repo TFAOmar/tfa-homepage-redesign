@@ -19,6 +19,7 @@ import anthonyBottleyImg from "@/assets/advisors/anthony-bottley.jpg";
 import conradOlveraImg from "@/assets/advisors/conrad-olvera.jpg";
 import patriciaSerafinImg from "@/assets/advisors/patricia-serafin.jpg";
 import omarSanchezImg from "@/assets/advisors/omar-sanchez.jpg";
+import peterHernandezImg from "@/assets/advisors/peter-hernandez.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -370,6 +371,23 @@ export const advisors: Advisor[] = [
     email: "omar@tfainsuranceadvisors.com",
     schedulingLink: "https://tfa.pipedrive.com/scheduler/M93alkfo/strategic-call-with-omar-sanchez-the-financial-architects",
     landingPage: "/advisors/omar-sanchez"
+  },
+  {
+    id: "peter-hernandez",
+    name: "Peter Hernandez",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Whittier",
+    region: "West",
+    bio: "With 25+ years in Financial Services at companies such as Wells Fargo Financial, Ford Motor Credit, and Sun West Mortgage, I am now dedicated to helping families save on taxes, increase their retirement, and most importantly lowering their cost of insurance to protect the ones they love most.",
+    specialties: ["Tax Strategies", "Retirement Planning", "Life Insurance", "Financial Planning"],
+    licenses: ["Life & Health"],
+    image: peterHernandezImg,
+    email: "phernandez@tfainsuranceadvisors.com",
+    phone: "(562) 547-4226",
+    yearsOfExperience: 25,
+    landingPage: "/advisors/peter-hernandez"
   }
 ];
 
