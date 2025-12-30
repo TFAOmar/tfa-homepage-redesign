@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import RecinosBusinessInsuranceForm from "@/components/business-insurance/RecinosBusinessInsuranceForm";
 import tfaLogo from "@/assets/tfa-logo.png";
+import rolandoRecinosImg from "@/assets/advisors/rolando-recinos.jpg";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generateWebPageSchema, generateBreadcrumbSchema, generateInsuranceAgencySchema, generateFAQSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
@@ -183,9 +184,11 @@ const RecinosBusinessInsurance = () => {
               </div>
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
-                  <div className="w-24 h-24 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-3">
-                    <Users className="h-12 w-12 text-white/60" />
-                  </div>
+                  <img 
+                    src={rolandoRecinosImg} 
+                    alt="Rolando Recinos" 
+                    className="w-24 h-24 mx-auto rounded-full object-cover border-2 border-accent mb-3"
+                  />
                   <h4 className="text-white font-semibold">Rolando Recinos</h4>
                   <p className="text-white/70 text-sm">Business Insurance Specialist</p>
                 </div>
