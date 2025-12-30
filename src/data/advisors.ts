@@ -20,6 +20,7 @@ import conradOlveraImg from "@/assets/advisors/conrad-olvera.jpg";
 import patriciaSerafinImg from "@/assets/advisors/patricia-serafin.jpg";
 import omarSanchezImg from "@/assets/advisors/omar-sanchez.jpg";
 import peterHernandezImg from "@/assets/advisors/peter-hernandez.jpg";
+import rolandoRecinosImg from "@/assets/advisors/rolando-recinos.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -292,6 +293,7 @@ export const advisors: Advisor[] = [
     bio: "Rolando specializes in commercial insurance solutions, helping business owners protect their operations, employees, and assets. With expertise in business liability, workers' compensation, and comprehensive commercial coverage, he guides businesses of all sizes through the complexities of commercial insurance.",
     specialties: ["Bilingual • Bilingüe", "Business Insurance", "Business Planning"],
     licenses: ["Life & Health"],
+    image: rolandoRecinosImg,
     email: "rrecinos@tfainsuranceadvisors.com",
     landingPage: "/advisors/recinos"
   },
