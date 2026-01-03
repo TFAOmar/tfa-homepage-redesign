@@ -21,6 +21,7 @@ import patriciaSerafinImg from "@/assets/advisors/patricia-serafin.jpg";
 import omarSanchezImg from "@/assets/advisors/omar-sanchez.jpg";
 import peterHernandezImg from "@/assets/advisors/peter-hernandez.jpg";
 import rolandoRecinosImg from "@/assets/advisors/rolando-recinos.jpg";
+import joseCovarrubiasImg from "@/assets/advisors/jose-covarrubias.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -390,6 +391,23 @@ export const advisors: Advisor[] = [
     phone: "(562) 547-4226",
     yearsOfExperience: 25,
     landingPage: "/advisors/peter-hernandez"
+  },
+  {
+    id: "jose-covarrubias",
+    name: "Jose \"C10\" Covarrubias",
+    title: "Financial Strategist & Founder, Spartans Financial",
+    type: "Advisor",
+    state: "California",
+    city: "Orange County",
+    region: "West",
+    bio: "Jose is a proud military veteran and founder of Spartans Financial, a TFA member firm. With over 6 years of hands-on financial planning experience and military discipline, he delivers strategic, personalized solutions focused on stability, growth, and long-term financial freedom.",
+    specialties: ["Financial Planning", "Retirement Planning", "Life Insurance"],
+    licenses: ["Life & Health"],
+    image: joseCovarrubiasImg,
+    email: "jose@spartansfinancial.com",
+    phone: "(714) 360-3025",
+    yearsOfExperience: 6,
+    landingPage: "/advisors/jose-covarrubias"
   }
 ];
 
