@@ -64,6 +64,7 @@ import AdvisorErikJohnson from "./pages/AdvisorErikJohnson";
 import AdvisorBraihyraMedellin from "./pages/AdvisorBraihyraMedellin";
 import BraihyraLivingTrust from "./pages/BraihyraLivingTrust";
 import AdvisorErinGraceVargas from "./pages/AdvisorErinGraceVargas";
+import RuthPachecoTaxStrategy from "./pages/RuthPachecoTaxStrategy";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
 import InvestmentManagement from "./pages/InvestmentManagement";
@@ -81,7 +82,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/braihyra-medellin/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/braihyra-medellin/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -149,6 +150,7 @@ const AppLayout = () => {
           <Route path="/advisors/hamlet-ohandjanian" element={<AdvisorHamletOhandjanian />} />
           <Route path="/advisors/sean-cagle" element={<AdvisorSeanCagle />} />
           <Route path="/advisors/ruth-pacheco" element={<AdvisorRuthPacheco />} />
+          <Route path="/advisors/ruth-pacheco/tax-strategy" element={<RuthPachecoTaxStrategy />} />
           <Route path="/advisors/anthony-bottley" element={<AdvisorAnthonyBottley />} />
           <Route path="/advisors/conrad-olvera" element={<AdvisorConradOlvera />} />
           <Route path="/advisors/patricia-serafin" element={<AdvisorPatriciaSerafin />} />
