@@ -547,7 +547,7 @@ const RuthPachecoTaxStrategy = () => {
               <div className="flex items-center gap-6">
                 <img src={tfaLogo} alt="The Financial Architects" className="h-10 w-auto" />
                 <div className="h-6 w-px bg-gray-200" />
-                <img src={laymansTaxLogo} alt="Layman's Tax & Accounting" className="h-8 w-auto" />
+                <img src={laymansTaxLogo} alt="Layman's Tax & Accounting" className="h-14 w-auto" />
               </div>
               <div className="flex items-center gap-6">
                 <a href="tel:8883505396" className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors">
