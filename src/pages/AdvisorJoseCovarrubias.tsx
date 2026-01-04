@@ -137,9 +137,10 @@ const AdvisorJoseCovarrubias = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="text-white">
-              <Badge className="mb-4 bg-accent/20 text-accent border-accent/30 hover:bg-accent/30">
-                Military Veteran | Financial Strategist
-              </Badge>
+                <Badge className="mb-4 bg-accent/20 text-accent border-accent/30 hover:bg-accent/30">
+                  <Globe className="w-4 h-4 mr-1.5 inline" />
+                  Military Veteran | Financial Strategist | Bilingual
+                </Badge>
               
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-tight">
                 Jose "C10" Covarrubias
