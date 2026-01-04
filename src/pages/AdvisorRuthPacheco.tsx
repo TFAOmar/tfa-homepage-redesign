@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,9 +14,11 @@ import {
   Users,
   TrendingUp,
   HandCoins,
-  Award
+  Award,
+  Calculator
 } from "lucide-react";
 import ruthImage from "@/assets/advisors/ruth-pacheco.jpg";
+import luisPachecoImage from "@/assets/partners/luis-pacheco.webp";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
 import { SEOHead, JsonLd } from "@/components/seo";
@@ -28,7 +31,8 @@ const specialties = [
   "Retirement Planning",
   "Real Estate Strategy",
   "Home Equity Solutions",
-  "Senior Financial Planning"
+  "Senior Financial Planning",
+  "Tax Strategy"
 ];
 
 const services = [
@@ -242,6 +246,50 @@ const AdvisorRuthPacheco = () => {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CPA Partnership Section */}
+      <section className="py-16 bg-accent/5 border-y border-accent/10">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <Card className="bg-card border-accent/20 overflow-hidden">
+              <CardContent className="p-0">
+                <div className="grid md:grid-cols-2 gap-0">
+                  <div className="p-8 flex flex-col justify-center">
+                    <Badge className="w-fit mb-4 bg-amber-500/10 text-amber-600 border-amber-500/20">
+                      CPA Partnership
+                    </Badge>
+                    <h3 className="text-2xl font-bold text-foreground mb-3">
+                      Tax-Advantaged Financial Solutions
+                    </h3>
+                    <p className="text-muted-foreground mb-6">
+                      In partnership with her son Luis Pacheco, CPA at Layman's Tax & Accounting, 
+                      Ruth offers integrated tax strategy and financial planning solutions that 
+                      help reduce your tax burden while building wealth.
+                    </p>
+                    <Link to="/advisors/ruth-pacheco/tax-strategy">
+                      <Button className="bg-accent hover:bg-accent/90 text-primary font-semibold">
+                        <Calculator className="mr-2 h-5 w-5" />
+                        Explore Tax Strategies
+                      </Button>
+                    </Link>
+                  </div>
+                  <div className="relative bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center p-8">
+                    <div className="text-center">
+                      <img 
+                        src={luisPachecoImage}
+                        alt="Luis Pacheco, CPA"
+                        className="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-accent/20"
+                      />
+                      <p className="font-semibold text-foreground">Luis Pacheco, CPA</p>
+                      <p className="text-sm text-muted-foreground">Layman's Tax & Accounting</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
