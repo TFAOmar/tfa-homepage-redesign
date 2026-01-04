@@ -179,6 +179,12 @@ const AdvisorRuthPacheco = () => {
                   <Mail className="mr-2 h-5 w-5" />
                   Contact Me
                 </Button>
+                <a href="tel:9098009142">
+                  <Button size="lg" variant="hero">
+                    <Phone className="mr-2 h-5 w-5" />
+                    (909) 800-9142
+                  </Button>
+                </a>
               </div>
             </div>
 
@@ -388,10 +394,10 @@ const AdvisorRuthPacheco = () => {
                 <Calendar className="mr-2 h-5 w-5" />
                 Book Your Free Consultation
               </Button>
-              <a href="tel:8883505396">
+              <a href="tel:9098009142">
                 <Button size="lg" variant="hero">
                   <Phone className="mr-2 h-5 w-5" />
-                  (888) 350-5396
+                  (909) 800-9142
                 </Button>
               </a>
             </div>
