@@ -19,16 +19,18 @@ import {
   Users,
   Heart,
   Target,
-  Award
+  Award,
+  Globe
 } from "lucide-react";
 
 import joseImage from "@/assets/advisors/jose-covarrubias.jpg";
 
 const specialties = [
-  "Financial Planning",
-  "Retirement Planning", 
-  "Life Insurance",
-  "Veterans Financial Guidance"
+  { name: "Bilingual • Bilingüe", isBilingual: true },
+  { name: "Financial Planning", isBilingual: false },
+  { name: "Retirement Planning", isBilingual: false },
+  { name: "Life Insurance", isBilingual: false },
+  { name: "Veterans Financial Guidance", isBilingual: false }
 ];
 
 const services = [
@@ -254,11 +256,15 @@ const AdvisorJoseCovarrubias = () => {
               <div className="flex flex-wrap gap-3">
                 {specialties.map((specialty) => (
                   <Badge 
-                    key={specialty} 
+                    key={specialty.name} 
                     variant="secondary"
-                    className="bg-secondary/50 text-secondary-foreground px-4 py-2"
+                    className={specialty.isBilingual 
+                      ? "bg-amber-500/20 text-amber-600 border-amber-500/40 px-4 py-2 text-sm font-semibold" 
+                      : "bg-secondary/50 text-secondary-foreground px-4 py-2"
+                    }
                   >
-                    {specialty}
+                    {specialty.isBilingual && <Globe className="w-4 h-4 mr-1.5 inline" />}
+                    {specialty.name}
                   </Badge>
                 ))}
               </div>
