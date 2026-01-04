@@ -25,11 +25,7 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
   const landingPage = 'landingPage' in advisor ? advisor.landingPage : undefined;
 
   const handleScheduleClick = () => {
-    if (landingPage) {
-      navigate(`${landingPage}#book`);
-    } else {
-      setScheduleModalOpen(true);
-    }
+    setScheduleModalOpen(true);
   };
   
   return (
@@ -145,7 +141,7 @@ const AdvisorCard = ({ advisor, index }: AdvisorCardProps) => {
             onClick={handleScheduleClick}
           >
             <Calendar className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-            {landingPage ? `Meet ${advisor.name.split(' ')[0]}` : `Schedule with ${advisor.name.split(' ')[0]}`}
+            {`Meet ${advisor.name.split(' ')[0]}`}
           </Button>
         </CardFooter>
       </Card>
