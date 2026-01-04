@@ -27,6 +27,7 @@ import {
 import tfaLogo from "@/assets/tfa-logo.png";
 import laymansTaxLogo from "@/assets/partners/laymans-tax-accounting-logo.webp";
 import luisPachecoImage from "@/assets/partners/luis-pacheco.webp";
+import luisPachecoPortrait from "@/assets/partners/luis-pacheco-portrait.webp";
 import ruthPachecoImage from "@/assets/advisors/ruth-pacheco.jpg";
 import RuthPachecoTaxStrategyForm from "@/components/tax-strategy/RuthPachecoTaxStrategyForm";
 import { SEOHead, JsonLd } from "@/components/seo";
@@ -404,7 +405,7 @@ const RuthPachecoTaxStrategy = () => {
                 <CardContent className="p-0">
                   <div className="aspect-[4/3] overflow-hidden">
                     <img
-                      src={luisPachecoImage}
+                      src={luisPachecoPortrait}
                       alt="Luis Pacheco, CPA"
                       className="w-full h-full object-cover"
                     />
