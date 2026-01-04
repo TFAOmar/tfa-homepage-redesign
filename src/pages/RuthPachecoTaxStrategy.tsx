@@ -179,8 +179,8 @@ const RuthPachecoTaxStrategy = () => {
               </div>
               <div className="text-right">
                 <p className="text-sm text-muted-foreground hidden sm:block">A Trusted Partnership</p>
-                <a href="tel:8883505396" className="text-primary font-semibold hover:text-accent transition-colors">
-                  (888) 350-5396
+                <a href="tel:9098009142" className="text-primary font-semibold hover:text-accent transition-colors">
+                  (909) 800-9142
                 </a>
               </div>
             </div>
@@ -213,10 +213,10 @@ const RuthPachecoTaxStrategy = () => {
                     Schedule Free Consultation
                     <ChevronRight className="ml-2 h-5 w-5" />
                   </Button>
-                  <a href="tel:8883505396">
+                  <a href="tel:9098009142">
                     <Button size="lg" variant="hero">
                       <Phone className="mr-2 h-5 w-5" />
-                      (888) 350-5396
+                      (909) 800-9142
                     </Button>
                   </a>
                 </div>
@@ -494,9 +494,9 @@ const RuthPachecoTaxStrategy = () => {
                     </li>
                   </ul>
                   <div className="pt-4">
-                    <p className="text-white/70 mb-2">Or call us directly:</p>
-                    <a href="tel:8883505396" className="text-2xl font-bold text-accent hover:text-accent/90 transition-colors">
-                      (888) 350-5396
+                    <p className="text-white/70 mb-2">Or call Ruth directly:</p>
+                    <a href="tel:9098009142" className="text-2xl font-bold text-accent hover:text-accent/90 transition-colors">
+                      (909) 800-9142
                     </a>
                   </div>
                 </div>
@@ -551,9 +551,9 @@ const RuthPachecoTaxStrategy = () => {
                 <img src={laymansTaxLogo} alt="Layman's Tax & Accounting" className="h-14 w-auto" />
               </div>
               <div className="flex items-center gap-6">
-                <a href="tel:8883505396" className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors">
+                <a href="tel:9098009142" className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors">
                   <Phone className="h-4 w-4" />
-                  (888) 350-5396
+                  (909) 800-9142
                 </a>
                 <a href="mailto:ruth@tfainsuranceadvisors.com" className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors">
                   <Mail className="h-4 w-4" />
