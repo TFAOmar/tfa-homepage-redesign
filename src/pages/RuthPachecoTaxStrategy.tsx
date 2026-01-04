@@ -173,7 +173,7 @@ const RuthPachecoTaxStrategy = () => {
                 <img 
                   src={laymansTaxLogo} 
                   alt="Layman's Tax & Accounting" 
-                  className="hidden sm:block h-10 w-auto" 
+                  className="hidden sm:block h-14 w-auto" 
                 />
               </div>
               <div className="text-right">
