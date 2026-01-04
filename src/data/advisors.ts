@@ -22,6 +22,7 @@ import omarSanchezImg from "@/assets/advisors/omar-sanchez.jpg";
 import peterHernandezImg from "@/assets/advisors/peter-hernandez.jpg";
 import rolandoRecinosImg from "@/assets/advisors/rolando-recinos.jpg";
 import joseCovarrubiasImg from "@/assets/advisors/jose-covarrubias.jpg";
+import erikJohnsonImg from "@/assets/advisors/erik-johnson.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -408,6 +409,22 @@ export const advisors: Advisor[] = [
     phone: "(714) 360-3025",
     yearsOfExperience: 6,
     landingPage: "/advisors/jose-covarrubias"
+  },
+  {
+    id: "erik-johnson",
+    name: "Erik Johnson",
+    title: "Independent Financial Advisor",
+    type: "Advisor",
+    state: "California",
+    city: "La Mirada",
+    region: "West",
+    bio: "As a licensed fiduciary, Erik focuses on providing financial advice that helps people become comfortable with their finances and gain clarity in their decisions. With 10+ years of experience, he specializes in investment risk management, retirement income planning, and tax minimization. He partners with The Financial Architects to provide comprehensive solutions.",
+    specialties: ["Federal Employee Benefits", "Investment Management", "Retirement Planning", "Tax Strategies"],
+    licenses: ["Series 6", "Series 63", "Series 26", "Series 65", "NMLS", "Notary Public"],
+    image: erikJohnsonImg,
+    email: "erik@infinitewealthmgmt.com",
+    yearsOfExperience: 10,
+    landingPage: "/advisors/erik-johnson"
   }
 ];
 
