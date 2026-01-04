@@ -23,6 +23,7 @@ import peterHernandezImg from "@/assets/advisors/peter-hernandez.jpg";
 import rolandoRecinosImg from "@/assets/advisors/rolando-recinos.jpg";
 import joseCovarrubiasImg from "@/assets/advisors/jose-covarrubias.jpg";
 import erikJohnsonImg from "@/assets/advisors/erik-johnson.jpg";
+import braihyraMedellinImg from "@/assets/advisors/braihyra-medellin.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -425,6 +426,23 @@ export const advisors: Advisor[] = [
     email: "erik@infinitewealthmgmt.com",
     yearsOfExperience: 10,
     landingPage: "/advisors/erik-johnson"
+  },
+  {
+    id: 25,
+    name: "Braihyra Medellin",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Whittier",
+    region: "West",
+    bio: "A licensed Financial Strategist with over 5 years of experience in health and life insurance, dedicated to helping individuals and families build, protect, and preserve their wealth through strategic planning, asset protection, living trusts, and real estate solutions.",
+    specialties: ["Living Trusts", "Asset Protection", "Real Estate", "Life Insurance", "Wealth Preservation"],
+    licenses: ["Life & Health (CDI #0M01119)", "Licensed Realtor"],
+    image: braihyraMedellinImg,
+    email: "bri@tfainsuranceadvisors.com",
+    phone: "(562) 702-3369",
+    yearsOfExperience: 5,
+    landingPage: "/advisors/braihyra-medellin"
   }
 ];
 

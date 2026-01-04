@@ -61,6 +61,8 @@ import AdvisorPatriciaSerafinSpanish from "./pages/AdvisorPatriciaSerafinSpanish
 import AdvisorPeterHernandez from "./pages/AdvisorPeterHernandez";
 import AdvisorJoseCovarrubias from "./pages/AdvisorJoseCovarrubias";
 import AdvisorErikJohnson from "./pages/AdvisorErikJohnson";
+import AdvisorBraihyraMedellin from "./pages/AdvisorBraihyraMedellin";
+import BraihyraLivingTrust from "./pages/BraihyraLivingTrust";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
 import InvestmentManagement from "./pages/InvestmentManagement";
@@ -78,7 +80,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/braihyra-medellin/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -153,6 +155,8 @@ const AppLayout = () => {
           <Route path="/advisors/peter-hernandez" element={<AdvisorPeterHernandez />} />
           <Route path="/advisors/jose-covarrubias" element={<AdvisorJoseCovarrubias />} />
           <Route path="/advisors/erik-johnson" element={<AdvisorErikJohnson />} />
+          <Route path="/advisors/braihyra-medellin" element={<AdvisorBraihyraMedellin />} />
+          <Route path="/advisors/braihyra-medellin/living-trust" element={<BraihyraLivingTrust />} />
           <Route path="/advisors/patricia-serafin/es" element={<AdvisorPatriciaSerafinSpanish />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
           <Route path="/services/estate-planning" element={<EstatePlanning />} />
