@@ -63,6 +63,7 @@ import AdvisorJoseCovarrubias from "./pages/AdvisorJoseCovarrubias";
 import AdvisorErikJohnson from "./pages/AdvisorErikJohnson";
 import AdvisorBraihyraMedellin from "./pages/AdvisorBraihyraMedellin";
 import BraihyraLivingTrust from "./pages/BraihyraLivingTrust";
+import AdvisorErinGraceVargas from "./pages/AdvisorErinGraceVargas";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
 import InvestmentManagement from "./pages/InvestmentManagement";
@@ -157,6 +158,7 @@ const AppLayout = () => {
           <Route path="/advisors/erik-johnson" element={<AdvisorErikJohnson />} />
           <Route path="/advisors/braihyra-medellin" element={<AdvisorBraihyraMedellin />} />
           <Route path="/advisors/braihyra-medellin/living-trust" element={<BraihyraLivingTrust />} />
+          <Route path="/advisors/erin-grace-vargas" element={<AdvisorErinGraceVargas />} />
           <Route path="/advisors/patricia-serafin/es" element={<AdvisorPatriciaSerafinSpanish />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
           <Route path="/services/estate-planning" element={<EstatePlanning />} />

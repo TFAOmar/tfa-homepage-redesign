@@ -24,6 +24,7 @@ import rolandoRecinosImg from "@/assets/advisors/rolando-recinos.jpg";
 import joseCovarrubiasImg from "@/assets/advisors/jose-covarrubias.jpg";
 import erikJohnsonImg from "@/assets/advisors/erik-johnson.jpg";
 import braihyraMedellinImg from "@/assets/advisors/braihyra-medellin.jpg";
+import erinGraceVargasImg from "@/assets/advisors/erin-grace-vargas.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -443,6 +444,23 @@ export const advisors: Advisor[] = [
     phone: "(562) 702-3369",
     yearsOfExperience: 5,
     landingPage: "/advisors/braihyra-medellin"
+  },
+  {
+    id: 26,
+    name: "Erin Grace Vargas",
+    title: "Real Estate Professional & Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "SoCal",
+    region: "West",
+    bio: "Erin is a seasoned real estate professional with 19 years of experience and a background managing a corporate legal office for 15 years. As a Fire Wife and mother, she brings a practical, values-driven approach to helping families build long-term financial security through asset protection and strategic planning.",
+    specialties: ["Real Estate", "Asset Protection", "Living Trusts", "Financial Planning", "Wealth Preservation"],
+    licenses: ["DRE# 01751500"],
+    image: erinGraceVargasImg,
+    email: "evargas@tfainsuranceadvisors.com",
+    phone: "(562) 777-5549",
+    yearsOfExperience: 19,
+    landingPage: "/advisors/erin-grace-vargas"
   }
 ];
 
