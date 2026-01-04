@@ -401,7 +401,7 @@ export const advisors: Advisor[] = [
     city: "Orange County",
     region: "West",
     bio: "Jose is a proud military veteran and founder of Spartans Financial, a TFA member firm. With over 6 years of hands-on financial planning experience and military discipline, he delivers strategic, personalized solutions focused on stability, growth, and long-term financial freedom.",
-    specialties: ["Financial Planning", "Retirement Planning", "Life Insurance"],
+    specialties: ["Bilingual • Bilingüe", "Financial Planning", "Retirement Planning", "Life Insurance"],
     licenses: ["Life & Health"],
     image: joseCovarrubiasImg,
     email: "jose@spartansfinancial.com",
