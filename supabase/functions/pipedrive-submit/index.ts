@@ -458,6 +458,66 @@ const generateTeamNotificationHtml = (
   `;
 };
 
+// Custom confirmation email for Ruth Pacheco Tax Strategy form
+const generateRuthTaxStrategyConfirmationEmail = (firstName: string): string => {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; font-family: Georgia, 'Times New Roman', serif; background-color: #f9f7f4;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+        <tr>
+          <td style="padding: 40px 30px; background: linear-gradient(135deg, #0A0F1F 0%, #1a2a44 100%); text-align: center;">
+            <h1 style="color: #E4B548; margin: 0; font-size: 22px; font-weight: 400; letter-spacing: 1px;">
+              The Financial Architects
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 40px 35px;">
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 20px 0;">
+              Hi ${firstName},
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 20px 0;">
+              I'm Ruth Pacheco, and I wanted to personally thank you for reaching out. Luis mentioned you might have some questions about tax-advantaged financial strategies, and I'm so glad you took the time to connect.
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 20px 0;">
+              As a mother-son team, Luis and I have helped many families coordinate their tax planning with their long-term financial goals. He handles the tax side at Layman's Tax & Accounting, and I help clients explore options like Living Trusts, tax-deferred retirement strategies, and life insurance solutions that can complement a solid tax plan.
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 20px 0;">
+              My goal isn't to sell you anything—it's to help you understand your options so you can make informed decisions for you and your family. Everyone's situation is different, and I believe in taking the time to listen first.
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 25px 0;">
+              I'll be reaching out within the next day or two to introduce myself properly and answer any questions you might have. In the meantime, if you'd like to chat sooner, feel free to give me a call directly at <a href="tel:9098009142" style="color: #1a365d; text-decoration: none; font-weight: 600;">(909) 800-9142</a>.
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 8px 0;">
+              Looking forward to connecting,
+            </p>
+            <p style="color: #1a365d; font-size: 18px; font-weight: 600; margin: 0 0 5px 0;">
+              Ruth Pacheco
+            </p>
+            <p style="color: #666; font-size: 14px; margin: 0;">
+              Financial Strategist | The Financial Architects
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 25px 35px; background-color: #f9f7f4; border-top: 1px solid #e5e5e5;">
+            <p style="color: #888; font-size: 12px; margin: 0; text-align: center; line-height: 1.6;">
+              This email is from Ruth Pacheco at The Financial Architects, sent in response to your inquiry.<br>
+              (909) 800-9142 | ruth@tfainsuranceadvisors.com
+            </p>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+};
+
 // Send emails function
 const sendEmails = async (
   resend: InstanceType<typeof Resend>,
@@ -722,6 +782,29 @@ serve(async (req) => {
         advisor?.email,
         advisor?.name
       );
+    }
+    
+    // ============ CUSTOM CONFIRMATION EMAILS ============
+    // Ruth Pacheco Tax Strategy - personalized confirmation from Ruth
+    if (resend && formData.form_name === "Tax Strategy Inquiry" && formData.advisor_slug === "ruth-pacheco") {
+      try {
+        const confirmationHtml = generateRuthTaxStrategyConfirmationEmail(formData.first_name);
+        const confirmResult = await resend.emails.send({
+          from: "Ruth Pacheco <noreply@tfainsuranceadvisors.com>",
+          reply_to: "ruth@tfainsuranceadvisors.com",
+          to: [formData.email],
+          subject: "Thank you for reaching out – Ruth Pacheco",
+          html: confirmationHtml,
+        });
+        
+        if (confirmResult.error) {
+          console.error("[Confirmation Email Error - Ruth Tax Strategy]", confirmResult.error);
+        } else {
+          console.log("[Confirmation Email Sent - Ruth Tax Strategy]", formData.email);
+        }
+      } catch (e) {
+        console.error("[Confirmation Email Exception - Ruth Tax Strategy]", e);
+      }
     }
     
     // ============ PIPEDRIVE (only for non-advisor forms) ============
