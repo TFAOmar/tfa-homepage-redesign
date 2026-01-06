@@ -41,6 +41,15 @@ const maskSSN = (ssn?: string): string => {
   return "***-**-****";
 };
 
+const formatSSN = (ssn?: string): string => {
+  if (!ssn) return "N/A";
+  const cleaned = ssn.replace(/\D/g, "");
+  if (cleaned.length === 9) {
+    return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 5)}-${cleaned.slice(5)}`;
+  }
+  return ssn;
+};
+
 const maskAccountNumber = (accountNum?: string): string => {
   if (!accountNum) return "N/A";
   const cleaned = accountNum.replace(/\D/g, "");
@@ -291,7 +300,7 @@ const generateApplicationPdf = (app: ApplicationData): string => {
   yPos = addPdfField(doc, "Full Name", app.applicant_name || "N/A", yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Date of Birth", formatPdfDate(step1.dateOfBirth as string), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Gender", formatPdfValue(step1.gender), yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "SSN", maskSSN(step1.ssn as string), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "SSN", formatSSN(step1.ssn as string), yPos, margin, pageWidth);
   
   const birthPlace = step1.birthplaceCountry 
     ? `${step1.birthplaceState ? step1.birthplaceState + ", " : ""}${step1.birthplaceCountry}` 
@@ -344,7 +353,7 @@ const generateApplicationPdf = (app: ApplicationData): string => {
   if (step3.insuredIsOwner === false) {
     yPos = addPdfField(doc, "Owner Type", formatPdfValue(step3.ownerType), yPos, margin, pageWidth);
     yPos = addPdfField(doc, "Owner Name", formatPdfValue(step3.ownerName), yPos, margin, pageWidth);
-    yPos = addPdfField(doc, "Owner SSN/TIN", maskSSN(step3.ownerSSN as string), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Owner SSN/TIN", formatSSN(step3.ownerSSN as string), yPos, margin, pageWidth);
     yPos = addPdfField(doc, "Owner Relationship", formatPdfValue(step3.ownerRelationshipToInsured), yPos, margin, pageWidth);
     const ownerAddress = [step3.ownerStreet, step3.ownerCity, step3.ownerState, step3.ownerZip]
       .filter(Boolean).join(", ") || "N/A";

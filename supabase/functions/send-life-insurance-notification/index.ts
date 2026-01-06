@@ -244,6 +244,15 @@ const maskSSN = (ssn?: string): string => {
   return "***-**-****";
 };
 
+const formatSSN = (ssn?: string): string => {
+  if (!ssn) return "N/A";
+  const cleaned = ssn.replace(/\D/g, "");
+  if (cleaned.length === 9) {
+    return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 5)}-${cleaned.slice(5)}`;
+  }
+  return ssn;
+};
+
 const maskAccountNumber = (accountNum?: string): string => {
   if (!accountNum) return "N/A";
   const cleaned = accountNum.replace(/\D/g, "");
@@ -490,7 +499,7 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   yPos = addPdfField(doc, "Full Name", applicantName || "N/A", yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Date of Birth", formatPdfDate(step1.dateOfBirth), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Gender", formatPdfValue(step1.gender), yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "SSN", maskSSN(step1.ssn), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "SSN", formatSSN(step1.ssn), yPos, margin, pageWidth);
   
   // Birthplace - using correct field names
   const birthPlace = step1.birthplaceCountry 
@@ -582,7 +591,7 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
     
     // Using correct field names
     yPos = addPdfField(doc, "Owner Name", formatPdfValue(step3.ownerName), yPos, margin, pageWidth);
-    yPos = addPdfField(doc, "Owner SSN/TIN", maskSSN(step3.ownerSSN), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Owner SSN/TIN", formatSSN(step3.ownerSSN), yPos, margin, pageWidth);
     
     if (step3.ownerType === "individual") {
       yPos = addPdfField(doc, "Owner DOB", formatPdfDate(step3.ownerDateOfBirth), yPos, margin, pageWidth);
@@ -640,7 +649,7 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
       yPos = addPdfField(doc, "Share", `${b.sharePercentage || 0}%`, yPos, margin, pageWidth);
       yPos = addPdfField(doc, "Relationship", formatPdfValue(b.relationship), yPos, margin, pageWidth);
       if (b.ssn) {
-        yPos = addPdfField(doc, "SSN", maskSSN(b.ssn), yPos, margin, pageWidth);
+        yPos = addPdfField(doc, "SSN", formatSSN(b.ssn), yPos, margin, pageWidth);
       }
       if (b.dateOfBirth) {
         yPos = addPdfField(doc, "Date of Birth", formatPdfDate(b.dateOfBirth), yPos, margin, pageWidth);
