@@ -187,10 +187,26 @@ export const generateLifeInsurancePdf = (
   yPos = addField(doc, "Date of Birth", formatDate(step1.dateOfBirth as string), yPos, margin, pageWidth);
   yPos = addField(doc, "Gender", step1.gender, yPos, margin, pageWidth);
   yPos = addField(doc, "SSN", step1.ssn ? "***-**-" + String(step1.ssn).slice(-4) : "N/A", yPos, margin, pageWidth);
-  yPos = addField(doc, "Address", `${step1.streetAddress || ""}, ${step1.city || ""}, ${step1.state || ""} ${step1.zipCode || ""}`, yPos, margin, pageWidth);
-  yPos = addField(doc, "US Citizen", step1.isUSCitizen, yPos, margin, pageWidth);
-  yPos = addField(doc, "ID Type", step1.idType, yPos, margin, pageWidth);
-  yPos = addField(doc, "ID Number", step1.idNumber, yPos, margin, pageWidth);
+  yPos = addField(doc, "Birthplace Country", step1.birthplaceCountry, yPos, margin, pageWidth);
+  yPos = addField(doc, "Birthplace State", step1.birthplaceState, yPos, margin, pageWidth);
+  // Home Address (correct field names)
+  yPos = addField(doc, "Home Address", `${step1.homeStreet || ""}, ${step1.homeCity || ""}, ${step1.homeState || ""} ${step1.homeZip || ""}`, yPos, margin, pageWidth);
+  // Mailing Address (if different)
+  if (step1.mailingAddressDifferent) {
+    yPos = addField(doc, "Mailing Address", `${step1.mailingStreet || ""}, ${step1.mailingCity || ""}, ${step1.mailingState || ""} ${step1.mailingZip || ""}`, yPos, margin, pageWidth);
+  }
+  // Citizenship (correct field names)
+  yPos = addField(doc, "Citizenship Status", step1.citizenshipStatus === "usa" ? "US Citizen" : "Non-US Citizen", yPos, margin, pageWidth);
+  if (step1.citizenshipStatus === "other") {
+    yPos = addField(doc, "Country of Citizenship", step1.countryOfCitizenship, yPos, margin, pageWidth);
+    yPos = addField(doc, "Date of Entry", formatDate(step1.dateOfEntry as string), yPos, margin, pageWidth);
+    yPos = addField(doc, "Visa Type", step1.visaType, yPos, margin, pageWidth);
+    yPos = addField(doc, "Permanent Resident Card", step1.permanentResidentCard, yPos, margin, pageWidth);
+    yPos = addField(doc, "Visa Expiration Date", formatDate(step1.visaExpirationDate as string), yPos, margin, pageWidth);
+  }
+  // Identity (correct field names)
+  yPos = addField(doc, "Driver's License Number", step1.driversLicenseNumber, yPos, margin, pageWidth);
+  yPos = addField(doc, "Driver's License State", step1.driversLicenseState, yPos, margin, pageWidth);
   yPos += 5;
 
   // Step 2: Contact & Employment
@@ -214,36 +230,56 @@ export const generateLifeInsurancePdf = (
   yPos = addField(doc, "Siblings Insurance", step2.siblingsInsuranceAmount, yPos, margin, pageWidth);
   yPos += 5;
 
-  // Step 3: Ownership
+  // Step 3: Ownership (correct field names)
   const step3 = formData.step3 || {};
   yPos = checkPageBreak(doc, yPos, margin, pageWidth);
   yPos = addSectionHeader(doc, "3. Policy Ownership", yPos, margin, pageWidth);
-  yPos = addField(doc, "Owner Same as Insured", step3.ownerSameAsInsured, yPos, margin, pageWidth);
-  if (step3.ownerSameAsInsured === false) {
-    yPos = addField(doc, "Owner Name", `${step3.ownerFirstName || ""} ${step3.ownerLastName || ""}`.trim(), yPos, margin, pageWidth);
-    yPos = addField(doc, "Owner Relationship", step3.ownerRelationship, yPos, margin, pageWidth);
-    yPos = addField(doc, "Owner SSN", step3.ownerSSN ? "***-**-" + String(step3.ownerSSN).slice(-4) : "N/A", yPos, margin, pageWidth);
+  yPos = addField(doc, "Insured Is Owner", step3.insuredIsOwner, yPos, margin, pageWidth);
+  if (step3.insuredIsOwner === false) {
+    yPos = addField(doc, "Owner Type", step3.ownerType, yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner Name", step3.ownerName, yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner SSN/TIN/EIN", step3.ownerSSN ? "***-**-" + String(step3.ownerSSN).slice(-4) : "N/A", yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner Date of Birth", formatDate(step3.ownerDateOfBirth as string), yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner Relationship to Insured", step3.ownerRelationshipToInsured, yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner Address", `${step3.ownerStreet || ""}, ${step3.ownerCity || ""}, ${step3.ownerState || ""} ${step3.ownerZip || ""}`, yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner Email", step3.ownerEmail, yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner Phone", step3.ownerPhone, yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner Citizenship Status", step3.ownerCitizenshipStatus === "usa" ? "US Citizen" : "Non-US Citizen", yPos, margin, pageWidth);
+    if (step3.ownerCitizenshipStatus === "other") {
+      yPos = addField(doc, "Owner Country of Citizenship", step3.ownerCountryOfCitizenship, yPos, margin, pageWidth);
+    }
+    if (step3.ownerType === "trust") {
+      yPos = addField(doc, "Trust Date", formatDate(step3.ownerTrustDate as string), yPos, margin, pageWidth);
+      yPos = addField(doc, "Trustee Names", step3.trusteeNames, yPos, margin, pageWidth);
+    }
   }
   yPos += 5;
 
-  // Step 4: Beneficiaries
+  // Step 4: Beneficiaries (correct field names)
   const step4 = formData.step4 || {};
   yPos = checkPageBreak(doc, yPos, margin, pageWidth);
   yPos = addSectionHeader(doc, "4. Beneficiaries", yPos, margin, pageWidth);
   const beneficiaries = (step4.beneficiaries || []) as Array<Record<string, unknown>>;
   if (beneficiaries.length > 0) {
     beneficiaries.forEach((ben, idx) => {
-      yPos = checkPageBreak(doc, yPos, margin, pageWidth, 30);
+      yPos = checkPageBreak(doc, yPos, margin, pageWidth, 50);
       doc.setFillColor(...LIGHT_GRAY);
-      doc.rect(margin, yPos - 3, pageWidth - margin * 2, 22, "F");
+      doc.rect(margin, yPos - 3, pageWidth - margin * 2, 42, "F");
       doc.setTextColor(...TFA_NAVY);
       doc.setFontSize(9);
       doc.setFont("helvetica", "bold");
-      doc.text(`${ben.type === "primary" ? "Primary" : "Contingent"} Beneficiary ${idx + 1}`, margin + 5, yPos + 3);
+      doc.text(`${ben.designation === "primary" ? "Primary" : "Contingent"} Beneficiary ${idx + 1}`, margin + 5, yPos + 3);
       yPos += 8;
-      yPos = addField(doc, "Name", `${ben.firstName || ""} ${ben.lastName || ""}`, yPos, margin, pageWidth);
+      yPos = addField(doc, "Name", ben.fullName, yPos, margin, pageWidth);
       yPos = addField(doc, "Relationship", ben.relationship, yPos, margin, pageWidth);
-      yPos = addField(doc, "Percentage", `${ben.percentage || 0}%`, yPos, margin, pageWidth);
+      yPos = addField(doc, "Share Percentage", `${ben.sharePercentage || 0}%`, yPos, margin, pageWidth);
+      yPos = addField(doc, "SSN", ben.ssn ? "***-**-" + String(ben.ssn).slice(-4) : "N/A", yPos, margin, pageWidth);
+      yPos = addField(doc, "Date of Birth", formatDate(ben.dateOfBirth as string), yPos, margin, pageWidth);
+      if (ben.street || ben.city || ben.state || ben.zip) {
+        yPos = addField(doc, "Address", `${ben.street || ""}, ${ben.city || ""}, ${ben.state || ""} ${ben.zip || ""}`, yPos, margin, pageWidth);
+      }
+      if (ben.phone) yPos = addField(doc, "Phone", ben.phone, yPos, margin, pageWidth);
+      if (ben.email) yPos = addField(doc, "Email", ben.email, yPos, margin, pageWidth);
       yPos += 3;
     });
   } else {
@@ -273,19 +309,19 @@ export const generateLifeInsurancePdf = (
   }
   yPos += 5;
 
-  // Step 6: Existing Coverage
+  // Step 6: Existing Coverage (correct field names)
   const step6 = formData.step6 || {};
   yPos = checkPageBreak(doc, yPos, margin, pageWidth);
   yPos = addSectionHeader(doc, "6. Existing Coverage", yPos, margin, pageWidth);
-  yPos = addField(doc, "Has Existing Insurance", step6.hasExistingInsurance, yPos, margin, pageWidth);
-  yPos = addField(doc, "Replacing Coverage", step6.replacingCoverage, yPos, margin, pageWidth);
+  yPos = addField(doc, "Has Existing Coverage", step6.hasExistingCoverage, yPos, margin, pageWidth);
   const existingPolicies = (step6.existingPolicies || []) as Array<Record<string, unknown>>;
   if (existingPolicies.length > 0) {
     existingPolicies.forEach((policy, idx) => {
-      yPos = checkPageBreak(doc, yPos, margin, pageWidth, 25);
-      yPos = addField(doc, `Policy ${idx + 1} Company`, policy.company, yPos, margin, pageWidth);
-      yPos = addField(doc, `Policy ${idx + 1} Amount`, policy.faceAmount, yPos, margin, pageWidth);
-      yPos = addField(doc, `Policy ${idx + 1} Type`, policy.policyType, yPos, margin, pageWidth);
+      yPos = checkPageBreak(doc, yPos, margin, pageWidth, 35);
+      yPos = addField(doc, `Policy ${idx + 1} Company`, policy.companyName, yPos, margin, pageWidth);
+      yPos = addField(doc, `Policy ${idx + 1} Number`, policy.policyNumber, yPos, margin, pageWidth);
+      yPos = addField(doc, `Policy ${idx + 1} Coverage Amount`, policy.amountOfCoverage, yPos, margin, pageWidth);
+      yPos = addField(doc, `Policy ${idx + 1} Being Replaced`, policy.isBeingReplaced, yPos, margin, pageWidth);
     });
   }
   yPos += 5;
@@ -352,7 +388,7 @@ export const generateLifeInsurancePdf = (
   const step9 = formData.step9 || {};
   yPos = checkPageBreak(doc, yPos, margin, pageWidth);
   yPos = addSectionHeader(doc, "9. Acknowledgment & Signature", yPos, margin, pageWidth);
-  yPos = addField(doc, "Acknowledgments Accepted", step9.acknowledgments, yPos, margin, pageWidth);
+  yPos = addField(doc, "Acknowledged", step9.acknowledged, yPos, margin, pageWidth);
   yPos = addField(doc, "Electronic Signature", step9.electronicSignature, yPos, margin, pageWidth);
   yPos = addField(doc, "Signature Date", formatDate(step9.signatureDate as string), yPos, margin, pageWidth);
 
