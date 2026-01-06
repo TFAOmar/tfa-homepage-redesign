@@ -49,6 +49,7 @@ import {
 interface ApplicationWizardProps {
   advisorId?: string;
   advisorName?: string;
+  advisorEmail?: string;
 }
 
 // Generate a cryptographically secure resume token
@@ -258,6 +259,7 @@ const ErrorBanner = ({
 const ApplicationWizard = ({
   advisorId,
   advisorName,
+  advisorEmail,
 }: ApplicationWizardProps) => {
   const { toast } = useToast();
   const { fireConfetti } = useConfetti();
@@ -424,6 +426,7 @@ const ApplicationWizard = ({
               status: "draft",
               advisor_id: advisorId || null,
               advisor_name: advisorName || null,
+              advisor_email: advisorEmail || null,
               applicant_name: applicantName || null,
               applicant_email: applicantEmail,
               applicant_phone: applicantPhone,
