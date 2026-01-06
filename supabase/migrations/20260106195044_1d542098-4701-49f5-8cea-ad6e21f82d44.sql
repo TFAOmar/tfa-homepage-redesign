@@ -1,0 +1,33 @@
+INSERT INTO dynamic_advisors (
+  name,
+  slug,
+  title,
+  type,
+  state,
+  city,
+  region,
+  bio,
+  specialties,
+  licenses,
+  email,
+  phone,
+  years_of_experience,
+  status,
+  image_url
+) VALUES (
+  'Conrad Olvera',
+  'conrad-olvera',
+  'Mortgage and Financial Specialist',
+  'Advisor',
+  'California',
+  'Chino Hills',
+  'West',
+  'Since 2014, I have dedicated myself to providing exceptional mortgage and financial services. With a focus on delivering the best customer experience, I strive to build lasting relationships with my clients. My expertise in the industry, combined with a commitment to understanding each client''s unique needs, ensures tailored solutions that facilitate their financial goal whether it''s a home loan, estate planning or retirement needs.',
+  ARRAY['Bilingual • Bilingüe', 'Mortgage Financing', 'Estate Planning', 'Retirement Planning'],
+  ARRAY['Life & Health'],
+  'conradolvera21@gmail.com',
+  '',
+  11,
+  'published',
+  '/assets/advisors/conrad-olvera.jpg'
+);
