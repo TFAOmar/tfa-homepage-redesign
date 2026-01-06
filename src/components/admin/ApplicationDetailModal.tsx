@@ -102,6 +102,64 @@ const StepContent = ({
   </div>
 );
 
+// Beneficiary display component
+const BeneficiariesDisplay = ({ beneficiaries }: { beneficiaries: Array<Record<string, unknown>> }) => {
+  if (!beneficiaries || beneficiaries.length === 0) {
+    return <p className="text-muted-foreground text-sm">No beneficiaries specified</p>;
+  }
+
+  return (
+    <div className="space-y-3">
+      {beneficiaries.map((ben, idx) => (
+        <div key={String(ben.id) || idx} className="bg-muted/50 rounded-lg p-3 border">
+          <div className="flex items-center gap-2 mb-2">
+            <Badge variant={ben.designation === "primary" ? "default" : "secondary"}>
+              {ben.designation === "primary" ? "Primary" : "Contingent"}
+            </Badge>
+            <span className="font-medium">{String(ben.fullName || "N/A")}</span>
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+            <FieldRow label="Relationship" value={ben.relationship} />
+            <FieldRow label="Share" value={ben.sharePercentage ? `${ben.sharePercentage}%` : "N/A"} />
+            <FieldRow label="SSN" value={ben.ssn ? "***-**-" + String(ben.ssn).slice(-4) : "N/A"} />
+            <FieldRow label="Date of Birth" value={ben.dateOfBirth} />
+            {(ben.street || ben.city || ben.state || ben.zip) && (
+              <FieldRow 
+                label="Address" 
+                value={`${ben.street || ""}, ${ben.city || ""}, ${ben.state || ""} ${ben.zip || ""}`.trim()} 
+              />
+            )}
+            {ben.phone && <FieldRow label="Phone" value={ben.phone} />}
+            {ben.email && <FieldRow label="Email" value={ben.email} />}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Existing policies display component
+const ExistingPoliciesDisplay = ({ policies }: { policies: Array<Record<string, unknown>> }) => {
+  if (!policies || policies.length === 0) {
+    return <p className="text-muted-foreground text-sm">No existing policies</p>;
+  }
+
+  return (
+    <div className="space-y-3">
+      {policies.map((policy, idx) => (
+        <div key={String(policy.id) || idx} className="bg-muted/50 rounded-lg p-3 border">
+          <div className="font-medium mb-2">{String(policy.companyName || "N/A")}</div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+            <FieldRow label="Policy Number" value={policy.policyNumber} />
+            <FieldRow label="Coverage Amount" value={policy.amountOfCoverage} />
+            <FieldRow label="Being Replaced" value={policy.isBeingReplaced} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export const ApplicationDetailModal = ({
   application,
   open,
@@ -227,13 +285,26 @@ export const ApplicationDetailModal = ({
                   { key: "lastName", label: "Last Name" },
                   { key: "dateOfBirth", label: "Date of Birth" },
                   { key: "gender", label: "Gender" },
-                  { key: "streetAddress", label: "Street Address" },
-                  { key: "city", label: "City" },
-                  { key: "state", label: "State" },
-                  { key: "zipCode", label: "ZIP Code" },
-                  { key: "isUSCitizen", label: "US Citizen" },
-                  { key: "idType", label: "ID Type" },
-                  { key: "idNumber", label: "ID Number" },
+                  { key: "ssn", label: "SSN" },
+                  { key: "birthplaceCountry", label: "Birthplace Country" },
+                  { key: "birthplaceState", label: "Birthplace State" },
+                  { key: "homeStreet", label: "Home Street" },
+                  { key: "homeCity", label: "Home City" },
+                  { key: "homeState", label: "Home State" },
+                  { key: "homeZip", label: "Home ZIP" },
+                  { key: "mailingAddressDifferent", label: "Mailing Address Different" },
+                  { key: "mailingStreet", label: "Mailing Street" },
+                  { key: "mailingCity", label: "Mailing City" },
+                  { key: "mailingState", label: "Mailing State" },
+                  { key: "mailingZip", label: "Mailing ZIP" },
+                  { key: "citizenshipStatus", label: "Citizenship Status" },
+                  { key: "countryOfCitizenship", label: "Country of Citizenship" },
+                  { key: "dateOfEntry", label: "Date of Entry" },
+                  { key: "visaType", label: "Visa Type" },
+                  { key: "permanentResidentCard", label: "Permanent Resident Card" },
+                  { key: "visaExpirationDate", label: "Visa Expiration Date" },
+                  { key: "driversLicenseNumber", label: "Driver's License Number" },
+                  { key: "driversLicenseState", label: "Driver's License State" },
                 ]}
               />
               <StepContent
@@ -261,17 +332,31 @@ export const ApplicationDetailModal = ({
                 title="Ownership (Step 3)"
                 data={formData.step3}
                 fields={[
-                  { key: "ownerSameAsInsured", label: "Owner Same as Insured" },
-                  { key: "ownerFirstName", label: "Owner First Name" },
-                  { key: "ownerLastName", label: "Owner Last Name" },
-                  { key: "ownerRelationship", label: "Relationship" },
+                  { key: "insuredIsOwner", label: "Insured Is Owner" },
+                  { key: "ownerType", label: "Owner Type" },
+                  { key: "ownerName", label: "Owner Name" },
+                  { key: "ownerSSN", label: "Owner SSN/TIN/EIN" },
+                  { key: "ownerDateOfBirth", label: "Owner Date of Birth" },
+                  { key: "ownerRelationshipToInsured", label: "Owner Relationship" },
+                  { key: "ownerStreet", label: "Owner Street" },
+                  { key: "ownerCity", label: "Owner City" },
+                  { key: "ownerState", label: "Owner State" },
+                  { key: "ownerZip", label: "Owner ZIP" },
+                  { key: "ownerEmail", label: "Owner Email" },
+                  { key: "ownerPhone", label: "Owner Phone" },
+                  { key: "ownerCitizenshipStatus", label: "Owner Citizenship Status" },
+                  { key: "ownerCountryOfCitizenship", label: "Owner Country of Citizenship" },
+                  { key: "ownerTrustDate", label: "Trust Date" },
+                  { key: "trusteeNames", label: "Trustee Names" },
                 ]}
               />
-              <StepContent
-                title="Beneficiaries (Step 4)"
-                data={formData.step4}
-                fields={[{ key: "beneficiaries", label: "Beneficiaries" }]}
-              />
+              {/* Beneficiaries with expanded display */}
+              <div className="space-y-1">
+                <h4 className="font-semibold text-navy mb-3">Beneficiaries (Step 4)</h4>
+                <BeneficiariesDisplay 
+                  beneficiaries={(formData.step4?.beneficiaries || []) as Array<Record<string, unknown>>} 
+                />
+              </div>
             </TabsContent>
 
             <TabsContent value="policy" className="space-y-6">
@@ -290,15 +375,16 @@ export const ApplicationDetailModal = ({
                   { key: "childrenDetails", label: "Children Details" },
                 ]}
               />
-              <StepContent
-                title="Existing Coverage (Step 6)"
-                data={formData.step6}
-                fields={[
-                  { key: "hasExistingInsurance", label: "Has Existing Insurance" },
-                  { key: "replacingCoverage", label: "Replacing Coverage" },
-                  { key: "existingPolicies", label: "Existing Policies" },
-                ]}
-              />
+              {/* Existing Coverage with expanded display */}
+              <div className="space-y-1">
+                <h4 className="font-semibold text-navy mb-3">Existing Coverage (Step 6)</h4>
+                <div className="bg-muted/30 rounded-lg p-4">
+                  <FieldRow label="Has Existing Coverage" value={formData.step6?.hasExistingCoverage} />
+                </div>
+                <ExistingPoliciesDisplay 
+                  policies={(formData.step6?.existingPolicies || []) as Array<Record<string, unknown>>} 
+                />
+              </div>
             </TabsContent>
 
             <TabsContent value="medical" className="space-y-6">
@@ -347,7 +433,7 @@ export const ApplicationDetailModal = ({
                 title="Acknowledgment (Step 9)"
                 data={formData.step9}
                 fields={[
-                  { key: "acknowledgments", label: "Acknowledgments" },
+                  { key: "acknowledged", label: "Acknowledged" },
                   { key: "electronicSignature", label: "Electronic Signature" },
                   { key: "signatureDate", label: "Signature Date" },
                 ]}
