@@ -1278,6 +1278,9 @@ const handler = async (req: Request): Promise<Response> => {
     // Fetch advisor email server-side using advisorId (keeps PII secure)
     let advisorEmail: string | undefined;
     if (data.advisorId) {
+      console.log("Looking up advisor email for ID:", data.advisorId, "Name:", data.advisorName);
+      
+      // Try UUID lookup first
       try {
         const { data: advisorData, error: advisorError } = await supabaseAdmin
           .from("dynamic_advisors")
@@ -1285,12 +1288,41 @@ const handler = async (req: Request): Promise<Response> => {
           .eq("id", data.advisorId)
           .single();
         
-        if (advisorData && !advisorError) {
+        if (advisorData?.email && !advisorError) {
           advisorEmail = advisorData.email;
-          console.log("Fetched advisor email for ID:", data.advisorId);
+          console.log("Found advisor email via UUID lookup:", advisorEmail);
+        } else {
+          console.log("UUID lookup failed or returned no email, error:", advisorError?.message);
         }
       } catch (e) {
-        console.error("Error fetching advisor email:", e);
+        console.error("Error in UUID lookup:", e);
+      }
+      
+      // Fallback: try lookup by slug derived from advisorName
+      if (!advisorEmail && data.advisorName) {
+        const slug = data.advisorName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        console.log("Trying slug fallback lookup with slug:", slug);
+        
+        try {
+          const { data: slugData, error: slugError } = await supabaseAdmin
+            .from("dynamic_advisors")
+            .select("email")
+            .eq("slug", slug)
+            .single();
+          
+          if (slugData?.email && !slugError) {
+            advisorEmail = slugData.email;
+            console.log("Found advisor email via slug lookup:", advisorEmail);
+          } else {
+            console.log("Slug lookup failed or returned no email, error:", slugError?.message);
+          }
+        } catch (e) {
+          console.error("Error in slug lookup:", e);
+        }
+      }
+      
+      if (!advisorEmail) {
+        console.warn("Could not find advisor email for ID:", data.advisorId, "Name:", data.advisorName);
       }
     }
 
