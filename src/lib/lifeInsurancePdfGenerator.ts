@@ -197,13 +197,21 @@ export const generateLifeInsurancePdf = (
   const step2 = formData.step2 || {};
   yPos = checkPageBreak(doc, yPos, margin, pageWidth);
   yPos = addSectionHeader(doc, "2. Contact & Employment", yPos, margin, pageWidth);
-  yPos = addField(doc, "Primary Phone", step2.primaryPhone, yPos, margin, pageWidth);
+  yPos = addField(doc, "Mobile Phone", step2.mobilePhone, yPos, margin, pageWidth);
+  yPos = addField(doc, "Home Phone", step2.homePhone, yPos, margin, pageWidth);
+  yPos = addField(doc, "Work Phone", step2.workPhone, yPos, margin, pageWidth);
   yPos = addField(doc, "Email", step2.email, yPos, margin, pageWidth);
-  yPos = addField(doc, "Employment Status", step2.employmentStatus, yPos, margin, pageWidth);
   yPos = addField(doc, "Employer", step2.employerName, yPos, margin, pageWidth);
   yPos = addField(doc, "Occupation", step2.occupation, yPos, margin, pageWidth);
-  yPos = addField(doc, "Annual Income", step2.annualIncome, yPos, margin, pageWidth);
+  yPos = addField(doc, "Industry", step2.industry, yPos, margin, pageWidth);
+  yPos = addField(doc, "Years Employed", step2.yearsEmployed, yPos, margin, pageWidth);
+  yPos = addField(doc, "Job Duties", step2.jobDuties, yPos, margin, pageWidth);
+  yPos = addField(doc, "Annual Earned Income", step2.annualEarnedIncome, yPos, margin, pageWidth);
+  yPos = addField(doc, "Household Income", step2.householdIncome, yPos, margin, pageWidth);
   yPos = addField(doc, "Net Worth", step2.netWorth, yPos, margin, pageWidth);
+  yPos = addField(doc, "Spouse Insurance", step2.spouseInsuranceAmount, yPos, margin, pageWidth);
+  yPos = addField(doc, "Parents Insurance", step2.parentsInsuranceAmount, yPos, margin, pageWidth);
+  yPos = addField(doc, "Siblings Insurance", step2.siblingsInsuranceAmount, yPos, margin, pageWidth);
   yPos += 5;
 
   // Step 3: Ownership
@@ -247,12 +255,22 @@ export const generateLifeInsurancePdf = (
   const step5 = formData.step5 || {};
   yPos = checkPageBreak(doc, yPos, margin, pageWidth);
   yPos = addSectionHeader(doc, "5. Policy & Riders", yPos, margin, pageWidth);
-  yPos = addField(doc, "Plan Type", step5.planType, yPos, margin, pageWidth);
+  yPos = addField(doc, "Plan Name", step5.planName, yPos, margin, pageWidth);
+  yPos = addField(doc, "Term Duration", step5.termDuration, yPos, margin, pageWidth);
   yPos = addField(doc, "Face Amount", step5.faceAmount, yPos, margin, pageWidth);
-  yPos = addField(doc, "Accelerated Death Benefit", step5.acceleratedDeathBenefit, yPos, margin, pageWidth);
-  yPos = addField(doc, "Waiver of Premium", step5.waiverOfPremium, yPos, margin, pageWidth);
-  yPos = addField(doc, "Term Rider", step5.termRider, yPos, margin, pageWidth);
-  yPos = addField(doc, "Child Rider", step5.childRider, yPos, margin, pageWidth);
+  yPos = addField(doc, "Children's Term Rider", step5.ridersChildrenTerm, yPos, margin, pageWidth);
+  yPos = addField(doc, "Waiver of Premium Rider", step5.ridersWaiverOfPremium, yPos, margin, pageWidth);
+  yPos = addField(doc, "Accelerated Benefits Rider", step5.ridersAcceleratedBenefits, yPos, margin, pageWidth);
+  yPos = addField(doc, "Chronic Illness Rider", step5.ridersChronicIllness, yPos, margin, pageWidth);
+  yPos = addField(doc, "Accidental Death Benefit", step5.ridersAccidentalDeath, yPos, margin, pageWidth);
+  const childrenDetails = (step5.childrenDetails || []) as Array<Record<string, unknown>>;
+  if (childrenDetails.length > 0) {
+    childrenDetails.forEach((child, idx) => {
+      yPos = checkPageBreak(doc, yPos, margin, pageWidth, 20);
+      yPos = addField(doc, `Child ${idx + 1} Name`, child.name, yPos, margin, pageWidth);
+      yPos = addField(doc, `Child ${idx + 1} DOB`, child.dateOfBirth, yPos, margin, pageWidth);
+    });
+  }
   yPos += 5;
 
   // Step 6: Existing Coverage
@@ -276,15 +294,40 @@ export const generateLifeInsurancePdf = (
   const step7 = formData.step7 || {};
   yPos = checkPageBreak(doc, yPos, margin, pageWidth);
   yPos = addSectionHeader(doc, "7. Medical & Lifestyle History", yPos, margin, pageWidth);
-  yPos = addField(doc, "Tobacco Use", step7.tobaccoUse, yPos, margin, pageWidth);
-  if (step7.tobaccoUse) {
+  yPos = addField(doc, "Used Tobacco (Last 5 Years)", step7.usedTobacco, yPos, margin, pageWidth);
+  if (step7.usedTobacco) {
     yPos = addField(doc, "Tobacco Type", step7.tobaccoType, yPos, margin, pageWidth);
+    yPos = addField(doc, "Tobacco Frequency", step7.tobaccoFrequency, yPos, margin, pageWidth);
     yPos = addField(doc, "Last Used", step7.tobaccoLastUsed, yPos, margin, pageWidth);
   }
-  yPos = addField(doc, "Hazardous Activities", step7.hazardousActivities, yPos, margin, pageWidth);
+  yPos = addField(doc, "Pilots Aircraft", step7.aviation, yPos, margin, pageWidth);
+  if (step7.aviation) {
+    yPos = addField(doc, "Aviation Details", step7.aviationDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Hazardous Sports", step7.hazardousSports, yPos, margin, pageWidth);
+  if (step7.hazardousSports) {
+    yPos = addField(doc, "Hazardous Sports Details", step7.hazardousSportsDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Foreign Travel Planned", step7.foreignTravel, yPos, margin, pageWidth);
+  if (step7.foreignTravel) {
+    yPos = addField(doc, "Foreign Travel Details", step7.foreignTravelDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Driving Violations (Last 5 Years)", step7.drivingViolations, yPos, margin, pageWidth);
+  if (step7.drivingViolations) {
+    yPos = addField(doc, "Driving Violations Details", step7.drivingViolationsDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Bankruptcy Filed", step7.bankruptcy, yPos, margin, pageWidth);
+  if (step7.bankruptcy) {
+    yPos = addField(doc, "Bankruptcy Details", step7.bankruptcyDetails, yPos, margin, pageWidth);
+  }
   yPos = addField(doc, "Criminal History", step7.criminalHistory, yPos, margin, pageWidth);
-  yPos = addField(doc, "Bankruptcy", step7.bankruptcy, yPos, margin, pageWidth);
-  yPos = addField(doc, "Medical Conditions", step7.medicalConditions, yPos, margin, pageWidth);
+  if (step7.criminalHistory) {
+    yPos = addField(doc, "Criminal History Details", step7.criminalHistoryDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Has Medical Conditions", step7.hasMedicalConditions, yPos, margin, pageWidth);
+  if (step7.hasMedicalConditions) {
+    yPos = addField(doc, "Medical Conditions Details", step7.medicalConditionsDetails, yPos, margin, pageWidth);
+  }
   yPos += 5;
 
   // Step 8: Premium Payment
@@ -293,9 +336,16 @@ export const generateLifeInsurancePdf = (
   yPos = addSectionHeader(doc, "8. Premium Payment", yPos, margin, pageWidth);
   yPos = addField(doc, "Payment Method", step8.paymentMethod, yPos, margin, pageWidth);
   yPos = addField(doc, "Payment Frequency", step8.paymentFrequency, yPos, margin, pageWidth);
-  yPos = addField(doc, "Bank Name", step8.bankName, yPos, margin, pageWidth);
-  yPos = addField(doc, "Account Type", step8.accountType, yPos, margin, pageWidth);
+  if (step8.paymentMethod === "eft") {
+    yPos = addField(doc, "Bank Name", step8.bankName, yPos, margin, pageWidth);
+    yPos = addField(doc, "Routing Number", step8.routingNumber ? "****" + String(step8.routingNumber).slice(-4) : "N/A", yPos, margin, pageWidth);
+    yPos = addField(doc, "Account Number", step8.accountNumber ? "****" + String(step8.accountNumber).slice(-4) : "N/A", yPos, margin, pageWidth);
+    yPos = addField(doc, "Account Type", step8.accountType, yPos, margin, pageWidth);
+  }
   yPos = addField(doc, "Source of Funds", step8.sourceOfFunds, yPos, margin, pageWidth);
+  if (step8.sourceOfFundsOther) {
+    yPos = addField(doc, "Source of Funds (Other)", step8.sourceOfFundsOther, yPos, margin, pageWidth);
+  }
   yPos += 5;
 
   // Step 9: Signature

@@ -240,13 +240,21 @@ export const ApplicationDetailModal = ({
                 title="Contact & Employment (Step 2)"
                 data={formData.step2}
                 fields={[
-                  { key: "primaryPhone", label: "Primary Phone" },
+                  { key: "mobilePhone", label: "Mobile Phone" },
+                  { key: "homePhone", label: "Home Phone" },
+                  { key: "workPhone", label: "Work Phone" },
                   { key: "email", label: "Email" },
-                  { key: "employmentStatus", label: "Employment Status" },
                   { key: "employerName", label: "Employer" },
                   { key: "occupation", label: "Occupation" },
-                  { key: "annualIncome", label: "Annual Income" },
+                  { key: "industry", label: "Industry" },
+                  { key: "yearsEmployed", label: "Years Employed" },
+                  { key: "jobDuties", label: "Job Duties" },
+                  { key: "annualEarnedIncome", label: "Annual Earned Income" },
+                  { key: "householdIncome", label: "Household Income" },
                   { key: "netWorth", label: "Net Worth" },
+                  { key: "spouseInsuranceAmount", label: "Spouse Insurance" },
+                  { key: "parentsInsuranceAmount", label: "Parents Insurance" },
+                  { key: "siblingsInsuranceAmount", label: "Siblings Insurance" },
                 ]}
               />
               <StepContent
@@ -271,15 +279,15 @@ export const ApplicationDetailModal = ({
                 title="Policy & Riders (Step 5)"
                 data={formData.step5}
                 fields={[
-                  { key: "planType", label: "Plan Type" },
+                  { key: "planName", label: "Plan Name" },
+                  { key: "termDuration", label: "Term Duration" },
                   { key: "faceAmount", label: "Face Amount" },
-                  {
-                    key: "acceleratedDeathBenefit",
-                    label: "Accelerated Death Benefit",
-                  },
-                  { key: "waiverOfPremium", label: "Waiver of Premium" },
-                  { key: "termRider", label: "Term Rider" },
-                  { key: "childRider", label: "Child Rider" },
+                  { key: "ridersChildrenTerm", label: "Children's Term Rider" },
+                  { key: "ridersWaiverOfPremium", label: "Waiver of Premium Rider" },
+                  { key: "ridersAcceleratedBenefits", label: "Accelerated Benefits Rider" },
+                  { key: "ridersChronicIllness", label: "Chronic Illness Rider" },
+                  { key: "ridersAccidentalDeath", label: "Accidental Death Benefit" },
+                  { key: "childrenDetails", label: "Children Details" },
                 ]}
               />
               <StepContent
@@ -298,13 +306,24 @@ export const ApplicationDetailModal = ({
                 title="Medical & Lifestyle (Step 7)"
                 data={formData.step7}
                 fields={[
-                  { key: "tobaccoUse", label: "Tobacco Use" },
+                  { key: "usedTobacco", label: "Used Tobacco (Last 5 Years)" },
                   { key: "tobaccoType", label: "Tobacco Type" },
+                  { key: "tobaccoFrequency", label: "Tobacco Frequency" },
                   { key: "tobaccoLastUsed", label: "Last Used" },
-                  { key: "hazardousActivities", label: "Hazardous Activities" },
+                  { key: "aviation", label: "Pilots Aircraft" },
+                  { key: "aviationDetails", label: "Aviation Details" },
+                  { key: "hazardousSports", label: "Hazardous Sports" },
+                  { key: "hazardousSportsDetails", label: "Hazardous Sports Details" },
+                  { key: "foreignTravel", label: "Foreign Travel Planned" },
+                  { key: "foreignTravelDetails", label: "Foreign Travel Details" },
+                  { key: "drivingViolations", label: "Driving Violations (Last 5 Years)" },
+                  { key: "drivingViolationsDetails", label: "Driving Violations Details" },
+                  { key: "bankruptcy", label: "Bankruptcy Filed" },
+                  { key: "bankruptcyDetails", label: "Bankruptcy Details" },
                   { key: "criminalHistory", label: "Criminal History" },
-                  { key: "bankruptcy", label: "Bankruptcy" },
-                  { key: "medicalConditions", label: "Medical Conditions" },
+                  { key: "criminalHistoryDetails", label: "Criminal History Details" },
+                  { key: "hasMedicalConditions", label: "Has Medical Conditions" },
+                  { key: "medicalConditionsDetails", label: "Medical Conditions Details" },
                 ]}
               />
             </TabsContent>
@@ -317,8 +336,11 @@ export const ApplicationDetailModal = ({
                   { key: "paymentMethod", label: "Payment Method" },
                   { key: "paymentFrequency", label: "Payment Frequency" },
                   { key: "bankName", label: "Bank Name" },
+                  { key: "routingNumber", label: "Routing Number" },
+                  { key: "accountNumber", label: "Account Number" },
                   { key: "accountType", label: "Account Type" },
                   { key: "sourceOfFunds", label: "Source of Funds" },
+                  { key: "sourceOfFundsOther", label: "Source of Funds (Other)" },
                 ]}
               />
               <StepContent
