@@ -48,6 +48,15 @@ const formatDate = (date: string | undefined): string => {
   }
 };
 
+const formatSSN = (ssn?: string): string => {
+  if (!ssn) return "N/A";
+  const cleaned = ssn.replace(/\D/g, "");
+  if (cleaned.length === 9) {
+    return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 5)}-${cleaned.slice(5)}`;
+  }
+  return ssn;
+};
+
 const addHeader = (doc: jsPDF, pageWidth: number, margin: number): number => {
   doc.setFillColor(...TFA_NAVY);
   doc.rect(0, 0, pageWidth, 45, "F");
@@ -196,7 +205,7 @@ export const generateLifeInsurancePdf = (
   yPos = addField(doc, "Full Name", `${step1.firstName || ""} ${step1.middleName || ""} ${step1.lastName || ""}`.trim(), yPos, margin, pageWidth);
   yPos = addField(doc, "Date of Birth", formatDate(step1.dateOfBirth as string), yPos, margin, pageWidth);
   yPos = addField(doc, "Gender", step1.gender, yPos, margin, pageWidth);
-  yPos = addField(doc, "SSN", step1.ssn ? "***-**-" + String(step1.ssn).slice(-4) : "N/A", yPos, margin, pageWidth);
+  yPos = addField(doc, "SSN", formatSSN(step1.ssn as string), yPos, margin, pageWidth);
   yPos = addField(doc, "Birthplace Country", step1.birthplaceCountry, yPos, margin, pageWidth);
   yPos = addField(doc, "Birthplace State", step1.birthplaceState, yPos, margin, pageWidth);
   // Home Address (correct field names)
@@ -248,7 +257,7 @@ export const generateLifeInsurancePdf = (
   if (step3.insuredIsOwner === false) {
     yPos = addField(doc, "Owner Type", step3.ownerType, yPos, margin, pageWidth);
     yPos = addField(doc, "Owner Name", step3.ownerName, yPos, margin, pageWidth);
-    yPos = addField(doc, "Owner SSN/TIN/EIN", step3.ownerSSN ? "***-**-" + String(step3.ownerSSN).slice(-4) : "N/A", yPos, margin, pageWidth);
+    yPos = addField(doc, "Owner SSN/TIN/EIN", formatSSN(step3.ownerSSN as string), yPos, margin, pageWidth);
     yPos = addField(doc, "Owner Date of Birth", formatDate(step3.ownerDateOfBirth as string), yPos, margin, pageWidth);
     yPos = addField(doc, "Owner Relationship to Insured", step3.ownerRelationshipToInsured, yPos, margin, pageWidth);
     yPos = addField(doc, "Owner Address", `${step3.ownerStreet || ""}, ${step3.ownerCity || ""}, ${step3.ownerState || ""} ${step3.ownerZip || ""}`, yPos, margin, pageWidth);
@@ -283,7 +292,7 @@ export const generateLifeInsurancePdf = (
       yPos = addField(doc, "Name", ben.fullName, yPos, margin, pageWidth);
       yPos = addField(doc, "Relationship", ben.relationship, yPos, margin, pageWidth);
       yPos = addField(doc, "Share Percentage", `${ben.sharePercentage || 0}%`, yPos, margin, pageWidth);
-      yPos = addField(doc, "SSN", ben.ssn ? "***-**-" + String(ben.ssn).slice(-4) : "N/A", yPos, margin, pageWidth);
+      yPos = addField(doc, "SSN", formatSSN(ben.ssn as string), yPos, margin, pageWidth);
       yPos = addField(doc, "Date of Birth", formatDate(ben.dateOfBirth as string), yPos, margin, pageWidth);
       if (ben.street || ben.city || ben.state || ben.zip) {
         yPos = addField(doc, "Address", `${ben.street || ""}, ${ben.city || ""}, ${ben.state || ""} ${ben.zip || ""}`, yPos, margin, pageWidth);
