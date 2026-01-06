@@ -96,15 +96,25 @@ const addField = (
   margin: number,
   pageWidth: number
 ): number => {
+  const formattedValue = formatValue(value);
+  const maxWidth = pageWidth - margin * 2 - 70;
+  const splitText = doc.splitTextToSize(formattedValue, maxWidth);
+  
+  // Calculate space needed: base height + extra lines for wrapped text
+  const neededSpace = splitText.length > 1 ? (splitText.length * 5 + 7) : 12;
+  
+  // Check for page break before rendering each field
+  const pageHeight = doc.internal.pageSize.getHeight();
+  if (yPos + neededSpace > pageHeight - 30) {
+    doc.addPage();
+    yPos = addHeader(doc, pageWidth, margin);
+  }
+  
   doc.setTextColor(...TFA_NAVY);
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
   doc.text(label + ":", margin + 5, yPos);
   doc.setFont("helvetica", "bold");
-  
-  const formattedValue = formatValue(value);
-  const maxWidth = pageWidth - margin * 2 - 70;
-  const splitText = doc.splitTextToSize(formattedValue, maxWidth);
   
   if (splitText.length > 1) {
     doc.text(splitText, margin + 65, yPos);
