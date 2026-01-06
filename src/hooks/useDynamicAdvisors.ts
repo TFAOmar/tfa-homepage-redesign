@@ -177,13 +177,14 @@ export const useBulkUpdateAdvisors = () => {
   });
 };
 
-// Advisor info returned by slug lookup (for public linking - no PII)
+// Advisor info returned by slug lookup (for public linking)
 export interface AdvisorBySlug {
   id: string;
   name: string;
   title: string;
   image_url: string | null;
   scheduling_link: string | null;
+  email: string;
 }
 
 // Fetch advisor by slug (public - for life insurance application linking)
