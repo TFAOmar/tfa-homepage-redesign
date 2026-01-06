@@ -482,14 +482,43 @@ serve(async (req) => {
     // Fetch advisor email if we have advisor_id
     let advisorEmail = application.advisor_email;
     if (!advisorEmail && application.advisor_id) {
-      const { data: advisor } = await supabaseAdmin
+      console.log("Looking up advisor email for ID:", application.advisor_id, "Name:", application.advisor_name);
+      
+      // Try UUID lookup first
+      const { data: advisor, error: advisorError } = await supabaseAdmin
         .from("dynamic_advisors")
         .select("email")
         .eq("id", application.advisor_id)
         .single();
       
-      if (advisor?.email) {
+      if (advisor?.email && !advisorError) {
         advisorEmail = advisor.email;
+        console.log("Found advisor email via UUID lookup:", advisorEmail);
+      } else {
+        console.log("UUID lookup failed, error:", advisorError?.message);
+        
+        // Fallback: try lookup by slug derived from advisor_name
+        if (application.advisor_name) {
+          const slug = application.advisor_name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          console.log("Trying slug fallback lookup with slug:", slug);
+          
+          const { data: slugAdvisor, error: slugError } = await supabaseAdmin
+            .from("dynamic_advisors")
+            .select("email")
+            .eq("slug", slug)
+            .single();
+          
+          if (slugAdvisor?.email && !slugError) {
+            advisorEmail = slugAdvisor.email;
+            console.log("Found advisor email via slug lookup:", advisorEmail);
+          } else {
+            console.log("Slug lookup failed, error:", slugError?.message);
+          }
+        }
+      }
+      
+      if (!advisorEmail) {
+        console.warn("Could not find advisor email for ID:", application.advisor_id, "Name:", application.advisor_name);
       }
     }
 
