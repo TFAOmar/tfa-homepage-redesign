@@ -29,19 +29,25 @@ const getCorsHeaders = (origin: string | null): Record<string, string> => {
   };
 };
 
-// Zod validation schemas
+// Zod validation schemas - Updated to match frontend schema
 const beneficiarySchema = z.object({
+  id: z.string().optional(),
   fullName: z.string().max(200).optional(),
   relationship: z.string().max(100).optional(),
   sharePercentage: z.number().min(0).max(100).optional(),
   designation: z.string().max(50).optional(),
   ssn: z.string().max(20).optional(),
   dateOfBirth: z.string().max(20).optional(),
+  street: z.string().max(300).optional(),
+  city: z.string().max(100).optional(),
+  state: z.string().max(100).optional(),
+  zip: z.string().max(20).optional(),
   phone: z.string().max(30).optional(),
   email: z.string().email().max(255).optional().or(z.literal("")),
 }).passthrough();
 
 const existingPolicySchema = z.object({
+  id: z.string().optional(),
   companyName: z.string().max(200).optional(),
   policyNumber: z.string().max(100).optional(),
   amountOfCoverage: z.number().optional(),
@@ -60,59 +66,70 @@ const notificationRequestSchema = z.object({
       firstName: z.string().max(100).optional(),
       lastName: z.string().max(100).optional(),
       middleName: z.string().max(100).optional(),
-      suffix: z.string().max(20).optional(),
-      dateOfBirth: z.string().max(20).optional(),
       gender: z.string().max(20).optional(),
+      dateOfBirth: z.string().max(20).optional(),
       ssn: z.string().max(20).optional(),
-      birthCity: z.string().max(100).optional(),
-      birthState: z.string().max(100).optional(),
-      birthCountry: z.string().max(100).optional(),
-      citizenship: z.string().max(100).optional(),
+      birthplaceState: z.string().max(100).optional(),
+      birthplaceCountry: z.string().max(100).optional(),
+      // Home Address
+      homeStreet: z.string().max(300).optional(),
+      homeCity: z.string().max(100).optional(),
+      homeState: z.string().max(100).optional(),
+      homeZip: z.string().max(20).optional(),
+      // Mailing Address
+      mailingAddressDifferent: z.boolean().optional(),
+      mailingStreet: z.string().max(300).optional(),
+      mailingCity: z.string().max(100).optional(),
+      mailingState: z.string().max(100).optional(),
+      mailingZip: z.string().max(20).optional(),
+      // Citizenship
+      citizenshipStatus: z.string().max(100).optional(),
+      countryOfCitizenship: z.string().max(100).optional(),
+      dateOfEntry: z.string().max(20).optional(),
+      visaType: z.string().max(100).optional(),
+      permanentResidentCard: z.string().max(100).optional(),
+      visaExpirationDate: z.string().max(20).optional(),
+      // ID Verification
+      driversLicenseNumber: z.string().max(100).optional(),
+      driversLicenseState: z.string().max(100).optional(),
     }).passthrough().optional(),
     step2: z.object({
       email: z.string().email().max(255).optional().or(z.literal("")),
       mobilePhone: z.string().max(30).optional(),
       homePhone: z.string().max(30).optional(),
-      address: z.string().max(300).optional(),
-      address2: z.string().max(300).optional(),
-      city: z.string().max(100).optional(),
-      state: z.string().max(100).optional(),
-      zipCode: z.string().max(20).optional(),
-      mailingAddressDifferent: z.boolean().optional(),
-      mailingAddress: z.string().max(300).optional(),
-      mailingCity: z.string().max(100).optional(),
-      mailingState: z.string().max(100).optional(),
-      mailingZipCode: z.string().max(20).optional(),
-      employer: z.string().max(200).optional(),
+      workPhone: z.string().max(30).optional(),
+      // Employment
+      employerName: z.string().max(200).optional(),
       occupation: z.string().max(200).optional(),
-      employerAddress: z.string().max(300).optional(),
-      employerCity: z.string().max(100).optional(),
-      employerState: z.string().max(100).optional(),
-      employerZipCode: z.string().max(20).optional(),
-      annualIncome: z.number().optional(),
+      industry: z.string().max(200).optional(),
+      jobDuties: z.string().max(1000).optional(),
+      yearsEmployed: z.number().optional(),
+      // Financials
+      annualEarnedIncome: z.number().optional(),
+      householdIncome: z.number().optional(),
       netWorth: z.number().optional(),
+      // Family Insurance
+      spouseInsuranceAmount: z.number().optional(),
+      parentsInsuranceAmount: z.number().optional(),
+      siblingsInsuranceAmount: z.number().optional(),
     }).passthrough().optional(),
     step3: z.object({
       insuredIsOwner: z.boolean().optional(),
       ownerType: z.string().max(50).optional(),
-      ownerFirstName: z.string().max(100).optional(),
-      ownerLastName: z.string().max(100).optional(),
-      ownerSsn: z.string().max(20).optional(),
+      ownerName: z.string().max(200).optional(),
+      ownerSSN: z.string().max(20).optional(),
       ownerDateOfBirth: z.string().max(20).optional(),
-      ownerRelationship: z.string().max(100).optional(),
-      trustName: z.string().max(200).optional(),
-      trustTaxId: z.string().max(20).optional(),
-      trustDate: z.string().max(20).optional(),
-      trusteeNames: z.string().max(500).optional(),
-      businessName: z.string().max(200).optional(),
-      businessTaxId: z.string().max(20).optional(),
-      ownerAddress: z.string().max(300).optional(),
+      ownerTrustDate: z.string().max(20).optional(),
+      ownerRelationshipToInsured: z.string().max(100).optional(),
+      ownerStreet: z.string().max(300).optional(),
       ownerCity: z.string().max(100).optional(),
       ownerState: z.string().max(100).optional(),
-      ownerZipCode: z.string().max(20).optional(),
+      ownerZip: z.string().max(20).optional(),
       ownerEmail: z.string().email().max(255).optional().or(z.literal("")),
       ownerPhone: z.string().max(30).optional(),
-      ownerCitizenship: z.string().max(100).optional(),
+      ownerCitizenshipStatus: z.string().max(100).optional(),
+      ownerCountryOfCitizenship: z.string().max(100).optional(),
+      trusteeNames: z.string().max(500).optional(),
     }).passthrough().optional(),
     step4: z.object({
       beneficiaries: z.array(beneficiarySchema).optional(),
@@ -121,29 +138,36 @@ const notificationRequestSchema = z.object({
       planName: z.string().max(100).optional(),
       faceAmount: z.number().optional(),
       termDuration: z.string().max(50).optional(),
-      riders: z.array(z.string().max(100)).optional(),
-      premiumMode: z.string().max(50).optional(),
+      ridersChildrenTerm: z.boolean().optional(),
+      ridersWaiverOfPremium: z.boolean().optional(),
+      ridersAcceleratedBenefits: z.boolean().optional(),
+      ridersChronicIllness: z.boolean().optional(),
+      ridersAccidentalDeath: z.boolean().optional(),
+      childrenDetails: z.array(z.object({
+        name: z.string().optional(),
+        dateOfBirth: z.string().optional(),
+      })).optional(),
     }).passthrough().optional(),
     step6: z.object({
       hasExistingCoverage: z.boolean().optional(),
       existingPolicies: z.array(existingPolicySchema).optional(),
     }).passthrough().optional(),
     step7: z.object({
-      usesTobacco: z.boolean().optional(),
+      usedTobacco: z.boolean().optional(),
       tobaccoType: z.string().max(100).optional(),
       tobaccoFrequency: z.string().max(100).optional(),
       tobaccoLastUsed: z.string().max(100).optional(),
-      hasAviation: z.boolean().optional(),
+      aviation: z.boolean().optional(),
       aviationDetails: z.string().max(1000).optional(),
-      hasHazardousSports: z.boolean().optional(),
+      hazardousSports: z.boolean().optional(),
       hazardousSportsDetails: z.string().max(1000).optional(),
-      hasForeignTravel: z.boolean().optional(),
+      foreignTravel: z.boolean().optional(),
       foreignTravelDetails: z.string().max(1000).optional(),
-      hasBankruptcy: z.boolean().optional(),
+      bankruptcy: z.boolean().optional(),
       bankruptcyDetails: z.string().max(1000).optional(),
-      hasCriminalHistory: z.boolean().optional(),
+      criminalHistory: z.boolean().optional(),
       criminalHistoryDetails: z.string().max(1000).optional(),
-      hasDrivingViolations: z.boolean().optional(),
+      drivingViolations: z.boolean().optional(),
       drivingViolationsDetails: z.string().max(1000).optional(),
       hasMedicalConditions: z.boolean().optional(),
       medicalConditionsDetails: z.string().max(2000).optional(),
@@ -159,7 +183,7 @@ const notificationRequestSchema = z.object({
       sourceOfFundsOther: z.string().max(200).optional(),
     }).passthrough().optional(),
     step9: z.object({
-      acknowledgment: z.boolean().optional(),
+      acknowledged: z.boolean().optional(),
       electronicSignature: z.string().max(200).optional(),
       signatureDate: z.string().max(20).optional(),
     }).passthrough().optional(),
@@ -170,17 +194,23 @@ const notificationRequestSchema = z.object({
 type NotificationRequest = z.infer<typeof notificationRequestSchema>;
 
 interface Beneficiary {
+  id?: string;
   fullName?: string;
   relationship?: string;
   sharePercentage?: number;
   designation?: string;
   ssn?: string;
   dateOfBirth?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
   phone?: string;
   email?: string;
 }
 
 interface ExistingPolicy {
+  id?: string;
   companyName?: string;
   policyNumber?: string;
   amountOfCoverage?: number;
@@ -251,6 +281,7 @@ const getPaymentFrequencyLabel = (freq?: string): string => {
 const getPaymentMethodLabel = (method?: string): string => {
   const labels: Record<string, string> = {
     eft: "Electronic Funds Transfer (EFT)",
+    check: "Check / Direct Bill",
     "direct-bill": "Direct Bill / Check",
   };
   return method ? labels[method] || method : "N/A";
@@ -258,14 +289,26 @@ const getPaymentMethodLabel = (method?: string): string => {
 
 const getSourceOfFundsLabel = (source?: string): string => {
   const labels: Record<string, string> = {
-    employment: "Employment Income",
+    income: "Employment Income",
     savings: "Savings",
+    loan: "Loan",
+    gift: "Gift",
+    other: "Other",
+    employment: "Employment Income",
     investments: "Investments",
     retirement: "Retirement Funds",
     inheritance: "Inheritance",
-    other: "Other",
   };
   return source ? labels[source] || source : "N/A";
+};
+
+const getCitizenshipLabel = (status?: string): string => {
+  if (!status) return "N/A";
+  const labels: Record<string, string> = {
+    usa: "U.S. Citizen",
+    other: "Non-U.S. Citizen",
+  };
+  return labels[status] || status;
 };
 
 // ============ PDF GENERATION FUNCTIONS ============
@@ -342,32 +385,6 @@ const addPdfSectionHeader = (
   return yPos + 15;
 };
 
-const addPdfField = (
-  doc: jsPDF,
-  label: string,
-  value: string,
-  yPos: number,
-  margin: number,
-  pageWidth: number
-): number => {
-  const labelWidth = 70;
-  const valueWidth = pageWidth - margin * 2 - labelWidth - 5;
-
-  doc.setTextColor(TEXT_GRAY[0], TEXT_GRAY[1], TEXT_GRAY[2]);
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.text(`${label}:`, margin, yPos);
-
-  doc.setTextColor(TEXT_DARK[0], TEXT_DARK[1], TEXT_DARK[2]);
-  doc.setFont("helvetica", "bold");
-
-  // Handle text wrapping for long values
-  const lines = doc.splitTextToSize(value, valueWidth);
-  doc.text(lines, margin + labelWidth, yPos);
-
-  return yPos + Math.max(lines.length * 5, 7);
-};
-
 const checkPdfPageBreak = (
   doc: jsPDF,
   yPos: number,
@@ -381,6 +398,36 @@ const checkPdfPageBreak = (
     return addPdfHeader(doc, pageWidth, margin);
   }
   return yPos;
+};
+
+const addPdfField = (
+  doc: jsPDF,
+  label: string,
+  value: string,
+  yPos: number,
+  margin: number,
+  pageWidth: number
+): number => {
+  const labelWidth = 70;
+  const valueWidth = pageWidth - margin * 2 - labelWidth - 5;
+
+  // Handle text wrapping for long values
+  const lines = doc.splitTextToSize(value, valueWidth);
+  const neededSpace = Math.max(lines.length * 5, 7) + 5;
+  
+  // Check for page break before rendering
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, neededSpace);
+
+  doc.setTextColor(TEXT_GRAY[0], TEXT_GRAY[1], TEXT_GRAY[2]);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${label}:`, margin, yPos);
+
+  doc.setTextColor(TEXT_DARK[0], TEXT_DARK[1], TEXT_DARK[2]);
+  doc.setFont("helvetica", "bold");
+  doc.text(lines, margin + labelWidth, yPos);
+
+  return yPos + Math.max(lines.length * 5, 7);
 };
 
 const addPdfFooter = (doc: jsPDF, pageWidth: number): void => {
@@ -444,9 +491,40 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   yPos = addPdfField(doc, "Date of Birth", formatPdfDate(step1.dateOfBirth), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Gender", formatPdfValue(step1.gender), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "SSN", maskSSN(step1.ssn), yPos, margin, pageWidth);
-  const birthPlace = step1.birthCity ? `${step1.birthCity}, ${step1.birthState || ""} ${step1.birthCountry || ""}` : "N/A";
-  yPos = addPdfField(doc, "Birth Place", birthPlace.trim(), yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "Citizenship", formatPdfValue(step1.citizenship), yPos, margin, pageWidth);
+  
+  // Birthplace - using correct field names
+  const birthPlace = step1.birthplaceCountry 
+    ? `${step1.birthplaceState ? step1.birthplaceState + ", " : ""}${step1.birthplaceCountry}` 
+    : "N/A";
+  yPos = addPdfField(doc, "Birth Place", birthPlace, yPos, margin, pageWidth);
+  
+  // Citizenship - using correct field name
+  yPos = addPdfField(doc, "Citizenship Status", getCitizenshipLabel(step1.citizenshipStatus), yPos, margin, pageWidth);
+  if (step1.citizenshipStatus === "other") {
+    yPos = addPdfField(doc, "Country of Citizenship", formatPdfValue(step1.countryOfCitizenship), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Date of Entry", formatPdfDate(step1.dateOfEntry), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Visa Type", formatPdfValue(step1.visaType), yPos, margin, pageWidth);
+    if (step1.visaExpirationDate) {
+      yPos = addPdfField(doc, "Visa Expiration", formatPdfDate(step1.visaExpirationDate), yPos, margin, pageWidth);
+    }
+  }
+  
+  // Home Address - using correct field names
+  const homeAddress = step1.homeStreet 
+    ? `${step1.homeStreet}, ${step1.homeCity || ""}, ${step1.homeState || ""} ${step1.homeZip || ""}`.trim()
+    : "N/A";
+  yPos = addPdfField(doc, "Home Address", homeAddress, yPos, margin, pageWidth);
+  
+  // Mailing Address - using correct field names
+  if (step1.mailingAddressDifferent && step1.mailingStreet) {
+    const mailingAddr = `${step1.mailingStreet}, ${step1.mailingCity || ""}, ${step1.mailingState || ""} ${step1.mailingZip || ""}`.trim();
+    yPos = addPdfField(doc, "Mailing Address", mailingAddr, yPos, margin, pageWidth);
+  }
+  
+  // Driver's License - using correct field names
+  if (step1.driversLicenseNumber) {
+    yPos = addPdfField(doc, "Driver's License", `${step1.driversLicenseNumber} (${step1.driversLicenseState || "N/A"})`, yPos, margin, pageWidth);
+  }
   yPos += 5;
 
   // ============ STEP 2: Contact & Employment ============
@@ -457,16 +535,40 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   if (step2.homePhone) {
     yPos = addPdfField(doc, "Home Phone", formatPdfValue(step2.homePhone), yPos, margin, pageWidth);
   }
-  const address = step2.address ? `${step2.address}${step2.address2 ? ", " + step2.address2 : ""}, ${step2.city}, ${step2.state} ${step2.zipCode}` : "N/A";
-  yPos = addPdfField(doc, "Address", address, yPos, margin, pageWidth);
-  if (step2.mailingAddressDifferent) {
-    const mailAddr = `${step2.mailingAddress}, ${step2.mailingCity}, ${step2.mailingState} ${step2.mailingZipCode}`;
-    yPos = addPdfField(doc, "Mailing Address", mailAddr, yPos, margin, pageWidth);
+  if (step2.workPhone) {
+    yPos = addPdfField(doc, "Work Phone", formatPdfValue(step2.workPhone), yPos, margin, pageWidth);
   }
-  yPos = addPdfField(doc, "Employer", formatPdfValue(step2.employer), yPos, margin, pageWidth);
+  
+  // Employment - using correct field names
+  yPos = addPdfField(doc, "Employer", formatPdfValue(step2.employerName), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Occupation", formatPdfValue(step2.occupation), yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "Annual Income", formatCurrency(step2.annualIncome), yPos, margin, pageWidth);
+  if (step2.industry) {
+    yPos = addPdfField(doc, "Industry", formatPdfValue(step2.industry), yPos, margin, pageWidth);
+  }
+  if (step2.jobDuties) {
+    yPos = addPdfField(doc, "Job Duties", formatPdfValue(step2.jobDuties), yPos, margin, pageWidth);
+  }
+  if (step2.yearsEmployed !== undefined) {
+    yPos = addPdfField(doc, "Years Employed", formatPdfValue(step2.yearsEmployed), yPos, margin, pageWidth);
+  }
+  
+  // Financials - using correct field names
+  yPos = addPdfField(doc, "Annual Earned Income", formatCurrency(step2.annualEarnedIncome), yPos, margin, pageWidth);
+  if (step2.householdIncome) {
+    yPos = addPdfField(doc, "Household Income", formatCurrency(step2.householdIncome), yPos, margin, pageWidth);
+  }
   yPos = addPdfField(doc, "Net Worth", formatCurrency(step2.netWorth), yPos, margin, pageWidth);
+  
+  // Family Insurance
+  if (step2.spouseInsuranceAmount) {
+    yPos = addPdfField(doc, "Spouse Insurance", formatCurrency(step2.spouseInsuranceAmount), yPos, margin, pageWidth);
+  }
+  if (step2.parentsInsuranceAmount) {
+    yPos = addPdfField(doc, "Parents Insurance", formatCurrency(step2.parentsInsuranceAmount), yPos, margin, pageWidth);
+  }
+  if (step2.siblingsInsuranceAmount) {
+    yPos = addPdfField(doc, "Siblings Insurance", formatCurrency(step2.siblingsInsuranceAmount), yPos, margin, pageWidth);
+  }
   yPos += 5;
 
   // ============ STEP 3: Ownership ============
@@ -478,24 +580,25 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
     const ownerTypeLabel = step3.ownerType === "individual" ? "Individual" : step3.ownerType === "trust" ? "Trust" : step3.ownerType === "business" ? "Business" : "N/A";
     yPos = addPdfField(doc, "Owner Type", ownerTypeLabel, yPos, margin, pageWidth);
     
+    // Using correct field names
+    yPos = addPdfField(doc, "Owner Name", formatPdfValue(step3.ownerName), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Owner SSN/TIN", maskSSN(step3.ownerSSN), yPos, margin, pageWidth);
+    
     if (step3.ownerType === "individual") {
-      const ownerName = `${step3.ownerFirstName || ""} ${step3.ownerLastName || ""}`.trim() || "N/A";
-      yPos = addPdfField(doc, "Owner Name", ownerName, yPos, margin, pageWidth);
-      yPos = addPdfField(doc, "Owner SSN", maskSSN(step3.ownerSsn), yPos, margin, pageWidth);
       yPos = addPdfField(doc, "Owner DOB", formatPdfDate(step3.ownerDateOfBirth), yPos, margin, pageWidth);
-      yPos = addPdfField(doc, "Relationship", formatPdfValue(step3.ownerRelationship), yPos, margin, pageWidth);
-    } else if (step3.ownerType === "trust") {
-      yPos = addPdfField(doc, "Trust Name", formatPdfValue(step3.trustName), yPos, margin, pageWidth);
-      yPos = addPdfField(doc, "Trust Tax ID", step3.trustTaxId ? maskSSN(step3.trustTaxId) : "N/A", yPos, margin, pageWidth);
-      yPos = addPdfField(doc, "Trust Date", formatPdfDate(step3.trustDate), yPos, margin, pageWidth);
-      yPos = addPdfField(doc, "Trustee Names", formatPdfValue(step3.trusteeNames), yPos, margin, pageWidth);
-    } else if (step3.ownerType === "business") {
-      yPos = addPdfField(doc, "Business Name", formatPdfValue(step3.businessName), yPos, margin, pageWidth);
-      yPos = addPdfField(doc, "Business Tax ID", step3.businessTaxId ? maskSSN(step3.businessTaxId) : "N/A", yPos, margin, pageWidth);
+      yPos = addPdfField(doc, "Relationship to Insured", formatPdfValue(step3.ownerRelationshipToInsured), yPos, margin, pageWidth);
     }
     
-    if (step3.ownerAddress) {
-      const ownerAddr = `${step3.ownerAddress}, ${step3.ownerCity}, ${step3.ownerState} ${step3.ownerZipCode}`;
+    if (step3.ownerType === "trust" && step3.ownerTrustDate) {
+      yPos = addPdfField(doc, "Trust Date", formatPdfDate(step3.ownerTrustDate), yPos, margin, pageWidth);
+      if (step3.trusteeNames) {
+        yPos = addPdfField(doc, "Trustee Names", formatPdfValue(step3.trusteeNames), yPos, margin, pageWidth);
+      }
+    }
+    
+    // Owner Address - using correct field names
+    if (step3.ownerStreet) {
+      const ownerAddr = `${step3.ownerStreet}, ${step3.ownerCity || ""}, ${step3.ownerState || ""} ${step3.ownerZip || ""}`.trim();
       yPos = addPdfField(doc, "Owner Address", ownerAddr, yPos, margin, pageWidth);
     }
     if (step3.ownerEmail) {
@@ -503,6 +606,14 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
     }
     if (step3.ownerPhone) {
       yPos = addPdfField(doc, "Owner Phone", formatPdfValue(step3.ownerPhone), yPos, margin, pageWidth);
+    }
+    
+    // Owner Citizenship - using correct field names
+    if (step3.ownerCitizenshipStatus) {
+      yPos = addPdfField(doc, "Owner Citizenship", getCitizenshipLabel(step3.ownerCitizenshipStatus), yPos, margin, pageWidth);
+      if (step3.ownerCitizenshipStatus === "other" && step3.ownerCountryOfCitizenship) {
+        yPos = addPdfField(doc, "Owner Country", formatPdfValue(step3.ownerCountryOfCitizenship), yPos, margin, pageWidth);
+      }
     }
   }
   yPos += 5;
@@ -513,7 +624,7 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   
   if (step4.beneficiaries && step4.beneficiaries.length > 0) {
     step4.beneficiaries.forEach((b: Beneficiary, index: number) => {
-      yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 35);
+      yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 50);
       
       // Beneficiary sub-header
       doc.setFillColor(249, 250, 251);
@@ -533,6 +644,17 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
       }
       if (b.dateOfBirth) {
         yPos = addPdfField(doc, "Date of Birth", formatPdfDate(b.dateOfBirth), yPos, margin, pageWidth);
+      }
+      // Beneficiary Address - using correct field names
+      if (b.street) {
+        const benAddr = `${b.street}, ${b.city || ""}, ${b.state || ""} ${b.zip || ""}`.trim();
+        yPos = addPdfField(doc, "Address", benAddr, yPos, margin, pageWidth);
+      }
+      if (b.phone) {
+        yPos = addPdfField(doc, "Phone", formatPdfValue(b.phone), yPos, margin, pageWidth);
+      }
+      if (b.email) {
+        yPos = addPdfField(doc, "Email", formatPdfValue(b.email), yPos, margin, pageWidth);
       }
       yPos += 3;
     });
@@ -564,9 +686,25 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   if (step5.termDuration) {
     yPos = addPdfField(doc, "Term Duration", formatPdfValue(step5.termDuration), yPos, margin, pageWidth);
   }
-  yPos = addPdfField(doc, "Premium Mode", getPaymentFrequencyLabel(step5.premiumMode), yPos, margin, pageWidth);
-  if (step5.riders && step5.riders.length > 0) {
-    yPos = addPdfField(doc, "Riders", step5.riders.join(", "), yPos, margin, pageWidth);
+  
+  // Riders - using correct boolean field names
+  const riders: string[] = [];
+  if (step5.ridersChildrenTerm) riders.push("Children's Term");
+  if (step5.ridersWaiverOfPremium) riders.push("Waiver of Premium");
+  if (step5.ridersAcceleratedBenefits) riders.push("Accelerated Benefits");
+  if (step5.ridersChronicIllness) riders.push("Chronic Illness");
+  if (step5.ridersAccidentalDeath) riders.push("Accidental Death");
+  
+  if (riders.length > 0) {
+    yPos = addPdfField(doc, "Riders", riders.join(", "), yPos, margin, pageWidth);
+  }
+  
+  // Children Details
+  if (step5.ridersChildrenTerm && step5.childrenDetails && step5.childrenDetails.length > 0) {
+    yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 30);
+    step5.childrenDetails.forEach((child, idx) => {
+      yPos = addPdfField(doc, `Child ${idx + 1}`, `${child.name || "N/A"} (DOB: ${formatPdfDate(child.dateOfBirth)})`, yPos, margin, pageWidth);
+    });
   }
   yPos += 5;
 
@@ -605,23 +743,27 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 60);
   yPos = addPdfSectionHeader(doc, "STEP 7: MEDICAL & LIFESTYLE", yPos, margin, pageWidth);
   
+  // Using correct field names
   const medicalFlags: string[] = [];
-  if (step7.usesTobacco) medicalFlags.push(`Tobacco Use: ${step7.tobaccoType || "Yes"}`);
-  if (step7.hasAviation) medicalFlags.push("Aviation Activities");
-  if (step7.hasHazardousSports) medicalFlags.push("Hazardous Sports");
-  if (step7.hasForeignTravel) medicalFlags.push("Foreign Travel");
-  if (step7.hasBankruptcy) medicalFlags.push("Bankruptcy History");
-  if (step7.hasCriminalHistory) medicalFlags.push("Criminal History");
-  if (step7.hasDrivingViolations) medicalFlags.push("Driving Violations");
+  if (step7.usedTobacco) medicalFlags.push(`Tobacco Use: ${step7.tobaccoType || "Yes"}`);
+  if (step7.aviation) medicalFlags.push("Aviation Activities");
+  if (step7.hazardousSports) medicalFlags.push("Hazardous Sports");
+  if (step7.foreignTravel) medicalFlags.push("Foreign Travel");
+  if (step7.bankruptcy) medicalFlags.push("Bankruptcy History");
+  if (step7.criminalHistory) medicalFlags.push("Criminal History");
+  if (step7.drivingViolations) medicalFlags.push("Driving Violations");
   if (step7.hasMedicalConditions) medicalFlags.push("Medical Conditions");
 
   if (medicalFlags.length > 0) {
     // Warning box
+    const boxHeight = 10 + medicalFlags.length * 6;
+    yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, boxHeight + 40);
+    
     doc.setFillColor(254, 242, 242);
-    doc.rect(margin, yPos, pageWidth - margin * 2, 10 + medicalFlags.length * 6, "F");
+    doc.rect(margin, yPos, pageWidth - margin * 2, boxHeight, "F");
     doc.setDrawColor(239, 68, 68);
     doc.setLineWidth(0.5);
-    doc.line(margin, yPos, margin, yPos + 10 + medicalFlags.length * 6);
+    doc.line(margin, yPos, margin, yPos + boxHeight);
     
     doc.setTextColor(153, 27, 27);
     doc.setFontSize(10);
@@ -632,10 +774,13 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
     medicalFlags.forEach((flag, idx) => {
       doc.text(`• ${flag}`, margin + 8, yPos + 14 + idx * 6);
     });
-    yPos += 15 + medicalFlags.length * 6;
+    yPos += boxHeight + 5;
     
     // Add details if present
-    if (step7.tobaccoLastUsed) {
+    if (step7.usedTobacco && step7.tobaccoFrequency) {
+      yPos = addPdfField(doc, "Tobacco Frequency", formatPdfValue(step7.tobaccoFrequency), yPos, margin, pageWidth);
+    }
+    if (step7.usedTobacco && step7.tobaccoLastUsed) {
       yPos = addPdfField(doc, "Tobacco Last Used", formatPdfValue(step7.tobaccoLastUsed), yPos, margin, pageWidth);
     }
     if (step7.aviationDetails) {
@@ -646,6 +791,15 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
     }
     if (step7.foreignTravelDetails) {
       yPos = addPdfField(doc, "Foreign Travel", formatPdfValue(step7.foreignTravelDetails), yPos, margin, pageWidth);
+    }
+    if (step7.bankruptcyDetails) {
+      yPos = addPdfField(doc, "Bankruptcy Details", formatPdfValue(step7.bankruptcyDetails), yPos, margin, pageWidth);
+    }
+    if (step7.criminalHistoryDetails) {
+      yPos = addPdfField(doc, "Criminal History", formatPdfValue(step7.criminalHistoryDetails), yPos, margin, pageWidth);
+    }
+    if (step7.drivingViolationsDetails) {
+      yPos = addPdfField(doc, "Driving Violations", formatPdfValue(step7.drivingViolationsDetails), yPos, margin, pageWidth);
     }
     if (step7.medicalConditionsDetails) {
       yPos = addPdfField(doc, "Medical Conditions", formatPdfValue(step7.medicalConditionsDetails), yPos, margin, pageWidth);
@@ -682,7 +836,8 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   // ============ STEP 9: Signature ============
   yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 40);
   yPos = addPdfSectionHeader(doc, "STEP 9: SIGNATURE & ACKNOWLEDGMENT", yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "Acknowledgment", step9.acknowledgment ? "Confirmed" : "Not confirmed", yPos, margin, pageWidth);
+  // Using correct field name
+  yPos = addPdfField(doc, "Acknowledgment", step9.acknowledged ? "Confirmed" : "Not confirmed", yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Electronic Signature", formatPdfValue(step9.electronicSignature), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Signature Date", formatPdfDate(step9.signatureDate), yPos, margin, pageWidth);
   yPos += 5;
@@ -766,9 +921,10 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
           <strong>Relationship:</strong> ${b.relationship || "N/A"}
         </p>
         ${b.ssn ? `<p style="margin: 4px 0 0 0; font-size: 14px; color: #374151;"><strong>SSN:</strong> ${maskSSN(b.ssn)}</p>` : ""}
-        ${b.dateOfBirth ? `<p style="margin: 4px 0 0 0; font-size: 14px; color: #374151;"><strong>DOB:</strong> ${b.dateOfBirth}</p>` : ""}
-        ${b.email ? `<p style="margin: 4px 0 0 0; font-size: 14px; color: #374151;"><strong>Email:</strong> ${b.email}</p>` : ""}
+        ${b.dateOfBirth ? `<p style="margin: 4px 0 0 0; font-size: 14px; color: #374151;"><strong>DOB:</strong> ${formatPdfDate(b.dateOfBirth)}</p>` : ""}
+        ${b.street ? `<p style="margin: 4px 0 0 0; font-size: 14px; color: #374151;"><strong>Address:</strong> ${b.street}, ${b.city || ""}, ${b.state || ""} ${b.zip || ""}</p>` : ""}
         ${b.phone ? `<p style="margin: 4px 0 0 0; font-size: 14px; color: #374151;"><strong>Phone:</strong> ${b.phone}</p>` : ""}
+        ${b.email ? `<p style="margin: 4px 0 0 0; font-size: 14px; color: #374151;"><strong>Email:</strong> ${b.email}</p>` : ""}
       </div>
     `).join("");
   } else {
@@ -792,16 +948,29 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
     existingPoliciesHtml = `<p style="color: #6b7280; font-style: italic;">No existing coverage</p>`;
   }
 
-  // Build medical/lifestyle flags
+  // Build medical/lifestyle flags - using correct field names
   const medicalFlags: string[] = [];
-  if (step7.usesTobacco) medicalFlags.push(`Tobacco Use: ${step7.tobaccoType || "Yes"} (${step7.tobaccoFrequency || "N/A"})`);
-  if (step7.hasAviation) medicalFlags.push("Aviation Activities");
-  if (step7.hasHazardousSports) medicalFlags.push("Hazardous Sports");
-  if (step7.hasForeignTravel) medicalFlags.push("Foreign Travel");
-  if (step7.hasBankruptcy) medicalFlags.push("Bankruptcy History");
-  if (step7.hasCriminalHistory) medicalFlags.push("Criminal History");
-  if (step7.hasDrivingViolations) medicalFlags.push("Driving Violations");
+  if (step7.usedTobacco) medicalFlags.push(`Tobacco Use: ${step7.tobaccoType || "Yes"} (${step7.tobaccoFrequency || "N/A"})`);
+  if (step7.aviation) medicalFlags.push("Aviation Activities");
+  if (step7.hazardousSports) medicalFlags.push("Hazardous Sports");
+  if (step7.foreignTravel) medicalFlags.push("Foreign Travel");
+  if (step7.bankruptcy) medicalFlags.push("Bankruptcy History");
+  if (step7.criminalHistory) medicalFlags.push("Criminal History");
+  if (step7.drivingViolations) medicalFlags.push("Driving Violations");
   if (step7.hasMedicalConditions) medicalFlags.push("Medical Conditions");
+
+  // Build riders list - using correct field names
+  const riders: string[] = [];
+  if (step5.ridersChildrenTerm) riders.push("Children's Term");
+  if (step5.ridersWaiverOfPremium) riders.push("Waiver of Premium");
+  if (step5.ridersAcceleratedBenefits) riders.push("Accelerated Benefits");
+  if (step5.ridersChronicIllness) riders.push("Chronic Illness");
+  if (step5.ridersAccidentalDeath) riders.push("Accidental Death");
+
+  // Home address - using correct field names
+  const homeAddress = step1.homeStreet 
+    ? `${step1.homeStreet}, ${step1.homeCity || ""}, ${step1.homeState || ""} ${step1.homeZip || ""}`
+    : "N/A";
 
   return `
 <!DOCTYPE html>
@@ -829,11 +998,19 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
       ${generateSectionHeader("Step 1: Proposed Insured")}
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
         ${generateDataRow("Full Name", applicantName || "N/A")}
-        ${generateDataRow("Date of Birth", step1.dateOfBirth || "N/A")}
+        ${generateDataRow("Date of Birth", formatPdfDate(step1.dateOfBirth))}
         ${generateDataRow("Gender", step1.gender || "N/A")}
         ${generateDataRow("SSN", maskSSN(step1.ssn))}
-        ${generateDataRow("Birth Place", step1.birthCity ? `${step1.birthCity}, ${step1.birthState || ""} ${step1.birthCountry || ""}` : "N/A")}
-        ${generateDataRow("Citizenship", step1.citizenship || "N/A")}
+        ${generateDataRow("Birth Place", step1.birthplaceCountry ? `${step1.birthplaceState ? step1.birthplaceState + ", " : ""}${step1.birthplaceCountry}` : "N/A")}
+        ${generateDataRow("Citizenship Status", getCitizenshipLabel(step1.citizenshipStatus))}
+        ${step1.citizenshipStatus === "other" ? `
+          ${generateDataRow("Country of Citizenship", step1.countryOfCitizenship || "N/A")}
+          ${generateDataRow("Date of Entry", formatPdfDate(step1.dateOfEntry))}
+          ${generateDataRow("Visa Type", step1.visaType || "N/A")}
+        ` : ""}
+        ${generateDataRow("Home Address", homeAddress)}
+        ${step1.mailingAddressDifferent && step1.mailingStreet ? generateDataRow("Mailing Address", `${step1.mailingStreet}, ${step1.mailingCity || ""}, ${step1.mailingState || ""} ${step1.mailingZip || ""}`) : ""}
+        ${step1.driversLicenseNumber ? generateDataRow("Driver's License", `${step1.driversLicenseNumber} (${step1.driversLicenseState || "N/A"})`) : ""}
       </table>
 
       <!-- STEP 2: Contact & Employment -->
@@ -842,13 +1019,18 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
         ${generateDataRow("Email", step2.email || "N/A", true, "email")}
         ${generateDataRow("Mobile Phone", step2.mobilePhone || applicantPhone || "N/A", true, "phone")}
         ${step2.homePhone ? generateDataRow("Home Phone", step2.homePhone, true, "phone") : ""}
-        ${generateDataRow("Address", step2.address ? `${step2.address}${step2.address2 ? ", " + step2.address2 : ""}, ${step2.city}, ${step2.state} ${step2.zipCode}` : "N/A")}
-        ${step2.mailingAddressDifferent ? generateDataRow("Mailing Address", `${step2.mailingAddress}, ${step2.mailingCity}, ${step2.mailingState} ${step2.mailingZipCode}`) : ""}
-        ${generateDataRow("Employer", step2.employer || "N/A")}
+        ${step2.workPhone ? generateDataRow("Work Phone", step2.workPhone, true, "phone") : ""}
+        ${generateDataRow("Employer", step2.employerName || "N/A")}
         ${generateDataRow("Occupation", step2.occupation || "N/A")}
-        ${step2.employerAddress ? generateDataRow("Employer Address", `${step2.employerAddress}, ${step2.employerCity}, ${step2.employerState} ${step2.employerZipCode}`) : ""}
-        ${generateDataRow("Annual Income", formatCurrency(step2.annualIncome))}
+        ${step2.industry ? generateDataRow("Industry", step2.industry) : ""}
+        ${step2.jobDuties ? generateDataRow("Job Duties", step2.jobDuties) : ""}
+        ${step2.yearsEmployed !== undefined ? generateDataRow("Years Employed", String(step2.yearsEmployed)) : ""}
+        ${generateDataRow("Annual Earned Income", formatCurrency(step2.annualEarnedIncome))}
+        ${step2.householdIncome ? generateDataRow("Household Income", formatCurrency(step2.householdIncome)) : ""}
         ${generateDataRow("Net Worth", formatCurrency(step2.netWorth))}
+        ${step2.spouseInsuranceAmount ? generateDataRow("Spouse Insurance", formatCurrency(step2.spouseInsuranceAmount)) : ""}
+        ${step2.parentsInsuranceAmount ? generateDataRow("Parents Insurance", formatCurrency(step2.parentsInsuranceAmount)) : ""}
+        ${step2.siblingsInsuranceAmount ? generateDataRow("Siblings Insurance", formatCurrency(step2.siblingsInsuranceAmount)) : ""}
       </table>
 
       <!-- STEP 3: Ownership -->
@@ -857,25 +1039,20 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
         ${generateDataRow("Insured is Owner", step3.insuredIsOwner ? "Yes" : "No")}
         ${!step3.insuredIsOwner ? `
           ${generateDataRow("Owner Type", step3.ownerType === "individual" ? "Individual" : step3.ownerType === "trust" ? "Trust" : step3.ownerType === "business" ? "Business" : "N/A")}
+          ${generateDataRow("Owner Name", step3.ownerName || "N/A")}
+          ${generateDataRow("Owner SSN/TIN", maskSSN(step3.ownerSSN))}
           ${step3.ownerType === "individual" ? `
-            ${generateDataRow("Owner Name", `${step3.ownerFirstName || ""} ${step3.ownerLastName || ""}`.trim() || "N/A")}
-            ${generateDataRow("Owner SSN", maskSSN(step3.ownerSsn))}
-            ${generateDataRow("Owner DOB", step3.ownerDateOfBirth || "N/A")}
-            ${generateDataRow("Relationship", step3.ownerRelationship || "N/A")}
+            ${generateDataRow("Owner DOB", formatPdfDate(step3.ownerDateOfBirth))}
+            ${generateDataRow("Relationship to Insured", step3.ownerRelationshipToInsured || "N/A")}
           ` : ""}
-          ${step3.ownerType === "trust" ? `
-            ${generateDataRow("Trust Name", step3.trustName || "N/A")}
-            ${generateDataRow("Trust Tax ID", step3.trustTaxId ? maskSSN(step3.trustTaxId) : "N/A")}
-            ${generateDataRow("Trust Date", step3.trustDate || "N/A")}
-            ${generateDataRow("Trustee Names", step3.trusteeNames || "N/A")}
+          ${step3.ownerType === "trust" && step3.ownerTrustDate ? `
+            ${generateDataRow("Trust Date", formatPdfDate(step3.ownerTrustDate))}
+            ${step3.trusteeNames ? generateDataRow("Trustee Names", step3.trusteeNames) : ""}
           ` : ""}
-          ${step3.ownerType === "business" ? `
-            ${generateDataRow("Business Name", step3.businessName || "N/A")}
-            ${generateDataRow("Business Tax ID", step3.businessTaxId ? maskSSN(step3.businessTaxId) : "N/A")}
-          ` : ""}
-          ${generateDataRow("Owner Address", step3.ownerAddress ? `${step3.ownerAddress}, ${step3.ownerCity}, ${step3.ownerState} ${step3.ownerZipCode}` : "N/A")}
+          ${step3.ownerStreet ? generateDataRow("Owner Address", `${step3.ownerStreet}, ${step3.ownerCity || ""}, ${step3.ownerState || ""} ${step3.ownerZip || ""}`) : ""}
           ${generateDataRow("Owner Email", step3.ownerEmail || "N/A", true, "email")}
           ${generateDataRow("Owner Phone", step3.ownerPhone || "N/A", true, "phone")}
+          ${step3.ownerCitizenshipStatus ? generateDataRow("Owner Citizenship", getCitizenshipLabel(step3.ownerCitizenshipStatus)) : ""}
         ` : ""}
       </table>
 
@@ -892,9 +1069,14 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
           <td style="padding: 8px 0; color: #111827; font-weight: 700; font-size: 18px;">${formatCurrency(step5.faceAmount)}</td>
         </tr>
         ${step5.termDuration ? generateDataRow("Term Duration", step5.termDuration) : ""}
-        ${generateDataRow("Premium Mode", getPaymentFrequencyLabel(step5.premiumMode))}
-        ${step5.riders && step5.riders.length > 0 ? generateDataRow("Riders", step5.riders.join(", ")) : ""}
+        ${riders.length > 0 ? generateDataRow("Riders", riders.join(", ")) : ""}
       </table>
+      ${step5.ridersChildrenTerm && step5.childrenDetails && step5.childrenDetails.length > 0 ? `
+        <div style="background-color: #f9fafb; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+          <p style="margin: 0 0 5px 0; font-weight: 600; color: #1e3a5f;">Children Covered:</p>
+          ${step5.childrenDetails.map((child, idx) => `<p style="margin: 2px 0; font-size: 14px; color: #374151;">Child ${idx + 1}: ${child.name || "N/A"} (DOB: ${formatPdfDate(child.dateOfBirth)})</p>`).join("")}
+        </div>
+      ` : ""}
 
       <!-- STEP 6: Existing Coverage -->
       ${generateSectionHeader("Step 6: Existing Coverage")}
@@ -909,7 +1091,7 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
             ${medicalFlags.map(flag => `<li>${flag}</li>`).join("")}
           </ul>
         </div>
-        ${step7.usesTobacco && step7.tobaccoLastUsed ? `<p style="color: #374151; font-size: 14px;"><strong>Tobacco Last Used:</strong> ${step7.tobaccoLastUsed}</p>` : ""}
+        ${step7.usedTobacco && step7.tobaccoLastUsed ? `<p style="color: #374151; font-size: 14px;"><strong>Tobacco Last Used:</strong> ${step7.tobaccoLastUsed}</p>` : ""}
         ${step7.aviationDetails ? `<p style="color: #374151; font-size: 14px;"><strong>Aviation Details:</strong> ${step7.aviationDetails}</p>` : ""}
         ${step7.hazardousSportsDetails ? `<p style="color: #374151; font-size: 14px;"><strong>Hazardous Sports Details:</strong> ${step7.hazardousSportsDetails}</p>` : ""}
         ${step7.foreignTravelDetails ? `<p style="color: #374151; font-size: 14px;"><strong>Foreign Travel Details:</strong> ${step7.foreignTravelDetails}</p>` : ""}
@@ -936,9 +1118,9 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
       <!-- STEP 9: Signature -->
       ${generateSectionHeader("Step 9: Signature & Acknowledgment")}
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-        ${generateDataRow("Acknowledgment", step9.acknowledgment ? "✓ Confirmed" : "Not confirmed")}
+        ${generateDataRow("Acknowledgment", step9.acknowledged ? "✓ Confirmed" : "Not confirmed")}
         ${generateDataRow("Electronic Signature", step9.electronicSignature || "N/A")}
-        ${generateDataRow("Signature Date", step9.signatureDate || "N/A")}
+        ${generateDataRow("Signature Date", formatPdfDate(step9.signatureDate))}
       </table>
 
       ${advisorName ? `
@@ -1165,7 +1347,7 @@ const handler = async (req: Request): Promise<Response> => {
         } = {
           from: FROM_EMAIL,
           to: [advisorEmail],
-          subject: `New Life Insurance Application - ${data.applicantName}`,
+          subject: `New Life Insurance Application Assigned - ${data.applicantName}`,
           html: generateAdminEmail(dataWithEmail),
         };
 
@@ -1187,35 +1369,35 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
 
-    // 3. Send confirmation to applicant (NO PDF for security)
-    if (data.applicantEmail) {
-      try {
-        console.log("Sending confirmation to applicant:", data.applicantEmail);
-        const applicantResult = await resend.emails.send({
-          from: FROM_EMAIL,
-          to: [data.applicantEmail],
-          subject: "Your Life Insurance Application Has Been Received",
-          html: generateApplicantEmail(dataWithEmail),
-        });
-        console.log("Applicant email sent successfully:", applicantResult);
-        emailResults.push({ recipient: "applicant", success: true });
-      } catch (error: unknown) {
-        console.error("Failed to send applicant email:", error);
-        emailResults.push({ recipient: "applicant", success: false, error: String(error) });
-      }
+    // 3. Send confirmation to applicant (no PDF for privacy)
+    try {
+      console.log("Sending applicant confirmation to:", data.applicantEmail);
+      const applicantResult = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.applicantEmail],
+        subject: "Your Life Insurance Application Has Been Received",
+        html: generateApplicantEmail(dataWithEmail),
+      });
+      console.log("Applicant email sent successfully:", applicantResult);
+      emailResults.push({ recipient: "applicant", success: true });
+    } catch (error: unknown) {
+      console.error("Failed to send applicant email:", error);
+      emailResults.push({ recipient: "applicant", success: false, error: String(error) });
     }
 
-    console.log("Email notification results:", emailResults);
-
     return new Response(
-      JSON.stringify({ success: true, results: emailResults, pdfGenerated: !!pdfBase64 }),
+      JSON.stringify({
+        success: true,
+        message: "Notifications processed",
+        results: emailResults,
+      }),
       {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
   } catch (error: unknown) {
-    console.error("Error in send-life-insurance-notification function:", error);
+    console.error("Error in send-life-insurance-notification:", error);
     return new Response(
       JSON.stringify({ error: String(error) }),
       {
