@@ -19,13 +19,22 @@ const ALLOWED_ORIGINS = [
   "http://localhost:8080",
 ];
 
+// Check if origin is allowed (includes Lovable preview domains)
+const isAllowedOrigin = (origin: string | null): boolean => {
+  if (!origin) return false;
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  // Allow Lovable preview domains
+  if (origin.endsWith(".lovable.app") || origin.endsWith(".lovable.dev")) return true;
+  return false;
+};
+
 const getCorsHeaders = (origin: string | null): Record<string, string> => {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) 
-    ? origin 
-    : ALLOWED_ORIGINS[0];
+  // Echo allowed origin for proper CORS, fallback to production
+  const allowedOrigin = isAllowedOrigin(origin) ? origin! : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 };
 
