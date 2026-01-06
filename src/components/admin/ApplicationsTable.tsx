@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { Eye, Download, MoreHorizontal, Trash2 } from "lucide-react";
+import { Eye, Download, MoreHorizontal, Trash2, Mail, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -29,7 +29,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import type { LifeInsuranceApplication } from "@/hooks/useLifeInsuranceApplications";
+import { useResendApplicationPdf } from "@/hooks/useLifeInsuranceApplications";
 import { downloadApplicationPdf } from "@/lib/lifeInsurancePdfGenerator";
+import { toast } from "sonner";
 
 interface ApplicationsTableProps {
   applications: LifeInsuranceApplication[];
@@ -56,12 +58,24 @@ export const ApplicationsTable = ({
   onDelete,
 }: ApplicationsTableProps) => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const resendPdfMutation = useResendApplicationPdf();
 
   const handleDelete = () => {
     if (deleteId) {
       onDelete(deleteId);
       setDeleteId(null);
     }
+  };
+
+  const handleResendPdf = (appId: string, advisorName?: string | null) => {
+    resendPdfMutation.mutate(appId, {
+      onSuccess: (data) => {
+        toast.success(data.message);
+      },
+      onError: (error) => {
+        toast.error("Failed to resend PDF: " + (error instanceof Error ? error.message : "Unknown error"));
+      },
+    });
   };
 
   if (applications.length === 0) {
@@ -156,6 +170,17 @@ export const ApplicationsTable = ({
                         >
                           <Download className="h-4 w-4 mr-2" />
                           Download PDF
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleResendPdf(app.id, app.advisor_name)}
+                          disabled={resendPdfMutation.isPending}
+                        >
+                          {resendPdfMutation.isPending ? (
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          ) : (
+                            <Mail className="h-4 w-4 mr-2" />
+                          )}
+                          Resend PDF to Advisor
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem

@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Download, X } from "lucide-react";
+import { Download, X, Mail, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { LifeInsuranceApplication } from "@/hooks/useLifeInsuranceApplications";
+import { useResendApplicationPdf } from "@/hooks/useLifeInsuranceApplications";
 import { downloadApplicationPdf } from "@/lib/lifeInsurancePdfGenerator";
 import type { Database } from "@/integrations/supabase/types";
+import { toast } from "sonner";
 
 type ApplicationStatus = Database["public"]["Enums"]["application_status"];
 
@@ -166,9 +168,22 @@ export const ApplicationDetailModal = ({
   onClose,
   onUpdateStatus,
 }: ApplicationDetailModalProps) => {
+  const resendPdfMutation = useResendApplicationPdf();
+
   if (!application) return null;
 
   const formData = application.form_data as FormData;
+
+  const handleResendPdf = () => {
+    resendPdfMutation.mutate(application.id, {
+      onSuccess: (data) => {
+        toast.success(data.message);
+      },
+      onError: (error) => {
+        toast.error("Failed to resend PDF: " + (error instanceof Error ? error.message : "Unknown error"));
+      },
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -229,6 +244,19 @@ export const ApplicationDetailModal = ({
           >
             <Download className="h-4 w-4 mr-2" />
             Export PDF
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleResendPdf}
+            disabled={resendPdfMutation.isPending}
+          >
+            {resendPdfMutation.isPending ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Mail className="h-4 w-4 mr-2" />
+            )}
+            Resend PDF
           </Button>
         </div>
 

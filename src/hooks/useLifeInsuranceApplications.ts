@@ -83,3 +83,16 @@ export const useDeleteApplication = () => {
     },
   });
 };
+
+export const useResendApplicationPdf = () => {
+  return useMutation({
+    mutationFn: async (applicationId: string) => {
+      const { data, error } = await supabase.functions.invoke(
+        "resend-life-insurance-pdf",
+        { body: { applicationId } }
+      );
+      if (error) throw error;
+      return data as { success: boolean; message: string };
+    },
+  });
+};
