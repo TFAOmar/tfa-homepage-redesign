@@ -34,6 +34,7 @@ import RequiredSavingsCalculator from "./pages/RequiredSavingsCalculator";
 import KaiZenCalculatorPage from "./pages/KaiZenCalculatorPage";
 import GuaranteedIncomeCalculator from "./pages/GuaranteedIncomeCalculator";
 import Tools from "./pages/Tools";
+import FinalExpenseQuote from "./pages/FinalExpenseQuote";
 import BusinessInsurance from "./pages/BusinessInsurance";
 import BookConsultation from "./pages/BookConsultation";
 import ThankYou from "./pages/ThankYou";
@@ -132,6 +133,7 @@ const AppLayout = () => {
           <Route path="/tools/required-savings-calculator" element={<RequiredSavingsCalculator />} />
           <Route path="/tools/kai-zen-calculator" element={<KaiZenCalculatorPage />} />
           <Route path="/tools/guaranteed-income-calculator" element={<GuaranteedIncomeCalculator />} />
+          <Route path="/tools/final-expense-quote" element={<FinalExpenseQuote />} />
           <Route path="/business-insurance" element={<BusinessInsurance />} />
           <Route path="/book-consultation" element={<BookConsultation />} />
           <Route path="/thank-you" element={<ThankYou />} />
