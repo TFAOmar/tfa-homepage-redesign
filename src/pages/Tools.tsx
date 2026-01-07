@@ -1,4 +1,4 @@
-import { TrendingUp, PiggyBank, Receipt, Target, Landmark, Shield } from "lucide-react";
+import { TrendingUp, PiggyBank, Receipt, Target, Landmark, Shield, Heart } from "lucide-react";
 import ToolsHero from "@/components/tools/ToolsHero";
 import ToolCard from "@/components/tools/ToolCard";
 import ToolsCTA from "@/components/tools/ToolsCTA";
@@ -42,6 +42,12 @@ const tools = [
     title: "Guaranteed Income Calculator",
     description: "Estimate guaranteed lifetime income from a fixed index annuity, or calculate the premium needed for your desired retirement income.",
     link: "/tools/guaranteed-income-calculator",
+  },
+  {
+    icon: Heart,
+    title: "Final Expense Quote Tool",
+    description: "Quickly generate Final Expense insurance quotes for clients using our integrated quoting system.",
+    link: "/tools/final-expense-quote",
   },
 ];
 
