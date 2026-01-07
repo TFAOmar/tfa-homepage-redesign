@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { ArrowLeft, Heart, Shield, TrendingUp, Clock, DollarSign, AlertCircle, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SEOHead, JsonLd } from "@/components/seo";
@@ -6,6 +7,25 @@ import { siteConfig } from "@/lib/seo/siteConfig";
 import { Button } from "@/components/ui/button";
 
 const FinalExpenseQuote = () => {
+  const quoteContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.className = "nqwq r41r";
+    script.type = "text/javascript";
+    script.src = "//wq.ninjaquoter.com/r41r42bPWRByqsgZdTCtEsxb.js";
+    script.async = true;
+
+    if (quoteContainerRef.current) {
+      quoteContainerRef.current.appendChild(script);
+    }
+
+    return () => {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, []);
   const benefits = [
     {
       icon: DollarSign,
@@ -102,17 +122,12 @@ const FinalExpenseQuote = () => {
           </div>
         </section>
 
-        {/* Iframe Section */}
+        {/* Quote Tool Section */}
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20">
-                <iframe
-                  style={{ border: "none", height: "800px", width: "100%" }}
-                  src="https://insurancetoolkits.com/fex/lite-form/?token=q1kl93CCvtQ4wSGpighrgxo222Tzg8_9DMGKux4K"
-                  title="Final Expense Quote Tool"
-                  loading="lazy"
-                />
+                <div ref={quoteContainerRef} className="min-h-[600px]" />
               </div>
             </div>
           </div>
