@@ -45,7 +45,7 @@ const TFACompoundGrowthCalculator = () => {
   const [selectedScenario, setSelectedScenario] = useState<"scenarioA" | "scenarioB">("scenarioA");
   
   const [inputs, setInputs] = useState<CalculatorInputs>({
-    initialInvestment: 10000,
+    initialInvestment: 0,
     monthlyContribution: 250,
     years: 20,
     annualRate: 7,
@@ -158,7 +158,7 @@ const TFACompoundGrowthCalculator = () => {
 
   const handleReset = () => {
     setInputs({
-      initialInvestment: 10000,
+      initialInvestment: 0,
       monthlyContribution: 250,
       years: 20,
       annualRate: 7,
@@ -432,6 +432,7 @@ const TFACompoundGrowthCalculator = () => {
                     <SelectItem value="2">Semiannually</SelectItem>
                     <SelectItem value="4">Quarterly</SelectItem>
                     <SelectItem value="12">Monthly</SelectItem>
+                    <SelectItem value="365">Daily</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
