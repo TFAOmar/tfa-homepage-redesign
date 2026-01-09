@@ -496,18 +496,18 @@ const TFACompoundGrowthCalculator = () => {
 
           {/* Scenario B Inputs Section */}
           {compareMode && (
-            <Card className="p-6 lg:p-8 bg-white/10 backdrop-blur-md border-white/20 shadow-lg shadow-black/30 rounded-2xl border-primary/30">
-              <div className="mb-6 pb-4 border-b border-white/10">
+            <Card className="p-6 lg:p-8 bg-slate-900/80 backdrop-blur-md border-border shadow-lg shadow-black/30 rounded-2xl">
+              <div className="mb-6 pb-4 border-b border-border/50">
                 <div className="h-1 w-14 rounded-full bg-primary mb-4" />
-                <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
+                <h3 className="text-lg md:text-xl font-semibold text-white mb-2">
                   Scenario B — Baseline Comparison
                 </h3>
-                <p className="text-xs md:text-sm text-muted-foreground mb-4">
+                <p className="text-xs md:text-sm text-white/70 mb-4">
                   Compare your plan against a different approach
                 </p>
                 
                 <Select value={scenarioBMode} onValueChange={handleScenarioBModeChange}>
-                  <SelectTrigger className="h-12">
+                  <SelectTrigger className="h-12 bg-slate-800/80 border-white/25 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -521,7 +521,7 @@ const TFACompoundGrowthCalculator = () => {
               {scenarioBMode === "custom" && (
                 <div className="space-y-6">
                   <div>
-                    <Label htmlFor="scenarioB-initial" className="text-sm font-medium mb-2 block">
+                    <Label htmlFor="scenarioB-initial" className="text-sm font-medium mb-2 block text-white">
                       Initial Investment Amount ($)
                     </Label>
                     <CurrencyInput
@@ -537,7 +537,7 @@ const TFACompoundGrowthCalculator = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="scenarioB-monthly" className="text-sm font-medium mb-2 block">
+                    <Label htmlFor="scenarioB-monthly" className="text-sm font-medium mb-2 block text-white">
                       Monthly Contribution ($)
                     </Label>
                     <CurrencyInput
@@ -553,7 +553,7 @@ const TFACompoundGrowthCalculator = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="scenarioB-rate" className="text-sm font-medium mb-2 block">
+                    <Label htmlFor="scenarioB-rate" className="text-sm font-medium mb-2 block text-white">
                       Estimated Annual Rate of Return (%)
                     </Label>
                     <PercentageInput
@@ -573,7 +573,7 @@ const TFACompoundGrowthCalculator = () => {
               {scenarioBMode === "no-interest" && (
                 <div className="space-y-6">
                   <div>
-                    <Label htmlFor="scenarioB-monthly-nointerest" className="text-sm font-medium mb-2 block">
+                    <Label htmlFor="scenarioB-monthly-nointerest" className="text-sm font-medium mb-2 block text-white">
                       Monthly Contribution ($)
                     </Label>
                     <CurrencyInput
@@ -587,14 +587,14 @@ const TFACompoundGrowthCalculator = () => {
                       className="h-12"
                     />
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-white/70">
                     This scenario shows total savings with no interest earned.
                   </p>
                 </div>
               )}
 
               {scenarioBMode === "none" && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-white/70">
                   This scenario shows what happens if you don't invest at all.
                 </p>
               )}
@@ -626,20 +626,20 @@ const TFACompoundGrowthCalculator = () => {
                   </div>
                 </Card>
 
-                <Card className="p-6 bg-background/40 backdrop-blur-sm border-border/50">
-                  <p className="text-xs font-medium text-muted-foreground mb-1">Scenario B</p>
-                  <p className="text-sm text-muted-foreground mb-2">Baseline</p>
-                  <p className="text-3xl font-bold text-foreground mb-4">
+                <Card className="p-6 bg-slate-800/80 backdrop-blur-sm border-border">
+                  <p className="text-xs font-semibold text-white/80 mb-1">Scenario B</p>
+                  <p className="text-sm text-white/70 mb-2">Baseline</p>
+                  <p className="text-3xl font-bold text-white mb-4">
                     {formatCurrency(comparisonResults.scenarioB.finalBalance)}
                   </p>
                   <div className="space-y-1 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Contributions:</span>
-                      <span className="font-medium">{formatCurrency(comparisonResults.scenarioB.totalContributions)}</span>
+                      <span className="text-white/60">Contributions:</span>
+                      <span className="font-medium text-white">{formatCurrency(comparisonResults.scenarioB.totalContributions)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Growth:</span>
-                      <span className="font-medium">{formatCurrency(comparisonResults.scenarioB.totalGrowth)}</span>
+                      <span className="text-white/60">Growth:</span>
+                      <span className="font-medium text-white">{formatCurrency(comparisonResults.scenarioB.totalGrowth)}</span>
                     </div>
                   </div>
                 </Card>
@@ -662,7 +662,7 @@ const TFACompoundGrowthCalculator = () => {
               </Card>
 
               {/* Dual-Line Comparison Chart */}
-              <Card className="p-6 bg-background/40 backdrop-blur-sm border-border/50">
+              <Card className="p-6 bg-card/80 backdrop-blur-sm border-border">
                 <h3 className="text-lg font-semibold mb-4">Growth Comparison Over Time</h3>
                 <div className="h-[400px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
