@@ -664,38 +664,53 @@ const TFACompoundGrowthCalculator = () => {
               {/* Dual-Line Comparison Chart */}
               <Card className="p-6 bg-background/40 backdrop-blur-sm border-border/50">
                 <h3 className="text-lg font-semibold mb-4">Growth Comparison Over Time</h3>
-                <div className="h-[320px] w-full">
+                <div className="h-[400px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
                       <XAxis
                         dataKey="year"
-                        stroke="hsl(var(--muted-foreground))"
-                        label={{ value: "Years", position: "insideBottom", offset: -5 }}
+                        stroke="hsl(var(--foreground))"
+                        tick={{ fill: "hsl(var(--foreground))" }}
+                        label={{ 
+                          value: "Years", 
+                          position: "insideBottom", 
+                          offset: -5,
+                          fill: "hsl(var(--foreground))"
+                        }}
                         type="number"
                         domain={[0, inputs.years]}
                       />
                       <YAxis
-                        stroke="hsl(var(--muted-foreground))"
+                        stroke="hsl(var(--foreground))"
+                        tick={{ fill: "hsl(var(--foreground))" }}
                         tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                       />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "hsl(var(--background))",
+                          backgroundColor: "hsl(var(--card))",
                           border: "1px solid hsl(var(--border))",
                           borderRadius: "8px",
+                          color: "hsl(var(--foreground))"
                         }}
-                        formatter={(value: number) => formatCurrency(value)}
+                        formatter={(value: number, name: string) => [formatCurrency(value), name]}
+                        labelFormatter={(value) => `Year ${value}`}
                       />
                       <Legend 
-                        wrapperStyle={{ paddingTop: "20px" }}
+                        wrapperStyle={{ 
+                          paddingTop: "20px",
+                          color: "hsl(var(--foreground))"
+                        }}
                         iconType="line"
+                        formatter={(value) => (
+                          <span style={{ color: "hsl(var(--foreground))" }}>{value}</span>
+                        )}
                       />
                       <Line
                         data={comparisonResults.scenarioA.yearlyData}
                         type="monotone"
                         dataKey="balance"
-                        stroke="hsl(var(--gold))"
+                        stroke="#E4B548"
                         strokeWidth={3}
                         dot={false}
                         name="Your Investment Plan"
@@ -704,9 +719,9 @@ const TFACompoundGrowthCalculator = () => {
                         data={comparisonResults.scenarioB.yearlyData}
                         type="monotone"
                         dataKey="balance"
-                        stroke="hsl(var(--muted-foreground))"
+                        stroke="#94A3B8"
                         strokeWidth={2}
-                        strokeDasharray="5 5"
+                        strokeDasharray="8 4"
                         dot={false}
                         name="Baseline Scenario"
                       />
