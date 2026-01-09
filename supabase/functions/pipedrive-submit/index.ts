@@ -708,6 +708,17 @@ serve(async (req) => {
         advisor = advisorData;
         isAdvisorSpecificForm = true;
         console.log(`[Advisor Form] Matched advisor: ${advisor.name} (${advisor.email})`);
+      } else if (formData.advisor_email) {
+        // Fallback: use form-provided email when DB lookup fails
+        advisor = {
+          id: '',
+          name: formData.advisor_slug?.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') || 'Advisor',
+          email: formData.advisor_email,
+          slug: formData.advisor_slug || '',
+          pipedrive_user_id: null
+        };
+        isAdvisorSpecificForm = true;
+        console.log(`[Advisor Form] Using form-provided email fallback: ${advisor.email}`);
       }
     }
     
