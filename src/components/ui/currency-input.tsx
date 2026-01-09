@@ -15,7 +15,8 @@ interface CurrencyInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
 }
 
 const formatNumber = (value: number, allowDecimals: boolean): string => {
-  if (isNaN(value) || value === 0) return "";
+  if (isNaN(value)) return "";
+  if (value === 0) return "0";
   
   if (allowDecimals) {
     return value.toLocaleString('en-US', { 
@@ -100,20 +101,13 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(true);
       // Show raw number on focus for easier editing
-      if (value > 0) {
-        setDisplayValue(allowDecimals ? value.toString() : Math.round(value).toString());
-      }
+      setDisplayValue(allowDecimals ? value.toString() : Math.round(value).toString());
       props.onFocus?.(e);
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(false);
-      // Only format if there's a non-zero value
-      if (value > 0) {
-        setDisplayValue(formatNumber(value, allowDecimals));
-      } else {
-        setDisplayValue(''); // Show empty for 0
-      }
+      setDisplayValue(formatNumber(value, allowDecimals));
       props.onBlur?.(e);
     };
 
