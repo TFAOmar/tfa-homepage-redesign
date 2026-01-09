@@ -29,7 +29,7 @@ interface CalculationResults {
   finalBalance: number;
   totalContributions: number;
   totalGrowth: number;
-  yearlyData: { year: number; balance: number }[];
+  yearlyData: { year: number; balance: number; contributions: number }[];
 }
 
 interface ComparisonResults {
@@ -96,7 +96,7 @@ const TFACompoundGrowthCalculator = () => {
     const t = Math.max(1, Math.min(50, scenarioInputs.years || 1));
 
     // Calculate yearly balances for chart
-    const yearlyData: { year: number; balance: number }[] = [];
+    const yearlyData: { year: number; balance: number; contributions: number }[] = [];
     
     for (let year = 0; year <= t; year++) {
       const periods = n * year;
@@ -120,7 +120,12 @@ const TFACompoundGrowthCalculator = () => {
       
       const balance = principalGrowth + contributionsGrowth;
       const safeBalance = isFinite(balance) ? balance : 0;
-      yearlyData.push({ year, balance: Math.round(safeBalance * 100) / 100 });
+      const cumulativeContributions = P + (PMT * 12 * year);
+      yearlyData.push({ 
+        year, 
+        balance: Math.round(safeBalance * 100) / 100,
+        contributions: Math.round(cumulativeContributions * 100) / 100
+      });
     }
 
     const finalBalance = yearlyData[yearlyData.length - 1]?.balance || 0;
@@ -886,7 +891,7 @@ const TFACompoundGrowthCalculator = () => {
               {/* Chart */}
               <Card className="p-6 bg-background/40 backdrop-blur-sm border-border/50">
                 <h3 className="text-lg font-semibold mb-4">Growth Over Time</h3>
-                <div className="h-[300px] w-full">
+                <div className="h-[350px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={results.yearlyData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -905,13 +910,32 @@ const TFACompoundGrowthCalculator = () => {
                           border: "1px solid hsl(var(--border))",
                           borderRadius: "8px",
                         }}
-                        formatter={(value: number) => [formatCurrency(value), "Balance"]}
+                        formatter={(value: number, name: string) => [
+                          formatCurrency(value), 
+                          name === "balance" ? "Total Balance" : "Contributions Only"
+                        ]}
+                      />
+                      <Legend 
+                        wrapperStyle={{ paddingTop: "20px" }}
+                        formatter={(value) => 
+                          value === "balance" ? "Total Balance (with growth)" : "Contributions Only (no interest)"
+                        }
                       />
                       <Line
                         type="monotone"
                         dataKey="balance"
+                        name="balance"
                         stroke="hsl(var(--primary))"
                         strokeWidth={2}
+                        dot={false}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="contributions"
+                        name="contributions"
+                        stroke="hsl(var(--muted-foreground))"
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
                         dot={false}
                       />
                     </LineChart>
