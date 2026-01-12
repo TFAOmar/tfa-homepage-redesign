@@ -51,7 +51,7 @@ export const estateGuruContent = {
     plans: [
       {
         name: "Monthly",
-        priceId: "price_1RTAGIQXKdxGcmw3YCH8YJjV",
+        priceId: "price_1SosvII5s9xwrb3eswl1WCzD",
         price: "$89.99",
         period: "/month",
         description: "Flexible monthly access with no long-term commitment",
@@ -65,7 +65,7 @@ export const estateGuruContent = {
       },
       {
         name: "Annual",
-        priceId: "price_1RTAGuQXKdxGcmw3kkIIFZqC",
+        priceId: "price_1SosvdI5s9xwrb3eJJuh7JHT",
         price: "$799",
         period: "/year",
         description: "Commit annually and save over monthly billing",
@@ -79,7 +79,7 @@ export const estateGuruContent = {
       },
       {
         name: "Annual Promo",
-        priceId: "price_1RTAGuQXKdxGcmw3kkIIFZqC",
+        priceId: "price_1SosvdI5s9xwrb3eJJuh7JHT",
         price: "$599.99",
         period: "/year",
         originalPrice: "$799/year",
