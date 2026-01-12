@@ -32,3 +32,6 @@ verify_jwt = false
 
 [functions.resend-life-insurance-pdf]
 verify_jwt = false
+
+[functions.create-estate-guru-checkout]
+verify_jwt = false

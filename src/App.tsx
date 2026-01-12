@@ -79,12 +79,14 @@ import AmericanWayHealth from "./pages/AmericanWayHealth";
 import LifeInsuranceApplication from "./pages/LifeInsuranceApplication";
 import LivingTrustQuestionnaire from "./pages/LivingTrustQuestionnaire";
 import EstateGuru from "./pages/EstateGuru";
+import EstateGuruSuccess from "./pages/EstateGuruSuccess";
+import EstateGuruCanceled from "./pages/EstateGuruCanceled";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/braihyra-medellin/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/braihyra-medellin/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -181,6 +183,8 @@ const AppLayout = () => {
           <Route path="/advisors/:advisorSlug/living-trust-questionnaire" element={<LivingTrustQuestionnaire />} />
           <Route path="/living-trust-questionnaire" element={<LivingTrustQuestionnaire />} />
           <Route path="/estate-guru" element={<EstateGuru />} />
+          <Route path="/estate-guru/success" element={<EstateGuruSuccess />} />
+          <Route path="/estate-guru/canceled" element={<EstateGuruCanceled />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
