@@ -63,7 +63,6 @@ serve(async (req) => {
       mode: "subscription",
       success_url: `${origin}/estate-guru/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/estate-guru`,
-      allow_promotion_codes: !isPromo, // Disable manual codes if promo is auto-applied
     };
 
     // Apply TFA200 coupon for promo plan
