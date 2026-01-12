@@ -12,8 +12,8 @@ const logStep = (step: string, details?: Record<string, unknown>) => {
 };
 
 // Price IDs from Stripe
-const MONTHLY_PRICE_ID = "price_1RTAGIQXKdxGcmw3YCH8YJjV";
-const ANNUAL_PRICE_ID = "price_1RTAGuQXKdxGcmw3kkIIFZqC";
+const MONTHLY_PRICE_ID = "price_1SosvII5s9xwrb3eswl1WCzD";
+const ANNUAL_PRICE_ID = "price_1SosvdI5s9xwrb3eJJuh7JHT";
 const TFA200_COUPON_ID = "Rdca79Wp";
 
 serve(async (req) => {
