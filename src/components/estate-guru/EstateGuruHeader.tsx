@@ -45,7 +45,7 @@ const EstateGuruHeader = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <img src={tfaLogo} alt="TFA Logo" className="h-10 w-auto" />
+            <img src={tfaLogo} alt="TFA Logo" className="h-10 w-auto brightness-0 invert" />
             <span className="hidden sm:block text-white font-semibold text-lg">
               {header.logoText}
             </span>
