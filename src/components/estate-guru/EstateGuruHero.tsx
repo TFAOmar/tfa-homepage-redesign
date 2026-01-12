@@ -40,7 +40,7 @@ const EstateGuruHero = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button
                 size="lg"
-                onClick={() => scrollToSection("#register")}
+                onClick={() => scrollToSection("#pricing")}
                 className="bg-[#D4AF37] hover:bg-[#B8962F] text-[#0B1F3B] font-semibold text-lg px-8 py-6 rounded-xl shadow-lg shadow-[#D4AF37]/25 hover:shadow-xl hover:shadow-[#D4AF37]/30 transition-all group"
               >
                 {hero.primaryCta}
