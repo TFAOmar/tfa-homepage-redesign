@@ -1,14 +1,38 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Loader2 } from "lucide-react";
 import { estateGuruContent } from "@/pages/EstateGuru";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const EstateGuruPricing = () => {
   const { pricing } = estateGuruContent;
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  const scrollToRegister = () => {
-    const element = document.querySelector("#register");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+  const handleCheckout = async (priceId: string, isPromo: boolean) => {
+    setLoadingPlan(priceId + (isPromo ? "-promo" : ""));
+    
+    try {
+      const { data, error } = await supabase.functions.invoke("create-estate-guru-checkout", {
+        body: { priceId, isPromo },
+      });
+
+      if (error) {
+        console.error("Checkout error:", error);
+        toast.error("Failed to start checkout. Please try again.");
+        return;
+      }
+
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      } else {
+        toast.error("No checkout URL returned. Please try again.");
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoadingPlan(null);
     }
   };
 
@@ -95,7 +119,8 @@ const EstateGuruPricing = () => {
               </ul>
 
               <Button
-                onClick={scrollToRegister}
+                onClick={() => handleCheckout(plan.priceId, plan.isPromo)}
+                disabled={loadingPlan !== null}
                 size="lg"
                 className={`w-full font-semibold ${
                   plan.isPromo
@@ -103,7 +128,14 @@ const EstateGuruPricing = () => {
                     : "bg-[#D4AF37] hover:bg-[#B8962F] text-[#0B1F3B]"
                 }`}
               >
-                Get Started
+                {loadingPlan === plan.priceId + (plan.isPromo ? "-promo" : "") ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  "Get Started"
+                )}
               </Button>
             </div>
           ))}
