@@ -126,7 +126,7 @@ const EstateGuruRegistrationForm = () => {
               {registration.successMessage}
             </h2>
             <p className="text-gray-600 mb-8">
-              Our team will review your registration and activate your access within 24-48 hours.
+              You'll receive your login credentials and welcome materials via email within 24-48 hours.
             </p>
             <Button
               asChild

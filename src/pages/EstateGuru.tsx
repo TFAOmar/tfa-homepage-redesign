@@ -9,31 +9,32 @@ import EstateGuruTestimonials from "@/components/estate-guru/EstateGuruTestimoni
 import EstateGuruFAQ from "@/components/estate-guru/EstateGuruFAQ";
 import EstateGuruRegistrationForm from "@/components/estate-guru/EstateGuruRegistrationForm";
 import EstateGuruFooter from "@/components/estate-guru/EstateGuruFooter";
+import EstateGuruPricing from "@/components/estate-guru/EstateGuruPricing";
 
 // ===================== EDITABLE CONTENT CONFIG =====================
 export const estateGuruContent = {
   meta: {
     title: "Estate Guru Agent Registration | The Financial Architects",
-    description: "Register for Estate Guru access through TFA. Offer attorney-led estate planning to your clients with compliance built in.",
+    description: "Subscribe to Estate Guru through TFA. Offer attorney-led estate planning to your clients with compliance built in.",
     ogImage: "/og-image.jpg",
   },
   header: {
     logoText: "The Financial Architects",
     navItems: [
       { label: "Overview", href: "#overview" },
+      { label: "Pricing", href: "#pricing" },
       { label: "How It Works", href: "#how-it-works" },
       { label: "Features", href: "#features" },
-      { label: "Testimonials", href: "#testimonials" },
       { label: "FAQ", href: "#faq" },
     ],
-    primaryCta: "Register Now",
+    primaryCta: "Get Started",
     secondaryCta: "Book a Demo",
     demoLink: "/book-consultation",
   },
   hero: {
     headline: "Attorney-first estate planning. TFA-powered.",
     subheadline: "Offer compliant, attorney-led estate planning through Estate Guru—set up under TFA's platform so you can start serving clients fast.",
-    primaryCta: "Register to Activate Access",
+    primaryCta: "View Pricing",
     secondaryCta: "See How It Works",
   },
   stats: {
@@ -44,17 +45,66 @@ export const estateGuruContent = {
       { value: "1.2M+", label: "Estate documents created on the platform" },
     ],
   },
+  pricing: {
+    title: "Choose Your Plan",
+    subtitle: "Subscribe to unlock Estate Guru through TFA",
+    plans: [
+      {
+        name: "Monthly",
+        price: "$89.99",
+        period: "/month",
+        description: "Flexible monthly access with no long-term commitment",
+        features: [
+          "Full platform access",
+          "Attorney-led document preparation",
+          "Client dashboard & branding",
+          "Cancel anytime",
+        ],
+        isPromo: false,
+      },
+      {
+        name: "Annual",
+        price: "$799",
+        period: "/year",
+        description: "Commit annually and save over monthly billing",
+        features: [
+          "Everything in Monthly",
+          "Save $280 vs monthly",
+          "Priority support",
+          "Annual billing",
+        ],
+        isPromo: false,
+      },
+      {
+        name: "Annual Promo",
+        price: "$599.99",
+        period: "/year",
+        originalPrice: "$799/year",
+        badge: "Save $200",
+        code: "TFA200",
+        description: "Limited time offer for TFA agents",
+        features: [
+          "Everything in Annual",
+          "Best value—save $480 vs monthly",
+          "Exclusive TFA pricing",
+          "Lock in your rate",
+        ],
+        isPromo: true,
+      },
+    ],
+    note: "📝 Once you subscribe, you'll receive a welcome email with your login credentials.",
+  },
   howItWorks: {
     title: "Guided intake + attorney oversight—without you touching legal work",
     steps: [
       {
         number: "1.01",
-        title: "Register through TFA",
-        description: "Submit the form and we'll set up your Estate Guru access under TFA's account.",
+        title: "Subscribe & Get Access",
+        description: "Choose your plan and complete checkout. We'll set up your Estate Guru access under TFA's platform.",
         bullets: [
-          "Quick registration process",
-          "No setup fees",
-          "Typically approved within 24-48 hours",
+          "Select monthly or annual plan",
+          "Complete registration form",
+          "Receive login credentials via email",
         ],
       },
       {
@@ -111,16 +161,20 @@ export const estateGuruContent = {
   faq: {
     items: [
       {
+        question: "How much does Estate Guru cost?",
+        answer: "We offer three pricing options: Monthly at $89.99/month, Annual at $799/year, or our special Annual Promo at $599.99/year using code TFA200. All plans include full platform access and attorney-led document preparation.",
+      },
+      {
+        question: "What happens after I subscribe?",
+        answer: "Once you complete your subscription and registration, you'll receive a welcome email with your login credentials and onboarding materials. Our team will have your access ready within 24-48 hours.",
+      },
+      {
         question: "Do I need to be an attorney to offer this?",
         answer: "No. The platform is attorney-led, meaning licensed attorneys are involved in document preparation and review. You stay in the advisory lane—helping clients understand their options and guiding them through the process.",
       },
       {
-        question: "How does setup work through TFA?",
-        answer: "Simply fill out the registration form below. Our team will create your Estate Guru account under TFA's master subscription and send you login credentials and onboarding materials.",
-      },
-      {
-        question: "How long does approval take?",
-        answer: "Most registrations are approved within 24-48 hours. You'll receive an email with next steps once your access is activated.",
+        question: "Can I cancel my subscription?",
+        answer: "Monthly subscribers can cancel anytime. Annual subscriptions are billed upfront for the full year. Contact our support team if you have questions about your subscription.",
       },
       {
         question: "Can I brand the client experience?",
@@ -130,16 +184,12 @@ export const estateGuruContent = {
         question: "What states are supported?",
         answer: "Estate Guru supports estate planning in all 50 states. Documents are prepared according to each state's specific requirements.",
       },
-      {
-        question: "What if I want concierge support for clients?",
-        answer: "The platform offers a Guru+ option with enhanced support. Once you're set up, you can discuss premium tiers for clients who need extra guidance.",
-      },
     ],
   },
   registration: {
-    headline: "Get set up with Estate Guru through TFA",
-    subtext: "Register below. Our team will activate your access and send next steps.",
-    successMessage: "Registration received. Check your email for next steps.",
+    headline: "Complete Your Registration",
+    subtext: "Fill out the form below after selecting your plan. We'll send your login credentials via email.",
+    successMessage: "Registration received! Check your email for your login credentials.",
     successCta: "Book a 10-min setup call",
     successCtaLink: "/book-consultation",
   },
@@ -172,6 +222,9 @@ const EstateGuru = () => {
             <EstateGuruHero />
           </section>
           <EstateGuruStats />
+          <section id="pricing">
+            <EstateGuruPricing />
+          </section>
           <section id="how-it-works">
             <EstateGuruHowItWorks />
           </section>
