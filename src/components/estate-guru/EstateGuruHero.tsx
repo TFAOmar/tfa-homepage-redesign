@@ -46,12 +46,12 @@ const EstateGuruHero = () => {
                 {hero.primaryCta}
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => scrollToSection("#how-it-works")}
-                className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-semibold text-lg px-8 py-6 rounded-xl transition-all group"
-              >
+        <Button
+          size="lg"
+          variant="hero"
+          onClick={() => scrollToSection("#how-it-works")}
+          className="hover:border-white/50 font-semibold text-lg px-8 py-6 rounded-xl transition-all group"
+        >
                 <Play className="mr-2 group-hover:scale-110 transition-transform" size={20} />
                 {hero.secondaryCta}
               </Button>
