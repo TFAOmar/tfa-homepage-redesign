@@ -12,9 +12,9 @@ const logStep = (step: string, details?: Record<string, unknown>) => {
 };
 
 // Price IDs from Stripe
-const MONTHLY_PRICE_ID = "price_1SosvII5s9xwrb3eswl1WCzD";
-const ANNUAL_PRICE_ID = "price_1SosvdI5s9xwrb3eJJuh7JHT";
-const TFA200_COUPON_ID = "Rdca79Wp";
+const MONTHLY_PRICE_ID = "price_1QlMO2I5s9xwrb3egL9P9Lyt";
+const ANNUAL_PRICE_ID = "price_1QlMO2I5s9xwrb3eSFT5aBZT";
+const TFA200_COUPON_ID = "5jW2mQix";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
