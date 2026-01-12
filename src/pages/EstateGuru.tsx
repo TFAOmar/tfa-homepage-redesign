@@ -29,7 +29,7 @@ export const estateGuruContent = {
     ],
     primaryCta: "Get Started",
     secondaryCta: "Book a Demo",
-    demoLink: "/book-consultation",
+    demoLink: "https://meetings.hubspot.com/valentina61/advisor-book-a-demo-from-website?uuid=c6cb5dbf-8070-4ff1-891f-3d04cf138a77",
   },
   hero: {
     headline: "Attorney-first estate planning. TFA-powered.",
