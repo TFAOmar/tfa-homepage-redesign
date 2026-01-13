@@ -356,6 +356,72 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsorship_leads: {
+        Row: {
+          company_name: string
+          contact_name: string
+          created_at: string | null
+          email: string
+          id: string
+          industry: string
+          logo_url: string | null
+          needs_power_internet: boolean | null
+          notes: string | null
+          phone: string
+          promotion_details: string | null
+          source_url: string | null
+          sponsorship_package: string
+          status: string | null
+          updated_at: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          website_social: string | null
+        }
+        Insert: {
+          company_name: string
+          contact_name: string
+          created_at?: string | null
+          email: string
+          id?: string
+          industry: string
+          logo_url?: string | null
+          needs_power_internet?: boolean | null
+          notes?: string | null
+          phone: string
+          promotion_details?: string | null
+          source_url?: string | null
+          sponsorship_package: string
+          status?: string | null
+          updated_at?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          website_social?: string | null
+        }
+        Update: {
+          company_name?: string
+          contact_name?: string
+          created_at?: string | null
+          email?: string
+          id?: string
+          industry?: string
+          logo_url?: string | null
+          needs_power_internet?: boolean | null
+          notes?: string | null
+          phone?: string
+          promotion_details?: string | null
+          source_url?: string | null
+          sponsorship_package?: string
+          status?: string | null
+          updated_at?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          website_social?: string | null
+        }
+        Relationships: []
+      }
       system_settings: {
         Row: {
           created_at: string | null
