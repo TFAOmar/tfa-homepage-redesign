@@ -38,9 +38,9 @@ export const SponsorshipFinalCTA = ({ onBecomeASponsor, onTalkToTeam }: Sponsors
             </Button>
             <Button 
               size="lg"
-              variant="outline"
+              variant="hero"
               onClick={onTalkToTeam}
-              className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 px-8 py-6 text-lg transition-all duration-300"
+              className="px-8 py-6 text-lg transition-all duration-300 hover:border-white/50"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
               Talk to Our Team
