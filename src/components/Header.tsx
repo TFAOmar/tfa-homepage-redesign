@@ -193,6 +193,14 @@ const Header = () => {
           {/* CTA & Mobile Menu */}
           <div className="flex items-center gap-2">
             <CartDrawer />
+            <a 
+              href="https://app.tfawealthplanning.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hidden lg:block text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Agent Login
+            </a>
             <Link to="/book-consultation" className="hidden lg:block">
               <Button className="btn-primary-cta px-6 py-5">
                 Book Consultation
@@ -283,6 +291,14 @@ const Header = () => {
                         Book Consultation
                       </Button>
                     </Link>
+                    <a 
+                      href="https://app.tfawealthplanning.com/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block text-center text-xs text-muted-foreground hover:text-foreground transition-colors mt-4"
+                    >
+                      Agent Login
+                    </a>
                   </div>
                 </nav>
               </SheetContent>
