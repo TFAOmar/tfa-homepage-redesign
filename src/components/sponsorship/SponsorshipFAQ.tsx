@@ -15,10 +15,6 @@ const faqs = [
     answer: "Yes! You can upgrade your sponsorship package at any time before the event, subject to availability. Simply reach out to our team and we'll adjust your package. You'll only pay the difference between packages. Downgrades are handled on a case-by-case basis."
   },
   {
-    question: "What do VIP tickets include?",
-    answer: "VIP tickets include priority seating, access to an exclusive networking session with TFA leadership and top performers, a VIP-only lunch, and a premium swag bag. VIP attendees also get early access to the venue and a dedicated check-in line."
-  },
-  {
     question: "How do I submit my logo?",
     answer: "You can upload your logo directly through the sponsorship application form above. We accept PNG, JPG, and SVG formats (up to 5MB). For best results, please provide a high-resolution logo with a transparent background. If you need to update your logo after submission, simply email our team."
   },
