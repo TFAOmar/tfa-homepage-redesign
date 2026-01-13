@@ -17,7 +17,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
-import { CheckCircle2, Loader2, Upload, Building2 } from "lucide-react";
+import { Loader2, Upload, Building2, CreditCard } from "lucide-react";
 import { type SponsorshipPackage } from "./SponsorshipPackages";
 
 const formSchema = z.object({
@@ -64,7 +64,6 @@ interface SponsorApplicationFormProps {
 
 export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: SponsorApplicationFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const { honeypotProps, isBot } = useHoneypot();
 
@@ -112,8 +111,8 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
 
   const onSubmit = async (data: FormData) => {
     if (isBot()) {
-      // Silently accept but don't process
-      setIsSuccess(true);
+      // Silently accept but don't process - redirect anyway to avoid detection
+      window.location.href = '/events/tfa-2026-kickoff-sponsorship/success';
       return;
     }
 
@@ -136,7 +135,8 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
       // Get UTM params from URL
       const urlParams = new URLSearchParams(window.location.search);
 
-      const { error } = await supabase.from('sponsorship_leads').insert({
+      // Save lead to database first
+      const { data: insertedLead, error } = await supabase.from('sponsorship_leads').insert({
         company_name: data.companyName,
         contact_name: data.contactName,
         email: data.email,
@@ -152,65 +152,49 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
         utm_source: urlParams.get('utm_source'),
         utm_medium: urlParams.get('utm_medium'),
         utm_campaign: urlParams.get('utm_campaign'),
-      });
+        status: 'pending_payment',
+      }).select('id').single();
 
       if (error) throw error;
 
-      // Try to send notification email
-      try {
-        await supabase.functions.invoke('send-sponsorship-notification', {
-          body: {
-            companyName: data.companyName,
-            contactName: data.contactName,
-            email: data.email,
-            phone: data.phone,
-            sponsorshipPackage: data.sponsorshipPackage,
-            industry: data.industry,
-          }
-        });
-      } catch (emailError) {
+      // Try to send notification email (don't wait for it)
+      supabase.functions.invoke('send-sponsorship-notification', {
+        body: {
+          companyName: data.companyName,
+          contactName: data.contactName,
+          email: data.email,
+          phone: data.phone,
+          sponsorshipPackage: data.sponsorshipPackage,
+          industry: data.industry,
+        }
+      }).catch((emailError) => {
         console.error('Email notification failed:', emailError);
-        // Don't fail the submission if email fails
-      }
+      });
 
-      setIsSuccess(true);
-      toast.success("Application submitted successfully!");
+      // Create Stripe checkout session
+      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-sponsorship-checkout', {
+        body: {
+          sponsorshipPackage: data.sponsorshipPackage,
+          email: data.email,
+          companyName: data.companyName,
+          leadId: insertedLead?.id,
+        }
+      });
+
+      if (checkoutError) throw checkoutError;
+
+      if (checkoutData?.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = checkoutData.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
     } catch (error) {
       console.error('Form submission error:', error);
-      toast.error("Failed to submit application. Please try again.");
-    } finally {
+      toast.error("Failed to proceed to payment. Please try again.");
       setIsSubmitting(false);
     }
   };
-
-  if (isSuccess) {
-    return (
-      <section id="apply" className="py-20 bg-muted/30">
-        <div className="container px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
-              <CheckCircle2 className="w-10 h-10 text-green-600" />
-            </div>
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Thank You for Your Interest!
-            </h2>
-            <p className="text-lg text-muted-foreground mb-8">
-              Our team will reach out within 1 business day to confirm availability and finalize your sponsorship. We're excited to have you at the TFA 2026 Kick Off!
-            </p>
-            <div className="p-6 rounded-xl bg-card border border-border">
-              <h3 className="font-semibold text-foreground mb-3">What's Next?</h3>
-              <ul className="text-left text-muted-foreground space-y-2">
-                <li>✓ You'll receive a confirmation email shortly</li>
-                <li>✓ Our sponsorship team will contact you within 24 hours</li>
-                <li>✓ We'll confirm your package and booth location</li>
-                <li>✓ Payment instructions will be provided upon confirmation</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section id="apply" className="py-20 bg-muted/30">
@@ -429,12 +413,18 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Submitting...
+                      Processing...
                     </>
                   ) : (
-                    "Submit Sponsorship Request"
+                    <>
+                      <CreditCard className="w-5 h-5 mr-2" />
+                      Continue to Payment — ${packagePrices[currentPackage].toLocaleString()}
+                    </>
                   )}
                 </Button>
+                <p className="text-center text-sm text-muted-foreground mt-3">
+                  You'll be redirected to Stripe to complete your secure payment
+                </p>
               </div>
             </div>
           </form>

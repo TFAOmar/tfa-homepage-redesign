@@ -38,3 +38,9 @@ verify_jwt = false
 
 [functions.send-estate-guru-registration]
 verify_jwt = false
+
+[functions.send-sponsorship-notification]
+verify_jwt = false
+
+[functions.create-sponsorship-checkout]
+verify_jwt = false
