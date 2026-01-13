@@ -17,37 +17,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { CheckCircle2, Loader2, Calendar } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { estateGuruContent } from "@/pages/EstateGuru";
 import { useConfetti } from "@/hooks/useConfetti";
 
-const US_STATES = [
-  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
-  "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
-  "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
-  "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
-  "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
-  "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
-  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
-  "Wisconsin", "Wyoming"
-];
-
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(100),
   lastName: z.string().min(1, "Last name is required").max(100),
   email: z.string().email("Please enter a valid email").max(255),
   phone: z.string().min(10, "Please enter a valid phone number").max(30),
-  statesLicensed: z.array(z.string()).min(1, "Please select at least one state"),
-  npn: z.string().max(20).optional(),
   currentlyWithTFA: z.enum(["yes", "no"], { required_error: "Please select an option" }),
   referredBy: z.string().max(200).optional(),
   notes: z.string().max(2000).optional(),
@@ -70,8 +50,6 @@ const EstateGuruRegistrationForm = () => {
       lastName: "",
       email: "",
       phone: "",
-      statesLicensed: [],
-      npn: "",
       currentlyWithTFA: undefined,
       referredBy: "",
       notes: "",
@@ -97,9 +75,7 @@ const EstateGuruRegistrationForm = () => {
         last_name: data.lastName,
         email: data.email,
         phone: data.phone,
-        state: data.statesLicensed.join(", "),
         notes: [
-          data.npn ? `NPN: ${data.npn}` : "",
           `Currently with TFA: ${data.currentlyWithTFA}`,
           data.referredBy ? `Referred by: ${data.referredBy}` : "",
           data.notes ? `Additional notes: ${data.notes}` : "",
@@ -114,8 +90,6 @@ const EstateGuruRegistrationForm = () => {
           lastName: data.lastName,
           email: data.email,
           phone: data.phone,
-          statesLicensed: data.statesLicensed,
-          npn: data.npn || "",
           currentlyWithTFA: data.currentlyWithTFA,
           referredBy: data.referredBy || "",
           notes: data.notes || "",
@@ -247,72 +221,6 @@ const EstateGuruRegistrationForm = () => {
                     )}
                   />
                 </div>
-
-                {/* States Licensed */}
-                <FormField
-                  control={form.control}
-                  name="statesLicensed"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>State(s) Licensed *</FormLabel>
-                      <Select
-                        onValueChange={(value) => {
-                          if (!field.value.includes(value)) {
-                            field.onChange([...field.value, value]);
-                          }
-                        }}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select states..." />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {US_STATES.map((state) => (
-                            <SelectItem key={state} value={state}>
-                              {state}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      {field.value.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {field.value.map((state) => (
-                            <span
-                              key={state}
-                              className="bg-[#0B1F3B]/10 text-[#0B1F3B] px-3 py-1 rounded-full text-sm flex items-center gap-2"
-                            >
-                              {state}
-                              <button
-                                type="button"
-                                onClick={() => field.onChange(field.value.filter(s => s !== state))}
-                                className="hover:text-red-600"
-                              >
-                                ×
-                              </button>
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* NPN */}
-                <FormField
-                  control={form.control}
-                  name="npn"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>NPN (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your NPN number" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 {/* Currently with TFA */}
                 <FormField
