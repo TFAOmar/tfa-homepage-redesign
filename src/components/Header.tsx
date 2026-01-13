@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, Building2, PiggyBank, LineChart, Repeat, DollarSign, Shield, Stethoscope, Landmark, Scale, Calculator, BookOpen, Calendar, Award, Users, ShoppingBag, Briefcase } from "lucide-react";
+import { Menu, Building2, PiggyBank, LineChart, Repeat, DollarSign, Shield, Stethoscope, Landmark, Scale, Calculator, BookOpen, Calendar, Award, Users, ShoppingBag, Briefcase, LogIn } from "lucide-react";
 import tfaLogo from "@/assets/tfa-logo.png";
 import { Link } from "react-router-dom";
 import { CartDrawer } from "./shop/CartDrawer";
@@ -197,8 +197,9 @@ const Header = () => {
               href="https://app.tfawealthplanning.com/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="hidden lg:block text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="hidden lg:flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
+              <LogIn className="h-3 w-3" />
               Agent Login
             </a>
             <Link to="/book-consultation" className="hidden lg:block">
@@ -295,8 +296,9 @@ const Header = () => {
                       href="https://app.tfawealthplanning.com/" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="block text-center text-xs text-muted-foreground hover:text-foreground transition-colors mt-4"
+                      className="flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mt-4"
                     >
+                      <LogIn className="h-3 w-3" />
                       Agent Login
                     </a>
                   </div>
