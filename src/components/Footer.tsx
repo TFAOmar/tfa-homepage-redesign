@@ -89,10 +89,18 @@ const Footer = () => {
             <p className="text-primary-foreground/60 text-sm">
               © 2025 The Financial Architects. All rights reserved.
             </p>
-            <div className="flex gap-6 text-sm">
+            <div className="flex flex-wrap gap-4 sm:gap-6 text-sm">
               <Link to="/contact" className="text-primary-foreground/60 hover:text-gold transition-colors">Privacy Policy</Link>
               <Link to="/contact" className="text-primary-foreground/60 hover:text-gold transition-colors">Terms of Service</Link>
               <Link to="/contact" className="text-primary-foreground/60 hover:text-gold transition-colors">Disclosures</Link>
+              <a 
+                href="https://app.tfawealthplanning.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary-foreground/60 hover:text-gold transition-colors"
+              >
+                Agent Login
+              </a>
             </div>
           </div>
           <p className="text-primary-foreground/50 text-xs mt-4 text-center md:text-left">
