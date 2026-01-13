@@ -90,9 +90,14 @@ const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/br
 
 const AppLayout = () => {
   const location = useLocation();
-  const isStandalonePage = standalonePages.includes(location.pathname) || 
-    /^\/advisors\/[^/]+\/life-insurance$/.test(location.pathname) ||
-    /^\/advisors\/[^/]+\/living-trust-questionnaire$/.test(location.pathname);
+  // Normalize pathname by removing trailing slash (except for root "/")
+  const normalizedPathname = location.pathname === '/' 
+    ? '/' 
+    : location.pathname.replace(/\/$/, '');
+  
+  const isStandalonePage = standalonePages.includes(normalizedPathname) || 
+    /^\/advisors\/[^/]+\/life-insurance\/?$/.test(location.pathname) ||
+    /^\/advisors\/[^/]+\/living-trust-questionnaire\/?$/.test(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col">
