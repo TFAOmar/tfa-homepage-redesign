@@ -83,9 +83,9 @@ export const SponsorshipHero = ({ onBecomeASponsor, onDownloadPDF }: Sponsorship
             </Button>
             <Button 
               size="lg" 
-              variant="outline"
+              variant="hero"
               onClick={onDownloadPDF}
-              className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 px-8 py-6 text-lg transition-all duration-300"
+              className="px-8 py-6 text-lg transition-all duration-300 hover:border-white/50"
             >
               Download Sponsor PDF
             </Button>
