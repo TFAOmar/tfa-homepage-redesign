@@ -82,6 +82,7 @@ import EstateGuru from "./pages/EstateGuru";
 import EstateGuruSuccess from "./pages/EstateGuruSuccess";
 import EstateGuruCanceled from "./pages/EstateGuruCanceled";
 import NotFound from "./pages/NotFound";
+import TFA2026KickoffSponsorship from "./pages/TFA2026KickoffSponsorship";
 
 const queryClient = new QueryClient();
 
@@ -110,6 +111,7 @@ const AppLayout = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/process" element={<Process />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/events/tfa-2026-kickoff-sponsorship" element={<TFA2026KickoffSponsorship />} />
           <Route path="/locations" element={<Locations />} />
           <Route path="/partners" element={<Partners />} />
           <Route path="/contact" element={<Contact />} />
