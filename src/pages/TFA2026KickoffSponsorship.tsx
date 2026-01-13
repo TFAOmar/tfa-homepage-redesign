@@ -1,8 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { SponsorshipHero } from "@/components/sponsorship/SponsorshipHero";
 import { EventOverview } from "@/components/sponsorship/EventOverview";
 import { WhySponsor } from "@/components/sponsorship/WhySponsor";
@@ -133,10 +131,8 @@ const TFA2026KickoffSponsorship = () => {
         <script type="application/ld+json">{JSON.stringify(generateOrganizationSchema())}</script>
       </Helmet>
 
-      <Header />
-      
       <main className="min-h-screen">
-        <SponsorshipHero 
+        <SponsorshipHero
           onBecomeASponsor={scrollToPackages}
           onDownloadPDF={handleDownloadPDF}
         />
@@ -163,8 +159,6 @@ const TFA2026KickoffSponsorship = () => {
           onTalkToTeam={handleTalkToTeam}
         />
       </main>
-
-      <Footer />
     </>
   );
 };
