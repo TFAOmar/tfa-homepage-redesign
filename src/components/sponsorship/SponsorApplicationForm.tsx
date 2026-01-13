@@ -152,7 +152,7 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
         utm_source: urlParams.get('utm_source'),
         utm_medium: urlParams.get('utm_medium'),
         utm_campaign: urlParams.get('utm_campaign'),
-        status: 'pending_payment',
+        status: 'pending',
       }).select('id').single();
 
       if (error) throw error;
