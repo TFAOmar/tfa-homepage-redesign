@@ -184,8 +184,17 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
       if (checkoutError) throw checkoutError;
 
       if (checkoutData?.url) {
-        // Redirect to Stripe Checkout
-        window.location.href = checkoutData.url;
+        // Open Stripe Checkout in new tab
+        const checkoutWindow = window.open(checkoutData.url, '_blank');
+        
+        if (checkoutWindow) {
+          toast.success("Checkout opened in a new tab. Complete your payment there.");
+        } else {
+          // Popup was blocked, fallback to redirect
+          toast.info("Opening checkout page...");
+          window.location.href = checkoutData.url;
+        }
+        setIsSubmitting(false);
       } else {
         throw new Error('No checkout URL returned');
       }
