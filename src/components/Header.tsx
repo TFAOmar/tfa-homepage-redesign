@@ -197,9 +197,9 @@ const Header = () => {
               href="https://app.tfawealthplanning.com/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="hidden lg:flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="group hidden lg:flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              <LogIn className="h-3 w-3" />
+              <LogIn className="h-3 w-3 transition-transform group-hover:scale-110 group-hover:rotate-6" />
               Agent Login
             </a>
             <Link to="/book-consultation" className="hidden lg:block">
@@ -292,15 +292,15 @@ const Header = () => {
                         Book Consultation
                       </Button>
                     </Link>
-                    <a 
-                      href="https://app.tfawealthplanning.com/" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mt-4"
-                    >
-                      <LogIn className="h-3 w-3" />
-                      Agent Login
-                    </a>
+                      <a 
+                        href="https://app.tfawealthplanning.com/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mt-4"
+                      >
+                        <LogIn className="h-3 w-3 transition-transform group-hover:scale-110 group-hover:rotate-6" />
+                        Agent Login
+                      </a>
                   </div>
                 </nav>
               </SheetContent>
