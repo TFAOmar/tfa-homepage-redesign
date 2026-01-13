@@ -12,8 +12,6 @@ interface RegistrationData {
   lastName: string;
   email: string;
   phone: string;
-  statesLicensed: string[];
-  npn?: string;
   currentlyWithTFA: string;
   referredBy?: string;
   notes?: string;
@@ -34,7 +32,6 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Received Estate Guru registration:", data);
 
     const fullName = `${data.firstName} ${data.lastName}`;
-    const statesFormatted = data.statesLicensed.join(", ");
     const submittedAt = new Date().toLocaleString("en-US", {
       timeZone: "America/Los_Angeles",
       dateStyle: "full",
@@ -89,16 +86,6 @@ const handler = async (req: Request): Promise<Response> => {
                     <a href="tel:${data.phone}" style="color: #0B1F3B;">${data.phone}</a>
                   </td>
                 </tr>
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">States Licensed:</td>
-                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">${statesFormatted}</td>
-                </tr>
-                ${data.npn ? `
-                <tr>
-                  <td style="padding: 8px 0; color: #666; font-size: 14px;">NPN:</td>
-                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">${data.npn}</td>
-                </tr>
-                ` : ''}
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px;">Currently with TFA:</td>
                   <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">
