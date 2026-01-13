@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { supabase } from "@/integrations/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -89,6 +90,7 @@ const EstateGuruRegistrationForm = () => {
     setIsSubmitting(true);
     
     try {
+      // Submit to Pipedrive
       await submitForm({
         form_name: "Estate Guru Registration",
         first_name: data.firstName,
@@ -103,6 +105,21 @@ const EstateGuruRegistrationForm = () => {
           data.notes ? `Additional notes: ${data.notes}` : "",
         ].filter(Boolean).join("\n"),
         tags: ["estate-guru", "agent-registration"],
+      });
+
+      // Send notification email to Heather and Nancy
+      await supabase.functions.invoke('send-estate-guru-registration', {
+        body: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          statesLicensed: data.statesLicensed,
+          npn: data.npn || "",
+          currentlyWithTFA: data.currentlyWithTFA,
+          referredBy: data.referredBy || "",
+          notes: data.notes || "",
+        }
       });
 
       setIsSuccess(true);

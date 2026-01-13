@@ -35,3 +35,6 @@ verify_jwt = false
 
 [functions.create-estate-guru-checkout]
 verify_jwt = false
+
+[functions.send-estate-guru-registration]
+verify_jwt = false
