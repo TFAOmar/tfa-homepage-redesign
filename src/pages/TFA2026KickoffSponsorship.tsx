@@ -116,13 +116,20 @@ const TFA2026KickoffSponsorship = () => {
           name="keywords" 
           content="TFA 2026, event sponsorship, financial services sponsorship, TFA Kick Off, sponsor booth, on-stage promotion" 
         />
-        <link rel="canonical" href="https://tfawealthplanning.lovable.app/events/tfa-2026-kickoff-sponsorship" />
+        <link rel="canonical" href="https://tfawealthplanning.com/events/tfa-2026-kickoff-sponsorship" />
         
         {/* Open Graph */}
         <meta property="og:title" content="TFA 2026 Kick Off Sponsorships | The Financial Architects" />
         <meta property="og:description" content="Sponsor the TFA 2026 Kick Off and get on-stage exposure, booth traffic, and VIP tickets." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://tfawealthplanning.lovable.app/events/tfa-2026-kickoff-sponsorship" />
+        <meta property="og:url" content="https://tfawealthplanning.com/events/tfa-2026-kickoff-sponsorship" />
+        <meta property="og:image" content="https://tfawealthplanning.com/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://tfawealthplanning.com/og-image.jpg" />
         
         {/* Schema markup */}
         <script type="application/ld+json">{JSON.stringify(pageSchema)}</script>
