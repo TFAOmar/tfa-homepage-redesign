@@ -4,10 +4,9 @@ import { Sparkles, Users, Mic, Ticket } from "lucide-react";
 
 interface SponsorshipHeroProps {
   onBecomeASponsor: () => void;
-  onDownloadPDF: () => void;
 }
 
-export const SponsorshipHero = ({ onBecomeASponsor, onDownloadPDF }: SponsorshipHeroProps) => {
+export const SponsorshipHero = ({ onBecomeASponsor }: SponsorshipHeroProps) => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -73,21 +72,13 @@ export const SponsorshipHero = ({ onBecomeASponsor, onDownloadPDF }: Sponsorship
           </div>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in [animation-delay:400ms]">
+          <div className="flex items-center justify-center animate-fade-in [animation-delay:400ms]">
             <Button 
               size="lg" 
               onClick={onBecomeASponsor}
               className="bg-gradient-to-r from-[#E4B548] to-[#D4A438] hover:from-[#D4A438] hover:to-[#C49428] text-[#0A0F1F] font-semibold px-8 py-6 text-lg shadow-lg shadow-[#E4B548]/25 transition-all duration-300 hover:shadow-xl hover:shadow-[#E4B548]/30 hover:scale-105"
             >
               Become a Sponsor
-            </Button>
-            <Button 
-              size="lg" 
-              variant="hero"
-              onClick={onDownloadPDF}
-              className="px-8 py-6 text-lg transition-all duration-300 hover:border-white/50"
-            >
-              Download Sponsor PDF
             </Button>
           </div>
         </div>
