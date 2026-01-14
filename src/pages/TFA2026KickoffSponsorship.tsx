@@ -139,10 +139,7 @@ const TFA2026KickoffSponsorship = () => {
       </Helmet>
 
       <main className="min-h-screen">
-        <SponsorshipHero
-          onBecomeASponsor={scrollToPackages}
-          onDownloadPDF={handleDownloadPDF}
-        />
+        <SponsorshipHero onBecomeASponsor={scrollToPackages} />
         
         <EventOverview />
         
