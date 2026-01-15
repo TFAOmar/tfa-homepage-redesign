@@ -84,6 +84,7 @@ import EstateGuruCanceled from "./pages/EstateGuruCanceled";
 import NotFound from "./pages/NotFound";
 import TFA2026KickoffSponsorship from "./pages/TFA2026KickoffSponsorship";
 import SponsorshipSuccess from "./pages/SponsorshipSuccess";
+import OnboardingChecklist from "./pages/OnboardingChecklist";
 
 const queryClient = new QueryClient();
 
@@ -194,6 +195,7 @@ const AppLayout = () => {
           <Route path="/estate-guru" element={<EstateGuru />} />
           <Route path="/estate-guru/success" element={<EstateGuruSuccess />} />
           <Route path="/estate-guru/canceled" element={<EstateGuruCanceled />} />
+          <Route path="/onboarding-checklist" element={<OnboardingChecklist />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
