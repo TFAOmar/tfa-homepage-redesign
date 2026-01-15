@@ -22,6 +22,7 @@ export interface OnboardingResource {
   description: string;
   url: string;
   buttonText: string;
+  logo?: string;
 }
 
 export const ONBOARDING_RESOURCES: OnboardingResource[] = [
@@ -30,28 +31,32 @@ export const ONBOARDING_RESOURCES: OnboardingResource[] = [
     title: "TFA Onboarding Registration",
     description: "NDA + $49.99 onboarding fee payment form for new agents",
     url: "https://app.tfawealthplanning.com/",
-    buttonText: "Open Registration"
+    buttonText: "Open Registration",
+    logo: "/src/assets/tfa-logo.png"
   },
   {
     key: "skool_community_invite_link",
     title: "Skool Community",
     description: "Join the TFA agent community for training, support, and networking",
     url: "https://www.skool.com/tfa/about",
-    buttonText: "Join Skool"
+    buttonText: "Join Skool",
+    logo: "/src/assets/resources/skool-logo.png"
   },
   {
     key: "pipedrive_setup_guide_link",
     title: "Pipedrive CRM",
     description: "Create your Pipedrive account and get 30 days free with this link",
     url: "https://www.pipedrive.com/en/programlp?utm_medium=Affiliate&utm_source=b17739830578&utm_campaign=risingaffiliate&pscd=aff.trypipedrive.com&ps_partner_key=YjE3NzM5ODMwNTc4&ps_xid=s908biY4T8ixWH&gsxid=s908biY4T8ixWH&gspk=YjE3NzM5ODMwNTc4",
-    buttonText: "Get 30 Days Free"
+    buttonText: "Get 30 Days Free",
+    logo: "/src/assets/resources/pipedrive-logo.png"
   },
   {
     key: "signal_advisors_portal_link",
     title: "Signal Advisors Portal",
     description: "Access Signal Advisors for case support and second opinions",
     url: "https://portal.signaladvisors.com/",
-    buttonText: "Open Portal"
+    buttonText: "Open Portal",
+    logo: "/src/assets/resources/signal-advisors-logo.png"
   },
 ];
 
