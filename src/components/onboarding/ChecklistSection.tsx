@@ -109,7 +109,7 @@ export const ChecklistSectionComponent = ({
     >
       <AccordionItem 
         value={section.id} 
-        className="glass border border-border/50 hover:border-accent/30 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-accent/5 print:border-foreground/20"
+        className="bg-card shadow-md border-2 border-accent/20 hover:border-accent/40 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 print:border-foreground/20"
       >
         <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-accent/5 transition-colors print:pointer-events-none">
           <div className="flex items-center justify-between w-full pr-2">
