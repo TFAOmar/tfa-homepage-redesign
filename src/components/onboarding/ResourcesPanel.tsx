@@ -17,44 +17,46 @@ const logoMap: Record<string, string> = {
 
 export const ResourcesPanel = () => {
   return (
-    <div className="space-y-4 no-print">
-      <div className="flex items-center gap-2 mb-4">
-        <BookOpen className="h-5 w-5 text-primary" />
-        <h2 className="text-lg font-semibold">Resources</h2>
+    <div className="space-y-6 no-print">
+      {/* Header with icon */}
+      <div className="flex items-center gap-3">
+        <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-accent/20 text-accent">
+          <BookOpen className="h-5 w-5" />
+        </div>
+        <h2 className="text-xl font-bold text-navy">Resources</h2>
       </div>
       
-      <div className="grid gap-3">
+      {/* Resource cards with glass styling */}
+      <div className="grid gap-4">
         {ONBOARDING_RESOURCES.map((resource) => (
           <Card 
             key={resource.key} 
-            className="border-border/50 bg-card/30 backdrop-blur-sm hover:bg-card/50 transition-colors"
+            className="glass border border-border/50 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group"
           >
-            <CardHeader className="p-4 pb-2">
-              <div className="flex items-start gap-3">
+            <CardHeader className="p-5 pb-3">
+              <div className="flex items-center gap-4">
                 {resource.logo && logoMap[resource.logo] && (
-                  <div className="h-[72px] w-[72px] flex items-center justify-center flex-shrink-0 rounded-md bg-white/5 border border-white/10">
+                  <div className="h-16 w-16 flex items-center justify-center flex-shrink-0 rounded-xl bg-white border border-gray-100 shadow-sm">
                     <img 
                       src={logoMap[resource.logo]} 
                       alt={`${resource.title} logo`}
-                      className="max-h-14 max-w-14 object-contain"
+                      className="max-h-12 max-w-12 object-contain"
                     />
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <CardTitle className="text-sm font-medium">
+                  <CardTitle className="text-base font-bold text-navy group-hover:text-accent transition-colors">
                     {resource.title}
                   </CardTitle>
-                  <CardDescription className="text-xs">
+                  <CardDescription className="text-sm text-muted-foreground mt-1">
                     {resource.description}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="p-4 pt-2">
+            <CardContent className="p-5 pt-2">
               <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-xs"
+                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
                 asChild
               >
                 <a 
@@ -63,7 +65,7 @@ export const ResourcesPanel = () => {
                   rel="noopener noreferrer"
                 >
                   {resource.buttonText}
-                  <ExternalLink className="h-3 w-3 ml-2" />
+                  <ExternalLink className="h-4 w-4 ml-2" />
                 </a>
               </Button>
             </CardContent>

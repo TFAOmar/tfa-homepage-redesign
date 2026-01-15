@@ -33,7 +33,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Printer, Link2, RotateCcw, Search, AlertTriangle } from "lucide-react";
+import { Printer, Link2, RotateCcw, Search, Shield, ClipboardCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import { AgentProfileCard, AgentProfile } from "@/components/onboarding/AgentProfileCard";
@@ -206,7 +206,7 @@ const OnboardingChecklist = () => {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-pulse text-muted-foreground">Loading...</div>
       </div>
     );
@@ -223,132 +223,169 @@ const OnboardingChecklist = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background">
-        {/* Disclaimer Banner */}
-        <div className="bg-primary/10 border-b border-primary/20 py-2 px-4 no-print">
-          <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-sm text-primary">
-            <AlertTriangle className="h-4 w-4" />
-            <span>Internal training resource for TFA agents.</span>
+        {/* Hero Section */}
+        <section className="relative min-h-[40vh] flex items-center overflow-hidden bg-gradient-to-br from-navy via-navy/95 to-navy/90 no-print">
+          {/* Decorative blur orbs */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-10 left-10 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-10 right-20 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/5 rounded-full blur-3xl" />
           </div>
-        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
-              New Agent Onboarding Checklist
-            </h1>
-            <p className="text-muted-foreground text-lg max-w-3xl">
-              Use this checklist to onboard a new agent from Day 0 to Day 30 — with links to all required resources.
-            </p>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16">
+            <div className="max-w-3xl">
+              {/* Icon badge */}
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/20 text-accent mb-6">
+                <ClipboardCheck className="h-8 w-8" strokeWidth={1.5} />
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4">
+                New Agent Onboarding
+              </h1>
+              <p className="text-lg md:text-xl text-primary-foreground/80 leading-relaxed max-w-2xl">
+                Your complete guide from Day 0 to Day 30 — with all the resources you need to succeed at TFA.
+              </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 mt-6 no-print">
-              <Button onClick={handlePrint} variant="outline">
-                <Printer className="h-4 w-4 mr-2" />
-                Print / Save PDF
-              </Button>
-              <Button onClick={handleCopyLink} variant="outline">
-                <Link2 className="h-4 w-4 mr-2" />
-                Copy Share Link
-              </Button>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="outline" className="text-destructive hover:text-destructive">
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Reset Checklist
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Reset Onboarding Checklist?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will clear all progress, notes, and agent information. This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleReset} className="bg-destructive hover:bg-destructive/90">
-                      Reset Everything
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 mt-8">
+                <Button 
+                  onClick={handlePrint} 
+                  className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                >
+                  <Printer className="h-4 w-4 mr-2" />
+                  Print / Save PDF
+                </Button>
+                <Button 
+                  onClick={handleCopyLink} 
+                  variant="outline"
+                  className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:border-primary-foreground/50"
+                >
+                  <Link2 className="h-4 w-4 mr-2" />
+                  Copy Share Link
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="border-destructive/50 text-destructive hover:bg-destructive/10 hover:border-destructive"
+                    >
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      Reset
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Reset Onboarding Checklist?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will clear all progress, notes, and agent information. This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleReset} className="bg-destructive hover:bg-destructive/90">
+                        Reset Everything
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </div>
           </div>
 
-          {/* Agent Profile Card */}
-          <div className="mb-6">
-            <AgentProfileCard
-              profile={state.agentProfile}
-              startedAt={state.startedAt}
-              onSave={handleSaveProfile}
-            />
+          {/* Bottom fade to content */}
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent z-10" />
+        </section>
+
+        {/* Disclaimer Banner */}
+        <div className="bg-gradient-to-r from-accent/10 via-accent/15 to-accent/10 border-b border-accent/20 py-3 px-4 no-print">
+          <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-sm">
+            <Shield className="h-4 w-4 text-accent" />
+            <span className="text-accent font-medium">Internal training resource for TFA agents</span>
           </div>
+        </div>
 
-          {/* Progress Bar */}
-          <ChecklistProgressBar
-            completed={completedCount}
-            total={totalItems}
-            allExpanded={allExpanded}
-            onExpandAll={handleExpandAll}
-            onCollapseAll={handleCollapseAll}
-          />
-
-          {/* Search */}
-          <div className="my-6 no-print">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search checklist items..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-                aria-label="Search checklist items"
+        {/* Main Content Section */}
+        <section className="py-12 md:py-16 bg-gradient-to-b from-background via-background to-secondary/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Agent Profile Card */}
+            <div className="mb-8">
+              <AgentProfileCard
+                profile={state.agentProfile}
+                startedAt={state.startedAt}
+                onSave={handleSaveProfile}
               />
             </div>
-          </div>
 
-          {/* Main Content */}
-          <div className="grid lg:grid-cols-[1fr,320px] gap-8">
-            {/* Checklist Sections */}
-            <div className="space-y-4">
-              {filteredSections.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  No items match your search.
+            {/* Progress Bar */}
+            <ChecklistProgressBar
+              completed={completedCount}
+              total={totalItems}
+              allExpanded={allExpanded}
+              onExpandAll={handleExpandAll}
+              onCollapseAll={handleCollapseAll}
+            />
+
+            {/* Search */}
+            <div className="my-8 no-print">
+              <div className="relative max-w-md">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                  <Search className="h-5 w-5 text-accent" />
                 </div>
-              ) : (
-                filteredSections.map((section) => (
-                  <ChecklistSectionComponent
-                    key={section.id}
-                    section={section}
-                    completedItems={state.completedItems}
-                    notes={state.sectionNotes[section.id] || ""}
-                    isOpen={openSections.includes(section.id)}
-                    onToggleItem={handleToggleItem}
-                    onMarkAllComplete={handleMarkAllComplete}
-                    onNotesChange={(notes) => handleNotesChange(section.id, notes)}
-                    onToggleOpen={() => handleToggleSection(section.id)}
-                    searchQuery={searchQuery}
-                  />
-                ))
-              )}
+                <Input
+                  type="search"
+                  placeholder="Search checklist items..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 h-12 rounded-xl border-border/50 focus:border-accent bg-card/50 backdrop-blur-sm"
+                  aria-label="Search checklist items"
+                />
+              </div>
             </div>
 
-            {/* Resources Panel */}
-            <aside className="lg:sticky lg:top-24 lg:self-start">
-              <ResourcesPanel />
-            </aside>
-          </div>
+            {/* Main Content */}
+            <div className="grid lg:grid-cols-[1fr,360px] gap-8">
+              {/* Checklist Sections */}
+              <div className="space-y-4">
+                {filteredSections.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground glass rounded-xl">
+                    No items match your search.
+                  </div>
+                ) : (
+                  filteredSections.map((section, index) => (
+                    <ChecklistSectionComponent
+                      key={section.id}
+                      section={section}
+                      sectionNumber={index + 1}
+                      completedItems={state.completedItems}
+                      notes={state.sectionNotes[section.id] || ""}
+                      isOpen={openSections.includes(section.id)}
+                      onToggleItem={handleToggleItem}
+                      onMarkAllComplete={handleMarkAllComplete}
+                      onNotesChange={(notes) => handleNotesChange(section.id, notes)}
+                      onToggleOpen={() => handleToggleSection(section.id)}
+                      searchQuery={searchQuery}
+                    />
+                  ))
+                )}
+              </div>
 
-          {/* Compliance Footer */}
-          <footer className="mt-12 pt-6 border-t border-border">
-            <p className="text-xs text-muted-foreground text-center max-w-2xl mx-auto">
-              This checklist is for internal training and onboarding support. 
+              {/* Resources Panel */}
+              <aside className="lg:sticky lg:top-24 lg:self-start">
+                <ResourcesPanel />
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        {/* Compliance Footer */}
+        <footer className="py-12 border-t border-border/50 bg-gradient-to-b from-background to-secondary/10">
+          <div className="max-w-2xl mx-auto text-center px-4">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              This checklist is for internal training and onboarding support.
+              <br />
               Licensing and carrier requirements may vary by state and carrier.
             </p>
-          </footer>
-        </div>
+          </div>
+        </footer>
       </div>
     </>
   );
