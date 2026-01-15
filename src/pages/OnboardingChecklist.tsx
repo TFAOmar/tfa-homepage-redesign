@@ -256,8 +256,7 @@ const OnboardingChecklist = () => {
                 </Button>
                 <Button 
                   onClick={handleCopyLink} 
-                  variant="outline"
-                  className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:border-primary-foreground/50"
+                  variant="hero"
                 >
                   <Link2 className="h-4 w-4 mr-2" />
                   Copy Share Link
@@ -265,8 +264,8 @@ const OnboardingChecklist = () => {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button 
-                      variant="outline" 
-                      className="border-destructive/50 text-destructive hover:bg-destructive/10 hover:border-destructive"
+                      variant="hero"
+                      className="border-red-400/50 text-red-400 hover:bg-red-400/10 hover:border-red-400"
                     >
                       <RotateCcw className="h-4 w-4 mr-2" />
                       Reset
