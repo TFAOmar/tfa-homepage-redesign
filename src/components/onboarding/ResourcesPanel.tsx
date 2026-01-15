@@ -32,11 +32,11 @@ export const ResourcesPanel = () => {
             <CardHeader className="p-4 pb-2">
               <div className="flex items-start gap-3">
                 {resource.logo && logoMap[resource.logo] && (
-                  <div className="h-8 w-8 flex items-center justify-center flex-shrink-0">
+                  <div className="h-10 w-10 flex items-center justify-center flex-shrink-0 rounded-md bg-white/5 border border-white/10">
                     <img 
                       src={logoMap[resource.logo]} 
                       alt={`${resource.title} logo`}
-                      className="max-h-8 max-w-8 object-contain"
+                      className="max-h-7 max-w-7 object-contain"
                     />
                   </div>
                 )}
