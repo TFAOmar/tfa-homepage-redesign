@@ -41,10 +41,10 @@ export const ONBOARDING_RESOURCES: OnboardingResource[] = [
   },
   {
     key: "pipedrive_setup_guide_link",
-    title: "Pipedrive Setup Guide",
-    description: "Step-by-step guide to setting up your CRM for lead management",
+    title: "Pipedrive CRM",
+    description: "Create your Pipedrive account and get 30 days free with this link",
     url: "https://www.pipedrive.com/en/programlp?utm_medium=Affiliate&utm_source=b17739830578&utm_campaign=risingaffiliate&pscd=aff.trypipedrive.com&ps_partner_key=YjE3NzM5ODMwNTc4&ps_xid=s908biY4T8ixWH&gsxid=s908biY4T8ixWH&gspk=YjE3NzM5ODMwNTc4",
-    buttonText: "View Guide"
+    buttonText: "Get 30 Days Free"
   },
   {
     key: "signal_advisors_portal_link",
