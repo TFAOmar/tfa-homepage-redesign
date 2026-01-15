@@ -39,7 +39,7 @@ export const AgentProfileCard = ({ profile, startedAt, onSave }: AgentProfileCar
 
   if (isEditing) {
     return (
-      <Card className="glass border border-accent/30 hover:border-accent/50 transition-all duration-300">
+      <Card className="bg-card shadow-lg border-2 border-accent/40 hover:border-accent/60 transition-all duration-300">
         <CardHeader className="pb-4">
           <CardTitle className="text-xl flex items-center gap-3">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/20 text-accent">
@@ -107,7 +107,7 @@ export const AgentProfileCard = ({ profile, startedAt, onSave }: AgentProfileCar
   }
 
   return (
-    <Card className="glass border border-accent/20 hover:border-accent/40 transition-all duration-300 print:border-foreground/20">
+    <Card className="bg-card shadow-md border-2 border-accent/30 hover:border-accent/50 transition-all duration-300 print:border-foreground/20">
       <CardContent className="py-5 px-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">

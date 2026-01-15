@@ -20,13 +20,13 @@ export const ChecklistProgressBar = ({
   const isComplete = completed === total && total > 0;
 
   return (
-    <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-border/50 py-4 px-6 -mx-4 sm:-mx-6 lg:-mx-8 print:static print:bg-transparent print:border-0">
+    <div className="sticky top-0 z-40 bg-card shadow-md border-b border-accent/20 py-4 px-6 -mx-4 sm:-mx-6 lg:-mx-8 print:static print:bg-transparent print:border-0">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-5 flex-1">
             {/* Custom progress bar with gold gradient */}
             <div className="flex-1 max-w-md">
-              <div className="relative h-3 bg-secondary/50 rounded-full overflow-hidden">
+              <div className="relative h-3 bg-navy/10 rounded-full overflow-hidden border border-navy/20">
                 <div 
                   className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent to-accent/80 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${percentage}%` }}
