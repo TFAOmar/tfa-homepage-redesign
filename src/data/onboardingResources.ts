@@ -39,6 +39,20 @@ export const ONBOARDING_RESOURCES: OnboardingResource[] = [
     url: "https://www.skool.com/tfa/about",
     buttonText: "Join Skool"
   },
+  {
+    key: "pipedrive_setup_guide_link",
+    title: "Pipedrive Setup Guide",
+    description: "Step-by-step guide to setting up your CRM for lead management",
+    url: "https://www.pipedrive.com/en/programlp?utm_medium=Affiliate&utm_source=b17739830578&utm_campaign=risingaffiliate&pscd=aff.trypipedrive.com&ps_partner_key=YjE3NzM5ODMwNTc4&ps_xid=s908biY4T8ixWH&gsxid=s908biY4T8ixWH&gspk=YjE3NzM5ODMwNTc4",
+    buttonText: "View Guide"
+  },
+  {
+    key: "signal_advisors_portal_link",
+    title: "Signal Advisors Portal",
+    description: "Access Signal Advisors for case support and second opinions",
+    url: "https://portal.signaladvisors.com/",
+    buttonText: "Open Portal"
+  },
 ];
 
 // Helper to get resource by key
