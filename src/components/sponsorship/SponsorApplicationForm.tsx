@@ -135,8 +135,8 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
       // Get UTM params from URL
       const urlParams = new URLSearchParams(window.location.search);
 
-      // Save lead to database first
-      const { data: insertedLead, error } = await supabase.from('sponsorship_leads').insert({
+      // Save lead to database first (don't select back due to RLS policy)
+      const { error } = await supabase.from('sponsorship_leads').insert({
         company_name: data.companyName,
         contact_name: data.contactName,
         email: data.email,
@@ -153,7 +153,7 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
         utm_medium: urlParams.get('utm_medium'),
         utm_campaign: urlParams.get('utm_campaign'),
         status: 'pending',
-      }).select('id').single();
+      });
 
       if (error) throw error;
 
@@ -177,7 +177,6 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
           sponsorshipPackage: data.sponsorshipPackage,
           email: data.email,
           companyName: data.companyName,
-          leadId: insertedLead?.id,
         }
       });
 
