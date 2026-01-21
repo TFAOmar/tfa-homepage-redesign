@@ -1,25 +1,21 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Quote, Star } from "lucide-react";
-
-const testimonials = [
-  {
-    name: "Robert & Linda M.",
-    role: "Ohio",
-    text: "We finally have clarity on our retirement. The peace of mind is worth everything.",
-  },
-  {
-    name: "James A.",
-    role: "Texas",
-    text: "Our advisor helped us protect our children's future. We feel secure knowing everything is in place.",
-  },
-  {
-    name: "Patricia & Michael R.",
-    role: "California",
-    text: "They took the time to understand us. Our plan actually works for our family.",
-  },
-];
+import { useEffect } from "react";
 
 const Testimonials = () => {
+  useEffect(() => {
+    // Check if script already exists to avoid duplicates
+    const existingScript = document.querySelector(
+      'script[src*="trustindex.io"]'
+    );
+    
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.trustindex.io/loader.js?58410d862849832fdb76669e5ee";
+      script.defer = true;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
   return (
     <section className="py-20 md:py-28 lg:py-32 bg-background">
       <div className="container mx-auto px-6 md:px-20 lg:px-20 max-w-[1280px]">
@@ -32,35 +28,12 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="relative p-10 rounded-2xl glass border-0 hover:shadow-xl transition-all duration-300 animate-fade-in flex flex-col"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <Quote className="h-12 w-12 text-accent/20 mb-7" strokeWidth={1.5} />
-              
-              <div className="flex gap-1 mb-7">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-accent text-accent" />
-                ))}
-              </div>
-
-              <p className="text-lg text-foreground leading-relaxed mb-8 flex-grow">
-                "{testimonial.text}"
-              </p>
-
-              <div className="pt-6 border-t border-accent/10 mt-auto">
-                <p className="font-bold text-navy text-lg mb-1">
-                  {testimonial.name}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {testimonial.role}
-                </p>
-              </div>
-            </div>
-          ))}
+        {/* Trustindex widget container */}
+        <div className="max-w-6xl mx-auto">
+          <div 
+            className="src-trustindex-io" 
+            data-widget-id="58410d862849832fdb76669e5ee"
+          />
         </div>
       </div>
     </section>
