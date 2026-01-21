@@ -1,18 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const Testimonials = () => {
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // Check if script already exists to avoid duplicates
-    const existingScript = document.querySelector(
-      'script[src*="trustindex.io"]'
-    );
-    
-    if (!existingScript) {
+    // Only inject if container exists and script hasn't been added yet
+    if (widgetContainerRef.current && !widgetContainerRef.current.querySelector('script')) {
       const script = document.createElement("script");
       script.src = "https://cdn.trustindex.io/loader.js?58410d862849832fdb76669e5ee";
       script.defer = true;
       script.async = true;
-      document.body.appendChild(script);
+      widgetContainerRef.current.appendChild(script);
     }
   }, []);
 
@@ -28,13 +26,8 @@ const Testimonials = () => {
           </p>
         </div>
 
-        {/* Trustindex widget container */}
-        <div className="max-w-6xl mx-auto">
-          <div 
-            className="src-trustindex-io" 
-            data-widget-id="58410d862849832fdb76669e5ee"
-          />
-        </div>
+        {/* Trustindex widget container - script injects here */}
+        <div className="max-w-6xl mx-auto" ref={widgetContainerRef} />
       </div>
     </section>
   );
