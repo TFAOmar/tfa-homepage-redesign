@@ -65,6 +65,7 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
+      allow_promotion_codes: true,
       success_url: `${origin}/events/tfa-2026-kickoff-sponsorship/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/events/tfa-2026-kickoff-sponsorship`,
       metadata: {
