@@ -163,8 +163,7 @@ const AdvisorFabianSerrano = () => {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10"
+                  variant="hero"
                   onClick={() => setContactModalOpen(true)}
                 >
                   <Mail className="mr-2 h-5 w-5" />
@@ -325,8 +324,8 @@ const AdvisorFabianSerrano = () => {
             <Link to="/advisors/fabian-serrano/life-insurance">
               <Button 
                 size="lg" 
-                variant="outline" 
-                className="border-white/30 text-white hover:bg-white/10 w-full"
+                variant="hero"
+                className="w-full"
               >
                 Apply for Life Insurance
                 <ArrowRight className="ml-2 h-5 w-5" />
