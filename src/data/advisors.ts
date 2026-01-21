@@ -25,6 +25,7 @@ import joseCovarrubiasImg from "@/assets/advisors/jose-covarrubias.jpg";
 import erikJohnsonImg from "@/assets/advisors/erik-johnson.jpg";
 import braihyraMedellinImg from "@/assets/advisors/braihyra-medellin.jpg";
 import erinGraceVargasImg from "@/assets/advisors/erin-grace-vargas.jpg";
+import fabianSerranoImg from "@/assets/advisors/fabian-serrano.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -461,6 +462,23 @@ export const advisors: Advisor[] = [
     phone: "(562) 777-5549",
     yearsOfExperience: 19,
     landingPage: "/advisors/erin-grace-vargas"
+  },
+  {
+    id: "fabian-serrano",
+    name: "Fabian Serrano",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Rancho Cucamonga",
+    region: "West",
+    bio: "Fabian is an insurance industry veteran with over 20 years of experience. A former agency manager who led 15+ agents and generated 7,200+ annual applications, he joined TFA in 2024 to help clients with life insurance, annuities, retirement planning, and estate planning. He believes a proactive approach to overall well-being is the key to success.",
+    specialties: ["Bilingual • Bilingüe", "Life Insurance", "Annuities", "Retirement Planning", "Estate Planning"],
+    licenses: ["Life & Health"],
+    image: fabianSerranoImg,
+    email: "fabian@shftinsurance.com",
+    phone: "(909) 323-7601",
+    yearsOfExperience: 20,
+    landingPage: "/advisors/fabian-serrano"
   }
 ];
 
