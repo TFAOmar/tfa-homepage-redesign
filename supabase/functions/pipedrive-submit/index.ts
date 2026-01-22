@@ -518,6 +518,70 @@ const generateRuthTaxStrategyConfirmationEmail = (firstName: string): string => 
   `;
 };
 
+// Custom confirmation email for Erik Johnson
+const generateErikJohnsonConfirmationEmail = (firstName: string): string => {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; font-family: Georgia, 'Times New Roman', serif; background-color: #f9f7f4;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+        <tr>
+          <td style="padding: 40px 30px; background: linear-gradient(135deg, #0A0F1F 0%, #1a2a44 100%); text-align: center;">
+            <h1 style="color: #E4B548; margin: 0; font-size: 22px; font-weight: 400; letter-spacing: 1px;">
+              Erik Johnson
+            </h1>
+            <p style="color: #ffffff; margin: 8px 0 0 0; font-size: 14px; font-weight: 300;">
+              Licensed Fiduciary | Independent Financial Advisor
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 40px 35px;">
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 20px 0;">
+              Hi ${firstName},
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 20px 0;">
+              Thank you for reaching out. I truly appreciate you taking the time to connect with me.
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 20px 0;">
+              I believe that <strong>finance should be your second language</strong>—something you understand and feel comfortable with, not something that causes stress or confusion. My goal is to help you gain clarity and confidence in your financial decisions.
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 20px 0;">
+              As a licensed fiduciary, I'm legally bound to act in your best interest. That means transparent advice, no hidden agendas, and recommendations tailored specifically to your situation—not a one-size-fits-all approach.
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 25px 0;">
+              I'll be reaching out within the next business day to schedule a conversation. In the meantime, feel free to reply to this email with any questions you might have.
+            </p>
+            <p style="color: #333; font-size: 17px; line-height: 1.7; margin: 0 0 8px 0;">
+              Looking forward to speaking with you,
+            </p>
+            <p style="color: #1a365d; font-size: 18px; font-weight: 600; margin: 0 0 5px 0;">
+              Erik Johnson
+            </p>
+            <p style="color: #666; font-size: 14px; margin: 0;">
+              Licensed Fiduciary | Infinite Wealth Management
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 25px 35px; background-color: #f9f7f4; border-top: 1px solid #e5e5e5;">
+            <p style="color: #888; font-size: 12px; margin: 0; text-align: center; line-height: 1.6;">
+              This email is from Erik Johnson, sent in response to your inquiry.<br>
+              erik@investwitherik.com | La Mirada, CA
+            </p>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+};
+
+
 // Send emails function
 const sendEmails = async (
   resend: InstanceType<typeof Resend>,
@@ -815,6 +879,28 @@ serve(async (req) => {
         }
       } catch (e) {
         console.error("[Confirmation Email Exception - Ruth Tax Strategy]", e);
+      }
+    }
+    
+    // Erik Johnson - personalized confirmation email
+    if (resend && formData.advisor_slug === "erik-johnson") {
+      try {
+        const confirmationHtml = generateErikJohnsonConfirmationEmail(formData.first_name);
+        const confirmResult = await resend.emails.send({
+          from: "Erik Johnson <noreply@tfainsuranceadvisors.com>",
+          reply_to: "erik@investwitherik.com",
+          to: [formData.email],
+          subject: "Thank you for reaching out – Erik Johnson",
+          html: confirmationHtml,
+        });
+        
+        if (confirmResult.error) {
+          console.error("[Confirmation Email Error - Erik Johnson]", confirmResult.error);
+        } else {
+          console.log("[Confirmation Email Sent - Erik Johnson]", formData.email);
+        }
+      } catch (e) {
+        console.error("[Confirmation Email Exception - Erik Johnson]", e);
       }
     }
     
