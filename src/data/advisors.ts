@@ -426,7 +426,7 @@ export const advisors: Advisor[] = [
     specialties: ["Federal Employee Benefits", "Investment Management", "Retirement Planning", "Tax Strategies"],
     licenses: ["Series 6", "Series 63", "Series 26", "Series 65", "NMLS", "Notary Public"],
     image: erikJohnsonImg,
-    email: "erik@infinitewealthmgmt.com",
+    email: "erik@investwitherik.com",
     yearsOfExperience: 10,
     landingPage: "/advisors/erik-johnson"
   },

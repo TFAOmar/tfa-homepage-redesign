@@ -467,14 +467,14 @@ const AdvisorErikJohnson = () => {
         open={scheduleModalOpen}
         onOpenChange={setScheduleModalOpen}
         advisorName="Erik Johnson"
-        advisorEmail="erik@infinitewealthmgmt.com"
+        advisorEmail="erik@investwitherik.com"
         advisorImage={erikImage}
       />
       <ContactModal
         open={contactModalOpen}
         onOpenChange={setContactModalOpen}
         advisorName="Erik Johnson"
-        advisorEmail="erik@infinitewealthmgmt.com"
+        advisorEmail="erik@investwitherik.com"
         advisorImage={erikImage}
       />
     </div>
