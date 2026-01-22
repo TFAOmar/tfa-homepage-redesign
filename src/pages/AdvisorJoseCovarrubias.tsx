@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import SEOHead from "@/components/seo/SEOHead";
 import JsonLd from "@/components/seo/JsonLd";
-import ScheduleModal from "@/components/advisors/ScheduleModal";
+import JoseScheduleModal from "@/components/advisors/JoseScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
 import { 
   Calendar, 
@@ -392,12 +392,9 @@ const AdvisorJoseCovarrubias = () => {
       </section>
 
       {/* Modals */}
-      <ScheduleModal
+      <JoseScheduleModal
         open={scheduleModalOpen}
         onOpenChange={setScheduleModalOpen}
-        advisorName="Jose Covarrubias"
-        advisorEmail="jose@spartansfinancial.com"
-        advisorImage={joseImage}
       />
       <ContactModal
         open={contactModalOpen}

@@ -411,7 +411,8 @@ export const advisors: Advisor[] = [
     email: "jose@spartansfinancial.com",
     phone: "(714) 360-3025",
     yearsOfExperience: 6,
-    landingPage: "/advisors/jose-covarrubias"
+    landingPage: "/advisors/jose-covarrubias",
+    schedulingLink: "https://spartansfinancial.pipedrive.com/scheduler/3xZw0Bt3/consultation"
   },
   {
     id: "erik-johnson",
