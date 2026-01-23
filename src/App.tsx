@@ -86,6 +86,7 @@ import NotFound from "./pages/NotFound";
 import TFA2026KickoffSponsorship from "./pages/TFA2026KickoffSponsorship";
 import SponsorshipSuccess from "./pages/SponsorshipSuccess";
 import OnboardingChecklist from "./pages/OnboardingChecklist";
+import SubmitEvent from "./pages/SubmitEvent";
 
 const queryClient = new QueryClient();
 
@@ -198,6 +199,7 @@ const AppLayout = () => {
           <Route path="/estate-guru/success" element={<EstateGuruSuccess />} />
           <Route path="/estate-guru/canceled" element={<EstateGuruCanceled />} />
           <Route path="/onboarding-checklist" element={<OnboardingChecklist />} />
+          <Route path="/submit-event" element={<SubmitEvent />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

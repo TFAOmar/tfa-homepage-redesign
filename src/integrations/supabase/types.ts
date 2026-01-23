@@ -176,6 +176,72 @@ export type Database = {
         }
         Relationships: []
       }
+      event_submissions: {
+        Row: {
+          agent_email: string
+          agent_name: string
+          agent_phone: string | null
+          created_at: string | null
+          description: string
+          enable_rsvp: boolean | null
+          end_time: string
+          event_name: string
+          id: string
+          location: string
+          max_attendees: number | null
+          notes: string | null
+          primary_image_url: string | null
+          rsvp_email: string | null
+          short_description: string
+          start_time: string
+          status: string | null
+          thumbnail_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          agent_email: string
+          agent_name: string
+          agent_phone?: string | null
+          created_at?: string | null
+          description: string
+          enable_rsvp?: boolean | null
+          end_time: string
+          event_name: string
+          id?: string
+          location: string
+          max_attendees?: number | null
+          notes?: string | null
+          primary_image_url?: string | null
+          rsvp_email?: string | null
+          short_description: string
+          start_time: string
+          status?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          agent_email?: string
+          agent_name?: string
+          agent_phone?: string | null
+          created_at?: string | null
+          description?: string
+          enable_rsvp?: boolean | null
+          end_time?: string
+          event_name?: string
+          id?: string
+          location?: string
+          max_attendees?: number | null
+          notes?: string | null
+          primary_image_url?: string | null
+          rsvp_email?: string | null
+          short_description?: string
+          start_time?: string
+          status?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       form_submissions: {
         Row: {
           advisor: string | null
