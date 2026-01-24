@@ -1,145 +1,85 @@
 
 
-# Include All Event Details in Notification Email
+# Add Fresno Office and Update Israel Castaneda's Profile
 
-## Current State
-The edge function only receives and displays a subset of the event data:
-- Agent name, email
-- Event name, location
-- Start/end times
-- Primary image URL
-
-## Missing from Email
-These fields are collected in the form but NOT sent to the edge function:
-- Agent phone
-- Full description
-- Short description
-- Thumbnail image URL
-- RSVP settings (enabled, email, max attendees)
+## Summary
+Add the new Fresno office location to the locations list and update Israel Castaneda's advisor profile to reflect his association with this office.
 
 ---
 
-## Implementation Plan
+## Changes Required
 
-### 1. Update Edge Function Interface
-Expand the `EventNotificationRequest` interface to accept all fields:
+### 1. Add Fresno Office to Locations
 
-| Field | Type | Notes |
-|-------|------|-------|
-| agentPhone | string (optional) | Agent's contact phone |
-| description | string | Full event description |
-| shortDescription | string | Brief summary |
-| thumbnailUrl | string (optional) | Thumbnail image URL |
-| enableRsvp | boolean | Whether RSVP is enabled |
-| rsvpEmail | string (optional) | RSVP contact email |
-| maxAttendees | number (optional) | Capacity limit |
+**File:** `src/data/locations.ts`
 
-### 2. Update Admin Email Template
-Enhance the HTML email to include:
-- Full description in a formatted section
-- Short description labeled clearly
-- Agent phone number (if provided)
-- Thumbnail image (if uploaded)
-- RSVP configuration details
-- TFA logo branding
+Add a new entry to the locations array:
 
-### 3. Update Form Submission
-Modify `EventSubmissionForm.tsx` to pass all fields to the edge function.
+| Field | Value |
+|-------|-------|
+| id | 20 |
+| name | Fresno |
+| city | Fresno |
+| state | CA |
+| address | 7621 N Del Mar Ave, Unit 102, Fresno, CA 93711 |
+| phone | (888) 350-5396 |
+| hours | Mon-Fri: 9am-5pm |
+| coordinates | [-119.7871, 36.8252] |
+| region | Central California |
 
----
+This creates a new "Central California" region for TFA's first office in the Central Valley.
 
-## Email Template Design
+### 2. Update Israel Castaneda's Profile
 
-```text
-┌─────────────────────────────────────────────────┐
-│  [TFA Logo]                                     │
-│                                                 │
-│  New Event Submission                           │
-│  ─────────────────────────                      │
-│                                                 │
-│  ┌─────────────────────────────────────────┐   │
-│  │ Event Name                               │   │
-│  │                                          │   │
-│  │ Submitted by: Name (email) phone        │   │
-│  │ Location: Address                        │   │
-│  │ Start: Date/Time                         │   │
-│  │ End: Date/Time                           │   │
-│  └─────────────────────────────────────────┘   │
-│                                                 │
-│  Description                                    │
-│  [Full event description text]                 │
-│                                                 │
-│  Short Description                              │
-│  [Brief summary text]                          │
-│                                                 │
-│  ┌───────────┐  ┌───────────┐                  │
-│  │ Primary   │  │ Thumbnail │ (if provided)   │
-│  │ Image     │  │ Image     │                  │
-│  └───────────┘  └───────────┘                  │
-│                                                 │
-│  RSVP Settings                                  │
-│  Enabled: Yes/No                                │
-│  RSVP Email: email@example.com                 │
-│  Max Attendees: 50 (or "No limit")             │
-│                                                 │
-│  ┌─────────────────────────────────────────┐   │
-│  │ Next Steps: Review in Supabase...       │   │
-│  └─────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────┘
-```
+**File:** `src/data/advisors.ts`
+
+Update Israel's profile (currently on line 65-78):
+
+| Field | Current | New |
+|-------|---------|-----|
+| city | Madera | Fresno |
+| Add office address to bio | n/a | Include office address in bio |
 
 ---
 
-## Files to Modify
+## Implementation Details
 
-| File | Changes |
-|------|---------|
-| `supabase/functions/send-event-notification/index.ts` | Add new fields to interface, enhance email HTML |
-| `src/components/events/EventSubmissionForm.tsx` | Pass all form fields to edge function |
-
----
-
-## Technical Details
-
-### Edge Function Changes
+### Location Entry
 ```typescript
-interface EventNotificationRequest {
-  agentName: string;
-  agentEmail: string;
-  agentPhone?: string;           // NEW
-  eventName: string;
-  description: string;           // NEW
-  shortDescription: string;      // NEW
-  location: string;
-  startTime: string;
-  endTime: string;
-  primaryImageUrl: string;
-  thumbnailUrl?: string;         // NEW
-  enableRsvp: boolean;           // NEW
-  rsvpEmail?: string;            // NEW
-  maxAttendees?: number;         // NEW
+// Central California
+{ 
+  id: 20, 
+  name: "Fresno", 
+  city: "Fresno", 
+  state: "CA", 
+  address: "7621 N Del Mar Ave, Unit 102, Fresno, CA 93711", 
+  phone: "(888) 350-5396", 
+  hours: "Mon-Fri: 9am-5pm", 
+  coordinates: [-119.7871, 36.8252], 
+  region: "Central California" 
 }
 ```
 
-### Form Submission Update
+### Israel Castaneda Profile Update
 ```typescript
-supabase.functions.invoke("send-event-notification", {
-  body: {
-    agentName: data.agentName,
-    agentEmail: data.agentEmail,
-    agentPhone: data.agentPhone || null,
-    eventName: data.eventName,
-    description: data.description,
-    shortDescription: data.shortDescription,
-    location: data.location,
-    startTime: data.startTime,
-    endTime: data.endTime,
-    primaryImageUrl,
-    thumbnailUrl,
-    enableRsvp: data.enableRsvp,
-    rsvpEmail: data.rsvpEmail || null,
-    maxAttendees: data.maxAttendees ? parseInt(data.maxAttendees) : null,
-  },
-});
+{
+  id: "israel-castaneda",
+  name: "Israel Castaneda",
+  title: "Partner",
+  type: "Advisor",
+  state: "California",
+  city: "Fresno",  // Updated from "Madera"
+  region: "West",
+  bio: "Israel helps families build generational security and long-term financial peace of mind. Specializing in life insurance, retirement planning, living trusts, and estate-protection strategies, he makes complex financial decisions easy to understand. Known for his clear communication and genuine care, Israel focuses on the 'why' behind every financial move, helping families protect what matters most and build a legacy for the next generation.",
+  // ... rest of profile
+}
 ```
+
+---
+
+## After Implementation
+- The Fresno office will appear on the `/locations` page with full address, phone, and directions
+- The new "Central California" region filter will be available
+- Israel Castaneda's profile in the advisor directory will show "Fresno, California" as his location
+- Map will show the new Fresno location marker
 
