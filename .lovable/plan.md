@@ -1,79 +1,145 @@
 
 
-# Fix Event Submission - Storage Upload Issue
+# Include All Event Details in Notification Email
 
-## Problem Identified
-Event submissions are failing at the image upload step. The investigation revealed:
+## Current State
+The edge function only receives and displays a subset of the event data:
+- Agent name, email
+- Event name, location
+- Start/end times
+- Primary image URL
 
-1. **Edge function works correctly** - When called directly, it sends emails successfully
-2. **Database is empty** - No event submissions exist in the `event_submissions` table
-3. **No images uploaded** - The `event-images` storage bucket is empty
-4. **Root cause found**: A storage policy is blocking anonymous uploads
-
-## Root Cause: Conflicting Storage Policy
-
-There's a storage policy called **"Anonymous users cannot upload to advisor photos"** that has:
-- `roles: {anon}` (applies to anonymous/unauthenticated users)  
-- `with_check: false` (denies all inserts)
-
-This blanket denial policy blocks ALL anonymous uploads to storage, including the `event-images` bucket, even though there's a separate policy "Anyone can upload event images".
-
-When an unauthenticated user tries to submit the form:
-1. They attempt to upload the event image → **BLOCKED** by the anon policy
-2. Upload fails → Code throws an error
-3. Database insert never happens
-4. Edge function never gets called
+## Missing from Email
+These fields are collected in the form but NOT sent to the edge function:
+- Agent phone
+- Full description
+- Short description
+- Thumbnail image URL
+- RSVP settings (enabled, email, max attendees)
 
 ---
 
-## Fix Plan
+## Implementation Plan
 
-### 1. Fix the Storage Policy (Database Migration)
-Modify the problematic policy to only block anonymous uploads to the `advisor-photos` bucket specifically, not all buckets:
+### 1. Update Edge Function Interface
+Expand the `EventNotificationRequest` interface to accept all fields:
 
-```sql
--- Drop the overly-broad policy
-DROP POLICY IF EXISTS "Anonymous users cannot upload to advisor photos" 
-ON storage.objects;
+| Field | Type | Notes |
+|-------|------|-------|
+| agentPhone | string (optional) | Agent's contact phone |
+| description | string | Full event description |
+| shortDescription | string | Brief summary |
+| thumbnailUrl | string (optional) | Thumbnail image URL |
+| enableRsvp | boolean | Whether RSVP is enabled |
+| rsvpEmail | string (optional) | RSVP contact email |
+| maxAttendees | number (optional) | Capacity limit |
 
--- Recreate it with bucket-specific restriction
-CREATE POLICY "Anonymous users cannot upload to advisor photos"
-ON storage.objects
-FOR INSERT
-TO anon
-WITH CHECK (bucket_id != 'advisor-photos');
+### 2. Update Admin Email Template
+Enhance the HTML email to include:
+- Full description in a formatted section
+- Short description labeled clearly
+- Agent phone number (if provided)
+- Thumbnail image (if uploaded)
+- RSVP configuration details
+- TFA logo branding
+
+### 3. Update Form Submission
+Modify `EventSubmissionForm.tsx` to pass all fields to the edge function.
+
+---
+
+## Email Template Design
+
+```text
+┌─────────────────────────────────────────────────┐
+│  [TFA Logo]                                     │
+│                                                 │
+│  New Event Submission                           │
+│  ─────────────────────────                      │
+│                                                 │
+│  ┌─────────────────────────────────────────┐   │
+│  │ Event Name                               │   │
+│  │                                          │   │
+│  │ Submitted by: Name (email) phone        │   │
+│  │ Location: Address                        │   │
+│  │ Start: Date/Time                         │   │
+│  │ End: Date/Time                           │   │
+│  └─────────────────────────────────────────┘   │
+│                                                 │
+│  Description                                    │
+│  [Full event description text]                 │
+│                                                 │
+│  Short Description                              │
+│  [Brief summary text]                          │
+│                                                 │
+│  ┌───────────┐  ┌───────────┐                  │
+│  │ Primary   │  │ Thumbnail │ (if provided)   │
+│  │ Image     │  │ Image     │                  │
+│  └───────────┘  └───────────┘                  │
+│                                                 │
+│  RSVP Settings                                  │
+│  Enabled: Yes/No                                │
+│  RSVP Email: email@example.com                 │
+│  Max Attendees: 50 (or "No limit")             │
+│                                                 │
+│  ┌─────────────────────────────────────────┐   │
+│  │ Next Steps: Review in Supabase...       │   │
+│  └─────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────┘
 ```
 
-### 2. Alternative: Delete the Redundant Policy
-Since authenticated admins already have their own upload policy for `advisor-photos`, and anonymous users are blocked by not having a policy that allows advisor-photos uploads, the anon denial policy may be redundant:
+---
 
-```sql
--- Simply remove the blocking policy
-DROP POLICY IF EXISTS "Anonymous users cannot upload to advisor photos" 
-ON storage.objects;
+## Files to Modify
+
+| File | Changes |
+|------|---------|
+| `supabase/functions/send-event-notification/index.ts` | Add new fields to interface, enhance email HTML |
+| `src/components/events/EventSubmissionForm.tsx` | Pass all form fields to edge function |
+
+---
+
+## Technical Details
+
+### Edge Function Changes
+```typescript
+interface EventNotificationRequest {
+  agentName: string;
+  agentEmail: string;
+  agentPhone?: string;           // NEW
+  eventName: string;
+  description: string;           // NEW
+  shortDescription: string;      // NEW
+  location: string;
+  startTime: string;
+  endTime: string;
+  primaryImageUrl: string;
+  thumbnailUrl?: string;         // NEW
+  enableRsvp: boolean;           // NEW
+  rsvpEmail?: string;            // NEW
+  maxAttendees?: number;         // NEW
+}
 ```
 
----
-
-## Implementation
-
-| Action | Description |
-|--------|-------------|
-| **Database migration** | Remove or fix the blocking storage policy |
-| **Testing** | Submit an event to verify uploads work |
-| **Verification** | Check that images appear in bucket and notifications are sent |
-
----
-
-## Why This Happened
-The original `advisor-photos` bucket was locked down to prevent anonymous uploads (correct behavior). However, the policy was written too broadly - it blocks ALL anonymous storage uploads instead of just the advisor-photos bucket.
-
----
-
-## After Fix
-1. Anonymous users can upload images to `event-images` bucket
-2. Form submission completes successfully
-3. Database record is created
-4. Edge function is triggered
-5. Email notifications are sent to admin and agent
+### Form Submission Update
+```typescript
+supabase.functions.invoke("send-event-notification", {
+  body: {
+    agentName: data.agentName,
+    agentEmail: data.agentEmail,
+    agentPhone: data.agentPhone || null,
+    eventName: data.eventName,
+    description: data.description,
+    shortDescription: data.shortDescription,
+    location: data.location,
+    startTime: data.startTime,
+    endTime: data.endTime,
+    primaryImageUrl,
+    thumbnailUrl,
+    enableRsvp: data.enableRsvp,
+    rsvpEmail: data.rsvpEmail || null,
+    maxAttendees: data.maxAttendees ? parseInt(data.maxAttendees) : null,
+  },
+});
+```
 
