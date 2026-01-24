@@ -74,7 +74,8 @@ export const advisors: Advisor[] = [
     specialties: ["Bilingual • Bilingüe", "Life Insurance", "Retirement Planning", "Estate Planning", "Tax Strategies"],
     licenses: ["Life & Health (Lic# 0I35205)"],
     image: israelCastanedaImg,
-    email: "israel@tfainsuranceadvisors.com"
+    email: "israel@tfainsuranceadvisors.com",
+    landingPage: "/advisors/israel-castaneda"
   },
   {
     id: "elena-esquivel",
