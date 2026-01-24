@@ -231,10 +231,10 @@ const GeneralSponsorshipSuccess = () => {
               <p className="text-muted-foreground">
                 Questions? Contact us at{" "}
                 <a 
-                  href="mailto:leads@tfainsuranceadvisors.com" 
+                  href="mailto:events@tfainsuranceadvisors.com" 
                   className="text-primary hover:underline font-medium"
                 >
-                  leads@tfainsuranceadvisors.com
+                  events@tfainsuranceadvisors.com
                 </a>
               </p>
             </div>
