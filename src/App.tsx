@@ -88,6 +88,7 @@ import TFA2026KickoffSponsorship from "./pages/TFA2026KickoffSponsorship";
 import SponsorshipSuccess from "./pages/SponsorshipSuccess";
 import OnboardingChecklist from "./pages/OnboardingChecklist";
 import SubmitEvent from "./pages/SubmitEvent";
+import EventSponsorship from "./pages/EventSponsorship";
 
 const queryClient = new QueryClient();
 
@@ -116,6 +117,7 @@ const AppLayout = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/process" element={<Process />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/events/sponsorship" element={<EventSponsorship />} />
           <Route path="/events/tfa-2026-kickoff-sponsorship" element={<TFA2026KickoffSponsorship />} />
           <Route path="/events/tfa-2026-kickoff-sponsorship/success" element={<SponsorshipSuccess />} />
           <Route path="/locations" element={<Locations />} />
