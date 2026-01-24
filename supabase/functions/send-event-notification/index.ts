@@ -52,7 +52,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification to admin
     const adminEmailResponse = await resend.emails.send({
-      from: "TFA Events <notifications@tfainsuranceadvisors.com>",
+      from: "TFA Events <noreply@tfainsuranceadvisors.com>",
       to: ["events@tfainsuranceadvisors.com"],
       subject: `New Event Submission: ${eventName}`,
       html: `
@@ -90,7 +90,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation to agent
     const agentEmailResponse = await resend.emails.send({
-      from: "TFA Events <notifications@tfainsuranceadvisors.com>",
+      from: "TFA Events <noreply@tfainsuranceadvisors.com>",
       to: [agentEmail],
       subject: `Event Submission Received: ${eventName}`,
       html: `
