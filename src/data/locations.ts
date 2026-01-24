@@ -43,4 +43,7 @@ export const locations: Location[] = [
   
   // Oregon
   { id: 19, name: "Medford", city: "Medford", state: "OR", address: "210 West 8th St, Medford, OR 97501", phone: "(800) 223-1281", hours: "Mon-Fri: 9am-5pm", coordinates: [-122.8756, 42.3265], region: "Pacific Northwest" },
+  
+  // Central California
+  { id: 20, name: "Fresno", city: "Fresno", state: "CA", address: "7621 N Del Mar Ave, Unit 102, Fresno, CA 93711", phone: "(888) 350-5396", hours: "Mon-Fri: 9am-5pm", coordinates: [-119.7871, 36.8252], region: "Central California" },
 ];
