@@ -166,11 +166,18 @@ const EventSubmissionForm = () => {
         body: {
           agentName: data.agentName,
           agentEmail: data.agentEmail,
+          agentPhone: data.agentPhone || null,
           eventName: data.eventName,
+          description: data.description,
+          shortDescription: data.shortDescription,
           location: data.location,
           startTime: data.startTime,
           endTime: data.endTime,
           primaryImageUrl,
+          thumbnailUrl,
+          enableRsvp: data.enableRsvp,
+          rsvpEmail: data.rsvpEmail || null,
+          maxAttendees: data.maxAttendees ? parseInt(data.maxAttendees) : null,
         },
       }).catch((emailError) => {
         console.error("Email notification failed:", emailError);
