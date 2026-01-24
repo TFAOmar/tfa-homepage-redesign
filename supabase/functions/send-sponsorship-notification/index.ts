@@ -68,7 +68,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send internal notification to leads email
     const internalEmailResponse = await resend.emails.send({
       from: "TFA Sponsorships <noreply@tfainsuranceadvisors.com>",
-      to: ["leads@tfainsuranceadvisors.com"],
+      to: ["events@tfainsuranceadvisors.com"],
       subject: internalSubject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -242,7 +242,7 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             
             <p style="margin-top: 30px; color: #666;">
-              Questions? Reply to this email or contact us at <a href="mailto:leads@tfainsuranceadvisors.com" style="color: #E4B548;">leads@tfainsuranceadvisors.com</a>
+              Questions? Reply to this email or contact us at <a href="mailto:events@tfainsuranceadvisors.com" style="color: #E4B548;">events@tfainsuranceadvisors.com</a>
             </p>
           </div>
           
