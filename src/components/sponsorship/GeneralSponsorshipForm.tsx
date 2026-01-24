@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import { useConfetti } from "@/hooks/useConfetti";
 import { Loader2, Send, Building2, Calendar, Sparkles } from "lucide-react";
 import { events } from "./EventsShowcase";
 
@@ -63,6 +64,7 @@ export const GeneralSponsorshipForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<string[]>(preselectedEvents);
   const { honeypotProps, isBot } = useHoneypot();
+  const { fireFireworks } = useConfetti();
 
   const {
     register,
@@ -147,6 +149,9 @@ export const GeneralSponsorshipForm = ({
       });
 
       toast.success("Thank you for your interest! Our team will contact you within 24 hours.");
+      
+      // Fire celebratory confetti
+      fireFireworks();
       
       // Reset form
       setSelectedEvents([]);
