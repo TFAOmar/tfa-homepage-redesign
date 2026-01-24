@@ -1,55 +1,42 @@
 
 
-# Route Sponsorship Notifications to events@tfainsuranceadvisors.com
+# Update Contact Email on Sponsorship Success Page
 
 ## Summary
-Update the `send-sponsorship-notification` Edge Function to send internal admin notifications to `events@tfainsuranceadvisors.com` instead of the current `leads@tfainsuranceadvisors.com`. This routes sponsorship inquiries to the dedicated events inbox for better team workflow.
-
----
-
-## Current State
-
-| Email | Recipient |
-|-------|-----------|
-| Internal admin notification | leads@tfainsuranceadvisors.com |
-| Sponsor confirmation | Sponsor's email address |
-
----
-
-## Proposed Change
-
-| Email | New Recipient |
-|-------|---------------|
-| Internal admin notification | events@tfainsuranceadvisors.com |
-| Sponsor confirmation | Sponsor's email address (no change) |
+Update the contact email displayed at the bottom of the General Sponsorship Success page from `leads@tfainsuranceadvisors.com` to `events@tfainsuranceadvisors.com` for consistency with the sponsorship notification routing.
 
 ---
 
 ## File to Modify
 
-**File:** `supabase/functions/send-sponsorship-notification/index.ts`
+**File:** `src/pages/GeneralSponsorshipSuccess.tsx`
 
-**Change:** Line 71
+**Change:** Lines 234-237
 
 ```typescript
 // Current
-to: ["leads@tfainsuranceadvisors.com"],
+<a 
+  href="mailto:leads@tfainsuranceadvisors.com" 
+  className="text-primary hover:underline font-medium"
+>
+  leads@tfainsuranceadvisors.com
+</a>
 
 // Updated
-to: ["events@tfainsuranceadvisors.com"],
+<a 
+  href="mailto:events@tfainsuranceadvisors.com" 
+  className="text-primary hover:underline font-medium"
+>
+  events@tfainsuranceadvisors.com
+</a>
 ```
-
----
-
-## Technical Note
-
-The sponsor's confirmation email (line 154-257) will continue to direct them to contact `leads@tfainsuranceadvisors.com` for questions. You may also want this changed to `events@tfainsuranceadvisors.com` for consistency — I can include that update as well if desired.
 
 ---
 
 ## After Implementation
 
-- All general sponsorship inquiries from `/events/sponsorship` will notify `events@tfainsuranceadvisors.com`
-- All specific event sponsorship inquiries (TFA 2026 Kick Off) will also notify `events@tfainsuranceadvisors.com`
-- Sponsors will receive confirmation emails with updated contact information
+All sponsorship-related communications will consistently reference `events@tfainsuranceadvisors.com`:
+- Internal admin notifications
+- Sponsor confirmation emails
+- Success page contact link
 
