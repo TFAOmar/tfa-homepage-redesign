@@ -15,12 +15,24 @@ interface SponsorshipNotificationRequest {
   phone: string;
   sponsorshipPackage: string;
   industry: string;
+  eventsInterested?: string[];
+  message?: string;
+  isGeneralInquiry?: boolean;
 }
 
 const packageLabels: Record<string, string> = {
-  title: "Title Sponsor — $4,000",
-  supporting: "Supporting Sponsor — $2,000",
-  community: "Community Sponsor — $500"
+  title: "Title Sponsor — $4,000/event",
+  supporting: "Supporting Sponsor — $2,000/event",
+  community: "Community Sponsor — $500/event",
+  undecided: "Package TBD — Needs consultation"
+};
+
+const eventLabels: Record<string, { name: string; timing: string; attendees: string }> = {
+  'kickoff': { name: 'Kick Off', timing: 'January', attendees: '200+' },
+  'crash-courses': { name: 'Crash Courses', timing: 'Spring', attendees: '75+' },
+  'leadership-summit': { name: 'Leadership Summit', timing: 'Summer', attendees: '100+' },
+  'summer-sizzler': { name: 'Summer Sizzler', timing: 'Mid-Year', attendees: '150+' },
+  'christmas-party': { name: 'Christmas Party', timing: 'December', attendees: '200+' }
 };
 
 const handler = async (req: Request): Promise<Response> => {
@@ -35,17 +47,34 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Processing sponsorship notification for:", data.companyName);
 
     const packageLabel = packageLabels[data.sponsorshipPackage] || data.sponsorshipPackage;
+    const isGeneral = data.isGeneralInquiry ?? false;
+    const eventsInterested = data.eventsInterested || [];
+
+    // Build events list HTML for emails
+    const eventsListHtml = eventsInterested.length > 0
+      ? eventsInterested.map(eventId => {
+          const event = eventLabels[eventId];
+          return event 
+            ? `<li style="padding: 8px 0; border-bottom: 1px solid #eee;">${event.name} <span style="color: #666;">(${event.timing})</span> — <span style="color: #E4B548;">${event.attendees} attendees</span></li>`
+            : `<li style="padding: 8px 0; border-bottom: 1px solid #eee;">${eventId}</li>`;
+        }).join('')
+      : '<li style="padding: 8px 0; color: #666;">No specific events selected</li>';
+
+    // Internal notification subject
+    const internalSubject = isGeneral
+      ? `🎉 New General Sponsorship Inquiry: ${data.companyName}`
+      : `🎉 New Sponsorship Application: ${data.companyName} (${packageLabel})`;
 
     // Send internal notification to leads email
     const internalEmailResponse = await resend.emails.send({
       from: "TFA Sponsorships <noreply@tfainsuranceadvisors.com>",
       to: ["leads@tfainsuranceadvisors.com"],
-      subject: `🎉 New Sponsorship Application: ${data.companyName} (${packageLabel})`,
+      subject: internalSubject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #0A0F1F 0%, #1a1f3c 100%); padding: 30px; text-align: center;">
-            <h1 style="color: #E4B548; margin: 0; font-size: 24px;">New Sponsorship Application</h1>
-            <p style="color: #ffffff; margin: 10px 0 0;">TFA 2026 Kick Off</p>
+            <h1 style="color: #E4B548; margin: 0; font-size: 24px;">New Sponsorship ${isGeneral ? 'Inquiry' : 'Application'}</h1>
+            <p style="color: #ffffff; margin: 10px 0 0;">${isGeneral ? 'General Event Sponsorship' : 'TFA 2026 Kick Off'}</p>
           </div>
           
           <div style="background: #ffffff; padding: 30px; border: 1px solid #e5e5e5;">
@@ -75,20 +104,40 @@ const handler = async (req: Request): Promise<Response> => {
                 </td>
               </tr>
               <tr>
-                <td style="padding: 10px 0; font-weight: bold; color: #666;">Industry</td>
-                <td style="padding: 10px 0;">${data.industry}</td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Industry</td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${data.industry}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px 0; font-weight: bold; color: #666;">Inquiry Type</td>
+                <td style="padding: 10px 0;">${isGeneral ? 'General Inquiry (Multiple Events)' : 'Specific Event'}</td>
               </tr>
             </table>
+
+            ${eventsInterested.length > 0 ? `
+            <div style="margin-top: 25px;">
+              <h3 style="color: #0A0F1F; margin-bottom: 10px;">Events Interested In:</h3>
+              <ul style="list-style: none; padding: 0; margin: 0; background: #f8f8f8; border-radius: 8px; padding: 15px;">
+                ${eventsListHtml}
+              </ul>
+            </div>
+            ` : ''}
+
+            ${data.message ? `
+            <div style="margin-top: 25px;">
+              <h3 style="color: #0A0F1F; margin-bottom: 10px;">Additional Message:</h3>
+              <p style="background: #f8f8f8; padding: 15px; border-radius: 8px; color: #333; margin: 0;">${data.message}</p>
+            </div>
+            ` : ''}
             
-            <div style="margin-top: 25px; padding: 20px; background: #f8f8f8; border-radius: 8px;">
-              <p style="margin: 0; color: #666; font-size: 14px;">
+            <div style="margin-top: 25px; padding: 20px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #E4B548;">
+              <p style="margin: 0; color: #856404; font-size: 14px;">
                 <strong>Action Required:</strong> Reach out to this sponsor within 24 hours to confirm availability and finalize their sponsorship.
               </p>
             </div>
           </div>
           
           <div style="background: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888;">
-            <p style="margin: 0;">This notification was sent from the TFA 2026 Kick Off Sponsorship page.</p>
+            <p style="margin: 0;">This notification was sent from the ${isGeneral ? 'TFA General Sponsorship' : 'TFA 2026 Kick Off Sponsorship'} page.</p>
           </div>
         </div>
       `,
@@ -96,58 +145,104 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Internal notification sent:", internalEmailResponse);
 
+    // Sponsor confirmation email subject
+    const sponsorSubject = isGeneral
+      ? `Your TFA Sponsorship Inquiry Has Been Received`
+      : `Thank you for your sponsorship interest - TFA 2026 Kick Off`;
+
     // Send confirmation email to sponsor
     const sponsorEmailResponse = await resend.emails.send({
       from: "TFA Events <noreply@tfainsuranceadvisors.com>",
       to: [data.email],
-      subject: `Thank you for your sponsorship interest - TFA 2026 Kick Off`,
+      subject: sponsorSubject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #0A0F1F 0%, #1a1f3c 100%); padding: 40px; text-align: center;">
             <h1 style="color: #E4B548; margin: 0; font-size: 28px;">Thank You, ${data.contactName}!</h1>
-            <p style="color: #ffffff; margin: 15px 0 0; font-size: 16px;">We've received your sponsorship application</p>
+            <p style="color: #ffffff; margin: 15px 0 0; font-size: 16px;">We've received your sponsorship inquiry</p>
           </div>
           
           <div style="background: #ffffff; padding: 40px; border: 1px solid #e5e5e5;">
-            <h2 style="color: #0A0F1F; margin-top: 0;">What happens next?</h2>
+            ${eventsInterested.length > 0 ? `
+            <div style="margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+              <h3 style="color: #0A0F1F; margin: 0 0 15px 0; font-size: 16px;">Events You're Interested In:</h3>
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                ${eventsInterested.map(eventId => {
+                  const event = eventLabels[eventId];
+                  return event 
+                    ? `<li style="padding: 10px 15px; background: #ffffff; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e5e5e5;">
+                        <strong style="color: #0A0F1F;">${event.name}</strong>
+                        <span style="color: #666; font-size: 14px;"> (${event.timing})</span>
+                        <span style="color: #E4B548; font-size: 13px; display: block; margin-top: 4px;">${event.attendees} attendees</span>
+                      </li>`
+                    : '';
+                }).join('')}
+              </ul>
+            </div>
+            ` : ''}
+
+            <h2 style="color: #0A0F1F; margin-top: 0;">What to Expect</h2>
             
             <div style="margin: 25px 0;">
-              <div style="display: flex; margin-bottom: 20px;">
-                <div style="min-width: 40px; height: 40px; background: #E4B548; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0A0F1F; font-weight: bold; margin-right: 15px;">1</div>
-                <div>
-                  <strong style="color: #0A0F1F;">Review</strong>
-                  <p style="color: #666; margin: 5px 0 0;">Our team is reviewing your application for the ${packageLabel}.</p>
-                </div>
-              </div>
-              
-              <div style="display: flex; margin-bottom: 20px;">
-                <div style="min-width: 40px; height: 40px; background: #E4B548; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0A0F1F; font-weight: bold; margin-right: 15px;">2</div>
-                <div>
-                  <strong style="color: #0A0F1F;">Confirmation</strong>
-                  <p style="color: #666; margin: 5px 0 0;">We'll reach out within 1 business day to confirm availability.</p>
-                </div>
-              </div>
-              
-              <div style="display: flex;">
-                <div style="min-width: 40px; height: 40px; background: #E4B548; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0A0F1F; font-weight: bold; margin-right: 15px;">3</div>
-                <div>
-                  <strong style="color: #0A0F1F;">Finalize</strong>
-                  <p style="color: #666; margin: 5px 0 0;">We'll send payment instructions and booth details.</p>
-                </div>
-              </div>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 15px; background: #f8f9fa; border-radius: 8px 8px 0 0; border-bottom: 2px solid #fff;">
+                    <div style="display: flex; align-items: center;">
+                      <div style="min-width: 32px; height: 32px; background: #E4B548; border-radius: 50%; text-align: center; line-height: 32px; color: #0A0F1F; font-weight: bold; margin-right: 12px;">1</div>
+                      <div>
+                        <strong style="color: #0A0F1F;">Within 5 minutes</strong>
+                        <p style="color: #666; margin: 4px 0 0; font-size: 14px;">This confirmation email arrives in your inbox</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px; background: #f8f9fa; border-bottom: 2px solid #fff;">
+                    <div style="display: flex; align-items: center;">
+                      <div style="min-width: 32px; height: 32px; background: #E4B548; border-radius: 50%; text-align: center; line-height: 32px; color: #0A0F1F; font-weight: bold; margin-right: 12px;">2</div>
+                      <div>
+                        <strong style="color: #0A0F1F;">Within 24 hours</strong>
+                        <p style="color: #666; margin: 4px 0 0; font-size: 14px;">A call from our sponsorship team to discuss your goals</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px; background: #f8f9fa; border-bottom: 2px solid #fff;">
+                    <div style="display: flex; align-items: center;">
+                      <div style="min-width: 32px; height: 32px; background: #E4B548; border-radius: 50%; text-align: center; line-height: 32px; color: #0A0F1F; font-weight: bold; margin-right: 12px;">3</div>
+                      <div>
+                        <strong style="color: #0A0F1F;">Within 2-3 days</strong>
+                        <p style="color: #666; margin: 4px 0 0; font-size: 14px;">Package finalization and secure payment</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px; background: #f8f9fa; border-radius: 0 0 8px 8px;">
+                    <div style="display: flex; align-items: center;">
+                      <div style="min-width: 32px; height: 32px; background: #E4B548; border-radius: 50%; text-align: center; line-height: 32px; color: #0A0F1F; font-weight: bold; margin-right: 12px;">4</div>
+                      <div>
+                        <strong style="color: #0A0F1F;">2 weeks before event</strong>
+                        <p style="color: #666; margin: 4px 0 0; font-size: 14px;">Sponsor welcome kit and booth details</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
             </div>
             
             <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #E4B548;">
-              <p style="margin: 0; color: #0A0F1F; font-weight: bold;">Your Application Summary</p>
+              <p style="margin: 0; color: #0A0F1F; font-weight: bold;">Your Inquiry Summary</p>
               <p style="margin: 10px 0 0; color: #666;">
                 <strong>Company:</strong> ${data.companyName}<br>
-                <strong>Package:</strong> ${packageLabel}<br>
+                <strong>Package Interest:</strong> ${packageLabel}<br>
                 <strong>Industry:</strong> ${data.industry}
               </p>
             </div>
             
             <p style="margin-top: 30px; color: #666;">
-              Questions? Reply to this email or contact us at <a href="mailto:info@tfainsuranceadvisors.com" style="color: #E4B548;">info@tfainsuranceadvisors.com</a>
+              Questions? Reply to this email or contact us at <a href="mailto:leads@tfainsuranceadvisors.com" style="color: #E4B548;">leads@tfainsuranceadvisors.com</a>
             </p>
           </div>
           

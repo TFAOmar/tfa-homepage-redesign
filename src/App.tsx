@@ -86,6 +86,7 @@ import EstateGuruCanceled from "./pages/EstateGuruCanceled";
 import NotFound from "./pages/NotFound";
 import TFA2026KickoffSponsorship from "./pages/TFA2026KickoffSponsorship";
 import SponsorshipSuccess from "./pages/SponsorshipSuccess";
+import GeneralSponsorshipSuccess from "./pages/GeneralSponsorshipSuccess";
 import OnboardingChecklist from "./pages/OnboardingChecklist";
 import SubmitEvent from "./pages/SubmitEvent";
 import EventSponsorship from "./pages/EventSponsorship";
@@ -118,6 +119,7 @@ const AppLayout = () => {
           <Route path="/process" element={<Process />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/sponsorship" element={<EventSponsorship />} />
+          <Route path="/events/sponsorship/success" element={<GeneralSponsorshipSuccess />} />
           <Route path="/events/tfa-2026-kickoff-sponsorship" element={<TFA2026KickoffSponsorship />} />
           <Route path="/events/tfa-2026-kickoff-sponsorship/success" element={<SponsorshipSuccess />} />
           <Route path="/locations" element={<Locations />} />

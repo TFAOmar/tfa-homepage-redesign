@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -61,6 +62,7 @@ export const GeneralSponsorshipForm = ({
   preselectedEvents = [], 
   preselectedPackage 
 }: GeneralSponsorshipFormProps) => {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<string[]>(preselectedEvents);
   const { honeypotProps, isBot } = useHoneypot();
@@ -148,14 +150,13 @@ export const GeneralSponsorshipForm = ({
         console.error('Email notification failed:', emailError);
       });
 
-      toast.success("Thank you for your interest! Our team will contact you within 24 hours.");
-      
-      // Fire celebratory confetti
-      fireFireworks();
-      
-      // Reset form
-      setSelectedEvents([]);
-      setValue('eventsInterested', []);
+      // Redirect to success page with query params for personalization
+      const params = new URLSearchParams({
+        company: data.companyName,
+        events: data.eventsInterested.join(','),
+        package: data.preferredPackage
+      });
+      navigate(`/events/sponsorship/success?${params.toString()}`);
 
     } catch (error) {
       console.error('Form submission error:', error);
