@@ -262,18 +262,15 @@ const formatSSN = (ssn?: string): string => {
   return ssn;
 };
 
-const maskAccountNumber = (accountNum?: string): string => {
+// Show full account/routing numbers for agent PDF (unmasked for underwriting)
+const formatAccountNumber = (accountNum?: string): string => {
   if (!accountNum) return "N/A";
-  const cleaned = accountNum.replace(/\D/g, "");
-  if (cleaned.length >= 4) {
-    return `****${cleaned.slice(-4)}`;
-  }
-  return "****";
+  return accountNum;
 };
 
-const maskRoutingNumber = (routingNum?: string): string => {
+const formatRoutingNumber = (routingNum?: string): string => {
   if (!routingNum) return "N/A";
-  return "***masked***";
+  return routingNum;
 };
 
 const getPlanLabel = (planValue?: string): string => {
@@ -522,9 +519,8 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
     yPos = addPdfField(doc, "Country of Citizenship", formatPdfValue(step1.countryOfCitizenship), yPos, margin, pageWidth);
     yPos = addPdfField(doc, "Date of Entry", formatPdfDate(step1.dateOfEntry), yPos, margin, pageWidth);
     yPos = addPdfField(doc, "Visa Type", formatPdfValue(step1.visaType), yPos, margin, pageWidth);
-    if (step1.visaExpirationDate) {
-      yPos = addPdfField(doc, "Visa Expiration", formatPdfDate(step1.visaExpirationDate), yPos, margin, pageWidth);
-    }
+    yPos = addPdfField(doc, "Visa Expiration", formatPdfDate(step1.visaExpirationDate), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Permanent Resident Card #", formatPdfValue(step1.permanentResidentCard), yPos, margin, pageWidth);
   }
   
   // Home Address - using correct field names
@@ -548,45 +544,29 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   // ============ STEP 2: Contact & Employment ============
   yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 60);
   yPos = addPdfSectionHeader(doc, "STEP 2: CONTACT & EMPLOYMENT", yPos, margin, pageWidth);
+  
+  // Contact - Always show all phone numbers
   yPos = addPdfField(doc, "Email", formatPdfValue(step2.email), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Mobile Phone", formatPdfValue(step2.mobilePhone || applicantPhone), yPos, margin, pageWidth);
-  if (step2.homePhone) {
-    yPos = addPdfField(doc, "Home Phone", formatPdfValue(step2.homePhone), yPos, margin, pageWidth);
-  }
-  if (step2.workPhone) {
-    yPos = addPdfField(doc, "Work Phone", formatPdfValue(step2.workPhone), yPos, margin, pageWidth);
-  }
+  yPos = addPdfField(doc, "Home Phone", formatPdfValue(step2.homePhone), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Work Phone", formatPdfValue(step2.workPhone), yPos, margin, pageWidth);
   
-  // Employment - using correct field names
+  // Employment - Always show all fields
   yPos = addPdfField(doc, "Employer", formatPdfValue(step2.employerName), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Occupation", formatPdfValue(step2.occupation), yPos, margin, pageWidth);
-  if (step2.industry) {
-    yPos = addPdfField(doc, "Industry", formatPdfValue(step2.industry), yPos, margin, pageWidth);
-  }
-  if (step2.jobDuties) {
-    yPos = addPdfField(doc, "Job Duties", formatPdfValue(step2.jobDuties), yPos, margin, pageWidth);
-  }
-  if (step2.yearsEmployed !== undefined) {
-    yPos = addPdfField(doc, "Years Employed", formatPdfValue(step2.yearsEmployed), yPos, margin, pageWidth);
-  }
+  yPos = addPdfField(doc, "Industry", formatPdfValue(step2.industry), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Job Duties", formatPdfValue(step2.jobDuties), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Years Employed", formatPdfValue(step2.yearsEmployed), yPos, margin, pageWidth);
   
-  // Financials - using correct field names
+  // Financials - Always show all fields
   yPos = addPdfField(doc, "Annual Earned Income", formatCurrency(step2.annualEarnedIncome), yPos, margin, pageWidth);
-  if (step2.householdIncome) {
-    yPos = addPdfField(doc, "Household Income", formatCurrency(step2.householdIncome), yPos, margin, pageWidth);
-  }
+  yPos = addPdfField(doc, "Household Income", formatCurrency(step2.householdIncome), yPos, margin, pageWidth);
   yPos = addPdfField(doc, "Net Worth", formatCurrency(step2.netWorth), yPos, margin, pageWidth);
   
-  // Family Insurance
-  if (step2.spouseInsuranceAmount) {
-    yPos = addPdfField(doc, "Spouse Insurance", formatCurrency(step2.spouseInsuranceAmount), yPos, margin, pageWidth);
-  }
-  if (step2.parentsInsuranceAmount) {
-    yPos = addPdfField(doc, "Parents Insurance", formatCurrency(step2.parentsInsuranceAmount), yPos, margin, pageWidth);
-  }
-  if (step2.siblingsInsuranceAmount) {
-    yPos = addPdfField(doc, "Siblings Insurance", formatCurrency(step2.siblingsInsuranceAmount), yPos, margin, pageWidth);
-  }
+  // Family Insurance - Always show all fields
+  yPos = addPdfField(doc, "Spouse Insurance", formatCurrency(step2.spouseInsuranceAmount), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Parents Insurance", formatCurrency(step2.parentsInsuranceAmount), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Siblings Insurance", formatCurrency(step2.siblingsInsuranceAmount), yPos, margin, pageWidth);
   yPos += 5;
 
   // ============ STEP 3: Ownership ============
@@ -758,76 +738,50 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   yPos += 5;
 
   // ============ STEP 7: Medical & Lifestyle ============
-  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 60);
+  yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, 80);
   yPos = addPdfSectionHeader(doc, "STEP 7: MEDICAL & LIFESTYLE", yPos, margin, pageWidth);
   
-  // Using correct field names
-  const medicalFlags: string[] = [];
-  if (step7.usedTobacco) medicalFlags.push(`Tobacco Use: ${step7.tobaccoType || "Yes"}`);
-  if (step7.aviation) medicalFlags.push("Aviation Activities");
-  if (step7.hazardousSports) medicalFlags.push("Hazardous Sports");
-  if (step7.foreignTravel) medicalFlags.push("Foreign Travel");
-  if (step7.bankruptcy) medicalFlags.push("Bankruptcy History");
-  if (step7.criminalHistory) medicalFlags.push("Criminal History");
-  if (step7.drivingViolations) medicalFlags.push("Driving Violations");
-  if (step7.hasMedicalConditions) medicalFlags.push("Medical Conditions");
-
-  if (medicalFlags.length > 0) {
-    // Warning box
-    const boxHeight = 10 + medicalFlags.length * 6;
-    yPos = checkPdfPageBreak(doc, yPos, margin, pageWidth, boxHeight + 40);
-    
-    doc.setFillColor(254, 242, 242);
-    doc.rect(margin, yPos, pageWidth - margin * 2, boxHeight, "F");
-    doc.setDrawColor(239, 68, 68);
-    doc.setLineWidth(0.5);
-    doc.line(margin, yPos, margin, yPos + boxHeight);
-    
-    doc.setTextColor(153, 27, 27);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text("FLAGS REQUIRING REVIEW:", margin + 4, yPos + 7);
-    
-    doc.setFont("helvetica", "normal");
-    medicalFlags.forEach((flag, idx) => {
-      doc.text(`• ${flag}`, margin + 8, yPos + 14 + idx * 6);
-    });
-    yPos += boxHeight + 5;
-    
-    // Add details if present
-    if (step7.usedTobacco && step7.tobaccoFrequency) {
-      yPos = addPdfField(doc, "Tobacco Frequency", formatPdfValue(step7.tobaccoFrequency), yPos, margin, pageWidth);
-    }
-    if (step7.usedTobacco && step7.tobaccoLastUsed) {
-      yPos = addPdfField(doc, "Tobacco Last Used", formatPdfValue(step7.tobaccoLastUsed), yPos, margin, pageWidth);
-    }
-    if (step7.aviationDetails) {
-      yPos = addPdfField(doc, "Aviation Details", formatPdfValue(step7.aviationDetails), yPos, margin, pageWidth);
-    }
-    if (step7.hazardousSportsDetails) {
-      yPos = addPdfField(doc, "Hazardous Sports", formatPdfValue(step7.hazardousSportsDetails), yPos, margin, pageWidth);
-    }
-    if (step7.foreignTravelDetails) {
-      yPos = addPdfField(doc, "Foreign Travel", formatPdfValue(step7.foreignTravelDetails), yPos, margin, pageWidth);
-    }
-    if (step7.bankruptcyDetails) {
-      yPos = addPdfField(doc, "Bankruptcy Details", formatPdfValue(step7.bankruptcyDetails), yPos, margin, pageWidth);
-    }
-    if (step7.criminalHistoryDetails) {
-      yPos = addPdfField(doc, "Criminal History", formatPdfValue(step7.criminalHistoryDetails), yPos, margin, pageWidth);
-    }
-    if (step7.drivingViolationsDetails) {
-      yPos = addPdfField(doc, "Driving Violations", formatPdfValue(step7.drivingViolationsDetails), yPos, margin, pageWidth);
-    }
-    if (step7.medicalConditionsDetails) {
-      yPos = addPdfField(doc, "Medical Conditions", formatPdfValue(step7.medicalConditionsDetails), yPos, margin, pageWidth);
-    }
-  } else {
-    doc.setTextColor(22, 163, 74);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text("No medical or lifestyle flags", margin, yPos);
-    yPos += 7;
+  // Show ALL questions with explicit Yes/No answers
+  yPos = addPdfField(doc, "Used Tobacco (Last 5 Years)", step7.usedTobacco ? "Yes" : "No", yPos, margin, pageWidth);
+  if (step7.usedTobacco) {
+    yPos = addPdfField(doc, "Tobacco Type", formatPdfValue(step7.tobaccoType), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Tobacco Frequency", formatPdfValue(step7.tobaccoFrequency), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Tobacco Last Used", formatPdfValue(step7.tobaccoLastUsed), yPos, margin, pageWidth);
+  }
+  
+  yPos = addPdfField(doc, "Pilots Aircraft", step7.aviation ? "Yes" : "No", yPos, margin, pageWidth);
+  if (step7.aviation) {
+    yPos = addPdfField(doc, "Aviation Details", formatPdfValue(step7.aviationDetails), yPos, margin, pageWidth);
+  }
+  
+  yPos = addPdfField(doc, "Hazardous Sports", step7.hazardousSports ? "Yes" : "No", yPos, margin, pageWidth);
+  if (step7.hazardousSports) {
+    yPos = addPdfField(doc, "Hazardous Sports Details", formatPdfValue(step7.hazardousSportsDetails), yPos, margin, pageWidth);
+  }
+  
+  yPos = addPdfField(doc, "Foreign Travel Planned", step7.foreignTravel ? "Yes" : "No", yPos, margin, pageWidth);
+  if (step7.foreignTravel) {
+    yPos = addPdfField(doc, "Foreign Travel Details", formatPdfValue(step7.foreignTravelDetails), yPos, margin, pageWidth);
+  }
+  
+  yPos = addPdfField(doc, "Driving Violations (Last 5 Years)", step7.drivingViolations ? "Yes" : "No", yPos, margin, pageWidth);
+  if (step7.drivingViolations) {
+    yPos = addPdfField(doc, "Driving Violations Details", formatPdfValue(step7.drivingViolationsDetails), yPos, margin, pageWidth);
+  }
+  
+  yPos = addPdfField(doc, "Bankruptcy Filed", step7.bankruptcy ? "Yes" : "No", yPos, margin, pageWidth);
+  if (step7.bankruptcy) {
+    yPos = addPdfField(doc, "Bankruptcy Details", formatPdfValue(step7.bankruptcyDetails), yPos, margin, pageWidth);
+  }
+  
+  yPos = addPdfField(doc, "Criminal History", step7.criminalHistory ? "Yes" : "No", yPos, margin, pageWidth);
+  if (step7.criminalHistory) {
+    yPos = addPdfField(doc, "Criminal History Details", formatPdfValue(step7.criminalHistoryDetails), yPos, margin, pageWidth);
+  }
+  
+  yPos = addPdfField(doc, "Has Medical Conditions", step7.hasMedicalConditions ? "Yes" : "No", yPos, margin, pageWidth);
+  if (step7.hasMedicalConditions) {
+    yPos = addPdfField(doc, "Medical Conditions Details", formatPdfValue(step7.medicalConditionsDetails), yPos, margin, pageWidth);
   }
   yPos += 5;
 
@@ -839,8 +793,8 @@ const generateApplicationPdf = (data: NotificationDataWithEmail): string => {
   
   if (step8.paymentMethod === "eft") {
     yPos = addPdfField(doc, "Bank Name", formatPdfValue(step8.bankName), yPos, margin, pageWidth);
-    yPos = addPdfField(doc, "Routing Number", maskRoutingNumber(step8.routingNumber), yPos, margin, pageWidth);
-    yPos = addPdfField(doc, "Account Number", maskAccountNumber(step8.accountNumber), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Routing Number", formatRoutingNumber(step8.routingNumber), yPos, margin, pageWidth);
+    yPos = addPdfField(doc, "Account Number", formatAccountNumber(step8.accountNumber), yPos, margin, pageWidth);
     const accountType = step8.accountType === "checking" ? "Checking" : step8.accountType === "savings" ? "Savings" : formatPdfValue(step8.accountType);
     yPos = addPdfField(doc, "Account Type", accountType, yPos, margin, pageWidth);
   }
@@ -1126,8 +1080,8 @@ const generateAdminEmail = (data: NotificationDataWithEmail): string => {
         ${generateDataRow("Payment Frequency", getPaymentFrequencyLabel(step8.paymentFrequency))}
         ${step8.paymentMethod === "eft" ? `
           ${generateDataRow("Bank Name", step8.bankName || "N/A")}
-          ${generateDataRow("Routing Number", maskRoutingNumber(step8.routingNumber))}
-          ${generateDataRow("Account Number", maskAccountNumber(step8.accountNumber))}
+          ${generateDataRow("Routing Number", formatRoutingNumber(step8.routingNumber))}
+          ${generateDataRow("Account Number", formatAccountNumber(step8.accountNumber))}
           ${generateDataRow("Account Type", step8.accountType === "checking" ? "Checking" : step8.accountType === "savings" ? "Savings" : step8.accountType || "N/A")}
         ` : ""}
         ${generateDataRow("Source of Funds", step8.sourceOfFunds === "other" && step8.sourceOfFundsOther ? step8.sourceOfFundsOther : getSourceOfFundsLabel(step8.sourceOfFunds))}
