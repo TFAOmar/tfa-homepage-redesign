@@ -1284,10 +1284,32 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Received notification request for application:", data.applicationId);
     console.log("Form data steps received:", Object.keys(data.formData || {}).join(", "));
 
-    // Fetch advisor email server-side using advisorId (keeps PII secure)
+    // Fetch advisor email - FIRST try from the application record itself
     let advisorEmail: string | undefined;
-    if (data.advisorId) {
-      console.log("Looking up advisor email for ID:", data.advisorId, "Name:", data.advisorName);
+    
+    // Primary source: Get advisor_email directly from the application record
+    // This works for ALL advisors (static and dynamic) since email is stored at submission time
+    try {
+      console.log("Looking up advisor email from application record:", data.applicationId);
+      const { data: appData, error: appError } = await supabaseAdmin
+        .from("life_insurance_applications")
+        .select("advisor_email")
+        .eq("id", data.applicationId)
+        .single();
+      
+      if (appData?.advisor_email && !appError) {
+        advisorEmail = appData.advisor_email;
+        console.log("Found advisor email from application record:", advisorEmail);
+      } else {
+        console.log("Application record lookup returned no advisor_email, error:", appError?.message);
+      }
+    } catch (e) {
+      console.error("Error fetching advisor email from application:", e);
+    }
+    
+    // Fallback: Try dynamic_advisors lookup if no email found in application record
+    if (!advisorEmail && data.advisorId) {
+      console.log("Falling back to dynamic_advisors lookup for ID:", data.advisorId, "Name:", data.advisorName);
       
       // Try UUID lookup first
       try {
