@@ -1,118 +1,186 @@
 
 
-# Fix Life Insurance Email Notification System
+# Display All Application Details in Agent Notification PDF
 
-## Problem Summary
-Fabian Serrano's client (Marvin Olivar) submitted a life insurance application on January 26th, but neither Fabian nor the admin team received email notifications. Investigation reveals:
-
-1. **Application was successfully submitted** - Status is `submitted` with all data intact
-2. **No edge function logs exist** - `send-life-insurance-notification` has zero invocation records
-3. **Advisor email lookup fails for static advisors** - Fabian is not in the `dynamic_advisors` table
+## Summary
+Update the edge function PDF generator to show **every question answered** on the life insurance application without masking or hiding any information. Agents need complete visibility into all application data to process submissions effectively.
 
 ---
 
-## Root Cause Analysis
+## Issues Found
 
-The edge function has two issues:
-
-### Issue 1: Advisor Email Lookup Fails for Static Advisors
-The function tries to look up advisor email from `dynamic_advisors` table (lines 1287-1336), but:
-- Fabian Serrano is a **static advisor** (defined in code, not database)
-- The lookup by UUID fails (the `advisorId` passed is a slug like "fabian-serrano", not a UUID)
-- The slug fallback lookup fails because Fabian isn't in the database
-- **The function ignores the `advisor_email` already stored in the application record**
-
-### Issue 2: Edge Function May Not Be Deployed
-The lack of any logs (not even the initial "function invoked" log at line 1253) suggests the function may not be properly deployed or there's a silent failure during invocation.
+| Issue | Current Behavior | Fix |
+|-------|------------------|-----|
+| Routing Number | Shows `***masked***` | Show full number |
+| Account Number | Shows `****1234` (last 4 only) | Show full number |
+| Permanent Resident Card | Not displayed | Add to PDF |
+| Home/Work Phone | Only shown if provided | Always show (N/A if empty) |
+| Job Duties | Only shown if provided | Always show (N/A if empty) |
+| Industry | Only shown if provided | Always show (N/A if empty) |
+| Years Employed | Only shown if defined | Always show (N/A if empty) |
+| Household Income | Only shown if provided | Always show (N/A if empty) |
+| Family Insurance fields | Only shown if provided | Always show (N/A if empty) |
+| Medical questions | Only shown when TRUE | Always show Yes/No answers |
 
 ---
 
-## Solution
+## File to Modify
 
-### Part 1: Use Stored advisor_email as Primary Source
+**File:** `supabase/functions/send-life-insurance-notification/index.ts`
 
-Since the `advisor_email` is now stored directly in `life_insurance_applications` at submission time, the edge function should:
+---
 
-1. Fetch the stored `advisor_email` from the database using the `applicationId`
-2. Use that email instead of doing dynamic lookups
-3. Only fall back to `dynamic_advisors` lookup if no email is stored
+## Changes Required
 
-**File to Modify:** `supabase/functions/send-life-insurance-notification/index.ts`
+### 1. Remove Masking Functions
+Replace the masking functions with formatting functions that show full values:
 
 ```typescript
-// NEW: Fetch advisor_email from the application record first
-let advisorEmail: string | undefined;
-
-try {
-  const { data: appData, error: appError } = await supabaseAdmin
-    .from("life_insurance_applications")
-    .select("advisor_email")
-    .eq("id", data.applicationId)
-    .single();
-  
-  if (appData?.advisor_email && !appError) {
-    advisorEmail = appData.advisor_email;
-    console.log("Found advisor email from application record:", advisorEmail);
+// BEFORE (lines 265-277)
+const maskAccountNumber = (accountNum?: string): string => {
+  if (!accountNum) return "N/A";
+  const cleaned = accountNum.replace(/\D/g, "");
+  if (cleaned.length >= 4) {
+    return `****${cleaned.slice(-4)}`;
   }
-} catch (e) {
-  console.error("Error fetching advisor email from application:", e);
+  return "****";
+};
+
+const maskRoutingNumber = (routingNum?: string): string => {
+  if (!routingNum) return "N/A";
+  return "***masked***";
+};
+
+// AFTER
+const formatAccountNumber = (accountNum?: string): string => {
+  if (!accountNum) return "N/A";
+  return accountNum;
+};
+
+const formatRoutingNumber = (routingNum?: string): string => {
+  if (!routingNum) return "N/A";
+  return routingNum;
+};
+```
+
+### 2. Add Missing Step 1 Field (Permanent Resident Card)
+After line 527 (visa expiration), add:
+
+```typescript
+if (step1.permanentResidentCard) {
+  yPos = addPdfField(doc, "Permanent Resident Card #", formatPdfValue(step1.permanentResidentCard), yPos, margin, pageWidth);
+}
+```
+
+### 3. Update Step 2 to Show All Fields (Not Just When Present)
+Change conditional fields to always display (lines 553-589):
+
+```typescript
+// Contact - Always show all phone numbers
+yPos = addPdfField(doc, "Email", formatPdfValue(step2.email), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Mobile Phone", formatPdfValue(step2.mobilePhone || applicantPhone), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Home Phone", formatPdfValue(step2.homePhone), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Work Phone", formatPdfValue(step2.workPhone), yPos, margin, pageWidth);
+
+// Employment - Always show all fields
+yPos = addPdfField(doc, "Employer", formatPdfValue(step2.employerName), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Occupation", formatPdfValue(step2.occupation), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Industry", formatPdfValue(step2.industry), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Job Duties", formatPdfValue(step2.jobDuties), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Years Employed", formatPdfValue(step2.yearsEmployed), yPos, margin, pageWidth);
+
+// Financials - Always show all fields
+yPos = addPdfField(doc, "Annual Earned Income", formatCurrency(step2.annualEarnedIncome), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Household Income", formatCurrency(step2.householdIncome), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Net Worth", formatCurrency(step2.netWorth), yPos, margin, pageWidth);
+
+// Family Insurance - Always show all fields
+yPos = addPdfField(doc, "Spouse Insurance", formatCurrency(step2.spouseInsuranceAmount), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Parents Insurance", formatCurrency(step2.parentsInsuranceAmount), yPos, margin, pageWidth);
+yPos = addPdfField(doc, "Siblings Insurance", formatCurrency(step2.siblingsInsuranceAmount), yPos, margin, pageWidth);
+```
+
+### 4. Update Step 7 to Show All Yes/No Answers
+Show all medical/lifestyle questions with their answers, not just the ones marked TRUE:
+
+```typescript
+// Show all questions with Yes/No answers
+yPos = addPdfField(doc, "Used Tobacco (Last 5 Years)", step7.usedTobacco ? "Yes" : "No", yPos, margin, pageWidth);
+if (step7.usedTobacco) {
+  yPos = addPdfField(doc, "Tobacco Type", formatPdfValue(step7.tobaccoType), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Tobacco Frequency", formatPdfValue(step7.tobaccoFrequency), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Tobacco Last Used", formatPdfValue(step7.tobaccoLastUsed), yPos, margin, pageWidth);
 }
 
-// Only do dynamic_advisors lookup if email not found in application
-if (!advisorEmail && data.advisorId) {
-  // ... existing lookup logic as fallback
+yPos = addPdfField(doc, "Pilots Aircraft", step7.aviation ? "Yes" : "No", yPos, margin, pageWidth);
+if (step7.aviation) {
+  yPos = addPdfField(doc, "Aviation Details", formatPdfValue(step7.aviationDetails), yPos, margin, pageWidth);
+}
+
+yPos = addPdfField(doc, "Hazardous Sports", step7.hazardousSports ? "Yes" : "No", yPos, margin, pageWidth);
+if (step7.hazardousSports) {
+  yPos = addPdfField(doc, "Hazardous Sports Details", formatPdfValue(step7.hazardousSportsDetails), yPos, margin, pageWidth);
+}
+
+yPos = addPdfField(doc, "Foreign Travel Planned", step7.foreignTravel ? "Yes" : "No", yPos, margin, pageWidth);
+if (step7.foreignTravel) {
+  yPos = addPdfField(doc, "Foreign Travel Details", formatPdfValue(step7.foreignTravelDetails), yPos, margin, pageWidth);
+}
+
+yPos = addPdfField(doc, "Driving Violations (Last 5 Years)", step7.drivingViolations ? "Yes" : "No", yPos, margin, pageWidth);
+if (step7.drivingViolations) {
+  yPos = addPdfField(doc, "Driving Violations Details", formatPdfValue(step7.drivingViolationsDetails), yPos, margin, pageWidth);
+}
+
+yPos = addPdfField(doc, "Bankruptcy Filed", step7.bankruptcy ? "Yes" : "No", yPos, margin, pageWidth);
+if (step7.bankruptcy) {
+  yPos = addPdfField(doc, "Bankruptcy Details", formatPdfValue(step7.bankruptcyDetails), yPos, margin, pageWidth);
+}
+
+yPos = addPdfField(doc, "Criminal History", step7.criminalHistory ? "Yes" : "No", yPos, margin, pageWidth);
+if (step7.criminalHistory) {
+  yPos = addPdfField(doc, "Criminal History Details", formatPdfValue(step7.criminalHistoryDetails), yPos, margin, pageWidth);
+}
+
+yPos = addPdfField(doc, "Has Medical Conditions", step7.hasMedicalConditions ? "Yes" : "No", yPos, margin, pageWidth);
+if (step7.hasMedicalConditions) {
+  yPos = addPdfField(doc, "Medical Conditions Details", formatPdfValue(step7.medicalConditionsDetails), yPos, margin, pageWidth);
 }
 ```
 
-### Part 2: Deploy the Edge Function
+### 5. Update Step 8 to Show Full Bank Details
+Update lines 840-845 to remove masking:
 
-After making the fix, deploy the function to ensure it's active:
-
-```
-supabase functions deploy send-life-insurance-notification
-```
-
-### Part 3: Resend Notification for Fabian's Application
-
-Use the existing "Resend PDF to Advisor" feature from the Admin Dashboard to manually trigger the notification for:
-- Application ID: `ce351ca6-d8f7-40b4-980f-c4f9baa248ae`
-- Applicant: Marvin Olivar
-- Advisor: Fabian Serrano (fabian@shftinsurance.com)
-
----
-
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `supabase/functions/send-life-insurance-notification/index.ts` | Add database lookup for `advisor_email` from application record before dynamic_advisors fallback |
-
----
-
-## Technical Details
-
-### Current Flow (Broken)
-```text
-1. Frontend invokes edge function with advisorId="fabian-serrano"
-2. Function tries UUID lookup in dynamic_advisors → FAILS
-3. Function tries slug lookup in dynamic_advisors → FAILS  
-4. advisorEmail = undefined
-5. Admin gets email, advisor gets nothing
-```
-
-### Fixed Flow
-```text
-1. Frontend invokes edge function with applicationId
-2. Function fetches advisor_email FROM application record → "fabian@shftinsurance.com"
-3. Emails sent to admin AND advisor
+```typescript
+if (step8.paymentMethod === "eft") {
+  yPos = addPdfField(doc, "Bank Name", formatPdfValue(step8.bankName), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Routing Number", formatRoutingNumber(step8.routingNumber), yPos, margin, pageWidth);
+  yPos = addPdfField(doc, "Account Number", formatAccountNumber(step8.accountNumber), yPos, margin, pageWidth);
+  const accountType = step8.accountType === "checking" ? "Checking" : step8.accountType === "savings" ? "Savings" : formatPdfValue(step8.accountType);
+  yPos = addPdfField(doc, "Account Type", accountType, yPos, margin, pageWidth);
+}
 ```
 
 ---
 
 ## After Implementation
 
-1. Redeploy the `send-life-insurance-notification` edge function
-2. Manually resend the notification for Fabian's application using Admin Dashboard
-3. Future submissions will use the stored `advisor_email` from the application record
-4. All advisors (static and dynamic) will receive notifications
+- **Full Visibility**: Agents will see every field from the application, including:
+  - Complete routing and account numbers (unmasked)
+  - All phone numbers and contact details
+  - All employment and financial information
+  - All Yes/No answers for medical/lifestyle questions
+  - Permanent resident card number (if applicable)
+- **No Blocked Information**: Every question answered on the form will appear in the PDF
+- **Clear Answers**: Medical/lifestyle questions show explicit "Yes" or "No" instead of only appearing when true
+
+---
+
+## Security Note
+
+The PDF is sent only to:
+1. The assigned advisor (via their verified email)
+2. The TFA admin inbox (leads@tfainsuranceadvisors.com)
+
+Both recipients are authorized to view full application data for underwriting purposes. The email body will still mask SSNs for security, but the attached PDF will contain complete unmasked information.
 
