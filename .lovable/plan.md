@@ -1,144 +1,113 @@
 
 
-# Add Erica Valenzuela Advisor Profile & Living Trust Landing Page
+# Add Elena Esquivel Advisor Profile Page
 
 ## Summary
-Create a complete advisor presence for **Erica Valenzuela**, including:
-1. Static advisor directory entry with enhanced biography
-2. Dedicated advisor profile page at `/advisors/erica-valenzuela`
-3. Standalone Living Trust landing page at `/advisors/erica-valenzuela/living-trust`
-4. Custom Living Trust form component for lead capture
+Create a dedicated advisor profile page for **Elena Esquivel** at `/advisors/elena-esquivel`. Elena already has a complete directory entry and photo in the system—she just needs a full landing page.
 
 ---
 
-## Enhanced Biography
+## Elena's Background (from existing data)
 
-Based on the provided information, here's an improved bio that highlights Erica's unique background and approach:
+- **Title**: Financial Strategist & Estate Planning Consultant
+- **Location**: Chino Hills, CA
+- **Experience**: 15+ years in Insurance and Financial Services
+- **Notable Achievement**: Top producer at Kaiser Permanente for 5 consecutive years
+- **Credentials**: Life & Health License (Lic# 4218087)
+- **Languages**: Bilingual (Spanish/English)
 
-> **"Erica Valenzuela understands the realities of high-stress professions—and the importance of planning for the unexpected. With a background in corrections, she brings a grounded, steady approach to financial education, helping families in demanding careers protect what matters most.**
->
-> **Specializing in protection planning with a focus on Living Trust awareness, Erica empowers clients to make informed decisions about their family's future. Her calm, education-first philosophy ensures you'll feel supported and confident at every step.**
->
-> **As a licensed Notary, Real Estate Professional, and Life Insurance Specialist, Erica provides a unique, well-rounded perspective—bridging real estate, protection planning, and estate awareness into a cohesive strategy for families who need their plan to work when it counts."**
+**Specialties**:
+- Medicare Planning
+- Retirement Planning
+- 401(k) Guidance
+- Estate Planning
+- Tax Strategies
+- Life Insurance
 
 ---
 
 ## Files to Create
 
-### 1. Advisor Photo
-**Copy:** `user-uploads://Erica_Valenzuela.jpg` → `src/assets/advisors/erica-valenzuela.jpg`
+### 1. Advisor Profile Page
+**File**: `src/pages/AdvisorElenaEsquivel.tsx`
 
-### 2. Advisor Directory Entry
-**File:** `src/data/advisors.ts`
+Following the established pattern (like Erica Valenzuela), the page will include:
 
-Add import and entry:
-```typescript
-import ericaValenzuelaImg from "@/assets/advisors/erica-valenzuela.jpg";
+**Hero Section**:
+- Photo, bilingual badge, name, tagline
+- "Book a Consultation" and "Contact Me" buttons
+- Phone: (951) 255-4997
+- Email: eeesquivel@tfainsuranceadvisors.com
 
-// Add to advisors array:
-{
-  id: "erica-valenzuela",
-  name: "Erica Valenzuela",
-  title: "Financial Strategist",
-  type: "Advisor",
-  state: "California",
-  city: "Chino Hills",  // Assuming based on TFA HQ
-  region: "West",
-  bio: "Erica brings a grounded, steady approach to financial education, helping families in demanding careers—including corrections and first responders—protect what matters most. Specializing in protection planning with a focus on Living Trust awareness, she empowers clients to make informed decisions with a calm, education-first philosophy.",
-  specialties: ["Bilingual • Bilingüe", "Living Trust Planning", "Life Insurance", "Estate Planning", "Real Estate"],
-  licenses: ["Life & Health", "Notary Public", "Real Estate"],
-  image: ericaValenzuelaImg,
-  email: "evalenzuela@tfainsuranceadvisors.com",
-  phone: "(909) 455-3878",
-  landingPage: "/advisors/erica-valenzuela"
-}
-```
+**About Section**:
+- Enhanced biography highlighting her Kaiser Permanente success
+- 15+ years of experience
+- Specialties badges
 
-### 3. Advisor Profile Page
-**File:** `src/pages/AdvisorEricaValenzuela.tsx`
+**Services Section** (6 cards tailored to her expertise):
+1. **Medicare Planning** - Navigate Medicare options with confidence
+2. **Retirement Planning** - Sustainable income strategies for your golden years
+3. **401(k) Guidance** - Smart rollover and optimization strategies
+4. **Estate Planning** - Living trusts and legacy protection
+5. **Tax Strategies** - Wealth-preservation and tax-efficient planning
+6. **Life Insurance** - Income protection for you and your family
 
-Structure following established pattern (like AdvisorFabianSerrano):
-- **Hero Section** with photo, badge, name, tagline, contact buttons
-- **About Section** highlighting corrections background and education-first approach
-- **Services Section** (6 cards): Living Trust Planning, Life Insurance, Estate Planning, Real Estate Solutions, Protection Planning, Financial Education
-- **Process Section** (4 steps): Discovery → Analysis → Strategy → Implementation
-- **CTA Section** with Living Trust Questionnaire button
-- **Modals**: ScheduleModal and ContactModal
+**Process Section** (4 steps):
+1. Discovery - Understand your goals and current situation
+2. Analysis - Review coverage, gaps, and opportunities
+3. Strategy - Develop a customized plan
+4. Implementation - Guide you through execution with ongoing support
 
-Key differentiators to highlight:
-- Background in corrections (understands high-stress professions)
-- Notary, Real Estate, and Life License credentials
-- Education-driven approach
-- Focus on Living Trust awareness
-- Bilingual capability (gold badge)
+**CTA Section**:
+- Schedule consultation button
+- Link to Living Trust Questionnaire
 
-### 4. Living Trust Landing Page
-**File:** `src/pages/EricaValenzuelaLivingTrust.tsx`
-
-Standalone page structure following BraihyraLivingTrust pattern:
-- **TFA-Only Header** (no co-branding needed)
-- **Hero Section** with photo and headline
-- **Benefits Section** (4 cards): Avoid Probate, Protect Privacy, Maintain Control, Reduce Family Stress
-- **About Erica Section** emphasizing her corrections background and calm approach
-- **Form Section** with custom lead capture form
-- **What Happens Next Section** (3 steps)
-- **Final CTA Section** with phone/email
-- **Footer**
-
-### 5. Living Trust Form Component
-**File:** `src/components/living-trust/EricaValenzuelaLivingTrustForm.tsx`
-
-Custom form that:
-- Collects: Name, Email, Phone, Marital Status, Property Ownership, Estate Value, Preferred Contact, Best Time
-- Routes to: `evalenzuela@tfainsuranceadvisors.com`
-- Tags: `["Living Trust", "Erica Valenzuela"]`
-- Uses standard form submission via `submitForm()`
-- Includes honeypot protection and confetti celebration
+**Modals**:
+- ScheduleModal for consultation booking
+- ContactModal for direct inquiries
 
 ---
 
 ## Files to Modify
 
-### 6. App.tsx Routes & Standalone Pages
+### 2. App.tsx
 
-Add imports:
+**Add import**:
 ```typescript
-import AdvisorEricaValenzuela from "./pages/AdvisorEricaValenzuela";
-import EricaValenzuelaLivingTrust from "./pages/EricaValenzuelaLivingTrust";
+import AdvisorElenaEsquivel from "./pages/AdvisorElenaEsquivel";
 ```
 
-Add to standalonePages array:
+**Add route**:
 ```typescript
-'/advisors/erica-valenzuela/living-trust'
+<Route path="/advisors/elena-esquivel" element={<AdvisorElenaEsquivel />} />
 ```
 
-Add routes:
+### 3. src/data/advisors.ts
+
+**Add `landingPage` property** to Elena's existing entry:
 ```typescript
-<Route path="/advisors/erica-valenzuela" element={<AdvisorEricaValenzuela />} />
-<Route path="/advisors/erica-valenzuela/living-trust" element={<EricaValenzuelaLivingTrust />} />
+landingPage: "/advisors/elena-esquivel"
 ```
+
+This enables the "View Full Profile" button in the directory.
 
 ---
 
 ## Technical Details
 
-### Specialties & Badges
-- **Primary Badge**: "Bilingual • Bilingüe" (gold styling per TFA pattern)
-- **Credentials**: Notary, Real Estate, Life License
+### Contact Information
+- **Phone**: (951) 255-4997
+- **Email**: eeesquivel@tfainsuranceadvisors.com
+- **Location**: Chino Hills, CA
 
 ### Email Routing
-- Form submissions route to: `evalenzuela@tfainsuranceadvisors.com`
-- CC: `leads@tfainsuranceadvisors.com` (via standard form handler)
+Form submissions will route to:
+- `eeesquivel@tfainsuranceadvisors.com` (Elena's direct email)
+- `leads@tfainsuranceadvisors.com` (via standard form handler CC)
 
 ### SEO Configuration
-- Profile: `/advisors/erica-valenzuela`
-- Living Trust: `/advisors/erica-valenzuela/living-trust`
-- Keywords: living trust, estate planning, corrections, first responders, bilingual
-
-### Contact Information
-- Phone: (909) 455-3878
-- Email: evalenzuela@tfainsuranceadvisors.com
-- Location: California (Chino Hills area based on TFA HQ)
+- **URL**: `/advisors/elena-esquivel`
+- **Keywords**: Elena Esquivel, Medicare planning, retirement planning, 401k rollover, estate planning, bilingual, Chino Hills CA
 
 ---
 
@@ -146,20 +115,16 @@ Add routes:
 
 | Action | File |
 |--------|------|
-| Copy | `user-uploads://Erica_Valenzuela.jpg` → `src/assets/advisors/erica-valenzuela.jpg` |
-| Modify | `src/data/advisors.ts` - Add import + advisor entry |
-| Create | `src/pages/AdvisorEricaValenzuela.tsx` - Full profile page |
-| Create | `src/pages/EricaValenzuelaLivingTrust.tsx` - Standalone landing page |
-| Create | `src/components/living-trust/EricaValenzuelaLivingTrustForm.tsx` - Lead form |
-| Modify | `src/App.tsx` - Add imports, routes, and standalone page path |
+| Create | `src/pages/AdvisorElenaEsquivel.tsx` - Full profile page |
+| Modify | `src/App.tsx` - Add import and route |
+| Modify | `src/data/advisors.ts` - Add `landingPage` property |
 
 ---
 
 ## After Implementation
 
-1. Erica will appear in the advisor directory with bilingual badge
-2. Her profile page will be accessible at `/advisors/erica-valenzuela`
-3. Living Trust landing page available at `/advisors/erica-valenzuela/living-trust`
-4. Form submissions will route to her email with proper lead tracking
-5. She can use the Living Trust page for QR codes and lead generation
+1. Elena will have her "View Full Profile" button active in the advisor directory
+2. Her profile page will be accessible at `/advisors/elena-esquivel`
+3. Form submissions will route to her email with proper lead tracking
+4. Her Kaiser Permanente background and 15+ years experience will be prominently featured
 
