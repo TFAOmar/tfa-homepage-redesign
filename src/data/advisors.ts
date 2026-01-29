@@ -26,6 +26,7 @@ import erikJohnsonImg from "@/assets/advisors/erik-johnson.jpg";
 import braihyraMedellinImg from "@/assets/advisors/braihyra-medellin.jpg";
 import erinGraceVargasImg from "@/assets/advisors/erin-grace-vargas.jpg";
 import fabianSerranoImg from "@/assets/advisors/fabian-serrano.jpg";
+import ericaValenzuelaImg from "@/assets/advisors/erica-valenzuela.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -481,6 +482,22 @@ export const advisors: Advisor[] = [
     phone: "(909) 323-7601",
     yearsOfExperience: 20,
     landingPage: "/advisors/fabian-serrano"
+  },
+  {
+    id: "erica-valenzuela",
+    name: "Erica Valenzuela",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Erica brings a grounded, steady approach to financial education, helping families in demanding careers—including corrections and first responders—protect what matters most. Specializing in protection planning with a focus on Living Trust awareness, she empowers clients to make informed decisions with a calm, education-first philosophy.",
+    specialties: ["Bilingual • Bilingüe", "Living Trust Planning", "Life Insurance", "Estate Planning", "Real Estate"],
+    licenses: ["Life & Health", "Notary Public", "Real Estate"],
+    image: ericaValenzuelaImg,
+    email: "evalenzuela@tfainsuranceadvisors.com",
+    phone: "(909) 455-3878",
+    landingPage: "/advisors/erica-valenzuela"
   }
 ];
 

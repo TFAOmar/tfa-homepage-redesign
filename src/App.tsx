@@ -67,6 +67,8 @@ import BraihyraLivingTrust from "./pages/BraihyraLivingTrust";
 import AdvisorErinGraceVargas from "./pages/AdvisorErinGraceVargas";
 import AdvisorFabianSerrano from "./pages/AdvisorFabianSerrano";
 import AdvisorIsraelCastaneda from "./pages/AdvisorIsraelCastaneda";
+import AdvisorEricaValenzuela from "./pages/AdvisorEricaValenzuela";
+import EricaValenzuelaLivingTrust from "./pages/EricaValenzuelaLivingTrust";
 import RuthPachecoTaxStrategy from "./pages/RuthPachecoTaxStrategy";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
@@ -94,7 +96,7 @@ import EventSponsorship from "./pages/EventSponsorship";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/braihyra-medellin/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -185,6 +187,8 @@ const AppLayout = () => {
           <Route path="/advisors/erin-grace-vargas" element={<AdvisorErinGraceVargas />} />
           <Route path="/advisors/fabian-serrano" element={<AdvisorFabianSerrano />} />
           <Route path="/advisors/israel-castaneda" element={<AdvisorIsraelCastaneda />} />
+          <Route path="/advisors/erica-valenzuela" element={<AdvisorEricaValenzuela />} />
+          <Route path="/advisors/erica-valenzuela/living-trust" element={<EricaValenzuelaLivingTrust />} />
           <Route path="/advisors/patricia-serafin/es" element={<AdvisorPatriciaSerafinSpanish />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
           <Route path="/services/estate-planning" element={<EstatePlanning />} />
