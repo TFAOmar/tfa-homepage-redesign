@@ -1,186 +1,165 @@
 
 
-# Display All Application Details in Agent Notification PDF
+# Add Erica Valenzuela Advisor Profile & Living Trust Landing Page
 
 ## Summary
-Update the edge function PDF generator to show **every question answered** on the life insurance application without masking or hiding any information. Agents need complete visibility into all application data to process submissions effectively.
+Create a complete advisor presence for **Erica Valenzuela**, including:
+1. Static advisor directory entry with enhanced biography
+2. Dedicated advisor profile page at `/advisors/erica-valenzuela`
+3. Standalone Living Trust landing page at `/advisors/erica-valenzuela/living-trust`
+4. Custom Living Trust form component for lead capture
 
 ---
 
-## Issues Found
+## Enhanced Biography
 
-| Issue | Current Behavior | Fix |
-|-------|------------------|-----|
-| Routing Number | Shows `***masked***` | Show full number |
-| Account Number | Shows `****1234` (last 4 only) | Show full number |
-| Permanent Resident Card | Not displayed | Add to PDF |
-| Home/Work Phone | Only shown if provided | Always show (N/A if empty) |
-| Job Duties | Only shown if provided | Always show (N/A if empty) |
-| Industry | Only shown if provided | Always show (N/A if empty) |
-| Years Employed | Only shown if defined | Always show (N/A if empty) |
-| Household Income | Only shown if provided | Always show (N/A if empty) |
-| Family Insurance fields | Only shown if provided | Always show (N/A if empty) |
-| Medical questions | Only shown when TRUE | Always show Yes/No answers |
+Based on the provided information, here's an improved bio that highlights Erica's unique background and approach:
+
+> **"Erica Valenzuela understands the realities of high-stress professions—and the importance of planning for the unexpected. With a background in corrections, she brings a grounded, steady approach to financial education, helping families in demanding careers protect what matters most.**
+>
+> **Specializing in protection planning with a focus on Living Trust awareness, Erica empowers clients to make informed decisions about their family's future. Her calm, education-first philosophy ensures you'll feel supported and confident at every step.**
+>
+> **As a licensed Notary, Real Estate Professional, and Life Insurance Specialist, Erica provides a unique, well-rounded perspective—bridging real estate, protection planning, and estate awareness into a cohesive strategy for families who need their plan to work when it counts."**
 
 ---
 
-## File to Modify
+## Files to Create
 
-**File:** `supabase/functions/send-life-insurance-notification/index.ts`
+### 1. Advisor Photo
+**Copy:** `user-uploads://Erica_Valenzuela.jpg` → `src/assets/advisors/erica-valenzuela.jpg`
+
+### 2. Advisor Directory Entry
+**File:** `src/data/advisors.ts`
+
+Add import and entry:
+```typescript
+import ericaValenzuelaImg from "@/assets/advisors/erica-valenzuela.jpg";
+
+// Add to advisors array:
+{
+  id: "erica-valenzuela",
+  name: "Erica Valenzuela",
+  title: "Financial Strategist",
+  type: "Advisor",
+  state: "California",
+  city: "Chino Hills",  // Assuming based on TFA HQ
+  region: "West",
+  bio: "Erica brings a grounded, steady approach to financial education, helping families in demanding careers—including corrections and first responders—protect what matters most. Specializing in protection planning with a focus on Living Trust awareness, she empowers clients to make informed decisions with a calm, education-first philosophy.",
+  specialties: ["Bilingual • Bilingüe", "Living Trust Planning", "Life Insurance", "Estate Planning", "Real Estate"],
+  licenses: ["Life & Health", "Notary Public", "Real Estate"],
+  image: ericaValenzuelaImg,
+  email: "evalenzuela@tfainsuranceadvisors.com",
+  phone: "(909) 455-3878",
+  landingPage: "/advisors/erica-valenzuela"
+}
+```
+
+### 3. Advisor Profile Page
+**File:** `src/pages/AdvisorEricaValenzuela.tsx`
+
+Structure following established pattern (like AdvisorFabianSerrano):
+- **Hero Section** with photo, badge, name, tagline, contact buttons
+- **About Section** highlighting corrections background and education-first approach
+- **Services Section** (6 cards): Living Trust Planning, Life Insurance, Estate Planning, Real Estate Solutions, Protection Planning, Financial Education
+- **Process Section** (4 steps): Discovery → Analysis → Strategy → Implementation
+- **CTA Section** with Living Trust Questionnaire button
+- **Modals**: ScheduleModal and ContactModal
+
+Key differentiators to highlight:
+- Background in corrections (understands high-stress professions)
+- Notary, Real Estate, and Life License credentials
+- Education-driven approach
+- Focus on Living Trust awareness
+- Bilingual capability (gold badge)
+
+### 4. Living Trust Landing Page
+**File:** `src/pages/EricaValenzuelaLivingTrust.tsx`
+
+Standalone page structure following BraihyraLivingTrust pattern:
+- **TFA-Only Header** (no co-branding needed)
+- **Hero Section** with photo and headline
+- **Benefits Section** (4 cards): Avoid Probate, Protect Privacy, Maintain Control, Reduce Family Stress
+- **About Erica Section** emphasizing her corrections background and calm approach
+- **Form Section** with custom lead capture form
+- **What Happens Next Section** (3 steps)
+- **Final CTA Section** with phone/email
+- **Footer**
+
+### 5. Living Trust Form Component
+**File:** `src/components/living-trust/EricaValenzuelaLivingTrustForm.tsx`
+
+Custom form that:
+- Collects: Name, Email, Phone, Marital Status, Property Ownership, Estate Value, Preferred Contact, Best Time
+- Routes to: `evalenzuela@tfainsuranceadvisors.com`
+- Tags: `["Living Trust", "Erica Valenzuela"]`
+- Uses standard form submission via `submitForm()`
+- Includes honeypot protection and confetti celebration
 
 ---
 
-## Changes Required
+## Files to Modify
 
-### 1. Remove Masking Functions
-Replace the masking functions with formatting functions that show full values:
+### 6. App.tsx Routes & Standalone Pages
 
+Add imports:
 ```typescript
-// BEFORE (lines 265-277)
-const maskAccountNumber = (accountNum?: string): string => {
-  if (!accountNum) return "N/A";
-  const cleaned = accountNum.replace(/\D/g, "");
-  if (cleaned.length >= 4) {
-    return `****${cleaned.slice(-4)}`;
-  }
-  return "****";
-};
-
-const maskRoutingNumber = (routingNum?: string): string => {
-  if (!routingNum) return "N/A";
-  return "***masked***";
-};
-
-// AFTER
-const formatAccountNumber = (accountNum?: string): string => {
-  if (!accountNum) return "N/A";
-  return accountNum;
-};
-
-const formatRoutingNumber = (routingNum?: string): string => {
-  if (!routingNum) return "N/A";
-  return routingNum;
-};
+import AdvisorEricaValenzuela from "./pages/AdvisorEricaValenzuela";
+import EricaValenzuelaLivingTrust from "./pages/EricaValenzuelaLivingTrust";
 ```
 
-### 2. Add Missing Step 1 Field (Permanent Resident Card)
-After line 527 (visa expiration), add:
-
+Add to standalonePages array:
 ```typescript
-if (step1.permanentResidentCard) {
-  yPos = addPdfField(doc, "Permanent Resident Card #", formatPdfValue(step1.permanentResidentCard), yPos, margin, pageWidth);
-}
+'/advisors/erica-valenzuela/living-trust'
 ```
 
-### 3. Update Step 2 to Show All Fields (Not Just When Present)
-Change conditional fields to always display (lines 553-589):
-
+Add routes:
 ```typescript
-// Contact - Always show all phone numbers
-yPos = addPdfField(doc, "Email", formatPdfValue(step2.email), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Mobile Phone", formatPdfValue(step2.mobilePhone || applicantPhone), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Home Phone", formatPdfValue(step2.homePhone), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Work Phone", formatPdfValue(step2.workPhone), yPos, margin, pageWidth);
-
-// Employment - Always show all fields
-yPos = addPdfField(doc, "Employer", formatPdfValue(step2.employerName), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Occupation", formatPdfValue(step2.occupation), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Industry", formatPdfValue(step2.industry), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Job Duties", formatPdfValue(step2.jobDuties), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Years Employed", formatPdfValue(step2.yearsEmployed), yPos, margin, pageWidth);
-
-// Financials - Always show all fields
-yPos = addPdfField(doc, "Annual Earned Income", formatCurrency(step2.annualEarnedIncome), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Household Income", formatCurrency(step2.householdIncome), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Net Worth", formatCurrency(step2.netWorth), yPos, margin, pageWidth);
-
-// Family Insurance - Always show all fields
-yPos = addPdfField(doc, "Spouse Insurance", formatCurrency(step2.spouseInsuranceAmount), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Parents Insurance", formatCurrency(step2.parentsInsuranceAmount), yPos, margin, pageWidth);
-yPos = addPdfField(doc, "Siblings Insurance", formatCurrency(step2.siblingsInsuranceAmount), yPos, margin, pageWidth);
+<Route path="/advisors/erica-valenzuela" element={<AdvisorEricaValenzuela />} />
+<Route path="/advisors/erica-valenzuela/living-trust" element={<EricaValenzuelaLivingTrust />} />
 ```
 
-### 4. Update Step 7 to Show All Yes/No Answers
-Show all medical/lifestyle questions with their answers, not just the ones marked TRUE:
+---
 
-```typescript
-// Show all questions with Yes/No answers
-yPos = addPdfField(doc, "Used Tobacco (Last 5 Years)", step7.usedTobacco ? "Yes" : "No", yPos, margin, pageWidth);
-if (step7.usedTobacco) {
-  yPos = addPdfField(doc, "Tobacco Type", formatPdfValue(step7.tobaccoType), yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "Tobacco Frequency", formatPdfValue(step7.tobaccoFrequency), yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "Tobacco Last Used", formatPdfValue(step7.tobaccoLastUsed), yPos, margin, pageWidth);
-}
+## Technical Details
 
-yPos = addPdfField(doc, "Pilots Aircraft", step7.aviation ? "Yes" : "No", yPos, margin, pageWidth);
-if (step7.aviation) {
-  yPos = addPdfField(doc, "Aviation Details", formatPdfValue(step7.aviationDetails), yPos, margin, pageWidth);
-}
+### Specialties & Badges
+- **Primary Badge**: "Bilingual • Bilingüe" (gold styling per TFA pattern)
+- **Credentials**: Notary, Real Estate, Life License
 
-yPos = addPdfField(doc, "Hazardous Sports", step7.hazardousSports ? "Yes" : "No", yPos, margin, pageWidth);
-if (step7.hazardousSports) {
-  yPos = addPdfField(doc, "Hazardous Sports Details", formatPdfValue(step7.hazardousSportsDetails), yPos, margin, pageWidth);
-}
+### Email Routing
+- Form submissions route to: `evalenzuela@tfainsuranceadvisors.com`
+- CC: `leads@tfainsuranceadvisors.com` (via standard form handler)
 
-yPos = addPdfField(doc, "Foreign Travel Planned", step7.foreignTravel ? "Yes" : "No", yPos, margin, pageWidth);
-if (step7.foreignTravel) {
-  yPos = addPdfField(doc, "Foreign Travel Details", formatPdfValue(step7.foreignTravelDetails), yPos, margin, pageWidth);
-}
+### SEO Configuration
+- Profile: `/advisors/erica-valenzuela`
+- Living Trust: `/advisors/erica-valenzuela/living-trust`
+- Keywords: living trust, estate planning, corrections, first responders, bilingual
 
-yPos = addPdfField(doc, "Driving Violations (Last 5 Years)", step7.drivingViolations ? "Yes" : "No", yPos, margin, pageWidth);
-if (step7.drivingViolations) {
-  yPos = addPdfField(doc, "Driving Violations Details", formatPdfValue(step7.drivingViolationsDetails), yPos, margin, pageWidth);
-}
+### Contact Information
+- Phone: (909) 455-3878
+- Email: evalenzuela@tfainsuranceadvisors.com
+- Location: California (Chino Hills area based on TFA HQ)
 
-yPos = addPdfField(doc, "Bankruptcy Filed", step7.bankruptcy ? "Yes" : "No", yPos, margin, pageWidth);
-if (step7.bankruptcy) {
-  yPos = addPdfField(doc, "Bankruptcy Details", formatPdfValue(step7.bankruptcyDetails), yPos, margin, pageWidth);
-}
+---
 
-yPos = addPdfField(doc, "Criminal History", step7.criminalHistory ? "Yes" : "No", yPos, margin, pageWidth);
-if (step7.criminalHistory) {
-  yPos = addPdfField(doc, "Criminal History Details", formatPdfValue(step7.criminalHistoryDetails), yPos, margin, pageWidth);
-}
+## Summary of All Files
 
-yPos = addPdfField(doc, "Has Medical Conditions", step7.hasMedicalConditions ? "Yes" : "No", yPos, margin, pageWidth);
-if (step7.hasMedicalConditions) {
-  yPos = addPdfField(doc, "Medical Conditions Details", formatPdfValue(step7.medicalConditionsDetails), yPos, margin, pageWidth);
-}
-```
-
-### 5. Update Step 8 to Show Full Bank Details
-Update lines 840-845 to remove masking:
-
-```typescript
-if (step8.paymentMethod === "eft") {
-  yPos = addPdfField(doc, "Bank Name", formatPdfValue(step8.bankName), yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "Routing Number", formatRoutingNumber(step8.routingNumber), yPos, margin, pageWidth);
-  yPos = addPdfField(doc, "Account Number", formatAccountNumber(step8.accountNumber), yPos, margin, pageWidth);
-  const accountType = step8.accountType === "checking" ? "Checking" : step8.accountType === "savings" ? "Savings" : formatPdfValue(step8.accountType);
-  yPos = addPdfField(doc, "Account Type", accountType, yPos, margin, pageWidth);
-}
-```
+| Action | File |
+|--------|------|
+| Copy | `user-uploads://Erica_Valenzuela.jpg` → `src/assets/advisors/erica-valenzuela.jpg` |
+| Modify | `src/data/advisors.ts` - Add import + advisor entry |
+| Create | `src/pages/AdvisorEricaValenzuela.tsx` - Full profile page |
+| Create | `src/pages/EricaValenzuelaLivingTrust.tsx` - Standalone landing page |
+| Create | `src/components/living-trust/EricaValenzuelaLivingTrustForm.tsx` - Lead form |
+| Modify | `src/App.tsx` - Add imports, routes, and standalone page path |
 
 ---
 
 ## After Implementation
 
-- **Full Visibility**: Agents will see every field from the application, including:
-  - Complete routing and account numbers (unmasked)
-  - All phone numbers and contact details
-  - All employment and financial information
-  - All Yes/No answers for medical/lifestyle questions
-  - Permanent resident card number (if applicable)
-- **No Blocked Information**: Every question answered on the form will appear in the PDF
-- **Clear Answers**: Medical/lifestyle questions show explicit "Yes" or "No" instead of only appearing when true
-
----
-
-## Security Note
-
-The PDF is sent only to:
-1. The assigned advisor (via their verified email)
-2. The TFA admin inbox (leads@tfainsuranceadvisors.com)
-
-Both recipients are authorized to view full application data for underwriting purposes. The email body will still mask SSNs for security, but the attached PDF will contain complete unmasked information.
+1. Erica will appear in the advisor directory with bilingual badge
+2. Her profile page will be accessible at `/advisors/erica-valenzuela`
+3. Living Trust landing page available at `/advisors/erica-valenzuela/living-trust`
+4. Form submissions will route to her email with proper lead tracking
+5. She can use the Living Trust page for QR codes and lead generation
 
