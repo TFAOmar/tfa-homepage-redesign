@@ -92,7 +92,8 @@ export const advisors: Advisor[] = [
     image: elenaEsquivelImg,
     email: "eeesquivel@tfainsuranceadvisors.com",
     phone: "(951) 255-4997",
-    yearsOfExperience: 15
+    yearsOfExperience: 15,
+    landingPage: "/advisors/elena-esquivel"
   },
   {
     id: "jose-estrada",
