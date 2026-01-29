@@ -90,7 +90,7 @@ export const advisors: Advisor[] = [
     specialties: ["Bilingual • Bilingüe", "Retirement Planning", "401(k) Guidance", "Estate Planning", "Tax Strategies", "Medicare Planning", "Life Insurance"],
     licenses: ["Life & Health (Lic# 4218087)"],
     image: elenaEsquivelImg,
-    email: "eeesquivel@tfainsuranceadvisors.com",
+    email: "eesquivel@tfainsuranceadvisors.com",
     phone: "(951) 255-4997",
     yearsOfExperience: 15,
     landingPage: "/advisors/elena-esquivel"
