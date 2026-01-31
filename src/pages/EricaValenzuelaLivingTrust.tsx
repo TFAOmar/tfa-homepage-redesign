@@ -238,9 +238,9 @@ export default function EricaValenzuelaLivingTrust() {
               Request Free Consultation
             </Button>
             <div className="mt-8 md:mt-12 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 text-white/60">
-              <a href="tel:+19094553878" className="flex items-center gap-2 hover:text-accent transition-colors min-h-[44px] touch-manipulation">
+              <a href="tel:+19494158537" className="flex items-center gap-2 hover:text-accent transition-colors min-h-[44px] touch-manipulation">
                 <Phone className="w-5 h-5" />
-                <span>(909) 455-3878</span>
+                <span>(949) 415-8537</span>
               </a>
               <span className="hidden md:inline text-white/30">|</span>
               <a href="mailto:evalenzuela@tfainsuranceadvisors.com" className="flex items-center gap-2 hover:text-accent transition-colors min-h-[44px] touch-manipulation text-sm md:text-base break-all md:break-normal">

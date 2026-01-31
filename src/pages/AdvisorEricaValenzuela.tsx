@@ -110,14 +110,14 @@ const AdvisorEricaValenzuela = () => {
   );
 
   const localBusinessSchema = generateLocalBusinessSchema(
-    "Chino Hills",
+    "Riverside",
     {
-      street: "13890 Peyton Dr",
-      city: "Chino Hills",
+      street: "",
+      city: "Riverside",
       state: "CA",
-      zip: "91709"
+      zip: "92501"
     },
-    "(909) 455-3878"
+    "(949) 415-8537"
   );
 
   return (
@@ -125,7 +125,7 @@ const AdvisorEricaValenzuela = () => {
       <SEOHead
         title="Erica Valenzuela | Financial Strategist | The Financial Architects"
         description="Meet Erica Valenzuela, a bilingual Financial Strategist specializing in Living Trust planning, life insurance, and estate planning for families in high-stress professions."
-        keywords="Erica Valenzuela, financial strategist, living trust, estate planning, life insurance, bilingual, Chino Hills CA, corrections, first responders"
+        keywords="Erica Valenzuela, financial strategist, living trust, estate planning, life insurance, bilingual, Riverside CA, corrections, first responders"
         canonical={`${siteConfig.url}/advisors/erica-valenzuela`}
       />
       <JsonLd data={[personSchema, localBusinessSchema]} />
@@ -147,7 +147,7 @@ const AdvisorEricaValenzuela = () => {
               </p>
               <div className="flex items-center justify-center lg:justify-start text-white/80 mb-6">
                 <MapPin className="h-5 w-5 mr-2" />
-                <span>Chino Hills, CA</span>
+                <span>Riverside, CA</span>
               </div>
               <p className="text-lg text-white/80 mb-8 max-w-xl mx-auto lg:mx-0 italic">
                 "Planning for the unexpected is the greatest gift you can give your family."
@@ -171,9 +171,9 @@ const AdvisorEricaValenzuela = () => {
                 </Button>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start text-white/80">
-                <a href="tel:+19094553878" className="flex items-center hover:text-accent transition-colors">
+                <a href="tel:+19494158537" className="flex items-center hover:text-accent transition-colors">
                   <Phone className="h-5 w-5 mr-2" />
-                  (909) 455-3878
+                  (949) 415-8537
                 </a>
                 <a href="mailto:evalenzuela@tfainsuranceadvisors.com" className="flex items-center hover:text-accent transition-colors">
                   <Mail className="h-5 w-5 mr-2" />
@@ -335,11 +335,11 @@ const AdvisorEricaValenzuela = () => {
             </Link>
           </div>
           <a 
-            href="tel:+19094553878" 
+            href="tel:+19494158537" 
             className="inline-flex items-center text-white/80 hover:text-accent transition-colors"
           >
             <Phone className="h-5 w-5 mr-2" />
-            (909) 455-3878
+            (949) 415-8537
           </a>
         </div>
       </section>

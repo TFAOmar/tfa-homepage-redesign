@@ -490,14 +490,14 @@ export const advisors: Advisor[] = [
     title: "Financial Strategist",
     type: "Advisor",
     state: "California",
-    city: "Chino Hills",
+    city: "Riverside",
     region: "West",
     bio: "Erica brings a grounded, steady approach to financial education, helping families in demanding careers—including corrections and first responders—protect what matters most. Specializing in protection planning with a focus on Living Trust awareness, she empowers clients to make informed decisions with a calm, education-first philosophy.",
     specialties: ["Bilingual • Bilingüe", "Living Trust Planning", "Life Insurance", "Estate Planning", "Real Estate"],
     licenses: ["Life & Health", "Notary Public", "Real Estate"],
     image: ericaValenzuelaImg,
     email: "evalenzuela@tfainsuranceadvisors.com",
-    phone: "(909) 455-3878",
+    phone: "(949) 415-8537",
     landingPage: "/advisors/erica-valenzuela"
   }
 ];
