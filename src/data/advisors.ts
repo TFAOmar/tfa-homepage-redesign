@@ -27,6 +27,7 @@ import braihyraMedellinImg from "@/assets/advisors/braihyra-medellin.jpg";
 import erinGraceVargasImg from "@/assets/advisors/erin-grace-vargas.jpg";
 import fabianSerranoImg from "@/assets/advisors/fabian-serrano.jpg";
 import ericaValenzuelaImg from "@/assets/advisors/erica-valenzuela.jpg";
+import sheilaRodriguezImg from "@/assets/advisors/sheila-rodriguez.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -499,6 +500,23 @@ export const advisors: Advisor[] = [
     email: "evalenzuela@tfainsuranceadvisors.com",
     phone: "(949) 415-8537",
     landingPage: "/advisors/erica-valenzuela"
+  },
+  {
+    id: "sheila-rodriguez",
+    name: "Sheila Rodriguez",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "Kansas",
+    city: "Overland Park",
+    region: "Midwest",
+    bio: "With over 25 years of experience in the mortgage, banking, & financial services industry, Sheila specializes in crafting comprehensive financial plans tailored to each client's unique circumstances. Her holistic approach spans investment management, retirement planning, risk assessment, tax optimization, and estate planning.",
+    specialties: ["Investment Management", "Retirement Planning", "Tax Optimization", "Estate Planning", "Risk Assessment"],
+    licenses: ["Life & Health"],
+    image: sheilaRodriguezImg,
+    email: "sheila@tfainsuranceadvisors.com",
+    phone: "(661) 816-1920",
+    yearsOfExperience: 25,
+    landingPage: "/advisors/sheila-rodriguez"
   }
 ];
 
