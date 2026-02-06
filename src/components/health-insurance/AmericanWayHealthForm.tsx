@@ -25,8 +25,8 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { Phone } from "lucide-react";
 
-const PHONE_NUMBER = "888-669-7553";
-const PHONE_TEL = "tel:+18886697553";
+const PHONE_NUMBER = "321-356-3450";
+const PHONE_TEL = "tel:+13213563450";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
