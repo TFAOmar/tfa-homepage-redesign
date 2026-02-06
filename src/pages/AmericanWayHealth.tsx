@@ -20,8 +20,8 @@ import unitedLogo from "@/assets/carriers/health/united-healthcare.png";
 import firstHealthLogo from "@/assets/carriers/health/first-health-network.png";
 import marketplaceLogo from "@/assets/carriers/health/health-insurance-marketplace.png";
 
-const PHONE_NUMBER = "888-669-7553";
-const PHONE_TEL = "tel:+18886697553";
+const PHONE_NUMBER = "321-356-3450";
+const PHONE_TEL = "tel:+13213563450";
 
 const scrollToForm = () => {
   document.getElementById("quote-form")?.scrollIntoView({ behavior: "smooth" });
@@ -182,20 +182,13 @@ const AmericanWayHealth = () => {
             <p className="text-lg text-white/70 mb-8">
               PERSONAL PLANS / FAMILY PLANS / GROUP PLANS
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Button
                 onClick={scrollToForm}
                 className="bg-accent hover:bg-accent/90 text-primary font-semibold px-8 py-6 text-lg rounded-full"
               >
                 Get Your Free Quote
               </Button>
-              <a
-                href={PHONE_TEL}
-                className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-6 text-lg rounded-full transition-colors"
-              >
-                <Phone className="w-5 h-5" />
-                Call: {PHONE_NUMBER}
-              </a>
             </div>
             <p className="text-white/60 mt-4 text-sm">No obligation. No cost. Just answers.</p>
           </div>
@@ -258,6 +251,44 @@ const AmericanWayHealth = () => {
                   Call us today: {PHONE_NUMBER}
                 </a>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Insurance Companies Section */}
+        <section className="py-16 px-6 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-4">
+              INSURANCE COMPANIES
+            </h2>
+            <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+              We compare health insurance plans from recognized companies nationwide.
+            </p>
+            <p className="text-muted-foreground text-center mb-12 max-w-3xl mx-auto text-sm">
+              Don't assume your current health insurance plan is still the right fit. American Way Health compares plans from more than 200 insurance companies nationwide to find the right plan, that's the right fit, at no cost to you.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              {insuranceCarriers.map((carrier, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-50 rounded-xl p-4 flex items-center justify-center h-32 border border-gray-100 hover:border-accent/30 transition-colors"
+                >
+                  <img
+                    src={carrier.logo}
+                    alt={carrier.name}
+                    className="max-h-20 max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-8">
+              <a
+                href={PHONE_TEL}
+                className="inline-flex items-center gap-2 text-green-600 font-semibold hover:underline"
+              >
+                <Phone className="w-4 h-4" />
+                Contact us today: {PHONE_NUMBER}
+              </a>
             </div>
           </div>
         </section>
@@ -340,44 +371,6 @@ const AmericanWayHealth = () => {
             <p className="text-white/70 max-w-2xl mx-auto">
               "Health Insurance the American Way" — focused on finding you the coverage you need at a price you can afford.
             </p>
-          </div>
-        </section>
-
-        {/* Insurance Companies Section */}
-        <section className="py-16 px-6 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-4">
-              INSURANCE COMPANIES
-            </h2>
-            <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
-              We compare health insurance plans from recognized companies nationwide.
-            </p>
-            <p className="text-muted-foreground text-center mb-12 max-w-3xl mx-auto text-sm">
-              Don't assume your current health insurance plan is still the right fit. American Way Health compares plans from more than 200 insurance companies nationwide to find the right plan, that's the right fit, at no cost to you.
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {insuranceCarriers.map((carrier, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-50 rounded-xl p-4 flex items-center justify-center h-24 border border-gray-100 hover:border-accent/30 transition-colors"
-                >
-                  <img
-                    src={carrier.logo}
-                    alt={carrier.name}
-                    className="max-h-12 max-w-full object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-8">
-              <a
-                href={PHONE_TEL}
-                className="inline-flex items-center gap-2 text-green-600 font-semibold hover:underline"
-              >
-                <Phone className="w-4 h-4" />
-                Contact us today: {PHONE_NUMBER}
-              </a>
-            </div>
           </div>
         </section>
 
