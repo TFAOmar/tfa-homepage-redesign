@@ -678,19 +678,19 @@ const generateAmericanWayHealthEmailHtml = (
                   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #f8fafc; border-radius: 8px; overflow: hidden;">
                     <tr>
                       <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px; width: 35%;">Full Name</td>
-                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px; font-weight: 600;">\${formData.first_name} \${formData.last_name}</td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px; font-weight: 600;">${formData.first_name} ${formData.last_name}</td>
                     </tr>
                     <tr>
                       <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px;">Email Address</td>
-                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0;"><a href="mailto:\${formData.email}" style="color: #0891b2; text-decoration: none; font-size: 14px;">\${formData.email}</a></td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0;"><a href="mailto:${formData.email}" style="color: #0891b2; text-decoration: none; font-size: 14px;">${formData.email}</a></td>
                     </tr>
                     <tr>
                       <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px;">Phone Number</td>
-                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0;"><a href="tel:\${formData.phone}" style="color: #0891b2; text-decoration: none; font-size: 14px;">\${formData.phone || 'Not provided'}</a></td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0;"><a href="tel:${formData.phone}" style="color: #0891b2; text-decoration: none; font-size: 14px;">${formData.phone || 'Not provided'}</a></td>
                     </tr>
                     <tr>
                       <td style="padding: 16px 20px; color: #64748b; font-size: 13px;">ZIP Code</td>
-                      <td style="padding: 16px 20px; color: #1e293b; font-size: 14px; font-weight: 500;">\${zipCode || 'Not provided'}</td>
+                      <td style="padding: 16px 20px; color: #1e293b; font-size: 14px; font-weight: 500;">${zipCode || 'Not provided'}</td>
                     </tr>
                   </table>
                 </td>
@@ -711,29 +711,29 @@ const generateAmericanWayHealthEmailHtml = (
                   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #f8fafc; border-radius: 8px; overflow: hidden;">
                     <tr>
                       <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px; width: 35%;">Insurance Type</td>
-                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px; font-weight: 600;">\${insuranceType || 'Not specified'}</td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px; font-weight: 600;">${insuranceType || 'Not specified'}</td>
                     </tr>
                     <tr>
                       <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px;">Date of Birth</td>
-                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px;">\${dateOfBirth || 'Not provided'}</td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px;">${dateOfBirth || 'Not provided'}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 16px 20px; \${referredBy ? 'border-bottom: 1px solid #e2e8f0;' : ''} color: #64748b; font-size: 13px;">Yearly Income</td>
-                      <td style="padding: 16px 20px; \${referredBy ? 'border-bottom: 1px solid #e2e8f0;' : ''} color: #1e293b; font-size: 14px;">\${yearlyIncome || 'Not provided'}</td>
+                      <td style="padding: 16px 20px; ${referredBy ? 'border-bottom: 1px solid #e2e8f0;' : ''} color: #64748b; font-size: 13px;">Yearly Income</td>
+                      <td style="padding: 16px 20px; ${referredBy ? 'border-bottom: 1px solid #e2e8f0;' : ''} color: #1e293b; font-size: 14px;">${yearlyIncome || 'Not provided'}</td>
                     </tr>
-                    \${referredBy ? \`
+                    ${referredBy ? `
                     <tr>
                       <td style="padding: 16px 20px; color: #64748b; font-size: 13px;">Referred By</td>
-                      <td style="padding: 16px 20px; color: #1e293b; font-size: 14px; font-weight: 500;">\${referredBy}</td>
+                      <td style="padding: 16px 20px; color: #1e293b; font-size: 14px; font-weight: 500;">${referredBy}</td>
                     </tr>
-                    \` : ''}
+                    ` : ''}
                   </table>
                 </td>
               </tr>
             </table>
             
             <!-- Attribution Section -->
-            \${formData.source_url || formData.utm_source ? \`
+            ${formData.source_url || formData.utm_source ? `
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
               <tr>
                 <td style="padding-bottom: 15px;">
@@ -745,35 +745,35 @@ const generateAmericanWayHealthEmailHtml = (
               <tr>
                 <td>
                   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #fefce8; border-radius: 8px; overflow: hidden; border: 1px solid #fef08a;">
-                    \${formData.source_url ? \`
+                    ${formData.source_url ? `
                     <tr>
-                      <td style="padding: 14px 20px; \${formData.utm_source ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px; width: 35%;">Source URL</td>
-                      <td style="padding: 14px 20px; \${formData.utm_source ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px; word-break: break-all;">\${formData.source_url}</td>
+                      <td style="padding: 14px 20px; ${formData.utm_source ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px; width: 35%;">Source URL</td>
+                      <td style="padding: 14px 20px; ${formData.utm_source ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px; word-break: break-all;">${formData.source_url}</td>
                     </tr>
-                    \` : ''}
-                    \${formData.utm_source ? \`
+                    ` : ''}
+                    ${formData.utm_source ? `
                     <tr>
-                      <td style="padding: 14px 20px; \${formData.utm_medium ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px;">UTM Source</td>
-                      <td style="padding: 14px 20px; \${formData.utm_medium ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px;">\${formData.utm_source}</td>
+                      <td style="padding: 14px 20px; ${formData.utm_medium ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px;">UTM Source</td>
+                      <td style="padding: 14px 20px; ${formData.utm_medium ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px;">${formData.utm_source}</td>
                     </tr>
-                    \` : ''}
-                    \${formData.utm_medium ? \`
+                    ` : ''}
+                    ${formData.utm_medium ? `
                     <tr>
-                      <td style="padding: 14px 20px; \${formData.utm_campaign ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px;">UTM Medium</td>
-                      <td style="padding: 14px 20px; \${formData.utm_campaign ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px;">\${formData.utm_medium}</td>
+                      <td style="padding: 14px 20px; ${formData.utm_campaign ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px;">UTM Medium</td>
+                      <td style="padding: 14px 20px; ${formData.utm_campaign ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px;">${formData.utm_medium}</td>
                     </tr>
-                    \` : ''}
-                    \${formData.utm_campaign ? \`
+                    ` : ''}
+                    ${formData.utm_campaign ? `
                     <tr>
                       <td style="padding: 14px 20px; color: #854d0e; font-size: 13px;">UTM Campaign</td>
-                      <td style="padding: 14px 20px; color: #713f12; font-size: 13px;">\${formData.utm_campaign}</td>
+                      <td style="padding: 14px 20px; color: #713f12; font-size: 13px;">${formData.utm_campaign}</td>
                     </tr>
-                    \` : ''}
+                    ` : ''}
                   </table>
                 </td>
               </tr>
             </table>
-            \` : ''}
+            ` : ''}
           </td>
         </tr>
         
@@ -783,12 +783,12 @@ const generateAmericanWayHealthEmailHtml = (
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
               <tr>
                 <td style="color: #64748b; font-size: 12px;">
-                  <strong style="color: #475569;">Submitted:</strong> \${submittedDate} (PST)
+                  <strong style="color: #475569;">Submitted:</strong> ${submittedDate} (PST)
                 </td>
               </tr>
               <tr>
                 <td style="color: #94a3b8; font-size: 11px; padding-top: 8px;">
-                  Submission ID: \${submissionId}
+                  Submission ID: ${submissionId}
                 </td>
               </tr>
             </table>
@@ -826,13 +826,18 @@ const sendEmails = async (
   const teamHtml = generateTeamNotificationHtml(formData, submissionId, advisorName);
   const subject = `New ${getFormDisplayName(formData.form_name)} - ${formData.first_name} ${formData.last_name}`;
 
-  // 1. Send to team email
+  // 1. Send to team email (use branded template for health insurance leads)
+  const isHealthInsuranceLead = formData.form_name === "Health Insurance Inquiry";
+  const finalTeamHtml = isHealthInsuranceLead 
+    ? generateAmericanWayHealthEmailHtml(formData, submissionId)
+    : teamHtml;
+
   try {
     const teamResult = await resend.emails.send({
       from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
       to: [TEAM_EMAIL],
       subject,
-      html: teamHtml,
+      html: finalTeamHtml,
     });
     if (teamResult.error) {
       console.error("[Email Error - Team]", teamResult.error);
