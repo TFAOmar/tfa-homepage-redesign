@@ -581,6 +581,221 @@ const generateErikJohnsonConfirmationEmail = (firstName: string): string => {
   `;
 };
 
+// Custom email template for American Way Health leads
+const generateAmericanWayHealthEmailHtml = (
+  formData: FormSubmitData,
+  submissionId: string
+): string => {
+  // Parse notes to extract structured data
+  const notesLines = (formData.notes || '').split('\n');
+  const extractField = (prefix: string): string => {
+    const line = notesLines.find(l => l.startsWith(prefix));
+    return line ? line.replace(prefix, '').trim() : '';
+  };
+  
+  const insuranceType = extractField('Insurance Type:');
+  const dateOfBirth = extractField('Date of Birth:');
+  const yearlyIncome = extractField('Yearly Income:');
+  const zipCode = extractField('ZIP Code:');
+  const referredBy = extractField('Referred By:');
+  
+  const submittedDate = new Date().toLocaleString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'America/Los_Angeles'
+  });
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 640px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        <!-- Header -->
+        <tr>
+          <td style="padding: 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="padding: 35px 40px; background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #0284c7 100%);">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td>
+                        <p style="color: rgba(255,255,255,0.9); margin: 0 0 5px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;">
+                          🏥 New Health Insurance Lead
+                        </p>
+                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">
+                          American Way Health
+                        </h1>
+                      </td>
+                      <td style="text-align: right; vertical-align: middle;">
+                        <span style="background: rgba(255,255,255,0.2); color: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                          via TFA
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        
+        <!-- Main Content -->
+        <tr>
+          <td style="padding: 35px 40px;">
+            <!-- Contact Information Section -->
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 30px;">
+              <tr>
+                <td style="padding-bottom: 15px;">
+                  <h2 style="color: #0f766e; font-size: 14px; margin: 0; text-transform: uppercase; letter-spacing: 1px; border-left: 4px solid #0d9488; padding-left: 12px;">
+                    Contact Information
+                  </h2>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #f8fafc; border-radius: 8px; overflow: hidden;">
+                    <tr>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px; width: 35%;">Full Name</td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px; font-weight: 600;">\${formData.first_name} \${formData.last_name}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px;">Email Address</td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0;"><a href="mailto:\${formData.email}" style="color: #0891b2; text-decoration: none; font-size: 14px;">\${formData.email}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px;">Phone Number</td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0;"><a href="tel:\${formData.phone}" style="color: #0891b2; text-decoration: none; font-size: 14px;">\${formData.phone || 'Not provided'}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 16px 20px; color: #64748b; font-size: 13px;">ZIP Code</td>
+                      <td style="padding: 16px 20px; color: #1e293b; font-size: 14px; font-weight: 500;">\${zipCode || 'Not provided'}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            
+            <!-- Insurance Details Section -->
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 30px;">
+              <tr>
+                <td style="padding-bottom: 15px;">
+                  <h2 style="color: #0f766e; font-size: 14px; margin: 0; text-transform: uppercase; letter-spacing: 1px; border-left: 4px solid #0d9488; padding-left: 12px;">
+                    Insurance Details
+                  </h2>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #f8fafc; border-radius: 8px; overflow: hidden;">
+                    <tr>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px; width: 35%;">Insurance Type</td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px; font-weight: 600;">\${insuranceType || 'Not specified'}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px;">Date of Birth</td>
+                      <td style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 14px;">\${dateOfBirth || 'Not provided'}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 16px 20px; \${referredBy ? 'border-bottom: 1px solid #e2e8f0;' : ''} color: #64748b; font-size: 13px;">Yearly Income</td>
+                      <td style="padding: 16px 20px; \${referredBy ? 'border-bottom: 1px solid #e2e8f0;' : ''} color: #1e293b; font-size: 14px;">\${yearlyIncome || 'Not provided'}</td>
+                    </tr>
+                    \${referredBy ? \`
+                    <tr>
+                      <td style="padding: 16px 20px; color: #64748b; font-size: 13px;">Referred By</td>
+                      <td style="padding: 16px 20px; color: #1e293b; font-size: 14px; font-weight: 500;">\${referredBy}</td>
+                    </tr>
+                    \` : ''}
+                  </table>
+                </td>
+              </tr>
+            </table>
+            
+            <!-- Attribution Section -->
+            \${formData.source_url || formData.utm_source ? \`
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="padding-bottom: 15px;">
+                  <h2 style="color: #0f766e; font-size: 14px; margin: 0; text-transform: uppercase; letter-spacing: 1px; border-left: 4px solid #0d9488; padding-left: 12px;">
+                    Attribution
+                  </h2>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #fefce8; border-radius: 8px; overflow: hidden; border: 1px solid #fef08a;">
+                    \${formData.source_url ? \`
+                    <tr>
+                      <td style="padding: 14px 20px; \${formData.utm_source ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px; width: 35%;">Source URL</td>
+                      <td style="padding: 14px 20px; \${formData.utm_source ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px; word-break: break-all;">\${formData.source_url}</td>
+                    </tr>
+                    \` : ''}
+                    \${formData.utm_source ? \`
+                    <tr>
+                      <td style="padding: 14px 20px; \${formData.utm_medium ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px;">UTM Source</td>
+                      <td style="padding: 14px 20px; \${formData.utm_medium ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px;">\${formData.utm_source}</td>
+                    </tr>
+                    \` : ''}
+                    \${formData.utm_medium ? \`
+                    <tr>
+                      <td style="padding: 14px 20px; \${formData.utm_campaign ? 'border-bottom: 1px solid #fef08a;' : ''} color: #854d0e; font-size: 13px;">UTM Medium</td>
+                      <td style="padding: 14px 20px; \${formData.utm_campaign ? 'border-bottom: 1px solid #fef08a;' : ''} color: #713f12; font-size: 13px;">\${formData.utm_medium}</td>
+                    </tr>
+                    \` : ''}
+                    \${formData.utm_campaign ? \`
+                    <tr>
+                      <td style="padding: 14px 20px; color: #854d0e; font-size: 13px;">UTM Campaign</td>
+                      <td style="padding: 14px 20px; color: #713f12; font-size: 13px;">\${formData.utm_campaign}</td>
+                    </tr>
+                    \` : ''}
+                  </table>
+                </td>
+              </tr>
+            </table>
+            \` : ''}
+          </td>
+        </tr>
+        
+        <!-- Footer -->
+        <tr>
+          <td style="padding: 25px 40px; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border-top: 1px solid #e2e8f0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="color: #64748b; font-size: 12px;">
+                  <strong style="color: #475569;">Submitted:</strong> \${submittedDate} (PST)
+                </td>
+              </tr>
+              <tr>
+                <td style="color: #94a3b8; font-size: 11px; padding-top: 8px;">
+                  Submission ID: \${submissionId}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      
+      <!-- Email Footer -->
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 640px; margin: 20px auto 0;">
+        <tr>
+          <td style="text-align: center; color: #94a3b8; font-size: 11px; padding: 10px;">
+            This lead was submitted through the TFA Insurance Advisors website on behalf of American Way Health.
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+};
+
 
 // Send emails function
 const sendEmails = async (
@@ -589,10 +804,11 @@ const sendEmails = async (
   submissionId: string,
   advisorEmail?: string,
   advisorName?: string
-): Promise<{ teamSent: boolean; advisorSent: boolean; errors: string[] }> => {
+): Promise<{ teamSent: boolean; advisorSent: boolean; partnerSent: boolean; errors: string[] }> => {
   const errors: string[] = [];
   let teamSent = false;
   let advisorSent = false;
+  let partnerSent = false;
 
   const teamHtml = generateTeamNotificationHtml(formData, submissionId, advisorName);
   const subject = `New ${getFormDisplayName(formData.form_name)} - ${formData.first_name} ${formData.last_name}`;
@@ -639,7 +855,30 @@ const sendEmails = async (
     }
   }
 
-  return { teamSent, advisorSent, errors };
+  // 3. Send to American Way Health partner for health insurance leads
+  if (formData.form_name === "Health Insurance Inquiry") {
+    try {
+      const partnerHtml = generateAmericanWayHealthEmailHtml(formData, submissionId);
+      const partnerResult = await resend.emails.send({
+        from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
+        to: ["info@health-market.com"],
+        subject: `New Health Insurance Lead - ${formData.first_name} ${formData.last_name}`,
+        html: partnerHtml,
+      });
+      if (partnerResult.error) {
+        console.error("[Email Error - Partner]", partnerResult.error);
+        errors.push(`Partner email: ${partnerResult.error.message}`);
+      } else {
+        partnerSent = true;
+        console.log("[Email Sent - Partner] info@health-market.com");
+      }
+    } catch (e) {
+      console.error("[Email Exception - Partner]", e);
+      errors.push(`Partner email exception: ${e instanceof Error ? e.message : "Unknown error"}`);
+    }
+  }
+
+  return { teamSent, advisorSent, partnerSent, errors };
 };
 
 serve(async (req) => {
@@ -977,7 +1216,7 @@ serve(async (req) => {
       })
       .eq("id", submissionId);
     
-    console.log(`[Success] Form: ${formData.form_name}, Email: ${formData.email}, Routed: ${routedToName}, Emails: team=${emailResult.teamSent} advisor=${emailResult.advisorSent}, Pipedrive: ${isAdvisorSpecificForm ? "skipped" : (leadId ? "created" : "failed")}`);
+    console.log(`[Success] Form: ${formData.form_name}, Email: ${formData.email}, Routed: ${routedToName}, Emails: team=${emailResult.teamSent} advisor=${emailResult.advisorSent} partner=${emailResult.partnerSent}, Pipedrive: ${isAdvisorSpecificForm ? "skipped" : (leadId ? "created" : "failed")}`);
     
     return new Response(
       JSON.stringify({
