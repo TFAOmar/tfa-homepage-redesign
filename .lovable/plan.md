@@ -1,117 +1,171 @@
 
 
-# Add Video Modal to American Way Health Landing Page
+# Enhance American Way Health Form Notifications
 
-## Recommendation: Video Popup Modal
+## Overview
 
-A modal/popup approach will perform better than hero embedding because:
-- Keeps the hero section focused on the primary conversion goal (form submissions)
-- Video loads on-demand, improving page performance
-- Works seamlessly on mobile devices
-- Users who click to watch show higher intent
+This plan addresses three requirements:
+1. **Add "Referred by" field** to the form
+2. **Create a visually enhanced email template** specifically for American Way Health submissions
+3. **Add additional email recipient** (info@health-market.com)
 
 ---
 
-## Implementation Details
+## Changes Summary
 
-### Add to Hero Section
-Place a "Watch Video" button below the main CTA in the hero, styled as a secondary action:
+### File 1: `src/components/health-insurance/AmericanWayHealthForm.tsx`
 
+**Add "Referred by" field:**
+- Add `referredBy` to the Zod schema (optional string, max 100 characters)
+- Add form field after the Insurance Type selector
+- Include the referred by value in the notes payload
+
+**Schema update:**
+```typescript
+referredBy: z.string().max(100).optional(),
+```
+
+**Notes payload update:**
+```typescript
+const notes = [
+  `Insurance Type: ${insuranceTypeLabels[data.insuranceType]}`,
+  `Date of Birth: ${dateOfBirth}`,
+  `Yearly Income: ${incomeLabel}`,
+  `ZIP Code: ${data.zipCode}`,
+  data.referredBy && `Referred By: ${data.referredBy}`,
+  `Partner: American Way Health`,
+  `Terms Accepted: Yes`,
+].filter(Boolean).join("\n");
+```
+
+---
+
+### File 2: `supabase/functions/pipedrive-submit/index.ts`
+
+**Create custom email template for American Way Health:**
+- Add new function `generateAmericanWayHealthEmailHtml()` with a professional, visually appealing design
+- Template will display all form fields in a structured table format with clear labels
+- Use branded colors (blue/green accents for health insurance theme)
+
+**Add additional recipient:**
+- Modify the `sendEmails()` function to detect "Health Insurance Inquiry" forms
+- Send an additional email to `info@health-market.com` for American Way Health submissions
+
+**New email template structure:**
 ```text
-[Get Your Free Quote]  ← Primary CTA (existing)
-      ▶ Watch Video     ← New secondary link
+┌────────────────────────────────────────────────────┐
+│  🏥  NEW HEALTH INSURANCE LEAD                     │
+│  American Way Health                               │
+├────────────────────────────────────────────────────┤
+│                                                    │
+│  CONTACT INFORMATION                               │
+│  ┌──────────────────┬─────────────────────────┐   │
+│  │ Name             │ John Smith              │   │
+│  │ Email            │ john@example.com        │   │
+│  │ Phone            │ (555) 123-4567          │   │
+│  │ ZIP Code         │ 90210                   │   │
+│  └──────────────────┴─────────────────────────┘   │
+│                                                    │
+│  INSURANCE DETAILS                                 │
+│  ┌──────────────────┬─────────────────────────┐   │
+│  │ Insurance Type   │ Individual Health       │   │
+│  │ Date of Birth    │ 06/15/1985              │   │
+│  │ Yearly Income    │ $50K - $75K             │   │
+│  │ Referred By      │ Jane Doe                │   │
+│  └──────────────────┴─────────────────────────┘   │
+│                                                    │
+│  ATTRIBUTION                                       │
+│  Source URL: https://tfawealthplanning...          │
+│  UTM Source: facebook                              │
+│                                                    │
+├────────────────────────────────────────────────────┤
+│  Submitted: Feb 6, 2026 at 3:45 PM                │
+│  Submission ID: abc-123-def                        │
+└────────────────────────────────────────────────────┘
 ```
 
-### Video Modal Component
-Create a responsive modal that:
-- Opens when "Watch Video" is clicked
-- Contains the Loom embed iframe
-- Closes on overlay click or X button
-- Pauses video when closed
+---
 
-### Loom Embed URL
+## Technical Implementation
+
+### Form Schema Changes
+
+**Before:**
+```typescript
+const formSchema = z.object({
+  // ... existing fields
+  insuranceType: z.string().min(1, "..."),
+  termsAccepted: z.literal(true, {...}),
+});
 ```
-https://www.loom.com/embed/bed6522f3c6a4b9aa857a60bd0be9f85
+
+**After:**
+```typescript
+const formSchema = z.object({
+  // ... existing fields
+  insuranceType: z.string().min(1, "..."),
+  referredBy: z.string().max(100).optional(),  // NEW
+  termsAccepted: z.literal(true, {...}),
+});
 ```
+
+### Email Routing Logic
+
+In the `sendEmails()` function, after sending to the team and advisor:
+
+```typescript
+// 3. Send to American Way Health partner for health insurance leads
+if (formData.form_name === "Health Insurance Inquiry") {
+  try {
+    const partnerHtml = generateAmericanWayHealthEmailHtml(formData, submissionId);
+    const partnerResult = await resend.emails.send({
+      from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
+      to: ["info@health-market.com"],
+      subject: `New Health Insurance Lead - ${formData.first_name} ${formData.last_name}`,
+      html: partnerHtml,
+    });
+    // ... handle result
+  } catch (e) {
+    // ... error handling
+  }
+}
+```
+
+---
+
+## Email Template Design Features
+
+The new template will include:
+
+1. **Header with gradient** - Green/teal health insurance branding
+2. **Partner logos placeholder** - Professional header treatment
+3. **Two-column data tables** - Clear label/value pairs
+4. **Separate sections** for:
+   - Contact Information (name, email, phone, ZIP)
+   - Insurance Details (type, DOB, income, referred by)
+   - Attribution Data (source URL, UTM parameters)
+5. **Footer** with timestamp and submission ID
+6. **Mobile-responsive** design with proper viewport handling
 
 ---
 
 ## Files to Modify
 
-### `src/pages/AmericanWayHealth.tsx`
-
-**Add imports:**
-- Import `Dialog`, `DialogContent`, `DialogTitle` from `@/components/ui/dialog`
-- Import `useState` from React
-- Import `Play` icon from lucide-react
-
-**Add state:**
-```typescript
-const [videoOpen, setVideoOpen] = useState(false);
-```
-
-**Add to Hero section (after main CTA button, around line 191):**
-```typescript
-<button
-  onClick={() => setVideoOpen(true)}
-  className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
->
-  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-    <Play className="w-5 h-5 text-white fill-white" />
-  </div>
-  <span className="font-medium">Watch Video</span>
-</button>
-```
-
-**Add Video Modal (before closing fragment):**
-```typescript
-<Dialog open={videoOpen} onOpenChange={setVideoOpen}>
-  <DialogContent className="max-w-4xl w-[95vw] p-0 bg-black border-0">
-    <DialogTitle className="sr-only">
-      Partnership Video - American Way Health
-    </DialogTitle>
-    <div className="aspect-video">
-      <iframe
-        src="https://www.loom.com/embed/bed6522f3c6a4b9aa857a60bd0be9f85"
-        frameBorder="0"
-        allowFullScreen
-        className="w-full h-full"
-      />
-    </div>
-  </DialogContent>
-</Dialog>
-```
-
----
-
-## Visual Layout (Hero Section)
-
-```text
-┌─────────────────────────────────────────────┐
-│   GET FREE INSURANCE QUOTES NOW             │
-│                                             │
-│   EASY WAY TO SHOP FOR INSURANCE            │
-│                                             │
-│   GET EXACTLY WHAT YOU NEED                 │
-│   PERSONAL / FAMILY / GROUP PLANS           │
-│                                             │
-│        ┌────────────────────┐               │
-│        │ Get Your Free Quote│  ← Gold CTA   │
-│        └────────────────────┘               │
-│                                             │
-│         ▶ Watch Video          ← New link   │
-│                                             │
-│   No obligation. No cost. Just answers.     │
-└─────────────────────────────────────────────┘
-```
+| File | Changes |
+|------|---------|
+| `src/components/health-insurance/AmericanWayHealthForm.tsx` | Add `referredBy` field to schema, form, and notes payload |
+| `supabase/functions/pipedrive-submit/index.ts` | Add custom email template and additional recipient logic |
 
 ---
 
 ## Expected Outcome
 
-- Clean, focused hero with optional video engagement
-- Modal opens with Loom video embed (16:9 aspect ratio)
-- Video title: "Seamless Client Transfers for Health Insurance Services"
-- Close button and click-outside-to-close functionality
-- Responsive design works on all devices
+After implementation:
+- Form will include an optional "Referred By" field
+- Submissions will trigger a professionally styled email notification
+- Three recipients will receive notifications:
+  - `leads@tfainsuranceadvisors.com` (TFA team)
+  - `info@health-market.com` (American Way Health partner) - **NEW**
+  - Any assigned advisor (if applicable)
+- All form data will be clearly displayed in the email with proper formatting
 
