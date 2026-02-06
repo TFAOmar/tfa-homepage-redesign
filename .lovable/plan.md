@@ -1,82 +1,117 @@
 
 
-# Update American Way Health Landing Page
+# Add Video Modal to American Way Health Landing Page
 
-## Changes Overview
+## Recommendation: Video Popup Modal
 
-1. **Update phone number** from `888-669-7553` to `321-356-3450` everywhere
-2. **Remove green CTA button** from the hero section (keep the gold "Get Your Free Quote" button)
-3. **Enlarge insurance carrier logos** (increase from `max-h-12` to `max-h-20` and card height from `h-24` to `h-32`)
-4. **Move "Insurance Companies" section** to appear right before "Why Us?" section
+A modal/popup approach will perform better than hero embedding because:
+- Keeps the hero section focused on the primary conversion goal (form submissions)
+- Video loads on-demand, improving page performance
+- Works seamlessly on mobile devices
+- Users who click to watch show higher intent
+
+---
+
+## Implementation Details
+
+### Add to Hero Section
+Place a "Watch Video" button below the main CTA in the hero, styled as a secondary action:
+
+```text
+[Get Your Free Quote]  ← Primary CTA (existing)
+      ▶ Watch Video     ← New secondary link
+```
+
+### Video Modal Component
+Create a responsive modal that:
+- Opens when "Watch Video" is clicked
+- Contains the Loom embed iframe
+- Closes on overlay click or X button
+- Pauses video when closed
+
+### Loom Embed URL
+```
+https://www.loom.com/embed/bed6522f3c6a4b9aa857a60bd0be9f85
+```
 
 ---
 
 ## Files to Modify
 
-### 1. `src/pages/AmericanWayHealth.tsx`
+### `src/pages/AmericanWayHealth.tsx`
 
-**Phone number update:**
-- Line 23-24: Change constants from `888-669-7553` to `321-356-3450`
-- Line 111: Update SEO description
+**Add imports:**
+- Import `Dialog`, `DialogContent`, `DialogTitle` from `@/components/ui/dialog`
+- Import `useState` from React
+- Import `Play` icon from lucide-react
 
-**Remove green hero CTA:**
-- Lines 192-199: Remove the green "Call: {PHONE_NUMBER}" button from the hero section
+**Add state:**
+```typescript
+const [videoOpen, setVideoOpen] = useState(false);
+```
 
-**Enlarge logos and move section:**
-- Lines 358-370: Increase logo container height from `h-24` to `h-32` and logo max-height from `max-h-12` to `max-h-20`
-- Move the entire "Insurance Companies" section (lines 346-381) to appear before "Why Us?" section (currently at line 265)
+**Add to Hero section (after main CTA button, around line 191):**
+```typescript
+<button
+  onClick={() => setVideoOpen(true)}
+  className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+>
+  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+    <Play className="w-5 h-5 text-white fill-white" />
+  </div>
+  <span className="font-medium">Watch Video</span>
+</button>
+```
 
-**Section order after change:**
-1. Benefits Section
-2. Insurance Plans Section
-3. **Insurance Companies Section** (moved up)
-4. **Why Us? Section** (now after Insurance Companies)
-5. About Section
-6. Partnership Section
-7. Form Section
-8. Footer/Disclaimer
-
-### 2. `src/components/health-insurance/AmericanWayHealthForm.tsx`
-
-**Phone number update:**
-- Lines 28-29: Change constants from `888-669-7553` to `321-356-3450`
+**Add Video Modal (before closing fragment):**
+```typescript
+<Dialog open={videoOpen} onOpenChange={setVideoOpen}>
+  <DialogContent className="max-w-4xl w-[95vw] p-0 bg-black border-0">
+    <DialogTitle className="sr-only">
+      Partnership Video - American Way Health
+    </DialogTitle>
+    <div className="aspect-video">
+      <iframe
+        src="https://www.loom.com/embed/bed6522f3c6a4b9aa857a60bd0be9f85"
+        frameBorder="0"
+        allowFullScreen
+        className="w-full h-full"
+      />
+    </div>
+  </DialogContent>
+</Dialog>
+```
 
 ---
 
-## Technical Details
+## Visual Layout (Hero Section)
 
-```typescript
-// Updated phone constants (both files)
-const PHONE_NUMBER = "321-356-3450";
-const PHONE_TEL = "tel:+13213563450";
-```
-
-```typescript
-// Hero section - REMOVE this button (lines 192-199)
-<a
-  href={PHONE_TEL}
-  className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700..."
->
-  <Phone className="w-5 h-5" />
-  Call: {PHONE_NUMBER}
-</a>
-```
-
-```typescript
-// Larger logo cards (update classes)
-// Before: className="... h-24 ..."
-// After:  className="... h-32 ..."
-
-// Before: className="max-h-12 max-w-full object-contain"
-// After:  className="max-h-20 max-w-full object-contain"
+```text
+┌─────────────────────────────────────────────┐
+│   GET FREE INSURANCE QUOTES NOW             │
+│                                             │
+│   EASY WAY TO SHOP FOR INSURANCE            │
+│                                             │
+│   GET EXACTLY WHAT YOU NEED                 │
+│   PERSONAL / FAMILY / GROUP PLANS           │
+│                                             │
+│        ┌────────────────────┐               │
+│        │ Get Your Free Quote│  ← Gold CTA   │
+│        └────────────────────┘               │
+│                                             │
+│         ▶ Watch Video          ← New link   │
+│                                             │
+│   No obligation. No cost. Just answers.     │
+└─────────────────────────────────────────────┘
 ```
 
 ---
 
 ## Expected Outcome
 
-- All phone references show **321-356-3450**
-- Hero section has only the gold "Get Your Free Quote" button (no green call button)
-- Insurance carrier logos are larger and more prominent
-- Section order: Benefits → Insurance Plans → **Insurance Companies** → **Why Us?** → About → Partnership → Form
+- Clean, focused hero with optional video engagement
+- Modal opens with Loom video embed (16:9 aspect ratio)
+- Video title: "Seamless Client Transfers for Health Insurance Services"
+- Close button and click-outside-to-close functionality
+- Responsive design works on all devices
 
