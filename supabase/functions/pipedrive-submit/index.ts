@@ -622,17 +622,30 @@ const generateAmericanWayHealthEmailHtml = (
         <!-- Header -->
         <tr>
           <td style="padding: 0;">
+            <!-- Logo Banner -->
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
               <tr>
-                <td style="padding: 35px 40px; background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #0284c7 100%);">
+                <td style="padding: 25px 40px; background-color: #ffffff; text-align: center; border-bottom: 1px solid #e2e8f0;">
+                  <img 
+                    src="https://tfawealthplanning.lovable.app/email/american-way-health.png" 
+                    alt="American Way Health" 
+                    style="max-width: 200px; height: auto;"
+                  />
+                </td>
+              </tr>
+            </table>
+            <!-- Gradient Header -->
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="padding: 25px 40px; background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #0284c7 100%);">
                   <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                     <tr>
                       <td>
                         <p style="color: rgba(255,255,255,0.9); margin: 0 0 5px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;">
                           🏥 New Health Insurance Lead
                         </p>
-                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">
-                          American Way Health
+                        <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 700;">
+                          Quote Request
                         </h1>
                       </td>
                       <td style="text-align: right; vertical-align: middle;">
