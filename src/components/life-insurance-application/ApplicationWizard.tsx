@@ -1001,10 +1001,12 @@ const ApplicationWizard = ({
 
     console.log("Application submitted successfully");
 
-    // Stage 4: Send email notifications (non-blocking - don't fail submission)
+    // Stage 4: Send email notifications (await with timeout to prevent race condition)
+    // This ensures the email request completes before browser navigates away
     try {
       console.log("Sending life insurance notification emails...");
-      const { error: emailError } = await supabase.functions.invoke(
+      
+      const emailPromise = supabase.functions.invoke(
         "send-life-insurance-notification",
         {
           body: {
@@ -1019,15 +1021,23 @@ const ApplicationWizard = ({
         }
       );
 
-      if (emailError) {
-        console.error("Failed to send notification emails:", emailError);
-        // Don't block success, just log the error
+      // Wait up to 15 seconds for email to send (prevents navigation from aborting request)
+      const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) =>
+        setTimeout(() => reject(new Error("Email notification timeout after 15s")), 15000)
+      );
+
+      const result = await Promise.race([emailPromise, timeoutPromise]);
+      
+      if (result?.error) {
+        console.error("Failed to send notification emails:", result.error);
+        // Don't block success, application is already saved
       } else {
         console.log("Notification emails sent successfully");
       }
     } catch (emailError) {
-      console.error("Error invoking email function:", emailError);
-      // Don't block success, just log the error
+      console.error("Email notification issue (application still saved):", emailError);
+      // Don't block success - application data is safely in the database
+      // Admin can use "Resend PDF" feature if needed
     }
 
     // Clear the draft from localStorage
