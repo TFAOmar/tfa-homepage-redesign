@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { Shield, Users, Heart, Phone, CheckCircle, Building2, UserCheck, FileText, Headphones, CreditCard, FileCheck, IdCard, MapPin, Play } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Shield, Users, Heart, Phone, CheckCircle, Building2, UserCheck, FileText, Headphones, CreditCard, FileCheck, IdCard, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import tfaLogo from "@/assets/tfa-logo.png";
 import awhLogo from "@/assets/partners/american-way-health.png";
@@ -105,8 +103,6 @@ const steps = [
 ];
 
 const AmericanWayHealth = () => {
-  const [videoOpen, setVideoOpen] = useState(false);
-
   return (
     <>
       <SEOHead
@@ -186,22 +182,13 @@ const AmericanWayHealth = () => {
             <p className="text-lg text-white/70 mb-8">
               PERSONAL PLANS / FAMILY PLANS / GROUP PLANS
             </p>
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex justify-center">
               <Button
                 onClick={scrollToForm}
                 className="bg-accent hover:bg-accent/90 text-primary font-semibold px-8 py-6 text-lg rounded-full"
               >
                 Get Your Free Quote
               </Button>
-              <button
-                onClick={() => setVideoOpen(true)}
-                className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
-              >
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                  <Play className="w-5 h-5 text-white fill-white" />
-                </div>
-                <span className="font-medium">Watch Video</span>
-              </button>
             </div>
             <p className="text-white/60 mt-4 text-sm">No obligation. No cost. Just answers.</p>
           </div>
@@ -484,22 +471,6 @@ const AmericanWayHealth = () => {
           </div>
         </footer>
       </div>
-      {/* Video Modal */}
-      <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
-        <DialogContent className="max-w-4xl w-[95vw] p-0 bg-black border-0">
-          <DialogTitle className="sr-only">
-            Partnership Video - American Way Health
-          </DialogTitle>
-          <div className="aspect-video">
-            <iframe
-              src="https://www.loom.com/embed/bed6522f3c6a4b9aa857a60bd0be9f85"
-              frameBorder="0"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
     </>
   );
 };
