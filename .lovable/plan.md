@@ -1,143 +1,119 @@
 
+# Fix: Reliable Life Insurance Email Notifications
 
-# Add Sheila Rodriguez - New Advisor Profile
+## Problem
 
-## Summary
-Add Sheila Rodriguez as a new advisor to the directory and create her dedicated landing page. This is notable as the **first TFA advisor in Kansas**, expanding TFA's geographic reach to the Midwest region.
+Life insurance application notifications are being missed because the edge function invocation can be aborted when the browser navigates to the thank-you page. This has happened for both Manuel Soto and Conrad Olvera applications.
 
----
+## Solution
 
-## Advisor Information
-
-| Field | Value |
-|-------|-------|
-| Name | Sheila Rodriguez |
-| Title | Financial Strategist |
-| Location | Overland Park, KS |
-| Region | Midwest |
-| Email | sheila@tfainsuranceadvisors.com |
-| Phone | (661) 816-1920 |
-| Years of Experience | 25+ |
-| Specialties | Investment Management, Retirement Planning, Risk Assessment, Tax Optimization, Estate Planning |
+Implement a database-trigger-based approach to guarantee notifications are sent, with the client-side call as an optional optimization.
 
 ---
 
-## Files to Create/Modify
+## Technical Approach
 
-### 1. Save Uploaded Image
-- Copy `user-uploads://Sheila_Rodriguez.jpg` to `src/assets/advisors/sheila-rodriguez.jpg`
+### Option A: Wait for Email Before Navigation (Quick Fix)
 
-### 2. Update `src/data/advisors.ts`
-Add import for the new image and add Sheila to the advisors array:
+Modify `ApplicationWizard.tsx` to await the email function and only navigate after it completes (or times out after 10 seconds).
+
+Changes:
+- Remove the fire-and-forget pattern for email invocation
+- Add a timeout wrapper so users aren't stuck waiting forever
+- Only navigate to `/thank-you` after email completes or times out
+
+```text
+File: src/components/life-insurance-application/ApplicationWizard.tsx
+
+Lines 1004-1031: Change email invocation from non-blocking to awaited with timeout
+
+Current pattern (non-blocking):
+  try {
+    supabase.functions.invoke("send-life-insurance-notification", {...});
+    // Don't await - just fire and forget
+  } catch { /* log only */ }
+  navigate("/thank-you"); // Navigates immediately
+
+New pattern (await with timeout):
+  await Promise.race([
+    supabase.functions.invoke("send-life-insurance-notification", {...}),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+  ]).catch(err => console.error("Email notification issue:", err));
+  navigate("/thank-you"); // Navigate after email completes or times out
+```
+
+### Option B: Database Webhook Trigger (Robust Fix)
+
+Create a Supabase database trigger that fires when `life_insurance_applications.status` changes to `submitted`, automatically invoking the notification edge function server-side.
+
+This approach guarantees notifications are sent regardless of client-side behavior.
+
+Steps:
+1. Create a new edge function `trigger-life-insurance-notification` that accepts the application ID
+2. Create a database trigger on `life_insurance_applications` that fires on UPDATE when status changes to 'submitted'
+3. Use `pg_net` or Supabase webhooks to call the edge function
+4. Remove client-side email invocation (or keep as backup)
+
+---
+
+## Recommended Implementation
+
+Start with **Option A** (quick fix) for immediate reliability improvement, then plan **Option B** for a bulletproof solution.
+
+### Files to Modify
+
+1. `src/components/life-insurance-application/ApplicationWizard.tsx`
+   - Lines 1004-1031: Make email invocation awaited with 10-second timeout
+   - Move navigation after the email promise settles
+
+### Code Change Summary
 
 ```typescript
-// Add import
-import sheilaRodriguezImg from "@/assets/advisors/sheila-rodriguez.jpg";
-
-// Add to advisors array
-{
-  id: "sheila-rodriguez",
-  name: "Sheila Rodriguez",
-  title: "Financial Strategist",
-  type: "Advisor",
-  state: "Kansas",
-  city: "Overland Park",
-  region: "Midwest",
-  bio: "With over 25 years of experience in the mortgage, banking, & financial services industry, Sheila specializes in crafting comprehensive financial plans tailored to each client's unique circumstances. Her holistic approach spans investment management, retirement planning, risk assessment, tax optimization, and estate planning.",
-  specialties: ["Investment Management", "Retirement Planning", "Tax Optimization", "Estate Planning", "Risk Assessment"],
-  licenses: ["Life & Health"],
-  image: sheilaRodriguezImg,
-  email: "sheila@tfainsuranceadvisors.com",
-  phone: "(661) 816-1920",
-  yearsOfExperience: 25,
-  landingPage: "/advisors/sheila-rodriguez"
+// Stage 4: Send email notifications (wait with timeout)
+try {
+  console.log("Sending life insurance notification emails...");
+  
+  const emailPromise = supabase.functions.invoke(
+    "send-life-insurance-notification",
+    {
+      body: {
+        applicationId,
+        applicantName,
+        applicantEmail,
+        applicantPhone,
+        advisorId: advisorId || null,
+        advisorName: advisorName || null,
+        formData: finalFormData,
+      },
+    }
+  );
+  
+  // Wait up to 10 seconds for email to send
+  const timeoutPromise = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error("Email notification timeout")), 10000)
+  );
+  
+  await Promise.race([emailPromise, timeoutPromise]);
+  console.log("Notification emails sent successfully");
+} catch (emailError) {
+  console.error("Email notification issue:", emailError);
+  // Still proceed to success - application is saved
 }
-```
 
-### 3. Create `src/pages/AdvisorSheilaRodriguez.tsx`
-New landing page following the established pattern with:
-
-**Hero Section**
-- Professional headshot
-- Name, title, location (Overland Park, KS)
-- Phone and email links
-- "Book a Consultation" and "Contact Me" buttons
-
-**About Section**
-- Full biography highlighting 25+ years of experience
-- Mortgage, banking, and financial services background
-- Holistic approach and client-first philosophy
-- Specialty badges
-
-**Services Section (6 cards)**
-1. Investment Management
-2. Retirement Planning
-3. Risk Assessment
-4. Tax Optimization
-5. Estate Planning
-6. Business Financial Strategy
-
-**Process Section (4 steps)**
-1. Discovery - Understanding goals and current situation
-2. Analysis - Reviewing existing strategies and identifying opportunities
-3. Strategy - Developing customized comprehensive plan
-4. Implementation - Ongoing support and guidance
-
-**CTA Section**
-- Final call-to-action with contact options
-
-**SEO**
-- PersonSchema and LocalBusinessSchema for Overland Park, KS (zip: 66212)
-- Meta title, description, keywords
-
-### 4. Update `src/App.tsx`
-Add import and route:
-
-```typescript
-// Add import
-import AdvisorSheilaRodriguez from "./pages/AdvisorSheilaRodriguez";
-
-// Add route (alphabetical with other advisors)
-<Route path="/advisors/sheila-rodriguez" element={<AdvisorSheilaRodriguez />} />
+// Clear draft and navigate (after email attempt)
+localStorage.removeItem("lifeInsuranceApplication");
+fireConfetti({ ... });
+toast({ ... });
+setIsSubmitting(false);
+navigate("/thank-you");
 ```
 
 ---
 
-## Technical Details
+## Expected Outcome
 
-### Directory Entry Structure
-The advisor will appear in the `/advisors` directory with:
-- Filterable by State: Kansas
-- Filterable by Region: Midwest
-- "View Full Profile" button linking to `/advisors/sheila-rodriguez`
-
-### Lead Routing
-- ScheduleModal and ContactModal configured with `sheila@tfainsuranceadvisors.com`
-- Notifications sent to both the advisor and `leads@tfainsuranceadvisors.com`
-
-### SEO Schema
-```typescript
-// PersonSchema
-name: "Sheila Rodriguez"
-jobTitle: "Financial Strategist"
-worksFor: "The Financial Architects"
-image: sheilaRodriguezImg
-areaServed: "Overland Park, KS"
-
-// LocalBusinessSchema
-city: "Overland Park"
-state: "KS"
-zip: "66212"
-phone: "(661) 816-1920"
-```
-
----
-
-## Result
-
-After implementation:
-1. Sheila appears in the advisor directory at `/advisors`
-2. Her dedicated landing page is accessible at `/advisors/sheila-rodriguez`
-3. Contact forms route to `sheila@tfainsuranceadvisors.com`
-4. TFA expands its presence to Kansas (Midwest region)
-
+After this change:
+- Email notifications will complete before the browser navigates away
+- If email takes longer than 10 seconds, user still gets success page (data is safe)
+- No more missed notifications due to race conditions
+- Admin can still use "Resend PDF" feature as backup
