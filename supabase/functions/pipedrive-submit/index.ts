@@ -861,7 +861,7 @@ const sendEmails = async (
       const partnerHtml = generateAmericanWayHealthEmailHtml(formData, submissionId);
       const partnerResult = await resend.emails.send({
         from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
-        to: ["info@health-market.com"],
+        to: ["info@health-market.com", "info@awhealthllc.com"],
         subject: `New Health Insurance Lead - ${formData.first_name} ${formData.last_name}`,
         html: partnerHtml,
       });
@@ -870,7 +870,7 @@ const sendEmails = async (
         errors.push(`Partner email: ${partnerResult.error.message}`);
       } else {
         partnerSent = true;
-        console.log("[Email Sent - Partner] info@health-market.com");
+        console.log("[Email Sent - Partner] info@health-market.com, info@awhealthllc.com");
       }
     } catch (e) {
       console.error("[Email Exception - Partner]", e);
