@@ -1,171 +1,82 @@
 
+
 # Update American Way Health Landing Page
 
-## Overview
-This plan adds comprehensive content from the American Way Health website, including their phone CTA, enhanced form fields, insurance plans information, "Why Us" features, about section, insurance carrier logos, and required legal disclaimers.
+## Changes Overview
+
+1. **Update phone number** from `888-669-7553` to `321-356-3450` everywhere
+2. **Remove green CTA button** from the hero section (keep the gold "Get Your Free Quote" button)
+3. **Enlarge insurance carrier logos** (increase from `max-h-12` to `max-h-20` and card height from `h-24` to `h-32`)
+4. **Move "Insurance Companies" section** to appear right before "Why Us?" section
 
 ---
 
-## Content Sections to Add
+## Files to Modify
 
-### 1. Phone Number CTA Banner
-Add a prominent call-now banner at the top of the hero with the phone number **888-669-7553**.
+### 1. `src/pages/AmericanWayHealth.tsx`
 
-### 2. Enhanced Hero Section
-Update hero with:
-- "GET FREE INSURANCE QUOTES NOW"
-- "EASY WAY TO SHOP FOR INSURANCE"
-- "GET EXACTLY WHAT YOU NEED"
-- "PERSONAL PLANS / FAMILY PLANS / GROUP PLANS"
+**Phone number update:**
+- Line 23-24: Change constants from `888-669-7553` to `321-356-3450`
+- Line 111: Update SEO description
 
-### 3. Enhanced Quote Form
-Expand the form to include:
-- First Name, Last Name (existing)
-- Email (existing)
-- Phone with character limit indicator
-- Yearly income dropdown (Under $30K, $30K-$50K, $50K-$75K, $75K-$100K, Over $100K)
-- Date of Birth (MM/DD/YYYY fields)
-- ZIP Code
-- Insurance type dropdown (existing, expanded)
-- Terms & Conditions checkbox with consent text
-- "Call Now" button for instant quote
+**Remove green hero CTA:**
+- Lines 192-199: Remove the green "Call: {PHONE_NUMBER}" button from the hero section
 
-### 4. Insurance Plans Section
-New section explaining the coverage types:
-- Short-Term, Long-Term, Marketplace Plans
-- Individual, Family, Group
-- Accident, Catastrophic, Critical Illness, Cancer
-- ACA/Marketplace Plans explanation with Open Enrollment info
+**Enlarge logos and move section:**
+- Lines 358-370: Increase logo container height from `h-24` to `h-32` and logo max-height from `max-h-12` to `max-h-20`
+- Move the entire "Insurance Companies" section (lines 346-381) to appear before "Why Us?" section (currently at line 265)
 
-### 5. "Why Us?" Section
-Add the 5 key features:
-1. Live licensed health insurance agents
-2. Create and view your Payment Statements
-3. Review your Explanations of Benefits
-4. Print and order your ID cards
-5. Locate Preferred Providers in your network
+**Section order after change:**
+1. Benefits Section
+2. Insurance Plans Section
+3. **Insurance Companies Section** (moved up)
+4. **Why Us? Section** (now after Insurance Companies)
+5. About Section
+6. Partnership Section
+7. Form Section
+8. Footer/Disclaimer
 
-### 6. About American Way Health Section
-Company description and value proposition:
-- "We take the confusion out of buying insurance"
-- Quote: "WE OFFER THE BEST PLANS FOR YOU AND YOUR FAMILY"
-- Contact information display
+### 2. `src/components/health-insurance/AmericanWayHealthForm.tsx`
 
-### 7. Insurance Companies Section
-Add carrier logo grid with the 10 uploaded insurance carrier logos:
-- Cigna, Humana, Aetna, Ambetter Health, Molina Healthcare
-- BlueCross BlueShield, Oscar, United Healthcare, First Health Network
-- Health Insurance Marketplace
-
-### 8. Legal Disclaimer Footer
-Add the comprehensive legal disclaimer including:
-- Licensing information (35 states)
-- Independent broker status
-- Agent compensation disclosure
-- Medicare disclaimer
-- Subsidy/premium information
-
----
-
-## Files to Create/Modify
-
-### New Assets (10 carrier logos)
-Copy uploaded logos to `src/assets/carriers/health/`:
-- cigna.png
-- humana.png
-- aetna.png
-- ambetter-health.png
-- molina-healthcare.png
-- bluecross-blueshield.png
-- oscar.png
-- united-healthcare.png
-- first-health-network.png
-- health-insurance-marketplace.png
-
-### Modify: `src/components/health-insurance/AmericanWayHealthForm.tsx`
-- Add yearly income field
-- Add date of birth fields (MM/DD/YYYY)
-- Add ZIP code field
-- Add terms & conditions checkbox with consent text
-- Update form schema with new required fields
-
-### Modify: `src/pages/AmericanWayHealth.tsx`
-Major restructure to include:
-- Phone CTA banner in header
-- Enhanced hero messaging
-- "Call Now" button with tel: link
-- New Insurance Plans section
-- "Why Us?" section with numbered list
-- About American Way Health section
-- Insurance Companies logo grid
-- Legal disclaimer in footer
+**Phone number update:**
+- Lines 28-29: Change constants from `888-669-7553` to `321-356-3450`
 
 ---
 
 ## Technical Details
 
-### Form Schema Updates
 ```typescript
-const formSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Please enter a valid email"),
-  phone: z.string().min(10).max(11, "Phone must be 10-11 characters"),
-  yearlyIncome: z.string().min(1, "Please select yearly income"),
-  dobMonth: z.string().min(1, "Month is required"),
-  dobDay: z.string().min(1, "Day is required"),
-  dobYear: z.string().min(4, "Year is required"),
-  zipCode: z.string().min(5, "Please enter a valid ZIP code"),
-  insuranceType: z.string().min(1, "Please select insurance type"),
-  termsAccepted: z.literal(true, {
-    errorMap: () => ({ message: "You must accept the terms" })
-  }),
-  message: z.string().optional(),
-});
+// Updated phone constants (both files)
+const PHONE_NUMBER = "321-356-3450";
+const PHONE_TEL = "tel:+13213563450";
 ```
 
-### New Data Arrays
 ```typescript
-const whyUsFeatures = [
-  "Live licensed health insurance agents.",
-  "Create and view your Payment Statements.",
-  "Review your Explanations of Benefits.",
-  "Print and order your ID cards.",
-  "Locate Preferred Providers in your network.",
-];
-
-const insuranceCarriers = [
-  { name: "Cigna", logo: cignaLogo },
-  { name: "Humana", logo: humanaLogo },
-  // ... etc
-];
+// Hero section - REMOVE this button (lines 192-199)
+<a
+  href={PHONE_TEL}
+  className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700..."
+>
+  <Phone className="w-5 h-5" />
+  Call: {PHONE_NUMBER}
+</a>
 ```
 
-### Phone Number Constant
 ```typescript
-const PHONE_NUMBER = "888-669-7553";
-const PHONE_TEL = "tel:+18886697553";
+// Larger logo cards (update classes)
+// Before: className="... h-24 ..."
+// After:  className="... h-32 ..."
+
+// Before: className="max-h-12 max-w-full object-contain"
+// After:  className="max-h-20 max-w-full object-contain"
 ```
-
----
-
-## UI Design Approach
-
-- Maintain existing dark gradient theme (from-primary via-navy to-primary)
-- Use glassmorphic cards (bg-white/10 backdrop-blur-sm border-white/10)
-- Accent color for CTAs and highlights
-- White background sections for carrier logos (better logo visibility)
-- Numbered list styling for "Why Us" section
-- Compact legal disclaimer with smaller text
 
 ---
 
 ## Expected Outcome
 
-The updated page will include:
-- Prominent phone CTA throughout (888-669-7553)
-- More comprehensive lead capture form
-- Educational content about insurance options
-- Trust-building carrier logos section
-- Required legal disclosures
-- Multiple conversion paths (form + phone)
+- All phone references show **321-356-3450**
+- Hero section has only the gold "Get Your Free Quote" button (no green call button)
+- Insurance carrier logos are larger and more prominent
+- Section order: Benefits → Insurance Plans → **Insurance Companies** → **Why Us?** → About → Partnership → Form
+
