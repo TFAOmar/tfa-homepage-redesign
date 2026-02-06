@@ -1,119 +1,171 @@
 
-# Fix: Reliable Life Insurance Email Notifications
+# Update American Way Health Landing Page
 
-## Problem
-
-Life insurance application notifications are being missed because the edge function invocation can be aborted when the browser navigates to the thank-you page. This has happened for both Manuel Soto and Conrad Olvera applications.
-
-## Solution
-
-Implement a database-trigger-based approach to guarantee notifications are sent, with the client-side call as an optional optimization.
+## Overview
+This plan adds comprehensive content from the American Way Health website, including their phone CTA, enhanced form fields, insurance plans information, "Why Us" features, about section, insurance carrier logos, and required legal disclaimers.
 
 ---
 
-## Technical Approach
+## Content Sections to Add
 
-### Option A: Wait for Email Before Navigation (Quick Fix)
+### 1. Phone Number CTA Banner
+Add a prominent call-now banner at the top of the hero with the phone number **888-669-7553**.
 
-Modify `ApplicationWizard.tsx` to await the email function and only navigate after it completes (or times out after 10 seconds).
+### 2. Enhanced Hero Section
+Update hero with:
+- "GET FREE INSURANCE QUOTES NOW"
+- "EASY WAY TO SHOP FOR INSURANCE"
+- "GET EXACTLY WHAT YOU NEED"
+- "PERSONAL PLANS / FAMILY PLANS / GROUP PLANS"
 
-Changes:
-- Remove the fire-and-forget pattern for email invocation
-- Add a timeout wrapper so users aren't stuck waiting forever
-- Only navigate to `/thank-you` after email completes or times out
+### 3. Enhanced Quote Form
+Expand the form to include:
+- First Name, Last Name (existing)
+- Email (existing)
+- Phone with character limit indicator
+- Yearly income dropdown (Under $30K, $30K-$50K, $50K-$75K, $75K-$100K, Over $100K)
+- Date of Birth (MM/DD/YYYY fields)
+- ZIP Code
+- Insurance type dropdown (existing, expanded)
+- Terms & Conditions checkbox with consent text
+- "Call Now" button for instant quote
 
-```text
-File: src/components/life-insurance-application/ApplicationWizard.tsx
+### 4. Insurance Plans Section
+New section explaining the coverage types:
+- Short-Term, Long-Term, Marketplace Plans
+- Individual, Family, Group
+- Accident, Catastrophic, Critical Illness, Cancer
+- ACA/Marketplace Plans explanation with Open Enrollment info
 
-Lines 1004-1031: Change email invocation from non-blocking to awaited with timeout
+### 5. "Why Us?" Section
+Add the 5 key features:
+1. Live licensed health insurance agents
+2. Create and view your Payment Statements
+3. Review your Explanations of Benefits
+4. Print and order your ID cards
+5. Locate Preferred Providers in your network
 
-Current pattern (non-blocking):
-  try {
-    supabase.functions.invoke("send-life-insurance-notification", {...});
-    // Don't await - just fire and forget
-  } catch { /* log only */ }
-  navigate("/thank-you"); // Navigates immediately
+### 6. About American Way Health Section
+Company description and value proposition:
+- "We take the confusion out of buying insurance"
+- Quote: "WE OFFER THE BEST PLANS FOR YOU AND YOUR FAMILY"
+- Contact information display
 
-New pattern (await with timeout):
-  await Promise.race([
-    supabase.functions.invoke("send-life-insurance-notification", {...}),
-    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
-  ]).catch(err => console.error("Email notification issue:", err));
-  navigate("/thank-you"); // Navigate after email completes or times out
-```
+### 7. Insurance Companies Section
+Add carrier logo grid with the 10 uploaded insurance carrier logos:
+- Cigna, Humana, Aetna, Ambetter Health, Molina Healthcare
+- BlueCross BlueShield, Oscar, United Healthcare, First Health Network
+- Health Insurance Marketplace
 
-### Option B: Database Webhook Trigger (Robust Fix)
-
-Create a Supabase database trigger that fires when `life_insurance_applications.status` changes to `submitted`, automatically invoking the notification edge function server-side.
-
-This approach guarantees notifications are sent regardless of client-side behavior.
-
-Steps:
-1. Create a new edge function `trigger-life-insurance-notification` that accepts the application ID
-2. Create a database trigger on `life_insurance_applications` that fires on UPDATE when status changes to 'submitted'
-3. Use `pg_net` or Supabase webhooks to call the edge function
-4. Remove client-side email invocation (or keep as backup)
+### 8. Legal Disclaimer Footer
+Add the comprehensive legal disclaimer including:
+- Licensing information (35 states)
+- Independent broker status
+- Agent compensation disclosure
+- Medicare disclaimer
+- Subsidy/premium information
 
 ---
 
-## Recommended Implementation
+## Files to Create/Modify
 
-Start with **Option A** (quick fix) for immediate reliability improvement, then plan **Option B** for a bulletproof solution.
+### New Assets (10 carrier logos)
+Copy uploaded logos to `src/assets/carriers/health/`:
+- cigna.png
+- humana.png
+- aetna.png
+- ambetter-health.png
+- molina-healthcare.png
+- bluecross-blueshield.png
+- oscar.png
+- united-healthcare.png
+- first-health-network.png
+- health-insurance-marketplace.png
 
-### Files to Modify
+### Modify: `src/components/health-insurance/AmericanWayHealthForm.tsx`
+- Add yearly income field
+- Add date of birth fields (MM/DD/YYYY)
+- Add ZIP code field
+- Add terms & conditions checkbox with consent text
+- Update form schema with new required fields
 
-1. `src/components/life-insurance-application/ApplicationWizard.tsx`
-   - Lines 1004-1031: Make email invocation awaited with 10-second timeout
-   - Move navigation after the email promise settles
+### Modify: `src/pages/AmericanWayHealth.tsx`
+Major restructure to include:
+- Phone CTA banner in header
+- Enhanced hero messaging
+- "Call Now" button with tel: link
+- New Insurance Plans section
+- "Why Us?" section with numbered list
+- About American Way Health section
+- Insurance Companies logo grid
+- Legal disclaimer in footer
 
-### Code Change Summary
+---
 
+## Technical Details
+
+### Form Schema Updates
 ```typescript
-// Stage 4: Send email notifications (wait with timeout)
-try {
-  console.log("Sending life insurance notification emails...");
-  
-  const emailPromise = supabase.functions.invoke(
-    "send-life-insurance-notification",
-    {
-      body: {
-        applicationId,
-        applicantName,
-        applicantEmail,
-        applicantPhone,
-        advisorId: advisorId || null,
-        advisorName: advisorName || null,
-        formData: finalFormData,
-      },
-    }
-  );
-  
-  // Wait up to 10 seconds for email to send
-  const timeoutPromise = new Promise((_, reject) => 
-    setTimeout(() => reject(new Error("Email notification timeout")), 10000)
-  );
-  
-  await Promise.race([emailPromise, timeoutPromise]);
-  console.log("Notification emails sent successfully");
-} catch (emailError) {
-  console.error("Email notification issue:", emailError);
-  // Still proceed to success - application is saved
-}
-
-// Clear draft and navigate (after email attempt)
-localStorage.removeItem("lifeInsuranceApplication");
-fireConfetti({ ... });
-toast({ ... });
-setIsSubmitting(false);
-navigate("/thank-you");
+const formSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Please enter a valid email"),
+  phone: z.string().min(10).max(11, "Phone must be 10-11 characters"),
+  yearlyIncome: z.string().min(1, "Please select yearly income"),
+  dobMonth: z.string().min(1, "Month is required"),
+  dobDay: z.string().min(1, "Day is required"),
+  dobYear: z.string().min(4, "Year is required"),
+  zipCode: z.string().min(5, "Please enter a valid ZIP code"),
+  insuranceType: z.string().min(1, "Please select insurance type"),
+  termsAccepted: z.literal(true, {
+    errorMap: () => ({ message: "You must accept the terms" })
+  }),
+  message: z.string().optional(),
+});
 ```
+
+### New Data Arrays
+```typescript
+const whyUsFeatures = [
+  "Live licensed health insurance agents.",
+  "Create and view your Payment Statements.",
+  "Review your Explanations of Benefits.",
+  "Print and order your ID cards.",
+  "Locate Preferred Providers in your network.",
+];
+
+const insuranceCarriers = [
+  { name: "Cigna", logo: cignaLogo },
+  { name: "Humana", logo: humanaLogo },
+  // ... etc
+];
+```
+
+### Phone Number Constant
+```typescript
+const PHONE_NUMBER = "888-669-7553";
+const PHONE_TEL = "tel:+18886697553";
+```
+
+---
+
+## UI Design Approach
+
+- Maintain existing dark gradient theme (from-primary via-navy to-primary)
+- Use glassmorphic cards (bg-white/10 backdrop-blur-sm border-white/10)
+- Accent color for CTAs and highlights
+- White background sections for carrier logos (better logo visibility)
+- Numbered list styling for "Why Us" section
+- Compact legal disclaimer with smaller text
 
 ---
 
 ## Expected Outcome
 
-After this change:
-- Email notifications will complete before the browser navigates away
-- If email takes longer than 10 seconds, user still gets success page (data is safe)
-- No more missed notifications due to race conditions
-- Admin can still use "Resend PDF" feature as backup
+The updated page will include:
+- Prominent phone CTA throughout (888-669-7553)
+- More comprehensive lead capture form
+- Educational content about insurance options
+- Trust-building carrier logos section
+- Required legal disclosures
+- Multiple conversion paths (form + phone)
