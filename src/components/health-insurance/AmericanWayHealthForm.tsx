@@ -39,6 +39,7 @@ const formSchema = z.object({
   dobYear: z.string().min(4, "Year is required (YYYY)"),
   zipCode: z.string().min(5, "Please enter a valid ZIP code").max(10, "Invalid ZIP code"),
   insuranceType: z.string().min(1, "Please select an insurance type"),
+  referredBy: z.string().max(100).optional(),
   termsAccepted: z.literal(true, {
     errorMap: () => ({ message: "You must accept the terms and conditions" })
   }),
@@ -99,6 +100,7 @@ const AmericanWayHealthForm = () => {
       dobYear: "",
       zipCode: "",
       insuranceType: "",
+      referredBy: "",
       termsAccepted: undefined,
     },
   });
@@ -123,6 +125,7 @@ const AmericanWayHealthForm = () => {
         `Date of Birth: ${dateOfBirth}`,
         `Yearly Income: ${incomeLabel}`,
         `ZIP Code: ${data.zipCode}`,
+        data.referredBy && `Referred By: ${data.referredBy}`,
         `Partner: American Way Health`,
         `Terms Accepted: Yes`,
       ].filter(Boolean).join("\n");
@@ -406,6 +409,27 @@ const AmericanWayHealthForm = () => {
                   <SelectItem value="dental-vision" className="text-white hover:bg-white/10">Dental & Vision</SelectItem>
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Referred By */}
+        <FormField
+          control={form.control}
+          name="referredBy"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white/90">Referred By (Optional)</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder="Who referred you?"
+                  maxLength={100}
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-accent focus:ring-accent/20"
+                  {...field}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
