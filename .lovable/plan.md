@@ -1,25 +1,16 @@
 
 
-# Make Think Tax Solutions Logo Significantly Larger
+# Replace Think Tax Solutions Dark Logo with New Transparent Version
 
-## Changes
+## Change
 
-Increase the Think Tax Solutions logo size across all three locations in `src/pages/VanessaThinkTaxSolutions.tsx`:
+Replace the existing `src/assets/partners/think-tax-solutions.png` (which had a black/opaque background) with the new version that has black letters on a transparent background. This will look much cleaner on the white header and footer sections.
 
-### Header (line 93)
-- Current: `h-10 md:h-14 lg:h-16`
-- New: `h-16 md:h-20 lg:h-24`
+## File Changes
 
-### Partnership Section (line 183)
-- Current: `h-8 md:h-10 lg:h-12`
-- New: `h-14 md:h-18 lg:h-20`
+| File | Action |
+|------|--------|
+| `src/assets/partners/think-tax-solutions.png` | Overwrite with `user-uploads://Think_Tax_Solutions_blk.png` |
 
-### Footer (line 262)
-- Current: `h-8 md:h-10`
-- New: `h-14 md:h-16`
-
-The TFA logo sizes stay the same, giving Think Tax Solutions more visual prominence as the partner brand on this page.
-
-## File to Modify
-`src/pages/VanessaThinkTaxSolutions.tsx` -- update className on 3 logo `<img>` tags
+No code changes needed -- the import in `VanessaThinkTaxSolutions.tsx` already references this file path. The header and footer will automatically use the updated logo.
 
