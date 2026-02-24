@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import ThinkTaxLivingTrustForm from "@/components/living-trust/ThinkTaxLivingTrustForm";
 import tfaLogo from "@/assets/tfa-logo.png";
 import thinkTaxLogo from "@/assets/partners/think-tax-solutions.png";
+import thinkTaxLogoWhite from "@/assets/partners/think-tax-solutions-white.png";
 import vanessaPhoto from "@/assets/advisors/vanessa-sanchez.jpg";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generateWebPageSchema, generateBreadcrumbSchema, generatePersonSchema } from "@/lib/seo/schemas";
@@ -179,7 +180,7 @@ export default function VanessaThinkTaxSolutions() {
                 you receive expert guidance tailored to your family's unique needs.
               </p>
               <div className="flex items-center justify-center gap-4 md:gap-6">
-                <img src={thinkTaxLogo} alt="Think Tax Solutions" className="h-8 md:h-10 lg:h-12 object-contain" />
+                <img src={thinkTaxLogoWhite} alt="Think Tax Solutions" className="h-8 md:h-10 lg:h-12 object-contain" />
                 <span className="text-accent font-medium">×</span>
                 <img src={tfaLogo} alt="The Financial Architects" className="h-7 md:h-8 lg:h-10 object-contain" />
               </div>
