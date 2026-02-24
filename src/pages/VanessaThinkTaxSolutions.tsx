@@ -90,7 +90,7 @@ export default function VanessaThinkTaxSolutions() {
           <div className="max-w-6xl mx-auto flex items-center justify-center gap-4 md:gap-6 lg:gap-10">
             <img src={tfaLogo} alt="The Financial Architects" className="h-10 md:h-12 lg:h-16 object-contain" />
             <div className="h-8 md:h-10 w-px bg-gray-200" />
-            <img src={thinkTaxLogo} alt="Think Tax Solutions" className="h-10 md:h-14 lg:h-16 object-contain" />
+            <img src={thinkTaxLogo} alt="Think Tax Solutions" className="h-16 md:h-20 lg:h-24 object-contain" />
           </div>
           <p className="text-center text-muted-foreground text-xs md:text-sm mt-2 md:mt-3 tracking-wide">
             A Trusted Partnership for Your Family's Future
@@ -180,7 +180,7 @@ export default function VanessaThinkTaxSolutions() {
                 you receive expert guidance tailored to your family's unique needs.
               </p>
               <div className="flex items-center justify-center gap-4 md:gap-6">
-                <img src={thinkTaxLogoWhite} alt="Think Tax Solutions" className="h-8 md:h-10 lg:h-12 object-contain" />
+                <img src={thinkTaxLogoWhite} alt="Think Tax Solutions" className="h-14 md:h-18 lg:h-20 object-contain" />
                 <span className="text-accent font-medium">×</span>
                 <img src={tfaLogo} alt="The Financial Architects" className="h-7 md:h-8 lg:h-10 object-contain" />
               </div>
@@ -259,7 +259,7 @@ export default function VanessaThinkTaxSolutions() {
             <div className="flex items-center justify-center gap-3 md:gap-4 mb-3 md:mb-4">
               <img src={tfaLogo} alt="The Financial Architects" className="h-6 md:h-8 object-contain" />
               <span className="text-gray-400">×</span>
-              <img src={thinkTaxLogo} alt="Think Tax Solutions" className="h-8 md:h-10 object-contain" />
+              <img src={thinkTaxLogo} alt="Think Tax Solutions" className="h-14 md:h-16 object-contain" />
             </div>
             <p className="text-muted-foreground text-xs md:text-sm">
               © {new Date().getFullYear()} The Financial Architects. All rights reserved.
