@@ -1,28 +1,25 @@
 
 
-# Use White Think Tax Solutions Logo on Dark Backgrounds
-
-## Problem
-The current Think Tax Solutions logo (dark/black version) doesn't look ideal on the dark sections of the page. The new white transparent logo will look great on dark backgrounds but will be invisible on the white header and footer.
-
-## Solution
-Save the new white logo as a second asset and use it specifically where it appears on dark backgrounds. Keep the existing dark logo for the white header and footer sections.
+# Make Think Tax Solutions Logo Significantly Larger
 
 ## Changes
 
-### 1. Save the White Logo
-- Copy `user-uploads://Think_Tax_Solutions.png` to `src/assets/partners/think-tax-solutions-white.png`
+Increase the Think Tax Solutions logo size across all three locations in `src/pages/VanessaThinkTaxSolutions.tsx`:
 
-### 2. Update VanessaThinkTaxSolutions.tsx
-- Import the white logo as `thinkTaxLogoWhite`
-- **Header (line 92)**: Keep the dark `thinkTaxLogo` (white background)
-- **Partnership section (line 182)**: Switch to `thinkTaxLogoWhite` (dark glassmorphic background)
-- **Footer (line 261)**: Keep the dark `thinkTaxLogo` (white background)
+### Header (line 93)
+- Current: `h-10 md:h-14 lg:h-16`
+- New: `h-16 md:h-20 lg:h-24`
 
-## Files
+### Partnership Section (line 183)
+- Current: `h-8 md:h-10 lg:h-12`
+- New: `h-14 md:h-18 lg:h-20`
 
-| File | Action |
-|------|--------|
-| `src/assets/partners/think-tax-solutions-white.png` | Create (copy from upload) |
-| `src/pages/VanessaThinkTaxSolutions.tsx` | Update partnership section logo import |
+### Footer (line 262)
+- Current: `h-8 md:h-10`
+- New: `h-14 md:h-16`
+
+The TFA logo sizes stay the same, giving Think Tax Solutions more visual prominence as the partner brand on this page.
+
+## File to Modify
+`src/pages/VanessaThinkTaxSolutions.tsx` -- update className on 3 logo `<img>` tags
 
