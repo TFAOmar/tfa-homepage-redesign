@@ -1,103 +1,88 @@
 
 
-# Fix American Way Health Email Template Issues
+# Co-Branded Landing Page: Vanessa Sanchez x Think Tax Solutions
 
-## Problems Identified
+## Overview
 
-### Issue 1: Data Showing as Code in Partner Emails
-The template variables are **escaped** (`\${...}`) instead of properly interpolated (`${...}`). This causes the email to display literal text like `${formData.first_name}` instead of the actual values like "John".
-
-**Example from current code (line 681):**
-```html
-<td>...\${formData.first_name} \${formData.last_name}</td>
-```
-This outputs: `${formData.first_name} ${formData.last_name}` (literal text)
-
-**Should be:**
-```html
-<td>...${formData.first_name} ${formData.last_name}</td>
-```
-This outputs: `John Smith` (actual data)
-
-### Issue 2: Team Email Using Old Template
-The `leads@tfainsuranceadvisors.com` address receives `teamHtml` (the generic template) instead of the new branded template. The code at line 833 sends the standard template to the team, while only the partner emails at line 874 use `generateAmericanWayHealthEmailHtml`.
+Create a new co-branded landing page at `/advisors/vanessa-sanchez/think-tax-solutions` for Brennon Ploenzke's tax firm, Think Tax Solutions (Glendora, CA). This follows the exact same pattern as the existing Brandon Drew Group landing page (`/advisors/vanessa-sanchez/living-trust`), but with Think Tax Solutions branding and a focus on Living Trust + Mortgage Protection services.
 
 ---
 
-## Solution
+## What Gets Built
 
-### Fix 1: Remove Escaped Backslashes from Template
+A standalone landing page (no global navigation) co-branded with TFA and Think Tax Solutions logos. The page will feature:
 
-Replace all `\${` with `${` throughout the `generateAmericanWayHealthEmailHtml` function to enable proper JavaScript template literal interpolation.
+- Co-branded header with TFA logo + Think Tax Solutions logo
+- Hero section with Vanessa's photo and headline about Living Trust + Mortgage Protection
+- Benefits section (Why a Living Trust + Mortgage Protection)
+- Partnership trust section explaining the Think Tax Solutions relationship
+- Lead capture form (same fields as the Brandon Drew Group version)
+- "What Happens Next" process steps
+- Final CTA + footer with co-branding
 
-**Affected lines:** 681-791 (approximately 30+ occurrences)
-
-### Fix 2: Use Branded Template for Team on Health Insurance Inquiries
-
-Update the `sendEmails` function to detect "Health Insurance Inquiry" forms and use the branded template for the team email as well.
-
-**File:** `supabase/functions/pipedrive-submit/index.ts`
-
-**Before (line 833):**
-```typescript
-// Team always gets teamHtml
-const teamResult = await resend.emails.send({
-  to: [teamEmail],
-  html: teamHtml,
-});
-```
-
-**After:**
-```typescript
-// Use branded template for health insurance leads
-const isHealthInsuranceLead = formData.form_name === "Health Insurance Inquiry";
-const finalTeamHtml = isHealthInsuranceLead 
-  ? generateAmericanWayHealthEmailHtml(formData, submissionId)
-  : teamHtml;
-
-const teamResult = await resend.emails.send({
-  to: [teamEmail],
-  html: finalTeamHtml,
-});
-```
+Leads will route to Vanessa's email and her personal Pipedrive, tagged with "Think Tax Solutions" instead of "The Brandon Group."
 
 ---
 
-## Variables to Fix in Template
+## Files to Create
 
-All occurrences of escaped template literals need correction:
+### 1. Copy Think Tax Solutions Logo
+- **From:** `user-uploads://image-13.png`
+- **To:** `src/assets/partners/think-tax-solutions.png`
 
-| Line | Current (Broken) | Fixed |
-|------|------------------|-------|
-| 681 | `\${formData.first_name}` | `${formData.first_name}` |
-| 681 | `\${formData.last_name}` | `${formData.last_name}` |
-| 685 | `\${formData.email}` | `${formData.email}` |
-| 689-690 | `\${formData.phone}` | `${formData.phone}` |
-| 693 | `\${zipCode}` | `${zipCode}` |
-| 714 | `\${insuranceType}` | `${insuranceType}` |
-| 718 | `\${dateOfBirth}` | `${dateOfBirth}` |
-| 721-722 | `\${referredBy}` (conditional) | `${referredBy}` |
-| 722 | `\${yearlyIncome}` | `${yearlyIncome}` |
-| 724-728 | `\${referredBy}` (row) | `${referredBy}` |
-| 736 | `\${formData.source_url}` | `${formData.source_url}` |
-| 748-751 | Multiple UTM fields | Remove backslashes |
-| 786 | `\${submittedDate}` | `${submittedDate}` |
-| 791 | `\${submissionId}` | `${submissionId}` |
+### 2. New Form Component
+- **File:** `src/components/living-trust/ThinkTaxLivingTrustForm.tsx`
+- Clone of `LivingTrustForm.tsx` with these changes:
+  - `form_name`: `"Living Trust Inquiry - Vanessa (Think Tax Solutions)"`
+  - `tags`: `["Living Trust", "Mortgage Protection", "Vanessa Sanchez", "Think Tax Solutions"]`
+  - Pipedrive submission tags: `["Living Trust", "Mortgage Protection", "Think Tax Solutions"]`
+
+### 3. New Page Component
+- **File:** `src/pages/VanessaThinkTaxSolutions.tsx`
+- Clone of `VanessaLivingTrust.tsx` with these changes:
+  - Replace Brandon Drew Group logo with Think Tax Solutions logo
+  - Update partnership text: "Think Tax Solutions and The Financial Architects have partnered..."
+  - Update hero headline to include Mortgage Protection emphasis
+  - Update SEO metadata for the new URL
+  - Import `ThinkTaxLivingTrustForm` instead of `LivingTrustForm`
 
 ---
 
 ## Files to Modify
 
-| File | Changes |
-|------|---------|
-| `supabase/functions/pipedrive-submit/index.ts` | Fix escaped template literals (~30 occurrences), update team email logic |
+### 4. App.tsx (Router + Standalone Config)
+- Add import for `VanessaThinkTaxSolutions`
+- Add route: `/advisors/vanessa-sanchez/think-tax-solutions`
+- Add path to `standalonePages` array
 
 ---
 
-## Expected Result
+## Key Differences from Brandon Drew Group Page
 
-After this fix:
-- Partner emails (`info@health-market.com`, `info@awhealthllc.com`) will show actual data (e.g., "John Smith") instead of code (`${formData.first_name}`)
-- Team email (`leads@tfainsuranceadvisors.com`) will receive the same branded template for Health Insurance Inquiry forms
-- All three recipients will see identical, properly formatted emails with the teal/cyan branding and logo
+| Aspect | Brandon Drew Group | Think Tax Solutions |
+|--------|-------------------|-------------------|
+| Partner | Robert & Colleen Olivas | Brennon Ploenzke |
+| Location | N/A | Glendora, CA |
+| Logo | `the-brandon-group.png` | `think-tax-solutions.png` |
+| Services Focus | Living Trust only | Living Trust + Mortgage Protection |
+| URL | `/advisors/vanessa-sanchez/living-trust` | `/advisors/vanessa-sanchez/think-tax-solutions` |
+| Form Tags | `["Living Trust", "The Brandon Group"]` | `["Living Trust", "Mortgage Protection", "Think Tax Solutions"]` |
+| Pipedrive | `vanessa-pipedrive-submit` | Same function, different tags |
+
+---
+
+## Lead Routing
+
+All form submissions will:
+1. Submit to `pipedrive-submit` for general email notification to `vsanchez@tfainsuranceadvisors.com` and `leads@tfainsuranceadvisors.com`
+2. Submit to `vanessa-pipedrive-submit` as a Lead in Vanessa's personal Pipedrive, tagged with "Think Tax Solutions"
+
+---
+
+## Technical Notes
+
+- The Think Tax Solutions logo has a black background; the co-branded header uses a white background per design standards, so the logo will display cleanly with its dark styling against white
+- Page follows the standalone layout pattern (no global nav/footer)
+- Form reuses the same validation schema, honeypot protection, confetti celebration, and shake-on-error animations
+- The Mortgage Protection interest is captured via tags for Pipedrive filtering
 
