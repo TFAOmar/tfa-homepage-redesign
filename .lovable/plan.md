@@ -1,48 +1,88 @@
 
 
-# Add Living Trust Questionnaire for Conrad Olvera
+# Life Insurance Pre-Qualification Questionnaire for Conrad Olvera
 
 ## Overview
-The Living Trust questionnaire system already supports any advisor via the dynamic route `/advisors/:advisorSlug/living-trust-questionnaire`. Conrad's URL (`/advisors/conrad-olvera/living-trust-questionnaire`) will work out of the box since he's in the static advisors data with matching id `conrad-olvera` and email `conradolvera21@gmail.com`. We just need two changes:
+Create a 4-step pre-qualification wizard that screens potential life insurance clients before they begin the full 9-step application. The form will be accessible at `/advisors/conrad-olvera/prequalification` and will notify Conrad and the admin team when a client completes it.
 
-1. Add a "Start Living Trust Questionnaire" button to Conrad's profile page
-2. Fix the CORS headers on the estate planning notification edge function (same bug that blocked life insurance notifications)
+## Steps in the Questionnaire
 
----
+### Step 1: Personal Information
+- First name, last name
+- Date of birth
+- Gender
+- Phone number, email
+- State of residence
 
-## Changes
+### Step 2: Health & Lifestyle Screening
+- Height and weight
+- Tobacco/nicotine use (and frequency)
+- Any major medical conditions diagnosed (diabetes, heart disease, cancer, stroke, etc.) -- checkbox list
+- Currently taking prescription medications? (Yes/No, if yes: brief description)
+- Hospitalized or had surgery in the past 5 years? (Yes/No)
+- Family history of heart disease or cancer before age 60? (Yes/No)
 
-### 1. Conrad's Profile Page (`src/pages/AdvisorConradOlvera.tsx`)
-- Add a "Start Living Trust Questionnaire" button in the hero section CTA buttons (next to the existing Life Insurance Application button)
-- Add a matching button in the bottom CTA section
+### Step 3: Coverage Needs
+- Coverage amount desired (dropdown: $25K, $50K, $100K, $250K, $500K, $1M, $1M+, Not Sure)
+- Type of coverage interested in (Term, Whole Life, IUL, Not Sure)
+- Monthly budget for premiums (dropdown: Under $50, $50-$100, $100-$200, $200-$500, $500+, Not Sure)
+- Do you currently have life insurance? (Yes/No, if yes: carrier and amount)
+- Purpose of coverage (dropdown: Income replacement, Mortgage protection, Final expenses, Wealth transfer, Business protection, Other)
 
-### 2. Fix CORS in Estate Planning Notification (`supabase/functions/send-estate-planning-notification/index.ts`)
-The `Access-Control-Allow-Headers` is missing the newer Supabase client headers, which will block the POST request (same issue we just fixed for life insurance notifications).
+### Step 4: Review & Submit
+- Summary of all answers
+- E-signature (name + date consent checkbox)
+- Submit button
 
-**Current:**
-```
-"Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type"
-```
+## Technical Implementation
 
-**Updated:**
-```
-"Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version"
-```
+### New Database Table: `prequalification_applications`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | PK, gen_random_uuid() |
+| status | text | 'draft' or 'submitted' |
+| advisor_id | text | e.g. 'conrad-olvera' |
+| advisor_name | text | |
+| advisor_email | text | |
+| applicant_name | text | |
+| applicant_email | text | |
+| applicant_phone | text | |
+| form_data | jsonb | All step data |
+| current_step | integer | Default 1 |
+| source_url | text | |
+| created_at | timestamptz | |
+| updated_at | timestamptz | |
+| submitted_at | timestamptz | |
 
-This ensures the browser preflight check passes and the actual POST with form data reaches the function, triggering emails to:
-- Conrad (`conradolvera21@gmail.com`)
-- Admin CC (`clients@tfainsuranceadvisors.com`)
+RLS: Anyone can INSERT, Admins can SELECT/UPDATE/DELETE (same pattern as other application tables).
 
----
+### New Files
+1. **`src/types/prequalificationApplication.ts`** -- Zod schemas for each step + TypeScript types
+2. **`src/components/prequalification/PrequalificationWizard.tsx`** -- Main wizard component (follows EstatePlanningWizard pattern with localStorage draft persistence, step navigation, Supabase save on submit)
+3. **`src/components/prequalification/PrequalificationProgressBar.tsx`** -- 4-step progress indicator
+4. **`src/components/prequalification/steps/Step1PersonalInfo.tsx`**
+5. **`src/components/prequalification/steps/Step2HealthLifestyle.tsx`**
+6. **`src/components/prequalification/steps/Step3CoverageNeeds.tsx`**
+7. **`src/components/prequalification/steps/Step4ReviewSubmit.tsx`**
+8. **`src/pages/PrequalificationQuestionnaire.tsx`** -- Page wrapper with advisor lookup (same hybrid pattern as LifeInsuranceApplication.tsx)
+9. **`supabase/functions/send-prequalification-notification/index.ts`** -- Edge function to email Conrad + admin
 
-## Technical Details
+### Modified Files
+1. **`src/App.tsx`** -- Add dynamic route `/advisors/:advisorSlug/prequalification` + standalone page regex
+2. **`src/pages/AdvisorConradOlvera.tsx`** -- Add "Start Pre-Qualification" button in hero and CTA sections
+3. **`supabase/config.toml`** -- Add `verify_jwt = false` for the new edge function
 
-### Notification Flow (already wired)
-1. Client completes 8-step wizard at `/advisors/conrad-olvera/living-trust-questionnaire`
-2. `EstatePlanningWizard` calls `supabase.functions.invoke("send-estate-planning-notification")` with Conrad's email
-3. Edge function saves to `estate_planning_applications` table and sends email via Resend
-4. Email goes to `conradolvera21@gmail.com` with CC to `clients@tfainsuranceadvisors.com`
+### Notification Flow
+1. Client completes wizard and submits
+2. Component saves to `prequalification_applications` table with status 'submitted'
+3. Calls `supabase.functions.invoke("send-prequalification-notification")` with application ID
+4. Edge function fetches data, sends formatted HTML email via Resend to:
+   - Conrad (`conradolvera21@gmail.com`)
+   - Admin CC (`clients@tfainsuranceadvisors.com`)
+5. CORS headers will include the expanded Supabase client headers from the start
 
-### No routing changes needed
-The dynamic route `/advisors/:advisorSlug/living-trust-questionnaire` is already registered in `App.tsx` (line 212) and included in the standalone pages regex (line 113).
-
+### Design
+- Standalone page (no global nav/footer) -- matches life insurance and living trust patterns
+- TFA logo header with company phone number
+- Mobile-first, clean card-based step layout
+- Auto-save to localStorage per step for draft persistence
