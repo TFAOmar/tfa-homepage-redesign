@@ -548,7 +548,7 @@ export const advisors: Advisor[] = [
     specialties: ["Life Insurance", "Estate Planning", "Executive Retention Packages", "Financial Education"],
     licenses: ["Life & Health"],
     image: neilClarkImg,
-    email: "nclark@tfainsuranceadvisors.com",
+    email: "cclark9514@gmail.com",
     yearsOfExperience: 12,
     landingPage: "/advisors/neil-clark"
   }
