@@ -1,47 +1,31 @@
 
 
-# Create Advisor Profile for Cornelius "Neil" Clark
+# Paid Consultation Booking Page for Manuel Soto
 
 ## Overview
-Add Neil Clark as a new advisor to the TFA roster with a dedicated profile page, his uploaded headshot, and links to all three client tools. Based in Rancho Cucamonga, CA.
+Create a dedicated landing page at `/advisors/manuel-soto/coaching` where clients can book a 1-hour paid consultation ($500) with Manuel. The page will embed his Calendly (`https://calendly.com/manuel-soto-/coaching`) and be linked from his profile page.
 
 ## What Gets Built
 
-### 1. Advisor Photo
-- Copy `Neil_Clark.jpg` to `src/assets/advisors/neil-clark.jpg`
+### 1. New Page: `src/pages/ManuelSotoCoaching.tsx`
+A standalone-style focused landing page with:
+- **Hero section**: Manuel's photo, headline ("1-on-1 Coaching Session with Manuel Soto"), $500/hour pricing prominently displayed, brief value proposition -- this is a serious, dedicated session with the founder
+- **What You Get section**: 3-4 cards explaining the value (e.g., Full financial review, Personalized strategy, Direct access to the founder, Action plan you walk away with)
+- **Embedded Calendly widget**: Full inline Calendly embed of `https://calendly.com/manuel-soto-/coaching` (using an iframe) so visitors can book directly on the page
+- **SEO head** with appropriate meta tags
 
-### 2. Add to Advisor Directory (`src/data/advisors.ts`)
-- id: `"neil-clark"`
-- Name: `Cornelius "Neil" Clark`
-- Title: "Insurance Agent & Protection Strategist"
-- Location: Rancho Cucamonga, CA
-- Email: his personal email (to be provided) or fallback TFA email
-- Specialties: Life Insurance, Estate Planning, Executive Retention Packages, Financial Education
-- License: Life & Health
-- Landing page: `/advisors/neil-clark`
+### 2. Update Manuel's Profile (`src/pages/AdvisorManuelSoto.tsx`)
+Add a "Book a Coaching Session" button/card in the hero section and CTA section linking to `/advisors/manuel-soto/coaching` with clear "$500/hr" pricing badge.
 
-### 3. Dedicated Profile Page (`src/pages/AdvisorNeilClark.tsx`)
-Following the established pattern (Hero, About, Services, Process, CTA):
-
-- **Hero**: Photo, name ("Cornelius 'Neil' Clark"), title, tagline about planning for your future, badges for Rancho Cucamonga CA and Life & Health Licensed. CTA buttons: Book Consultation, Contact Me, Life Insurance Application, Living Trust Questionnaire, Pre-Qualification.
-- **About**: 12 years as an insurance agent and protection strategist. Educates individuals and businesses on insurance as estate planning tool and executive retention packages. Keynote speaker -- especially proud of speaking at Etiwanda High School about financial literacy. Married 22 years, three children, enjoys sports and fitness.
-- **Services** (6 cards): Life Insurance, Estate Planning, Executive Retention Packages, Financial Education, Business Insurance Solutions, Retirement Planning
-- **Process** (4 steps): Standard consultation flow
-- **CTA**: Bottom section with all tool links
-- **Modals**: ScheduleModal and ContactModal routed to his email
-
-### 4. Routing (`src/App.tsx`)
-- Add route: `/advisors/neil-clark`
-- Add lazy import for `AdvisorNeilClark`
-
-### 5. No Additional Changes Needed
-- Life Insurance App, Living Trust, and Pre-Qualification use dynamic routes with hybrid advisor lookup -- they auto-work once Neil is in the static advisors array
+### 3. Routing (`src/App.tsx`)
+- Add import for `ManuelSotoCoaching`
+- Add route: `/advisors/manuel-soto/coaching`
+- Add to `standalonePages` array so it renders without global header/footer for a focused booking experience
 
 ## Files Changed
 | File | Action |
 |------|--------|
-| `src/assets/advisors/neil-clark.jpg` | Copy from upload |
-| `src/data/advisors.ts` | Add new advisor entry |
-| `src/pages/AdvisorNeilClark.tsx` | New profile page |
-| `src/App.tsx` | Add route + import |
+| `src/pages/ManuelSotoCoaching.tsx` | New -- paid coaching booking page with embedded Calendly |
+| `src/pages/AdvisorManuelSoto.tsx` | Add coaching session CTA button |
+| `src/App.tsx` | Add route + standalone page entry |
 
