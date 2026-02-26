@@ -1,29 +1,48 @@
 
-# Fix Life Insurance Notification CORS Issues
 
-## Problem Found
-The test application (ID: `529b3cc8-...`, submitted by Omar Sanchez for Conrad Olvera) was saved to the database successfully with status "submitted", but **no notification emails were sent**. The edge function logs confirm only a CORS preflight (OPTIONS) reached the function -- the actual POST never arrived.
+# Add Living Trust Questionnaire for Conrad Olvera
 
-Two CORS issues are blocking notifications:
+## Overview
+The Living Trust questionnaire system already supports any advisor via the dynamic route `/advisors/:advisorSlug/living-trust-questionnaire`. Conrad's URL (`/advisors/conrad-olvera/living-trust-questionnaire`) will work out of the box since he's in the static advisors data with matching id `conrad-olvera` and email `conradolvera21@gmail.com`. We just need two changes:
 
-1. **Missing allowed headers**: The edge function only allows `authorization, x-client-info, apikey, content-type`, but Supabase JS v2.95 sends additional headers (`x-supabase-client-platform`, `x-supabase-client-platform-version`, `x-supabase-client-runtime`, `x-supabase-client-runtime-version`). The browser blocks the POST when these aren't whitelisted.
+1. Add a "Start Living Trust Questionnaire" button to Conrad's profile page
+2. Fix the CORS headers on the estate planning notification edge function (same bug that blocked life insurance notifications)
 
-2. **Missing origin**: The preview domain `lovableproject.com` isn't in the allowed origins check (only `.lovable.app` and `.lovable.dev` are matched). This also blocks the POST from the preview environment.
+---
 
-## Fix
+## Changes
 
-Update the `send-life-insurance-notification` edge function's CORS configuration:
+### 1. Conrad's Profile Page (`src/pages/AdvisorConradOlvera.tsx`)
+- Add a "Start Living Trust Questionnaire" button in the hero section CTA buttons (next to the existing Life Insurance Application button)
+- Add a matching button in the bottom CTA section
 
-### File: `supabase/functions/send-life-insurance-notification/index.ts`
+### 2. Fix CORS in Estate Planning Notification (`supabase/functions/send-estate-planning-notification/index.ts`)
+The `Access-Control-Allow-Headers` is missing the newer Supabase client headers, which will block the POST request (same issue we just fixed for life insurance notifications).
 
-**Change 1 -- Expand allowed headers (line 36)**
-- Add `x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version` to the `Access-Control-Allow-Headers` value
+**Current:**
+```
+"Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type"
+```
 
-**Change 2 -- Add lovableproject.com to allowed origins (line 27)**
-- Add `origin.endsWith(".lovableproject.com")` to the `isAllowedOrigin` check so the preview domain works
+**Updated:**
+```
+"Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version"
+```
 
-## Verification
-After deploying, we can use the "Resend PDF" feature from the admin dashboard to re-trigger the notification for Conrad's test application, or submit a new test to confirm emails arrive at:
-- `conradolvera21@gmail.com` (Conrad's inbox)
-- `leads@tfainsuranceadvisors.com` (admin inbox)
-- `osanchez2222@gmail.com` (applicant confirmation)
+This ensures the browser preflight check passes and the actual POST with form data reaches the function, triggering emails to:
+- Conrad (`conradolvera21@gmail.com`)
+- Admin CC (`clients@tfainsuranceadvisors.com`)
+
+---
+
+## Technical Details
+
+### Notification Flow (already wired)
+1. Client completes 8-step wizard at `/advisors/conrad-olvera/living-trust-questionnaire`
+2. `EstatePlanningWizard` calls `supabase.functions.invoke("send-estate-planning-notification")` with Conrad's email
+3. Edge function saves to `estate_planning_applications` table and sends email via Resend
+4. Email goes to `conradolvera21@gmail.com` with CC to `clients@tfainsuranceadvisors.com`
+
+### No routing changes needed
+The dynamic route `/advisors/:advisorSlug/living-trust-questionnaire` is already registered in `App.tsx` (line 212) and included in the standalone pages regex (line 113).
+
