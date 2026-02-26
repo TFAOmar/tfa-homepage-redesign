@@ -422,6 +422,57 @@ export type Database = {
         }
         Relationships: []
       }
+      prequalification_applications: {
+        Row: {
+          advisor_email: string | null
+          advisor_id: string | null
+          advisor_name: string | null
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_phone: string | null
+          created_at: string
+          current_step: number
+          form_data: Json
+          id: string
+          source_url: string | null
+          status: string
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          advisor_email?: string | null
+          advisor_id?: string | null
+          advisor_name?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          current_step?: number
+          form_data?: Json
+          id?: string
+          source_url?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          advisor_email?: string | null
+          advisor_id?: string | null
+          advisor_name?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          current_step?: number
+          form_data?: Json
+          id?: string
+          source_url?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       sponsorship_leads: {
         Row: {
           company_name: string
