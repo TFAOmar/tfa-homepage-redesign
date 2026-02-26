@@ -186,6 +186,16 @@ const AdvisorManuelSoto = () => {
                     Start Life Insurance Application
                   </Button>
                 </Link>
+                <Link to="/advisors/manuel-soto/coaching">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-accent bg-transparent text-accent hover:bg-accent/20"
+                  >
+                    <Briefcase className="mr-2 h-5 w-5" />
+                    1-on-1 Coaching — $500/hr
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -364,6 +374,15 @@ const AdvisorManuelSoto = () => {
                 >
                   <FileText className="mr-2 h-5 w-5" />
                   Life Insurance Application
+                </Button>
+              </Link>
+              <Link to="/advisors/manuel-soto/coaching">
+                <Button 
+                  size="lg" 
+                  variant="hero"
+                >
+                  <Briefcase className="mr-2 h-5 w-5" />
+                  1-on-1 Coaching — $500/hr
                 </Button>
               </Link>
             </div>
