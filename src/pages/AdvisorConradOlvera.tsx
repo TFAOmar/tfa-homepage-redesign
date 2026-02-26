@@ -186,6 +186,16 @@ const AdvisorConradOlvera = () => {
                     Start Life Insurance Application
                   </Button>
                 </Link>
+                <Link to="/advisors/conrad-olvera/living-trust-questionnaire">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-accent bg-transparent text-accent hover:bg-accent/20"
+                  >
+                    <FileText className="mr-2 h-5 w-5" />
+                    Start Living Trust Questionnaire
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -362,6 +372,15 @@ const AdvisorConradOlvera = () => {
                 >
                   <FileText className="mr-2 h-5 w-5" />
                   Life Insurance Application
+                </Button>
+              </Link>
+              <Link to="/advisors/conrad-olvera/living-trust-questionnaire">
+                <Button 
+                  size="lg" 
+                  variant="hero"
+                >
+                  <FileText className="mr-2 h-5 w-5" />
+                  Living Trust Questionnaire
                 </Button>
               </Link>
             </div>
