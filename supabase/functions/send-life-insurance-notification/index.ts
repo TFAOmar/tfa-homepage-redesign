@@ -68,7 +68,7 @@ const notificationRequestSchema = z.object({
   applicantName: z.string().min(1).max(200),
   applicantEmail: z.string().email().max(255),
   applicantPhone: z.string().max(30).optional(),
-  advisorId: z.string().uuid().optional().or(z.literal("")).or(z.null()),
+  advisorId: z.string().max(255).optional().or(z.literal("")).or(z.null()),
   advisorName: z.string().max(200).optional(),
   formData: z.object({
     step1: z.object({
@@ -1203,6 +1203,62 @@ const generateApplicantEmail = (data: NotificationDataWithEmail): string => {
   `;
 };
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const sendEmailWithRetry = async (
+  emailOptions: {
+    from: string;
+    to: string[];
+    subject: string;
+    html: string;
+    attachments?: { filename: string; content: string }[];
+  },
+  label: string
+): Promise<{ success: boolean; result?: unknown; error?: string }> => {
+  const maxAttempts = 3;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const result = await resend.emails.send(emailOptions);
+      const resendError = (result as { error?: { statusCode?: number; message?: string; name?: string } })?.error;
+
+      if (!resendError) {
+        return { success: true, result };
+      }
+
+      const isRateLimited = resendError.statusCode === 429 ||
+        (resendError.name || "").toLowerCase().includes("rate_limit") ||
+        (resendError.message || "").toLowerCase().includes("too many requests");
+
+      if (isRateLimited && attempt < maxAttempts) {
+        const delayMs = 650 * attempt;
+        console.warn(`${label} rate-limited on attempt ${attempt}, retrying in ${delayMs}ms`);
+        await sleep(delayMs);
+        continue;
+      }
+
+      return {
+        success: false,
+        error: resendError.message || JSON.stringify(resendError),
+      };
+    } catch (error: unknown) {
+      const message = String(error);
+      const isRateLimited = message.toLowerCase().includes("429") || message.toLowerCase().includes("too many requests");
+
+      if (isRateLimited && attempt < maxAttempts) {
+        const delayMs = 650 * attempt;
+        console.warn(`${label} threw rate-limit error on attempt ${attempt}, retrying in ${delayMs}ms`);
+        await sleep(delayMs);
+        continue;
+      }
+
+      return { success: false, error: message };
+    }
+  }
+
+  return { success: false, error: "Unknown email delivery failure" };
+};
+
 const handler = async (req: Request): Promise<Response> => {
   console.log("send-life-insurance-notification function invoked");
   
@@ -1352,9 +1408,14 @@ const handler = async (req: Request): Promise<Response> => {
         ];
       }
 
-      const adminResult = await resend.emails.send(adminEmailOptions);
-      console.log("Admin email sent successfully:", adminResult);
-      emailResults.push({ recipient: "admin", success: true });
+      const adminSend = await sendEmailWithRetry(adminEmailOptions, "Admin email");
+      if (adminSend.success) {
+        console.log("Admin email sent successfully:", adminSend.result);
+        emailResults.push({ recipient: "admin", success: true });
+      } else {
+        console.error("Failed to send admin email:", adminSend.error);
+        emailResults.push({ recipient: "admin", success: false, error: adminSend.error });
+      }
     } catch (error: unknown) {
       console.error("Failed to send admin email:", error);
       emailResults.push({ recipient: "admin", success: false, error: String(error) });
@@ -1386,9 +1447,14 @@ const handler = async (req: Request): Promise<Response> => {
           ];
         }
 
-        const advisorResult = await resend.emails.send(advisorEmailOptions);
-        console.log("Advisor email sent successfully:", advisorResult);
-        emailResults.push({ recipient: "advisor", success: true });
+        const advisorSend = await sendEmailWithRetry(advisorEmailOptions, "Advisor email");
+        if (advisorSend.success) {
+          console.log("Advisor email sent successfully:", advisorSend.result);
+          emailResults.push({ recipient: "advisor", success: true });
+        } else {
+          console.error("Failed to send advisor email:", advisorSend.error);
+          emailResults.push({ recipient: "advisor", success: false, error: advisorSend.error });
+        }
       } catch (error: unknown) {
         console.error("Failed to send advisor email:", error);
         emailResults.push({ recipient: "advisor", success: false, error: String(error) });
@@ -1398,14 +1464,20 @@ const handler = async (req: Request): Promise<Response> => {
     // 3. Send confirmation to applicant (no PDF for privacy)
     try {
       console.log("Sending applicant confirmation to:", data.applicantEmail);
-      const applicantResult = await resend.emails.send({
+      const applicantSend = await sendEmailWithRetry({
         from: FROM_EMAIL,
         to: [data.applicantEmail],
         subject: "Your Life Insurance Application Has Been Received",
         html: generateApplicantEmail(dataWithEmail),
-      });
-      console.log("Applicant email sent successfully:", applicantResult);
-      emailResults.push({ recipient: "applicant", success: true });
+      }, "Applicant email");
+
+      if (applicantSend.success) {
+        console.log("Applicant email sent successfully:", applicantSend.result);
+        emailResults.push({ recipient: "applicant", success: true });
+      } else {
+        console.error("Failed to send applicant email:", applicantSend.error);
+        emailResults.push({ recipient: "applicant", success: false, error: applicantSend.error });
+      }
     } catch (error: unknown) {
       console.error("Failed to send applicant email:", error);
       emailResults.push({ recipient: "applicant", success: false, error: String(error) });
