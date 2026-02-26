@@ -24,7 +24,7 @@ const isAllowedOrigin = (origin: string | null): boolean => {
   if (!origin) return false;
   if (ALLOWED_ORIGINS.includes(origin)) return true;
   // Allow Lovable preview domains
-  if (origin.endsWith(".lovable.app") || origin.endsWith(".lovable.dev")) return true;
+  if (origin.endsWith(".lovable.app") || origin.endsWith(".lovable.dev") || origin.endsWith(".lovableproject.com")) return true;
   return false;
 };
 
@@ -33,7 +33,7 @@ const getCorsHeaders = (origin: string | null): Record<string, string> => {
   const allowedOrigin = isAllowedOrigin(origin) ? origin! : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 };
