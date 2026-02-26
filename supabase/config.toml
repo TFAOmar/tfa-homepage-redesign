@@ -1,1 +1,4 @@
 project_id = "cstkeblqqyjwlrbppucu"
+
+[functions.send-prequalification-notification]
+verify_jwt = false

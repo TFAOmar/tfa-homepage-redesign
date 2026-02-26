@@ -95,6 +95,7 @@ import GeneralSponsorshipSuccess from "./pages/GeneralSponsorshipSuccess";
 import OnboardingChecklist from "./pages/OnboardingChecklist";
 import SubmitEvent from "./pages/SubmitEvent";
 import EventSponsorship from "./pages/EventSponsorship";
+import PrequalificationQuestionnaire from "./pages/PrequalificationQuestionnaire";
 
 const queryClient = new QueryClient();
 
@@ -110,7 +111,8 @@ const AppLayout = () => {
   
   const isStandalonePage = standalonePages.includes(normalizedPathname) || 
     /^\/advisors\/[^/]+\/life-insurance\/?$/.test(location.pathname) ||
-    /^\/advisors\/[^/]+\/living-trust-questionnaire\/?$/.test(location.pathname);
+    /^\/advisors\/[^/]+\/living-trust-questionnaire\/?$/.test(location.pathname) ||
+    /^\/advisors\/[^/]+\/prequalification\/?$/.test(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -211,6 +213,7 @@ const AppLayout = () => {
           <Route path="/life-insurance-application" element={<LifeInsuranceApplication />} />
           <Route path="/advisors/:advisorSlug/living-trust-questionnaire" element={<LivingTrustQuestionnaire />} />
           <Route path="/living-trust-questionnaire" element={<LivingTrustQuestionnaire />} />
+          <Route path="/advisors/:advisorSlug/prequalification" element={<PrequalificationQuestionnaire />} />
           <Route path="/estate-guru" element={<EstateGuru />} />
           <Route path="/estate-guru/success" element={<EstateGuruSuccess />} />
           <Route path="/estate-guru/canceled" element={<EstateGuruCanceled />} />
