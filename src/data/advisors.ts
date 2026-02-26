@@ -29,6 +29,7 @@ import fabianSerranoImg from "@/assets/advisors/fabian-serrano.jpg";
 import ericaValenzuelaImg from "@/assets/advisors/erica-valenzuela.jpg";
 import sheilaRodriguezImg from "@/assets/advisors/sheila-rodriguez.jpg";
 import manoloMonterImg from "@/assets/advisors/manolo-monter.jpg";
+import neilClarkImg from "@/assets/advisors/neil-clark.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -534,6 +535,22 @@ export const advisors: Advisor[] = [
     email: "mmonter@tfainsuranceadvisors.com",
     yearsOfExperience: 10,
     landingPage: "/advisors/manolo-monter"
+  },
+  {
+    id: "neil-clark",
+    name: 'Cornelius "Neil" Clark',
+    title: "Insurance Agent & Protection Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Rancho Cucamonga",
+    region: "West",
+    bio: "With 12 years of experience as an insurance agent and protection strategist, Neil educates individuals and businesses on the benefits of using insurance as an estate planning tool and establishing retention packages for executives. A keynote speaker and passionate advocate for financial literacy, he is devoted to helping others build a solid financial foundation.",
+    specialties: ["Life Insurance", "Estate Planning", "Executive Retention Packages", "Financial Education"],
+    licenses: ["Life & Health"],
+    image: neilClarkImg,
+    email: "nclark@tfainsuranceadvisors.com",
+    yearsOfExperience: 12,
+    landingPage: "/advisors/neil-clark"
   }
 ];
 
