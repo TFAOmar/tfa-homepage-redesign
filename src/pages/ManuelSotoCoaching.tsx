@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
   ArrowLeft,
+  ArrowRight,
   Clock,
   Target,
   UserCheck,
@@ -51,7 +52,7 @@ const ManuelSotoCoaching = () => {
         canonical={`${siteConfig.url}/advisors/manuel-soto/coaching`}
         keywords="Manuel Soto coaching, financial coaching session, TFA founder consultation, paid financial consultation"
       />
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background scroll-smooth">
         {/* Back Navigation */}
         <div className="bg-primary text-white">
           <div className="container mx-auto px-4 py-3">
@@ -92,6 +93,12 @@ const ManuelSotoCoaching = () => {
                   <Clock className="h-5 w-5 text-accent" />
                   <span>60-minute dedicated session</span>
                 </div>
+                <a href="#book" className="inline-block mt-2">
+                  <Button size="lg" className="btn-primary-cta px-8 py-6 text-lg border-2 border-accent hover:border-primary group">
+                    Book Your Session
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </a>
               </div>
 
               <div className="relative flex justify-center lg:justify-end">
@@ -177,6 +184,27 @@ const ManuelSotoCoaching = () => {
             <p className="text-center mt-6 text-muted-foreground text-sm">
               By booking, you agree to the session terms. Cancellations must be made 24 hours in advance.
             </p>
+          </div>
+        </section>
+        {/* Final CTA Section */}
+        <section className="py-16 lg:py-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary/90 -z-10" />
+          <div className="absolute top-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-3xl lg:text-4xl font-bold text-primary-foreground mb-6">
+                Don't Wait — Your Financial Clarity Starts Here
+              </h2>
+              <p className="text-xl text-primary-foreground/80 mb-8">
+                One hour with Manuel could change the trajectory of your financial future.
+              </p>
+              <a href="#book">
+                <Button size="lg" className="btn-primary-cta px-8 py-6 text-lg border-2 border-accent hover:border-primary group">
+                  Book Your Session Now
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </a>
+            </div>
           </div>
         </section>
       </div>
