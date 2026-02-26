@@ -52,6 +52,7 @@ import MariahKaiZen from "./pages/MariahKaiZen";
 import RecinosBusinessInsurance from "./pages/RecinosBusinessInsurance";
 import AdvisorIsmaelVervera from "./pages/AdvisorIsmaelVervera";
 import AdvisorManuelSoto from "./pages/AdvisorManuelSoto";
+import ManuelSotoCoaching from "./pages/ManuelSotoCoaching";
 import AdvisorHamletOhandjanian from "./pages/AdvisorHamletOhandjanian";
 import AdvisorSeanCagle from "./pages/AdvisorSeanCagle";
 import AdvisorRuthPacheco from "./pages/AdvisorRuthPacheco";
@@ -102,7 +103,7 @@ import PrequalificationQuestionnaire from "./pages/PrequalificationQuestionnaire
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -179,6 +180,7 @@ const AppLayout = () => {
           <Route path="/advisors/recinos" element={<RecinosBusinessInsurance />} />
           <Route path="/advisors/ismael-ververa" element={<AdvisorIsmaelVervera />} />
           <Route path="/advisors/manuel-soto" element={<AdvisorManuelSoto />} />
+          <Route path="/advisors/manuel-soto/coaching" element={<ManuelSotoCoaching />} />
           <Route path="/advisors/hamlet-ohandjanian" element={<AdvisorHamletOhandjanian />} />
           <Route path="/advisors/sean-cagle" element={<AdvisorSeanCagle />} />
           <Route path="/advisors/ruth-pacheco" element={<AdvisorRuthPacheco />} />
