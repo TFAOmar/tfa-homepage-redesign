@@ -1,31 +1,17 @@
 
 
-# Paid Consultation Booking Page for Manuel Soto
+# Add CTA Buttons to Manuel Soto's Coaching Landing Page
 
 ## Overview
-Create a dedicated landing page at `/advisors/manuel-soto/coaching` where clients can book a 1-hour paid consultation ($500) with Manuel. The page will embed his Calendly (`https://calendly.com/manuel-soto-/coaching`) and be linked from his profile page.
+The coaching page currently has no actionable button in the hero section to guide visitors to the booking calendar. We'll add a prominent "Book Your Session" CTA button in the hero and a final CTA section at the bottom of the page.
 
-## What Gets Built
+## Changes
 
-### 1. New Page: `src/pages/ManuelSotoCoaching.tsx`
-A standalone-style focused landing page with:
-- **Hero section**: Manuel's photo, headline ("1-on-1 Coaching Session with Manuel Soto"), $500/hour pricing prominently displayed, brief value proposition -- this is a serious, dedicated session with the founder
-- **What You Get section**: 3-4 cards explaining the value (e.g., Full financial review, Personalized strategy, Direct access to the founder, Action plan you walk away with)
-- **Embedded Calendly widget**: Full inline Calendly embed of `https://calendly.com/manuel-soto-/coaching` (using an iframe) so visitors can book directly on the page
-- **SEO head** with appropriate meta tags
+### File: `src/pages/ManuelSotoCoaching.tsx`
 
-### 2. Update Manuel's Profile (`src/pages/AdvisorManuelSoto.tsx`)
-Add a "Book a Coaching Session" button/card in the hero section and CTA section linking to `/advisors/manuel-soto/coaching` with clear "$500/hr" pricing badge.
+1. **Hero CTA Button** -- Add a "Book Your Session" button below the "60-minute dedicated session" line (after line 94). It will use an anchor link (`#book`) to smooth-scroll down to the Calendly embed section. Styled with the gold/accent color to stand out against the dark hero background, matching the existing `btn-primary-cta` pattern used in `FinalCTA.tsx`.
 
-### 3. Routing (`src/App.tsx`)
-- Add import for `ManuelSotoCoaching`
-- Add route: `/advisors/manuel-soto/coaching`
-- Add to `standalonePages` array so it renders without global header/footer for a focused booking experience
+2. **Bottom CTA Section** -- Add a new section after the Calendly embed (after line 181) with a bold headline like "Don't Wait — Your Financial Clarity Starts Here", a short motivating line, and another "Book Your Session" button linking to `#book`. Dark background matching the site's FinalCTA style.
 
-## Files Changed
-| File | Action |
-|------|--------|
-| `src/pages/ManuelSotoCoaching.tsx` | New -- paid coaching booking page with embedded Calendly |
-| `src/pages/AdvisorManuelSoto.tsx` | Add coaching session CTA button |
-| `src/App.tsx` | Add route + standalone page entry |
+3. **Smooth scroll behavior** -- Add `scroll-behavior: smooth` to the parent div or use a click handler to ensure the anchor link scrolls smoothly.
 
