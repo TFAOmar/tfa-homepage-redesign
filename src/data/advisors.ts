@@ -28,6 +28,7 @@ import erinGraceVargasImg from "@/assets/advisors/erin-grace-vargas.jpg";
 import fabianSerranoImg from "@/assets/advisors/fabian-serrano.jpg";
 import ericaValenzuelaImg from "@/assets/advisors/erica-valenzuela.jpg";
 import sheilaRodriguezImg from "@/assets/advisors/sheila-rodriguez.jpg";
+import manoloMonterImg from "@/assets/advisors/manolo-monter.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -517,6 +518,22 @@ export const advisors: Advisor[] = [
     phone: "(661) 816-1920",
     yearsOfExperience: 25,
     landingPage: "/advisors/sheila-rodriguez"
+  },
+  {
+    id: "manolo-monter",
+    name: "Manolo Monter",
+    title: "Life Insurance Agent & Pre-Need Specialist",
+    type: "Advisor",
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Manolo is an award-winning life insurance agent licensed in California for over a decade. For the past six years, he has specialized in pre-need funeral planning, guiding families with compassion during life's most challenging moments. With experience both in funeral homes and in the field, he blends expertise with personal care. Beyond his professional work, he is a devoted father of three.",
+    specialties: ["Bilingual • Bilingüe", "Life Insurance", "Pre-Need Funeral Planning", "Final Expense", "Estate Planning"],
+    licenses: ["Life & Health"],
+    image: manoloMonterImg,
+    email: "mmonter@tfainsuranceadvisors.com",
+    yearsOfExperience: 10,
+    landingPage: "/advisors/manolo-monter"
   }
 ];
 
