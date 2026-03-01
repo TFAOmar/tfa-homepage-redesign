@@ -99,6 +99,8 @@ import OnboardingChecklist from "./pages/OnboardingChecklist";
 import SubmitEvent from "./pages/SubmitEvent";
 import EventSponsorship from "./pages/EventSponsorship";
 import PrequalificationQuestionnaire from "./pages/PrequalificationQuestionnaire";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 const queryClient = new QueryClient();
 
@@ -225,6 +227,8 @@ const AppLayout = () => {
           <Route path="/estate-guru/canceled" element={<EstateGuruCanceled />} />
           <Route path="/onboarding-checklist" element={<OnboardingChecklist />} />
           <Route path="/submit-event" element={<SubmitEvent />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
