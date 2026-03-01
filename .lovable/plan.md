@@ -1,17 +1,47 @@
 
 
-# Add CTA Buttons to Manuel Soto's Coaching Landing Page
+# Privacy Policy & Terms of Service Pages (A2P 10DLC Compliant)
 
 ## Overview
-The coaching page currently has no actionable button in the hero section to guide visitors to the booking calendar. We'll add a prominent "Book Your Session" CTA button in the hero and a final CTA section at the bottom of the page.
+Create two new pages -- Privacy Policy and Terms & Conditions -- written to pass US A2P 10DLC registration requirements. Update the footer links to point to these pages instead of `/contact`.
 
-## Changes
+## What Gets Built
 
-### File: `src/pages/ManuelSotoCoaching.tsx`
+### 1. New Page: `src/pages/PrivacyPolicy.tsx` (`/privacy-policy`)
+A full privacy policy page covering:
+- What personal data is collected (name, email, phone, financial info submitted via forms)
+- How data is used (to provide financial services, respond to inquiries, send appointment reminders)
+- **Explicit statement that data will NOT be shared with third parties for marketing purposes**
+- Data retention and security practices
+- User rights (access, correction, deletion requests)
+- Contact information for privacy inquiries
+- Cookie usage disclosure
+- Last updated date
 
-1. **Hero CTA Button** -- Add a "Book Your Session" button below the "60-minute dedicated session" line (after line 94). It will use an anchor link (`#book`) to smooth-scroll down to the Calendly embed section. Styled with the gold/accent color to stand out against the dark hero background, matching the existing `btn-primary-cta` pattern used in `FinalCTA.tsx`.
+### 2. New Page: `src/pages/TermsOfService.tsx` (`/terms-of-service`)
+A full terms & conditions page including all A2P 10DLC required elements:
+- **Program name**: The Financial Architects SMS Communications
+- **Program description**: Appointment reminders, service updates, and requested information delivery
+- **Message and data rates may apply** (prominently stated)
+- **Message frequency**: Description of expected message volume
+- **Support contact**: info@tfainsuranceadvisors.com / (888) 350-5396
+- **Opt-out instructions**: Text **STOP** to unsubscribe (bold)
+- **Help instructions**: Text **HELP** for assistance (bold)
+- Standard terms covering use of website, intellectual property, disclaimers, limitation of liability, and governing law (California)
 
-2. **Bottom CTA Section** -- Add a new section after the Calendly embed (after line 181) with a bold headline like "Don't Wait — Your Financial Clarity Starts Here", a short motivating line, and another "Book Your Session" button linking to `#book`. Dark background matching the site's FinalCTA style.
+### 3. Update Footer (`src/components/Footer.tsx`)
+- Change "Privacy Policy" link from `/contact` to `/privacy-policy`
+- Change "Terms of Service" link from `/contact` to `/terms-of-service`
 
-3. **Smooth scroll behavior** -- Add `scroll-behavior: smooth` to the parent div or use a click handler to ensure the anchor link scrolls smoothly.
+### 4. Update Routing (`src/App.tsx`)
+- Import both new pages
+- Add routes: `/privacy-policy` and `/terms-of-service`
+
+## Files Changed
+| File | Action |
+|------|--------|
+| `src/pages/PrivacyPolicy.tsx` | New -- A2P compliant privacy policy |
+| `src/pages/TermsOfService.tsx` | New -- A2P compliant terms with SMS program details |
+| `src/components/Footer.tsx` | Update links to new pages |
+| `src/App.tsx` | Add two new routes |
 
