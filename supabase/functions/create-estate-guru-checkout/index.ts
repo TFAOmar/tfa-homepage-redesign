@@ -65,10 +65,13 @@ serve(async (req) => {
       cancel_url: `${origin}/estate-guru`,
     };
 
-    // Apply TFA200 coupon for promo plan
+    // Apply TFA200 coupon for promo plan, or allow promotion codes for non-promo plans
     if (isPromo && priceId === ANNUAL_PRICE_ID) {
       sessionConfig.discounts = [{ coupon: TFA200_COUPON_ID }];
       logStep("Applying TFA200 coupon");
+    } else {
+      sessionConfig.allow_promotion_codes = true;
+      logStep("Enabling promotion codes input");
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
