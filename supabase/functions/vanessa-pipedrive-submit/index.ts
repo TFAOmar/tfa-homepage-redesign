@@ -461,8 +461,9 @@ serve(async (req) => {
       }
 
       // Determine lead title
+      const partnerLabel = requestData.partner_name || "Unknown Partner";
       const leadTitle = submission_type === "living_trust_landing"
-        ? `Living Trust Inquiry - ${name} (Brandon Drew Group)`
+        ? `Living Trust Inquiry - ${name} (${partnerLabel})`
         : `Contact Inquiry - ${name}`;
 
       // Create lead
