@@ -1,47 +1,30 @@
 
 
-# Privacy Policy & Terms of Service Pages (A2P 10DLC Compliant)
+# Add Discount Code Support for Monthly Plan
 
 ## Overview
-Create two new pages -- Privacy Policy and Terms & Conditions -- written to pass US A2P 10DLC registration requirements. Update the footer links to point to these pages instead of `/contact`.
+Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
 
-## What Gets Built
+## Approach
+Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
 
-### 1. New Page: `src/pages/PrivacyPolicy.tsx` (`/privacy-policy`)
-A full privacy policy page covering:
-- What personal data is collected (name, email, phone, financial info submitted via forms)
-- How data is used (to provide financial services, respond to inquiries, send appointment reminders)
-- **Explicit statement that data will NOT be shared with third parties for marketing purposes**
-- Data retention and security practices
-- User rights (access, correction, deletion requests)
-- Contact information for privacy inquiries
-- Cookie usage disclosure
-- Last updated date
+This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
 
-### 2. New Page: `src/pages/TermsOfService.tsx` (`/terms-of-service`)
-A full terms & conditions page including all A2P 10DLC required elements:
-- **Program name**: The Financial Architects SMS Communications
-- **Program description**: Appointment reminders, service updates, and requested information delivery
-- **Message and data rates may apply** (prominently stated)
-- **Message frequency**: Description of expected message volume
-- **Support contact**: info@tfainsuranceadvisors.com / (888) 350-5396
-- **Opt-out instructions**: Text **STOP** to unsubscribe (bold)
-- **Help instructions**: Text **HELP** for assistance (bold)
-- Standard terms covering use of website, intellectual property, disclaimers, limitation of liability, and governing law (California)
+## Changes
 
-### 3. Update Footer (`src/components/Footer.tsx`)
-- Change "Privacy Policy" link from `/contact` to `/privacy-policy`
-- Change "Terms of Service" link from `/contact` to `/terms-of-service`
+### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
+- Accept an optional `couponCode` parameter from the request body
+- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
+- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
+- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
 
-### 4. Update Routing (`src/App.tsx`)
-- Import both new pages
-- Add routes: `/privacy-policy` and `/terms-of-service`
+### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
+- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+
+## How to Create Promo Codes
+After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
 
 ## Files Changed
 | File | Action |
 |------|--------|
-| `src/pages/PrivacyPolicy.tsx` | New -- A2P compliant privacy policy |
-| `src/pages/TermsOfService.tsx` | New -- A2P compliant terms with SMS program details |
-| `src/components/Footer.tsx` | Update links to new pages |
-| `src/App.tsx` | Add two new routes |
-
+| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
