@@ -1,10 +1,12 @@
 import jsPDF from "jspdf";
 
-const NAVY = [30, 58, 95] as const;    // #1E3A5F
-const GOLD = [201, 168, 76] as const;  // #C9A84C
-const WHITE = [255, 255, 255] as const;
-const DARK = [40, 56, 69] as const;    // #283845
-const LIGHT_BG = [250, 250, 250] as const;
+type RGB = [number, number, number];
+const NAVY: RGB = [30, 58, 95];
+const GOLD: RGB = [201, 168, 76];
+const WHITE: RGB = [255, 255, 255];
+const DARK: RGB = [40, 56, 69];
+const LIGHT_BG: RGB = [250, 250, 250];
+const GRAY: RGB = [120, 130, 140];
 const GRAY = [120, 130, 140] as const;
 
 function addPageHeader(doc: jsPDF, pageTitle: string) {
