@@ -56,7 +56,7 @@ const Locations = () => {
         data={[
           generateWebPageSchema(
             "Office Locations | The Financial Architects",
-            "Find a The Financial Architects office near you. 19 locations across California, Arizona, and Oregon.",
+            "Find a The Financial Architects office near you. 21 locations across California, Arizona, and Oregon.",
             `${siteConfig.url}/locations`
           ),
           generateBreadcrumbSchema([
