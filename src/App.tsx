@@ -45,6 +45,7 @@ import FranchiseRecruitment from "./pages/FranchiseRecruitment";
 import AdvisorVanessaSanchez from "./pages/AdvisorVanessaSanchez";
 import VanessaLivingTrust from "./pages/VanessaLivingTrust";
 import VanessaThinkTaxSolutions from "./pages/VanessaThinkTaxSolutions";
+import VanessaCardenasAndCompany from "./pages/VanessaCardenasAndCompany";
 import KaiZen from "./pages/KaiZen";
 import AdvisorMariahLorenzen from "./pages/AdvisorMariahLorenzen";
 import AdvisorTamaraLee from "./pages/AdvisorTamaraLee";
@@ -106,7 +107,7 @@ import TermsOfService from "./pages/TermsOfService";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -176,6 +177,7 @@ const AppLayout = () => {
           <Route path="/advisors/vanessa-sanchez" element={<AdvisorVanessaSanchez />} />
           <Route path="/advisors/vanessa-sanchez/living-trust" element={<VanessaLivingTrust />} />
           <Route path="/advisors/vanessa-sanchez/think-tax-solutions" element={<VanessaThinkTaxSolutions />} />
+          <Route path="/advisors/vanessa-sanchez/cardenas-and-company" element={<VanessaCardenasAndCompany />} />
           <Route path="/advisors/mariah-lorenzen" element={<AdvisorMariahLorenzen />} />
           <Route path="/advisors/mariah-lorenzen/kai-zen" element={<MariahKaiZen />} />
           <Route path="/advisors/tamara-lee" element={<AdvisorTamaraLee />} />

@@ -1,32 +1,30 @@
 
 
-# Co-Branded Living Trust Landing Page: Cardenas & Company Real Estate Group
+# Add Discount Code Support for Monthly Plan
 
 ## Overview
-Create a new co-branded Living Trust landing page for Vanessa Sanchez in partnership with Cardenas & Company Real Estate Group, following the exact pattern established by Brandon Drew Group and Think Tax Solutions pages.
+Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
 
-**URL:** `/advisors/vanessa-sanchez/cardenas-and-company`
+## Approach
+Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
 
-## Files to Create/Modify
+This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
 
+## Changes
+
+### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
+- Accept an optional `couponCode` parameter from the request body
+- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
+- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
+- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
+
+### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
+- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+
+## How to Create Promo Codes
+After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
+
+## Files Changed
 | File | Action |
 |------|--------|
-| `src/assets/partners/cardenas-and-company.jpg` | Copy uploaded logo into project assets |
-| `src/components/living-trust/CardenasLivingTrustForm.tsx` | New form component (clone of ThinkTaxLivingTrustForm with Cardenas branding, `partner_name: "Cardenas & Company Real Estate Group"`, tags updated) |
-| `src/pages/VanessaCardenasAndCompany.tsx` | New page component (clone of VanessaThinkTaxSolutions with Cardenas logo, partner name, and partnership copy referencing real estate clients/agents) |
-| `src/App.tsx` | Add route `/advisors/vanessa-sanchez/cardenas-and-company` and add path to `standalonePages` array |
-
-## Key Customizations from Template
-
-- **Partner name**: "Cardenas & Company Real Estate Group" everywhere
-- **Logo**: Use uploaded `cardenas-and-company.jpg` in header, partnership section, and footer (white background sections)
-- **Partnership copy**: Tailored to real estate — "Cardenas & Company Real Estate Group and The Financial Architects have partnered to bring you comprehensive Living Trust services. Vanessa Sanchez personally handles all Living Trust consultations for Cardenas & Company clients and their agents' clients..."
-- **Benefits**: Standard Living Trust benefits (Avoid Probate, Protect Privacy, Maintain Control, Reduce Family Stress) — no Mortgage Protection since this is a real estate group, not tax/mortgage focused
-- **Form tags**: `["Living Trust", "Vanessa Sanchez", "Cardenas & Company"]`
-- **Form name**: `"Living Trust Inquiry - Vanessa (Cardenas & Company)"`
-- **Pipedrive submission**: Routes to `vanessa-pipedrive-submit` with `partner_name: "Cardenas & Company Real Estate Group"`
-- **SEO**: Title/description/canonical referencing Cardenas & Company
-
-## No Edge Function Changes Needed
-The `vanessa-pipedrive-submit` function already supports dynamic `partner_name`, so no backend changes are required.
-
+| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
