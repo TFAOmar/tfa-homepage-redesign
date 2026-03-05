@@ -7,7 +7,7 @@ const WHITE: RGB = [255, 255, 255];
 const DARK: RGB = [40, 56, 69];
 const LIGHT_BG: RGB = [250, 250, 250];
 const GRAY: RGB = [120, 130, 140];
-const GRAY = [120, 130, 140] as const;
+
 
 function addPageHeader(doc: jsPDF, pageTitle: string) {
   doc.setFillColor(...NAVY);
