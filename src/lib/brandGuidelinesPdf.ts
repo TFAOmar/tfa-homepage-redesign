@@ -67,10 +67,10 @@ export async function generateBrandGuidelinesPdf() {
   const colors = [
     { name: "Primary Navy", hex: "#1E3A5F", rgb: NAVY, usage: "Headers, backgrounds, trust" },
     { name: "Primary Gold", hex: "#C9A84C", rgb: GOLD, usage: "Accents, CTAs, warmth" },
-    { name: "Navy Light", hex: "#3D5A80", rgb: [61, 90, 128] as const, usage: "Secondary text, hover" },
-    { name: "Gold Light", hex: "#D4BC7A", rgb: [212, 188, 122] as const, usage: "Subtle accents" },
-    { name: "CTA Gold", hex: "#E4B548", rgb: [228, 181, 72] as const, usage: "Call-to-action buttons" },
-    { name: "CTA Hover", hex: "#1A2744", rgb: [26, 39, 68] as const, usage: "Button hover state" },
+    { name: "Navy Light", hex: "#3D5A80", rgb: [61, 90, 128] as [number, number, number], usage: "Secondary text, hover" },
+    { name: "Gold Light", hex: "#D4BC7A", rgb: [212, 188, 122] as [number, number, number], usage: "Subtle accents" },
+    { name: "CTA Gold", hex: "#E4B548", rgb: [228, 181, 72] as [number, number, number], usage: "Call-to-action buttons" },
+    { name: "CTA Hover", hex: "#1A2744", rgb: [26, 39, 68] as [number, number, number], usage: "Button hover state" },
     { name: "Background", hex: "#FAFAFA", rgb: LIGHT_BG, usage: "Page backgrounds" },
     { name: "Foreground", hex: "#283845", rgb: DARK, usage: "Body text" },
   ];
