@@ -251,6 +251,73 @@ const AdvisorVanessaSanchez = () => {
         </div>
       </section>
 
+      {/* Trusted Partnerships Section */}
+      <section className="py-20 md:py-32 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Handshake className="h-8 w-8 text-accent" />
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                Trusted Partnerships
+              </h2>
+            </div>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Collaborating with trusted professionals to provide comprehensive financial solutions for their clients.
+            </p>
+            <div className="h-1 w-20 bg-accent mx-auto mt-6" />
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[
+              {
+                name: "The Brandon Drew Group",
+                logo: brandonDrewLogo,
+                link: "/advisors/vanessa-sanchez/living-trust",
+                description: "Living Trust Services",
+                detail: "Helping Brandon Drew Group clients protect their assets and plan their legacy through Living Trust consultations."
+              },
+              {
+                name: "Think Tax Solutions",
+                logo: thinkTaxLogo,
+                link: "/advisors/vanessa-sanchez/think-tax-solutions",
+                description: "Living Trust & Mortgage Protection",
+                detail: "Partnering with Think Tax Solutions to offer tax-smart Living Trust and Mortgage Protection strategies."
+              },
+              {
+                name: "Cardenas & Company Real Estate Group",
+                logo: cardenasLogo,
+                link: "/advisors/vanessa-sanchez/cardenas-and-company",
+                description: "Living Trust for Real Estate Clients",
+                detail: "Providing Living Trust services for Cardenas & Company clients and their agents' clients."
+              }
+            ].map((partner) => (
+              <Link key={partner.name} to={partner.link}>
+                <Card className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 group h-full flex flex-col">
+                  <div className="bg-white p-6 flex items-center justify-center h-40 border-b border-gray-100">
+                    <img
+                      src={partner.logo}
+                      alt={`${partner.name} logo`}
+                      className="max-h-24 max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <Badge className="bg-accent/10 text-accent border-accent/30 w-fit mb-3 text-xs">
+                      {partner.description}
+                    </Badge>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{partner.name}</h3>
+                    <p className="text-muted-foreground text-sm flex-1">{partner.detail}</p>
+                    <div className="flex items-center text-accent font-medium mt-4 group-hover:gap-2 transition-all">
+                      <span>View Partnership Page</span>
+                      <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Process Section */}
       <section className="py-20 md:py-32 bg-secondary/30">
         <div className="container mx-auto px-4">
