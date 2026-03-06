@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRight, Building2, Heart, Briefcase, FileCheck } from "lucide-react";
+import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRight, Building2, Heart, Briefcase, FileCheck, Handshake, ArrowRight } from "lucide-react";
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
 import VanessaScheduleModal from "@/components/advisors/VanessaScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
