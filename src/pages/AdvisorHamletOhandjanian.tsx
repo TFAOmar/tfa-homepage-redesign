@@ -99,21 +99,21 @@ const AdvisorHamletOhandjanian = () => {
     <>
       <SEOHead
         title="Hamlet Ohandjanian - Managing Partner"
-        description="Work with Hamlet Ohandjanian, Managing Partner at TFA in Granada Hills, CA. 28 years of leadership experience, committed to integrity and transparent financial planning."
+        description="Work with Hamlet Ohandjanian, Managing Partner at TFA in Chatsworth, CA. 28 years of leadership experience, committed to integrity and transparent financial planning."
         canonical={`${siteConfig.url}/advisors/hamlet-ohandjanian`}
         ogType="profile"
-        keywords="managing partner Granada Hills, retirement planning, tax strategies, life insurance, financial education California"
+        keywords="managing partner Chatsworth, retirement planning, tax strategies, life insurance, financial education California"
       />
       <JsonLd data={[
         generateWebPageSchema(
           "Hamlet Ohandjanian - Managing Partner | The Financial Architects",
-          "Work with Hamlet Ohandjanian, Managing Partner at TFA in Granada Hills, CA. 28 years of leadership experience.",
+          "Work with Hamlet Ohandjanian, Managing Partner at TFA in Chatsworth, CA. 28 years of leadership experience.",
           `${siteConfig.url}/advisors/hamlet-ohandjanian`
         ),
         generatePersonSchema(
           "Hamlet Ohandjanian",
           "Managing Partner",
-          "Hamlet Ohandjanian is a Managing Partner at The Financial Architects in Granada Hills, CA, with 28 years of leadership experience committed to integrity and transparent financial planning.",
+          "Hamlet Ohandjanian is a Managing Partner at The Financial Architects in Chatsworth, CA, with 28 years of leadership experience committed to integrity and transparent financial planning.",
           hamletImage,
           `${siteConfig.url}/advisors/hamlet-ohandjanian`,
           specialties
@@ -149,7 +149,7 @@ const AdvisorHamletOhandjanian = () => {
               <div className="flex flex-wrap gap-4 pt-4">
                 <div className="flex items-center gap-2 text-white/80">
                   <MapPin className="h-5 w-5 text-accent" />
-                  <span>Granada Hills, California</span>
+                  <span>Chatsworth, California</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/80">
                   <Award className="h-5 w-5 text-accent" />

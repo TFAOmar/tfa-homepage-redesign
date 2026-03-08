@@ -27,6 +27,7 @@ export const locations: Location[] = [
   // Southern California - LA Area
   { id: 10, name: "La Mirada", city: "La Mirada", state: "CA", address: "16700 Valley View Ave #190, La Mirada, CA 90638", phone: "(888) 350-5396", hours: "Mon-Fri: 9am-5pm", coordinates: [-118.0120, 33.9172], region: "Southern California" },
   { id: 11, name: "San Fernando", city: "San Fernando", state: "CA", address: "313 S. Brand Ave., San Fernando, CA 91340", phone: "(818) 838-6655", hours: "Mon-Fri: 9am-5pm", coordinates: [-118.4390, 34.2819], region: "Southern California" },
+  { id: 22, name: "Chatsworth", city: "Chatsworth", state: "CA", address: "21000 Devonshire St #113, Chatsworth, CA 91311", phone: "(888) 350-5396", hours: "Mon-Fri: 9am-5pm", coordinates: [-118.5987, 34.2572], region: "Southern California" },
   
   // Southern California - Orange County
   { id: 12, name: "Anaheim", city: "Anaheim", state: "CA", address: "1801 E. Katella Ave, Suite 1009, Anaheim, CA 92805", phone: "(714) 329-4844", hours: "Mon-Fri: 9am-5pm", coordinates: [-117.8897, 33.8046], region: "Southern California" },

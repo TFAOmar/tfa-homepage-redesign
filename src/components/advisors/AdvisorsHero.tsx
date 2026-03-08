@@ -18,7 +18,7 @@ const AdvisorsHero = () => {
           Meet Our Advisors & Brokers
         </h1>
         <p className="text-xl md:text-2xl text-primary-foreground/90 max-w-3xl mx-auto leading-relaxed mb-8">
-          280+ licensed professionals across 21 locations, ready to guide you toward financial confidence
+          280+ licensed professionals across 22 locations, ready to guide you toward financial confidence
         </p>
         <Link to="/careers">
           <Button 

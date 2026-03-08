@@ -25,7 +25,7 @@ const Locations = () => {
             Nationwide Presence, Local Expertise
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            With 21 locations across the United States, we're here to serve you
+            With 22 locations across the United States, we're here to serve you
           </p>
         </div>
 

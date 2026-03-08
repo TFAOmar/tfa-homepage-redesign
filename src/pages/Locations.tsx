@@ -28,7 +28,7 @@ const Locations = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Generate LocalBusiness schemas for all 21 locations
+  // Generate LocalBusiness schemas for all 22 locations
   const localBusinessSchemas = locations.map((location) => {
     const addressParts = parseAddress(location.address);
     return generateLocalBusinessSchema(
@@ -48,7 +48,7 @@ const Locations = () => {
     <>
       <SEOHead
         title="Office Locations"
-        description="Find a The Financial Architects office near you. 21 locations across California, Arizona, and Oregon including Los Angeles, San Diego, Orange County, and Phoenix."
+        description="Find a The Financial Architects office near you. 22 locations across California, Arizona, and Oregon including Los Angeles, San Diego, Orange County, and Phoenix."
         canonical={`${siteConfig.url}/locations`}
         keywords="financial advisor near me, financial planner California, financial advisor Arizona, retirement planner Los Angeles, wealth management Orange County, financial advisor San Diego"
       />
@@ -56,7 +56,7 @@ const Locations = () => {
         data={[
           generateWebPageSchema(
             "Office Locations | The Financial Architects",
-            "Find a The Financial Architects office near you. 21 locations across California, Arizona, and Oregon.",
+            "Find a The Financial Architects office near you. 22 locations across California, Arizona, and Oregon.",
             `${siteConfig.url}/locations`
           ),
           generateBreadcrumbSchema([

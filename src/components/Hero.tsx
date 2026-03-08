@@ -48,7 +48,7 @@ const Hero = () => {
             
             {/* Supporting credibility text */}
             <p className="text-sm md:text-base text-white/70 font-light mt-1">
-              21 locations • 280+ licensed advisors nationwide
+              22 locations • 280+ licensed advisors nationwide
             </p>
           </div>
         </div>
