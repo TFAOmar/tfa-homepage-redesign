@@ -1,21 +1,30 @@
 
 
-## Plan: Fix favicon for WhatsApp/social sharing
+# Add Discount Code Support for Monthly Plan
 
-### Problem
-Your `favicon.svg` is already the TFA logo and works in browsers. However, WhatsApp and messaging apps don't use SVG favicons — they look for `apple-touch-icon` or PNG/ICO formats. Since those aren't declared in `index.html`, WhatsApp falls back to the Lovable heart icon.
+## Overview
+Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
 
-### Solution
-Add proper favicon references to `index.html` so messaging platforms pick up the TFA icon:
+## Approach
+Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
 
-**File: `index.html`** — Add these lines alongside the existing SVG favicon:
-```html
-<link rel="icon" href="/favicon.ico" type="image/x-icon" />
-<link rel="apple-touch-icon" href="/favicon.ico" />
-```
+This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
 
-The `favicon.ico` already exists in your `public/` folder. If that `.ico` file is still the Lovable heart (not TFA-branded), we'd need to replace it — but the SVG favicon you already have is TFA-branded, so we can also generate a PNG version from it to use as the apple-touch-icon.
+## Changes
 
-### After deploying
-You'll need to click **Update** in the publish dialog to push the change live. WhatsApp caches link previews aggressively, so you may need to wait or append a query parameter to the URL to see the updated icon.
+### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
+- Accept an optional `couponCode` parameter from the request body
+- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
+- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
+- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
 
+### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
+- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+
+## How to Create Promo Codes
+After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
+
+## Files Changed
+| File | Action |
+|------|--------|
+| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
