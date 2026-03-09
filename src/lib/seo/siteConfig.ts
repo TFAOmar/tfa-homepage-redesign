@@ -42,8 +42,8 @@ export const siteConfig = {
     title: "CEO & Founder",
   },
   foundingDate: "2005",
-  areasServed: ["California", "Arizona", "Oregon"],
-  numberOfLocations: 22,
+  areasServed: ["California", "Arizona", "Oregon", "Ohio"],
+  numberOfLocations: 24,
 };
 
 export const defaultMeta = {

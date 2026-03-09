@@ -30,6 +30,7 @@ import ericaValenzuelaImg from "@/assets/advisors/erica-valenzuela.jpg";
 import sheilaRodriguezImg from "@/assets/advisors/sheila-rodriguez.jpg";
 import manoloMonterImg from "@/assets/advisors/manolo-monter.jpg";
 import neilClarkImg from "@/assets/advisors/neil-clark.jpg";
+import kevinWaltersImg from "@/assets/advisors/kevin-walters.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -551,6 +552,23 @@ export const advisors: Advisor[] = [
     email: "cclark9514@gmail.com",
     yearsOfExperience: 12,
     landingPage: "/advisors/neil-clark"
+  },
+  {
+    id: "kevin-walters",
+    name: "Kevin B. Walters Sr.",
+    title: "Insurance Agent & LEAP Practitioner",
+    type: "Advisor",
+    state: "Ohio",
+    city: "Troy",
+    region: "Midwest",
+    bio: "On a mission to declutter the American wallet. Founder of Walters Insurance Services and a seasoned LEAP practitioner, Kevin has spent 30 years helping people find the 'missing money' in their lives through the Lifetime Economic Acceleration Process, famously helping clients sort through the '27 drawers' of their financial existence to create order out of chaos.",
+    specialties: ["Life Insurance", "Retirement Planning", "Estate Planning", "LEAP Strategy"],
+    licenses: ["Life & Health"],
+    image: kevinWaltersImg,
+    email: "walterssrkevinb@gmail.com",
+    phone: "(937) 387-7426",
+    yearsOfExperience: 30,
+    landingPage: "/advisors/kevin-walters"
   }
 ];
 

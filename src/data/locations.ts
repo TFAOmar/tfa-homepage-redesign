@@ -50,4 +50,7 @@ export const locations: Location[] = [
   
   // Home Offices
   { id: 21, name: "Brea (Home Office)", city: "Brea", state: "CA", address: "200 W Imperial Hwy, Brea, CA 92821", phone: "(888) 350-5396", hours: "Mon-Fri: 9am-5pm", coordinates: [-117.9006, 33.9167], region: "Southern California" },
+  
+  // Ohio
+  { id: 23, name: "Troy", city: "Troy", state: "OH", address: "1295 S Clay St, Bldg 2, Troy, OH 45373", phone: "(937) 387-7426", hours: "Mon-Fri: 9am-5pm", coordinates: [-84.2033, 40.0395], region: "Midwest" },
 ];
