@@ -26,6 +26,7 @@ const ContactModal = ({
   advisorEmail,
   advisorImage,
   advisorSlug,
+  skipPipedrive,
 }: ContactModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
