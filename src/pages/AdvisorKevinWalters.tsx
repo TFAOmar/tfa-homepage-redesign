@@ -414,6 +414,7 @@ const AdvisorKevinWalters = () => {
         advisorName="Kevin B. Walters Sr."
         advisorEmail="walterssrkevinb@gmail.com"
         advisorImage={kevinImage}
+        skipPipedrive
       />
       <ContactModal
         open={contactModalOpen}

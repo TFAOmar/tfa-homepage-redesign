@@ -73,20 +73,38 @@ const ScheduleModal = ({
         formData.message ? `Message: ${formData.message}` : null,
       ].filter(Boolean).join("\n");
 
-      const response = await submitForm({
-        form_name: "Schedule Request",
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        notes,
-        tags: ["Schedule Request", advisorName],
-        advisor_slug: advisorSlug,
-        advisor_email: advisorEmail,
-        honeypot: honeypotValue,
-      });
+      if (skipPipedrive) {
+        const { supabase } = await import("@/integrations/supabase/client");
+        const { error } = await supabase.functions.invoke("send-form-notification", {
+          body: {
+            form_type: "book-consultation",
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            notes,
+            advisor_name: advisorName,
+            advisor_email: advisorEmail,
+            source_url: window.location.href,
+          },
+        });
+        if (error) throw new Error(error.message);
+      } else {
+        const response = await submitForm({
+          form_name: "Schedule Request",
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          notes,
+          tags: ["Schedule Request", advisorName],
+          advisor_slug: advisorSlug,
+          advisor_email: advisorEmail,
+          honeypot: honeypotValue,
+        });
 
-      if (!response.ok) throw new Error(response.error);
+        if (!response.ok) throw new Error(response.error);
+      }
 
       toast({
         title: "Request Submitted!",
