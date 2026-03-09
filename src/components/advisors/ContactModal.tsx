@@ -16,6 +16,7 @@ interface ContactModalProps {
   advisorEmail?: string;
   advisorImage?: string;
   advisorSlug?: string;
+  skipPipedrive?: boolean;
 }
 
 const ContactModal = ({ 
@@ -25,6 +26,7 @@ const ContactModal = ({
   advisorEmail,
   advisorImage,
   advisorSlug,
+  skipPipedrive,
 }: ContactModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -65,41 +67,59 @@ const ContactModal = ({
         formData.message ? `Message: ${formData.message}` : null,
       ].filter(Boolean).join("\n");
 
-      const response = await submitForm({
-        form_name: "Advisor Contact",
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        notes,
-        tags: ["Advisor Inquiry", advisorName],
-        advisor_slug: advisorSlug,
-        advisor_email: advisorEmail,
-        honeypot: honeypotValue,
-      });
+      if (skipPipedrive) {
+        const { supabase } = await import("@/integrations/supabase/client");
+        const { error } = await supabase.functions.invoke("send-form-notification", {
+          body: {
+            form_type: "contact-inquiry",
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            notes,
+            advisor_name: advisorName,
+            advisor_email: advisorEmail,
+            source_url: window.location.href,
+          },
+        });
+        if (error) throw new Error(error.message);
+      } else {
+        const response = await submitForm({
+          form_name: "Advisor Contact",
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          notes,
+          tags: ["Advisor Inquiry", advisorName],
+          advisor_slug: advisorSlug,
+          advisor_email: advisorEmail,
+          honeypot: honeypotValue,
+        });
 
-      if (!response.ok) throw new Error(response.error);
+        if (!response.ok) throw new Error(response.error);
 
-      // If this is Vanessa's contact form, also submit to her Pipedrive
-      if (advisorSlug === "vanessa-sanchez" || 
-          advisorEmail === "vsanchez@tfainsuranceadvisors.com") {
-        try {
-          const { supabase } = await import("@/integrations/supabase/client");
-          await supabase.functions.invoke("vanessa-pipedrive-submit", {
-            body: {
-              submission_type: "contact",
-              first_name: formData.firstName,
-              last_name: formData.lastName,
-              email: formData.email,
-              phone: formData.phone,
-              notes: formData.message,
-              tags: ["Advisor Inquiry"],
-              source_url: window.location.href,
-            },
-          });
-          console.log("Successfully submitted to Vanessa's Pipedrive as Lead");
-        } catch (pipedriveError) {
-          console.error("Pipedrive submission error (non-blocking):", pipedriveError);
+        // If this is Vanessa's contact form, also submit to her Pipedrive
+        if (advisorSlug === "vanessa-sanchez" || 
+            advisorEmail === "vsanchez@tfainsuranceadvisors.com") {
+          try {
+            const { supabase } = await import("@/integrations/supabase/client");
+            await supabase.functions.invoke("vanessa-pipedrive-submit", {
+              body: {
+                submission_type: "contact",
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                email: formData.email,
+                phone: formData.phone,
+                notes: formData.message,
+                tags: ["Advisor Inquiry"],
+                source_url: window.location.href,
+              },
+            });
+            console.log("Successfully submitted to Vanessa's Pipedrive as Lead");
+          } catch (pipedriveError) {
+            console.error("Pipedrive submission error (non-blocking):", pipedriveError);
+          }
         }
       }
 
