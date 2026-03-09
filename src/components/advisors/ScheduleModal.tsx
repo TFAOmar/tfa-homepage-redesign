@@ -17,6 +17,7 @@ interface ScheduleModalProps {
   advisorImage?: string;
   schedulingLink?: string;
   advisorSlug?: string;
+  skipPipedrive?: boolean;
 }
 
 const ScheduleModal = ({ 
