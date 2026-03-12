@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Phone, MapPin, Clock, ShieldCheck, Globe, Trophy, ClipboardList, PenTool, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/seo/SEOHead";
+import BreaContactForm from "@/components/brea/BreaContactForm";
 
 // REPLACE: Update phone number if different for Brea office
 const PHONE_NUMBER = "+18883505396";
@@ -202,15 +203,7 @@ const Brea = () => {
             In-person at our Brea office or over the phone — your choice.
           </p>
 
-          {/* REPLACE: Swap the Calendly URL below with your actual Calendly link */}
-          <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
-            <iframe
-              src="https://calendly.com/thefinancialarchitects/30min"
-              className="w-full h-[600px] md:h-[650px] border-0"
-              title="Schedule an appointment"
-              loading="lazy"
-            />
-          </div>
+          <BreaContactForm />
 
           {/* Fallback CTA */}
           <div className="mt-8 text-muted-foreground text-sm">
