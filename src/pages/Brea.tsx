@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Phone, MapPin, Clock, ShieldCheck, Globe, Trophy, ClipboardList, PenTool, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/seo/SEOHead";
+import BreaContactForm from "@/components/brea/BreaContactForm";
 
 // REPLACE: Update phone number if different for Brea office
 const PHONE_NUMBER = "+18883505396";
