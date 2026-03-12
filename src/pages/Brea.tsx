@@ -15,11 +15,22 @@ const scrollToBook = () => {
 
 const Brea = () => {
   const [showSticky, setShowSticky] = useState(false);
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setShowSticky(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (widgetContainerRef.current && !widgetContainerRef.current.querySelector('script')) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.trustindex.io/loader.js?58410d862849832fdb76669e5ee";
+      script.defer = true;
+      script.async = true;
+      widgetContainerRef.current.appendChild(script);
+    }
   }, []);
 
   return (
