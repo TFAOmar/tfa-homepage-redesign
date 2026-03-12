@@ -260,7 +260,7 @@ const BreaContactForm = () => {
                 </FormLabel>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {SERVICE_OPTIONS.map((service) => {
-                    const isSelected = field.value.includes(service);
+                    const isSelected = (field.value || []).includes(service);
                     return (
                       <label
                         key={service}
