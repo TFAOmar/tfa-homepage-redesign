@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { CheckCircle, Send } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -25,6 +26,15 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { submitForm } from "@/lib/formSubmit";
 
+const SERVICE_OPTIONS = [
+  "Retirement Planning",
+  "Life Insurance",
+  "Investment Management",
+  "Tax Strategy",
+  "Estate Planning",
+  "Business Insurance",
+];
+
 const formSchema = z.object({
   first_name: z.string().trim().min(1, "First name is required").max(50),
   last_name: z.string().trim().min(1, "Last name is required").max(50),
@@ -32,6 +42,7 @@ const formSchema = z.object({
   phone: z.string().min(10, "Please enter a valid phone number").max(10),
   meeting_preference: z.string().min(1, "Please select a meeting preference"),
   best_time: z.string().min(1, "Please select a preferred time"),
+  interestCategories: z.array(z.string()).min(1, "Please select at least one service"),
   preferred_language: z.string().optional(),
   message: z.string().max(1000).optional(),
   honeypot: z.string().max(0).optional(),
@@ -52,6 +63,7 @@ const BreaContactForm = () => {
       phone: "",
       meeting_preference: "",
       best_time: "",
+      interestCategories: [],
       preferred_language: "",
       message: "",
       honeypot: "",
@@ -64,6 +76,7 @@ const BreaContactForm = () => {
     setIsSubmitting(true);
     try {
       const notes = [
+        `Services Interested In: ${data.interestCategories.join(", ")}`,
         `Meeting Preference: ${data.meeting_preference}`,
         `Best Time: ${data.best_time}`,
         data.preferred_language && `Language: ${data.preferred_language}`,
@@ -80,8 +93,8 @@ const BreaContactForm = () => {
         phone: data.phone,
         preferred_language: data.preferred_language || undefined,
         notes,
-        tags: ["Brea Office", "Consultation Request"],
-        interest_category: "Consultation",
+        tags: ["Brea Office", "Consultation Request", ...data.interestCategories],
+        interest_category: data.interestCategories.join(", "),
       });
 
       if (result.ok) {
@@ -235,6 +248,48 @@ const BreaContactForm = () => {
               )}
             />
           </div>
+
+          {/* Service Interests */}
+          <Controller
+            control={form.control}
+            name="interestCategories"
+            render={({ field, fieldState }) => (
+              <div className="space-y-2">
+                <FormLabel className={fieldState.error ? "text-destructive" : ""}>
+                  Services You're Interested In *
+                </FormLabel>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {SERVICE_OPTIONS.map((service) => {
+                    const isSelected = field.value.includes(service);
+                    return (
+                      <label
+                        key={service}
+                        className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 cursor-pointer transition-colors ${
+                          isSelected
+                            ? "border-accent bg-accent/10"
+                            : "border-border hover:border-muted-foreground/30"
+                        }`}
+                      >
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) => {
+                            const next = checked
+                              ? [...field.value, service]
+                              : field.value.filter((s: string) => s !== service);
+                            field.onChange(next);
+                          }}
+                        />
+                        <span className="text-sm text-foreground">{service}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                {fieldState.error && (
+                  <p className="text-sm font-medium text-destructive">{fieldState.error.message}</p>
+                )}
+              </div>
+            )}
+          />
 
           <FormField
             control={form.control}
