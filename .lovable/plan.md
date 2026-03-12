@@ -1,30 +1,40 @@
 
 
-# Add Discount Code Support for Monthly Plan
+## Plan: Brea QR Code Landing Page
 
-## Overview
-Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
+### Overview
+Create a standalone, mobile-first appointment booking page at `/brea` — no global header/footer/floating CTA. Single-purpose conversion page accessed via QR code.
 
-## Approach
-Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
+### Files to Create/Modify
 
-This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
-
-## Changes
-
-### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
-- Accept an optional `couponCode` parameter from the request body
-- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
-- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
-- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
-
-### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
-- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
-
-## How to Create Promo Codes
-After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
-
-## Files Changed
-| File | Action |
+| File | Change |
 |------|--------|
-| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
+| `src/pages/Brea.tsx` | New standalone landing page with all 6 sections |
+| `src/App.tsx` | Add route `/brea` + add to `standalonePages` array |
+
+### Page Structure (`Brea.tsx`)
+
+**Sticky Header** — Appears on scroll with "Book My Free Appointment" gold button + tap-to-call icon. Uses `useState` + scroll listener.
+
+**Section 1: Hero** — Navy gradient background. Badge pill "Now Open in Brea, CA". Bold headline, subheadline. Two CTAs: gold filled "Book My Free Appointment" (scrolls to `#book`) + outlined "Call Us Now" (`tel:+18883505396`). Staggered CSS fade-in animations.
+
+**Section 2: Trust Bar** — 3 icon items in a row (Licensed & Insured, Hablamos Español, 100+ Families Served). Thin dividers above/below.
+
+**Section 3: What to Expect** — 3 cards with gold left border, hover lift. Review → Plan → Protected.
+
+**Section 4: Booking Section** (`id="book"`) — Calendly iframe placeholder with `{/* REPLACE: Calendly URL */}` comment. Fallback phone CTA below.
+
+**Section 5: Location Strip** — Dark card with address (200 W Imperial Hwy, Brea, CA), phone, hours. Google Maps iframe placeholder.
+
+**Section 6: Footer** — TFA branding, tagline, privacy link, copyright.
+
+### Technical Details
+- Smooth scroll via `document.querySelector('#book')?.scrollIntoView({ behavior: 'smooth' })`
+- Staggered animations using Tailwind `animate-fade-in` + inline `animation-delay`
+- Sticky header uses `useState<boolean>` tracking scroll position > 300px
+- All phone numbers as `tel:+18883505396`
+- Mobile-first: stacked CTAs, single-column cards, responsive Calendly embed
+- Brand colors: Navy `#1E3A5F`, Gold `#C9A84C`
+- Uses existing Lucide icons + Inter font (already loaded)
+- All placeholder content wrapped in `{/* REPLACE: ... */}` comments
+
