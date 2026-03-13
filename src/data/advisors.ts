@@ -583,7 +583,7 @@ export const advisors: Advisor[] = [
     specialties: ["Retirement Planning", "Life Insurance", "Annuities", "Income Protection"],
     licenses: ["Life & Health (Lic# 0F77548)"],
     image: rubenDavisImg,
-    email: "leads@tfainsuranceadvisors.com",
+    email: "ruben@tfainsuranceadvisors.com",
     phone: "(818) 381-6770",
     yearsOfExperience: 17,
     landingPage: "/advisors/ruben-davis"
