@@ -215,6 +215,7 @@ const AppLayout = () => {
           <Route path="/advisors/neil-clark" element={<AdvisorNeilClark />} />
           <Route path="/advisors/kevin-walters" element={<AdvisorKevinWalters />} />
           <Route path="/advisors/ruben-davis" element={<AdvisorRubenDavis />} />
+          <Route path="/advisors/michelle-martinez" element={<AdvisorMichelleMartinez />} />
           <Route path="/services/kai-zen" element={<KaiZen />} />
           <Route path="/services/estate-planning" element={<EstatePlanning />} />
           <Route path="/services/income-planning" element={<IncomePlanning />} />

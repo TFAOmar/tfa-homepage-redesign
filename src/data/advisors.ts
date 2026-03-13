@@ -588,6 +588,23 @@ export const advisors: Advisor[] = [
     phone: "(818) 381-6770",
     yearsOfExperience: 17,
     landingPage: "/advisors/ruben-davis"
+  },
+  {
+    id: 35,
+    name: "Michelle Martinez",
+    title: "Lead Agent",
+    type: "Advisor" as const,
+    state: "California",
+    city: "Los Angeles",
+    region: "West",
+    bio: "Bilingual Lead Agent with 13+ years of experience in insurance and financial protection. Specializing in mortgage protection, whole life insurance, tax-free retirement strategies, Rich Man's Roth, and living benefits to help families protect their legacies.",
+    specialties: ["Mortgage Protection", "Life Insurance", "Tax-Free Retirement", "Living Benefits"],
+    licenses: [],
+    image: michelleMartinezImg,
+    email: "mmartinez@tfainsuranceadvisors.com",
+    phone: "(619) 571-2274",
+    yearsOfExperience: 13,
+    landingPage: "/advisors/michelle-martinez"
   }
 ];
 
