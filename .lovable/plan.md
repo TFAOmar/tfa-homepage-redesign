@@ -1,44 +1,30 @@
 
 
-## Plan: Create Michelle Martinez Advisor Profile Page
+# Add Discount Code Support for Monthly Plan
 
-Add a dedicated landing page at `/advisors/michelle-martinez` following the established advisor page pattern.
+## Overview
+Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
 
-### Profile Details
+## Approach
+Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
 
-- **Name:** Michelle Martinez
-- **Title:** Lead Agent
-- **Location:** Los Angeles, CA
-- **Email:** mmartinez@tfainsuranceadvisors.com
-- **Phone:** (619) 571-2274
-- **Experience:** 13+ years (since 2011)
-- **Bilingual:** Yes — gold "Bilingual · Bilingüe" badge
-- **Tagline:** "Protecting What Matters Most — Your Legacy."
+This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
 
-### Services (6 cards)
-1. Mortgage Protection
-2. Whole Life Insurance
-3. Tax-Free Retirement Strategies
-4. Rich Man's Roth
-5. Living Benefits
-6. Legacy Planning
+## Changes
 
-### Files to Create/Edit
+### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
+- Accept an optional `couponCode` parameter from the request body
+- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
+- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
+- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
 
-1. **Copy uploaded image** → `src/assets/advisors/michelle-martinez.jpg`
+### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
+- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
 
-2. **Create `src/pages/AdvisorMichelleMartinez.tsx`** — Full landing page:
-   - Hero with "Lead Agent" badge, bilingual badge, name, tagline, bio summary, location/license badges
-   - About section with full bio (career timeline from 2011, CEO's Interim Assistant role, solo-agent transition)
-   - 6 service cards tailored to her specialties
-   - 4-step process section
-   - CTA with phone (619) 571-2274
-   - ScheduleModal + ContactModal routing to mmartinez@tfainsuranceadvisors.com
+## How to Create Promo Codes
+After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
 
-3. **Edit `src/data/advisors.ts`** — Add Michelle Martinez entry with bilingual badge, image import, and `landingPage: "/advisors/michelle-martinez"`
-
-4. **Edit `src/App.tsx`** — Add route `/advisors/michelle-martinez` → `AdvisorMichelleMartinez`
-
-### Lead Routing
-- Email notifications to mmartinez@tfainsuranceadvisors.com and leads@tfainsuranceadvisors.com
-
+## Files Changed
+| File | Action |
+|------|--------|
+| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
