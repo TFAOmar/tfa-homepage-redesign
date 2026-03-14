@@ -1,30 +1,35 @@
 
 
-# Add Discount Code Support for Monthly Plan
+## Plan: Add Escobar Realty Partner Email Notification
 
-## Overview
-Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
+**What**: Send a copy of the lead notification email to `heiner@escorealtygroup.com` whenever the Escobar Realty Living Trust form is submitted.
 
-## Approach
-Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
+**How**: Add a new partner email block in the `sendEmails` function in `supabase/functions/pipedrive-submit/index.ts`, mirroring the existing Health Insurance partner pattern (step 3). When `form_name` matches `"Living Trust Inquiry - Escobar Realty Group"`, send the team notification HTML to Heiner's email.
 
-This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
+### Changes
 
-## Changes
+**`supabase/functions/pipedrive-submit/index.ts`** — In the `sendEmails` function, after the existing Health Insurance partner block (~line 897), add a new block:
 
-### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
-- Accept an optional `couponCode` parameter from the request body
-- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
-- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
-- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
+```typescript
+// 4. Send to Escobar Realty partner for their living trust leads
+if (formData.form_name === "Living Trust Inquiry - Escobar Realty Group") {
+  try {
+    const partnerResult = await resend.emails.send({
+      from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
+      to: ["heiner@escorealtygroup.com"],
+      subject: `New Living Trust Lead - ${formData.first_name} ${formData.last_name}`,
+      html: teamHtml,
+    });
+    if (partnerResult.error) {
+      errors.push(`Escobar partner email: ${partnerResult.error.message}`);
+    } else {
+      partnerSent = true;
+    }
+  } catch (e) {
+    errors.push(`Escobar partner email exception: ${e instanceof Error ? e.message : "Unknown error"}`);
+  }
+}
+```
 
-### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
-- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+Then redeploy the `pipedrive-submit` edge function.
 
-## How to Create Promo Codes
-After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
-
-## Files Changed
-| File | Action |
-|------|--------|
-| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
