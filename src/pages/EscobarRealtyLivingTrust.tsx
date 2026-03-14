@@ -303,10 +303,6 @@ export default function EscobarRealtyLivingTrust() {
               <span className="text-gray-400">×</span>
               <img src={tfaLogo} alt="The Financial Architects" className="h-7 md:h-8 object-contain" />
             </div>
-            <div className="flex items-center justify-center gap-4 mb-3">
-              <img src={kwLogo} alt="Keller Williams" className="h-5 md:h-6 object-contain opacity-50" />
-              <img src={fusionLogo} alt="Fusion Growth Partners" className="h-5 md:h-6 object-contain opacity-50" />
-            </div>
             <p className="text-gray-500 text-xs md:text-sm">
               © {new Date().getFullYear()} The Financial Architects. All rights reserved.
             </p>
