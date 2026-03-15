@@ -1,30 +1,20 @@
 
 
-# Add Discount Code Support for Monthly Plan
+## Plan: Move Logos to `public/` for Stable Hosted URLs
 
-## Overview
-Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
+Images in `src/assets/` get hashed by Vite during build (e.g., `corebridge-D4f2x.png`), making URLs unpredictable and unusable in HTML emails. Moving them to `public/` gives them clean, permanent URLs.
 
-## Approach
-Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
+### Changes
 
-This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
+1. **Copy three images to `public/images/`**:
+   - `src/assets/carriers/corebridge.png` → `public/images/corebridge.png`
+   - `src/assets/carriers/north-american.png` → `public/images/north-american.png`
+   - `src/assets/tfa-logo.png` → `public/images/tfa-logo.png`
 
-## Changes
+2. **Resulting stable URLs** (usable in HTML emails):
+   - `https://tfawealthplanning.lovable.app/images/corebridge.png`
+   - `https://tfawealthplanning.lovable.app/images/north-american.png`
+   - `https://tfawealthplanning.lovable.app/images/tfa-logo.png`
 
-### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
-- Accept an optional `couponCode` parameter from the request body
-- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
-- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
-- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
+No code changes needed — existing component imports from `src/assets/` continue working independently. The `public/` copies are solely for external use in emails.
 
-### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
-- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
-
-## How to Create Promo Codes
-After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
-
-## Files Changed
-| File | Action |
-|------|--------|
-| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
