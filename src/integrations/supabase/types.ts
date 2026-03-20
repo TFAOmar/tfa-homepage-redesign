@@ -473,6 +473,60 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsorship_events: {
+        Row: {
+          atmosphere: string | null
+          attendees: string
+          created_at: string | null
+          description: string
+          display_order: number
+          event_date: string | null
+          gradient: string
+          icon: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          status: string
+          timing: string
+          updated_at: string | null
+        }
+        Insert: {
+          atmosphere?: string | null
+          attendees?: string
+          created_at?: string | null
+          description: string
+          display_order?: number
+          event_date?: string | null
+          gradient?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          status?: string
+          timing: string
+          updated_at?: string | null
+        }
+        Update: {
+          atmosphere?: string | null
+          attendees?: string
+          created_at?: string | null
+          description?: string
+          display_order?: number
+          event_date?: string | null
+          gradient?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          status?: string
+          timing?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       sponsorship_leads: {
         Row: {
           company_name: string
@@ -536,6 +590,54 @@ export type Database = {
           utm_medium?: string | null
           utm_source?: string | null
           website_social?: string | null
+        }
+        Relationships: []
+      }
+      sponsorship_tiers: {
+        Row: {
+          created_at: string | null
+          display_order: number
+          features: string[]
+          highlight: string | null
+          id: string
+          is_active: boolean
+          is_popular: boolean | null
+          name: string
+          price: number
+          price_note: string
+          stripe_price_id: string | null
+          tier_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number
+          features?: string[]
+          highlight?: string | null
+          id?: string
+          is_active?: boolean
+          is_popular?: boolean | null
+          name: string
+          price: number
+          price_note?: string
+          stripe_price_id?: string | null
+          tier_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number
+          features?: string[]
+          highlight?: string | null
+          id?: string
+          is_active?: boolean
+          is_popular?: boolean | null
+          name?: string
+          price?: number
+          price_note?: string
+          stripe_price_id?: string | null
+          tier_id?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
