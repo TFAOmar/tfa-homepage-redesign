@@ -166,6 +166,11 @@ const AppLayout = () => {
               <AdminFormSubmissions />
             </ProtectedRoute>
           } />
+          <Route path="/admin/sponsorship" element={
+            <ProtectedRoute requireAdmin>
+              <AdminSponsorshipEvents />
+            </ProtectedRoute>
+          } />
           <Route path="/tools" element={<Tools />} />
           <Route path="/tools/compound-growth-calculator" element={<CompoundGrowthCalculator />} />
           <Route path="/tools/retirement-income-calculator" element={<RetirementIncomeCalculator />} />
