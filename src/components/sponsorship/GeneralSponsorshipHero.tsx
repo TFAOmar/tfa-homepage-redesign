@@ -9,12 +9,25 @@ import {
   Clock,
   Zap
 } from "lucide-react";
+import { useSponsorshipEvents } from "@/hooks/useSponsorshipData";
+import { format, parseISO } from "date-fns";
 
 interface GeneralSponsorshipHeroProps {
   onInquireNow: () => void;
 }
 
 export const GeneralSponsorshipHero = ({ onInquireNow }: GeneralSponsorshipHeroProps) => {
+  const { data: events = [] } = useSponsorshipEvents();
+  
+  const today = new Date().toISOString().split('T')[0];
+  const nextEvent = events
+    .filter(e => e.event_date && e.event_date >= today)
+    .sort((a, b) => a.event_date!.localeCompare(b.event_date!))[0];
+
+  const nextEventLabel = nextEvent
+    ? `Next Event: ${nextEvent.name} — ${format(parseISO(nextEvent.event_date!), 'MMMM yyyy')}`
+    : 'Events Coming Soon';
+
   return (
     <section className="relative min-h-[90vh] md:min-h-[85vh] flex items-center overflow-hidden">
       {/* Dynamic background */}
@@ -41,7 +54,7 @@ export const GeneralSponsorshipHero = ({ onInquireNow }: GeneralSponsorshipHeroP
               className="px-4 py-2 text-sm font-semibold bg-accent text-accent-foreground"
             >
               <Clock className="w-4 h-4 mr-1" />
-              Next Event: Kick Off — January 2026
+              {nextEventLabel}
             </Badge>
           </div>
 

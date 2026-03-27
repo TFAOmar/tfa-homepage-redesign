@@ -13,6 +13,7 @@ import {
   Loader2
 } from "lucide-react";
 import { useSponsorshipEvents, type SponsorshipEvent } from "@/hooks/useSponsorshipData";
+import { format, parseISO, isBefore } from "date-fns";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Rocket,
@@ -25,7 +26,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 const statusLabels: Record<string, { label: string; className: string }> = {
   'selling-fast': { label: '🔥 Selling Fast', className: 'bg-destructive text-destructive-foreground' },
   'few-spots': { label: '⚡ Few Spots Left', className: 'bg-amber-500 text-white' },
-  'available': { label: 'Available', className: 'bg-muted text-muted-foreground' },
+  'available': { label: '✅ Available', className: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' },
   'sold-out': { label: 'Sold Out', className: 'bg-muted text-muted-foreground' },
   'past': { label: 'Past Event', className: 'bg-muted text-muted-foreground' },
 };
@@ -62,19 +63,21 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {events.map((event) => {
               const IconComp = iconMap[event.icon] || Rocket;
-              const statusInfo = statusLabels[event.status] || statusLabels['available'];
+              const today = new Date();
+              const isPast = event.event_date && isBefore(parseISO(event.event_date), today);
+              const effectiveStatus = isPast ? 'past' : event.status;
+              const statusInfo = statusLabels[effectiveStatus] || statusLabels['available'];
+              const isDisabled = effectiveStatus === 'sold-out' || effectiveStatus === 'past';
               return (
                 <div 
                   key={event.id}
-                  className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:border-primary/50 hover:shadow-xl transition-all duration-300"
+                  className={`group relative bg-card rounded-2xl border border-border overflow-hidden transition-all duration-300 ${isDisabled ? 'opacity-60' : 'hover:border-primary/50 hover:shadow-xl'}`}
                 >
-                  {event.status !== 'available' && event.status !== 'past' && (
-                    <div className="absolute top-4 right-4 z-10">
-                      <Badge className={`${statusInfo.className} animate-pulse`}>
-                        {statusInfo.label}
-                      </Badge>
-                    </div>
-                  )}
+                  <div className="absolute top-4 right-4 z-10">
+                    <Badge className={`${statusInfo.className}`}>
+                      {statusInfo.label}
+                    </Badge>
+                  </div>
 
                   <div className={`h-32 bg-gradient-to-r ${event.gradient} relative overflow-hidden`}>
                     <div className="absolute inset-0 bg-black/20" />
@@ -84,7 +87,11 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
                       </div>
                       <div>
                         <h3 className="text-xl font-bold text-white">{event.name}</h3>
-                        <p className="text-white/80 text-sm">{event.timing}</p>
+                        <p className="text-white/80 text-sm">
+                          {event.event_date 
+                            ? format(parseISO(event.event_date), 'MMMM d, yyyy')
+                            : event.timing}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -97,7 +104,7 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
                         <Users className="w-4 h-4 text-primary" />
                         <span>{event.attendees} attendees</span>
                       </div>
-                      {event.status === 'selling-fast' && (
+                      {effectiveStatus === 'selling-fast' && (
                         <div className="flex items-center gap-1 text-destructive">
                           <Flame className="w-4 h-4" />
                           <span>High demand</span>
@@ -107,12 +114,12 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
 
                     <Button 
                       onClick={() => onSelectEvent(event.slug)}
-                      className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                      className={`w-full transition-colors ${!isDisabled ? 'group-hover:bg-primary group-hover:text-primary-foreground' : ''}`}
                       variant="outline"
-                      disabled={event.status === 'sold-out'}
+                      disabled={isDisabled}
                     >
-                      {event.status === 'sold-out' ? 'Sold Out' : 'Sponsor This Event'}
-                      {event.status !== 'sold-out' && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />}
+                      {effectiveStatus === 'past' ? 'Past Event' : effectiveStatus === 'sold-out' ? 'Sold Out' : 'Sponsor This Event'}
+                      {!isDisabled && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />}
                     </Button>
                   </div>
                 </div>
