@@ -8,6 +8,17 @@ interface GeneralSponsorshipFinalCTAProps {
 }
 
 export const GeneralSponsorshipFinalCTA = ({ onInquireNow }: GeneralSponsorshipFinalCTAProps) => {
+  const { data: events = [] } = useSponsorshipEvents();
+  
+  const today = new Date().toISOString().split('T')[0];
+  const nextEvent = events
+    .filter(e => e.event_date && e.event_date >= today)
+    .sort((a, b) => a.event_date!.localeCompare(b.event_date!))[0];
+
+  const nextEventLabel = nextEvent
+    ? `Next Event: ${nextEvent.name} — ${format(parseISO(nextEvent.event_date!), 'MMMM yyyy')}`
+    : 'Events Coming Soon';
+
   return (
     <section className="py-20 relative overflow-hidden">
       {/* Background gradient */}
