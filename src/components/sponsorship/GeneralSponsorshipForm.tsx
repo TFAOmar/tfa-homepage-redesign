@@ -142,7 +142,9 @@ export const GeneralSponsorshipForm = ({
     try {
       const urlParams = new URLSearchParams(window.location.search);
 
-      const { data: insertedData, error } = await supabase.from('sponsorship_leads').insert({
+      const leadId = generateUUID();
+      const { error } = await supabase.from('sponsorship_leads').insert({
+        id: leadId,
         company_name: data.companyName,
         contact_name: data.contactName,
         email: data.email,
@@ -155,7 +157,7 @@ export const GeneralSponsorshipForm = ({
         utm_medium: urlParams.get('utm_medium'),
         utm_campaign: urlParams.get('utm_campaign'),
         status: 'pending',
-      }).select('id').single();
+      });
 
       if (error) throw error;
 
@@ -175,8 +177,8 @@ export const GeneralSponsorshipForm = ({
         console.error('Email notification failed:', emailError);
       });
 
-      if (data.preferredPackage !== 'undecided' && insertedData?.id) {
-        setSubmittedLeadId(insertedData.id);
+      if (data.preferredPackage !== 'undecided') {
+        setSubmittedLeadId(leadId);
         toast.success("Inquiry submitted! You can now proceed to payment or we'll follow up within 24 hours.");
       } else {
         const params = new URLSearchParams({
