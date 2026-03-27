@@ -241,9 +241,6 @@ const EstateGuru = () => {
           <section id="faq">
             <EstateGuruFAQ />
           </section>
-          <section id="register">
-            <EstateGuruRegistrationForm />
-          </section>
         </main>
         <EstateGuruFooter />
       </div>
