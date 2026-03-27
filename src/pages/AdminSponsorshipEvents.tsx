@@ -354,7 +354,7 @@ const AdminSponsorshipEvents = () => {
                 </div>
                 <div>
                   <Label>Gradient</Label>
-                  <Input value={editingEvent.gradient || ''} onChange={(e) => setEditingEvent({ ...editingEvent, gradient: e.target.value })} className="mt-1" placeholder="from-blue-500 to-cyan-500" />
+                  <Input value={editingEvent.gradient || ''} onChange={(e) => setEditingEvent({ ...editingEvent, gradient: e.target.value })} className="mt-1" placeholder="linear-gradient(to right, #2563eb, #7c3aed)" />
                 </div>
               </div>
               <div className="flex items-center gap-2">
