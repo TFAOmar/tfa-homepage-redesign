@@ -256,7 +256,11 @@ const AdminSponsorshipEvents = () => {
               </div>
               <div>
                 <Label>Description</Label>
-                <Input value={editingEvent.description || ''} onChange={(e) => setEditingEvent({ ...editingEvent, description: e.target.value })} className="mt-1" />
+                <Textarea value={editingEvent.description || ''} onChange={(e) => setEditingEvent({ ...editingEvent, description: e.target.value })} className="mt-1" rows={3} />
+              </div>
+              <div>
+                <Label>Atmosphere</Label>
+                <Input value={editingEvent.atmosphere || ''} onChange={(e) => setEditingEvent({ ...editingEvent, atmosphere: e.target.value })} className="mt-1" placeholder="e.g. High-energy networking" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
