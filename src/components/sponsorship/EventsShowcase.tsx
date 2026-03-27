@@ -13,6 +13,7 @@ import {
   Loader2
 } from "lucide-react";
 import { useSponsorshipEvents, type SponsorshipEvent } from "@/hooks/useSponsorshipData";
+import { format, parseISO, isBefore } from "date-fns";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Rocket,
