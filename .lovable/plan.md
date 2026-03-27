@@ -1,48 +1,43 @@
 
 
-## Plan: Fix Dynamic Gradient Colors on Event Cards
+## Plan: Fix Sponsorship Email Pricing
 
 ### Problem
 
-Tailwind CSS purges unused classes at build time. The gradient classes (e.g. `from-blue-600 to-purple-600`) are stored in the database and injected dynamically via `${event.gradient}`, so Tailwind never detects them during the build scan. Result: the gradient classes are stripped out and the cards render as grey.
+The `send-sponsorship-notification` edge function has hardcoded `packageLabels` with outdated prices and `eventLabels` with outdated timing/attendee info.
 
-### Fix
+**Current (wrong):**
+- Title Sponsor — $4,000/event
+- Supporting Sponsor — $2,000/event
+- Community Sponsor — $500/event
 
-Replace the Tailwind gradient class approach with inline `style` attributes using CSS gradients. This bypasses Tailwind's purge entirely.
+**Correct (from DB tiers):**
+- Title Sponsor — $5,000/event
+- Supporting Sponsor — $2,500/event
+- Community Sponsor — $1,000/event
 
-### Change — `src/components/sponsorship/EventsShowcase.tsx`
+Event labels also need updating (e.g., Kick Off was January, Crash Courses timing, etc.).
 
-**Line 92**: Replace the Tailwind gradient class with an inline style.
+### Fix — `supabase/functions/send-sponsorship-notification/index.ts`
 
-Convert DB values like `from-blue-600 to-purple-600` into actual CSS gradient strings. Add a helper function that maps Tailwind color names to hex values, or — simpler and more robust — store actual CSS gradient strings in the DB (e.g. `linear-gradient(to right, #2563eb, #9333ea)`).
+Update the two hardcoded lookup objects:
 
-**Recommended approach**: Use inline `style` with the gradient value directly, and update the DB gradient values to be valid CSS gradients instead of Tailwind classes.
+```typescript
+const packageLabels = {
+  title: "Title Sponsor — $5,000/event",
+  supporting: "Supporting Sponsor — $2,500/event",
+  community: "Community Sponsor — $1,000/event",
+  undecided: "Package TBD — Needs consultation"
+};
 
-```tsx
-// Before
-<div className={`h-32 bg-gradient-to-r ${event.gradient} relative overflow-hidden`}>
-
-// After
-<div className="h-32 relative overflow-hidden" style={{ background: event.gradient }}>
+const eventLabels = {
+  'kickoff': { name: 'Kick Off', timing: 'January 2026', attendees: '200+' },
+  'crash-courses': { name: 'Crash Courses', timing: 'May 31, 2026', attendees: '75+' },
+  'leadership-summit': { name: 'Leadership Summit', timing: 'April 23, 2026', attendees: '100+' },
+  'summer-sizzler': { name: 'Summer Sizzler', timing: 'August 16, 2026', attendees: '150+' },
+  'christmas-party': { name: 'Christmas Party', timing: 'December 12, 2026', attendees: '200+' }
+};
 ```
 
-Then update the 5 event rows in `sponsorship_events` to store CSS gradients:
-
-| Slug | New `gradient` value |
-|------|---------------------|
-| `kickoff` | `linear-gradient(to right, #2563eb, #7c3aed)` |
-| `crash-courses` | `linear-gradient(to right, #059669, #0d9488)` |
-| `leadership-summit` | `linear-gradient(to right, #d97706, #dc2626)` |
-| `summer-sizzler` | `linear-gradient(to right, #f59e0b, #ef4444)` |
-| `christmas-party` | `linear-gradient(to right, #dc2626, #16a34a)` |
-
-Also update the admin panel's gradient input placeholder to indicate CSS gradient format.
-
-### Files Changed
-
-| File | Change |
-|------|--------|
-| `src/components/sponsorship/EventsShowcase.tsx` | Use inline `style={{ background: event.gradient }}` instead of Tailwind class |
-| `src/pages/AdminSponsorshipEvents.tsx` | Update gradient field placeholder to show CSS gradient format |
-| DB migration | Update gradient values from Tailwind classes to CSS gradient strings |
+Single file change, then redeploy the edge function.
 
