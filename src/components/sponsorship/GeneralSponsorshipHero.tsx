@@ -9,6 +9,8 @@ import {
   Clock,
   Zap
 } from "lucide-react";
+import { useSponsorshipEvents } from "@/hooks/useSponsorshipData";
+import { format, parseISO } from "date-fns";
 
 interface GeneralSponsorshipHeroProps {
   onInquireNow: () => void;
