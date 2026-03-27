@@ -1,26 +1,23 @@
 
-# Dynamic Sponsorship Dashboard — Completed
 
-## What was done
+## Plan: Fix Sponsorship Page Crash
 
-### Database
-- Created `sponsorship_events` table (5 events seeded: Kick Off, Crash Courses, Leadership Summit, Summer Sizzler, Christmas Party)
-- Created `sponsorship_tiers` table (3 tiers: Title $5,000, Supporting $2,500, Community $1,000)
-- RLS: public read for active rows, admin-only write via `has_role()`
+The `/events/sponsorship` page renders a blank white screen due to a React crash in the Radix `<Select>` component. The error: "An error occurred in the `<select>` component" followed by "Failed to execute 'removeChild' on 'Node'."
 
-### Stripe Products
-- Title Sponsor: `price_1TD8cpI5s9xwrb3eyaGSQ8Pj` ($5,000)
-- Supporting Sponsor: `price_1TD8dII5s9xwrb3eM3jbITVt` ($2,500)
-- Community Sponsor: `price_1TD8gTI5s9xwrb3ek6QkdIFf` ($1,000)
+### Root Cause
 
-### Files Created/Updated
-- `src/hooks/useSponsorshipData.ts` — hooks for fetching events/tiers + admin mutations
-- `src/pages/AdminSponsorshipEvents.tsx` — admin CRUD for events & tiers at `/admin/sponsorship`
-- `src/components/sponsorship/EventsShowcase.tsx` — now fetches from DB
-- `src/components/sponsorship/GeneralSponsorshipTiers.tsx` — now fetches from DB with new prices
-- `src/components/sponsorship/GeneralSponsorshipForm.tsx` — dynamic events/tiers + Stripe checkout button
-- `supabase/functions/create-sponsorship-checkout/index.ts` — dynamic price lookup from DB
-- `src/App.tsx` — added `/admin/sponsorship` route
+In `GeneralSponsorshipForm.tsx`, the "Preferred Package" `<Select>` uses `defaultValue` but its `<SelectItem>` children are dynamic — they start empty (while `tiers` loads from Supabase) then populate with 3 items plus "undecided". Radix Select cannot handle its children changing after mount when `defaultValue` is set, causing a DOM crash that kills the entire page.
 
-### Stripe Discounts
-`allow_promotion_codes: true` is enabled. Create coupons in Stripe Dashboard → Coupons → Promotion Codes.
+### Fix
+
+**File: `src/components/sponsorship/GeneralSponsorshipForm.tsx`**
+
+1. Switch the Package `<Select>` from `defaultValue` to controlled `value` prop (using `watchedPackage` which is already tracked)
+2. Guard the event checkboxes and package Select to only render after data has loaded (show a loading state while `tiers` or `events` are still fetching)
+
+Specifically:
+- Line 313-314: Change `defaultValue={preselectedPackage || 'undecided'}` to `value={watchedPackage}` — this makes it a fully controlled component that works with dynamic children
+- Wrap the events checkbox grid and package select in a conditional that checks `tiers.length > 0` before rendering the Select items, preventing the empty-to-populated transition that crashes Radix
+
+This is a minimal, targeted fix — no new files, no schema changes.
+
