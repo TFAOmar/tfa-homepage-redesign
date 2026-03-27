@@ -89,7 +89,7 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
                     </Badge>
                   </div>
 
-                  <div className={`h-32 bg-gradient-to-r ${event.gradient} relative overflow-hidden`}>
+                  <div className="h-32 relative overflow-hidden" style={{ background: event.gradient }}>
                     <div className="absolute inset-0 bg-black/20" />
                     <div className="absolute bottom-4 left-4 flex items-center gap-3">
                       <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
