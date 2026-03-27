@@ -1,43 +1,19 @@
 
 
-## Plan: Fix Sponsorship Email Pricing
+## Plan: Fix Hardcoded "Next Event" in Final CTA
 
 ### Problem
+`GeneralSponsorshipFinalCTA.tsx` line 26 has a hardcoded string: `"Next Event: Kick Off — January 2026"`. The hero component was already fixed to be dynamic, but this pre-footer CTA was missed.
 
-The `send-sponsorship-notification` edge function has hardcoded `packageLabels` with outdated prices and `eventLabels` with outdated timing/attendee info.
+### Fix — `src/components/sponsorship/GeneralSponsorshipFinalCTA.tsx`
 
-**Current (wrong):**
-- Title Sponsor — $4,000/event
-- Supporting Sponsor — $2,000/event
-- Community Sponsor — $500/event
+1. Import `useSponsorshipEvents` hook, `format`, and `parseISO`
+2. Add the same dynamic next-event logic used in the hero:
+   - Filter events where `event_date >= today`
+   - Sort ascending, pick the first
+   - Format as `"Next Event: {name} — {month year}"`
+   - Fallback to `"Events Coming Soon"`
+3. Replace the hardcoded string on line 26 with the dynamic label
 
-**Correct (from DB tiers):**
-- Title Sponsor — $5,000/event
-- Supporting Sponsor — $2,500/event
-- Community Sponsor — $1,000/event
-
-Event labels also need updating (e.g., Kick Off was January, Crash Courses timing, etc.).
-
-### Fix — `supabase/functions/send-sponsorship-notification/index.ts`
-
-Update the two hardcoded lookup objects:
-
-```typescript
-const packageLabels = {
-  title: "Title Sponsor — $5,000/event",
-  supporting: "Supporting Sponsor — $2,500/event",
-  community: "Community Sponsor — $1,000/event",
-  undecided: "Package TBD — Needs consultation"
-};
-
-const eventLabels = {
-  'kickoff': { name: 'Kick Off', timing: 'January 2026', attendees: '200+' },
-  'crash-courses': { name: 'Crash Courses', timing: 'May 31, 2026', attendees: '75+' },
-  'leadership-summit': { name: 'Leadership Summit', timing: 'April 23, 2026', attendees: '100+' },
-  'summer-sizzler': { name: 'Summer Sizzler', timing: 'August 16, 2026', attendees: '150+' },
-  'christmas-party': { name: 'Christmas Party', timing: 'December 12, 2026', attendees: '200+' }
-};
-```
-
-Single file change, then redeploy the edge function.
+Single file change. No schema or migration needed.
 
