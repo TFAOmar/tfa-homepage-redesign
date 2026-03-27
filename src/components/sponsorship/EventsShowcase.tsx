@@ -124,8 +124,8 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
 
                     <Button 
                       onClick={() => onSelectEvent(event.slug)}
-                      className={`w-full transition-colors ${!isDisabled ? 'group-hover:bg-primary group-hover:text-primary-foreground' : ''}`}
-                      variant="outline"
+                      className="w-full"
+                      variant={isDisabled ? 'outline' : (effectiveStatus === 'selling-fast' || effectiveStatus === 'few-spots') ? 'destructive' : 'default'}
                       disabled={isDisabled}
                     >
                       {effectiveStatus === 'past' ? 'Past Event' : effectiveStatus === 'sold-out' ? 'Sold Out' : 'Sponsor This Event'}
