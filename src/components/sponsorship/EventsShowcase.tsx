@@ -61,7 +61,13 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {events.map((event) => {
+            {[...events].sort((a, b) => {
+              const today = new Date();
+              const aPast = a.event_date ? isBefore(parseISO(a.event_date), today) : false;
+              const bPast = b.event_date ? isBefore(parseISO(b.event_date), today) : false;
+              if (aPast !== bPast) return aPast ? 1 : -1;
+              return 0;
+            }).map((event) => {
               const IconComp = iconMap[event.icon] || Rocket;
               const today = new Date();
               const isPast = event.event_date && isBefore(parseISO(event.event_date), today);
@@ -71,7 +77,11 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
               return (
                 <div 
                   key={event.id}
-                  className={`group relative bg-card rounded-2xl border border-border overflow-hidden transition-all duration-300 ${isDisabled ? 'opacity-60' : 'hover:border-primary/50 hover:shadow-xl'}`}
+                  className={`group relative bg-card rounded-2xl border overflow-hidden transition-all duration-300 ${
+                    isDisabled 
+                      ? 'opacity-60 border-border' 
+                      : 'border-primary/30 hover:border-primary hover:shadow-xl shadow-md'
+                  }`}
                 >
                   <div className="absolute top-4 right-4 z-10">
                     <Badge className={`${statusInfo.className}`}>
@@ -114,8 +124,8 @@ export const EventsShowcase = ({ onSelectEvent }: EventsShowcaseProps) => {
 
                     <Button 
                       onClick={() => onSelectEvent(event.slug)}
-                      className={`w-full transition-colors ${!isDisabled ? 'group-hover:bg-primary group-hover:text-primary-foreground' : ''}`}
-                      variant="outline"
+                      className="w-full"
+                      variant={isDisabled ? 'outline' : (effectiveStatus === 'selling-fast' || effectiveStatus === 'few-spots') ? 'destructive' : 'default'}
                       disabled={isDisabled}
                     >
                       {effectiveStatus === 'past' ? 'Past Event' : effectiveStatus === 'sold-out' ? 'Sold Out' : 'Sponsor This Event'}
