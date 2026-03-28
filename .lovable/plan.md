@@ -1,37 +1,23 @@
 
 
-## Plan: Fix Estate Guru Registration Before Payment
+## Plan: Add "Manage Subscription" Link to Footer
 
-### Problem
+Add an external link to the Stripe customer portal in the footer's bottom bar, next to the existing "Agent Login" link.
 
-The registration form appears in two places:
-1. On the main `/estate-guru` landing page (scroll down to `#register` section)
-2. On the `/estate-guru/success` page (after Stripe payment)
+### Change — `src/components/Footer.tsx`
 
-Anyone can scroll to the bottom of the landing page and submit the registration form **without paying**. This triggers the confirmation email and Pipedrive lead creation prematurely.
+After the "Agent Login" link (line 103), add:
 
-### Fix
+```html
+<a 
+  href="https://pay.tfawealthplanning.com/p/login/7sI3cffBfcSI4Fi8ww"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="text-primary-foreground/60 hover:text-gold transition-colors"
+>
+  Manage Subscription
+</a>
+```
 
-**Remove the registration form from the main `/estate-guru` landing page.** It should only exist on the `/estate-guru/success` page, which users reach after completing Stripe checkout.
-
-### Changes — `src/pages/EstateGuru.tsx`
-
-1. Remove the `#register` section that wraps `<EstateGuruRegistrationForm />`
-2. Remove the import of `EstateGuruRegistrationForm`
-3. Update the header nav items to remove the "Register" link (currently not in nav, but the `#register` anchor becomes dead)
-
-### Changes — `src/components/estate-guru/EstateGuruHero.tsx` (if applicable)
-
-Check if the hero CTA links to `#register` — if so, redirect it to `#pricing` instead, since the correct flow is: choose plan → Stripe checkout → success page → register.
-
-### Result
-
-The only way to reach the registration form is through the Stripe checkout success redirect, ensuring payment always happens before registration and confirmation emails.
-
-### Files Changed
-
-| File | Change |
-|------|--------|
-| `src/pages/EstateGuru.tsx` | Remove `#register` section and `EstateGuruRegistrationForm` import |
-| Hero/CTA components | Update any `#register` links to point to `#pricing` instead |
+Single line addition. No other files changed.
 
