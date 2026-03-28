@@ -101,6 +101,14 @@ const Footer = () => {
               >
                 Agent Login
               </a>
+              <a 
+                href="https://pay.tfawealthplanning.com/p/login/7sI3cffBfcSI4Fi8ww" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary-foreground/60 hover:text-gold transition-colors"
+              >
+                Manage Subscription
+              </a>
             </div>
           </div>
           <p className="text-primary-foreground/50 text-xs mt-4 text-center md:text-left">
