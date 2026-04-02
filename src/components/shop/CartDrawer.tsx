@@ -87,7 +87,7 @@ export const CartDrawer = () => {
             description: "Your business card information has been submitted. Proceeding to payment...",
           });
         }
-        window.open(checkoutUrl, '_blank');
+        window.location.href = checkoutUrl;
         setIsOpen(false);
       }
     } catch (error) {
