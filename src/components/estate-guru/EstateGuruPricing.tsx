@@ -24,7 +24,7 @@ const EstateGuruPricing = () => {
       }
 
       if (data?.url) {
-        window.open(data.url, "_blank");
+        window.location.href = data.url;
       } else {
         toast.error("No checkout URL returned. Please try again.");
       }
