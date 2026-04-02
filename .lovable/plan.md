@@ -1,30 +1,27 @@
 
 
-## Plan: Fix Safari/iPhone Checkout Blocked Popup
+## Plan: Fix Safari Popup Blocker Across All Checkout Flows
 
 ### Problem
+Same Safari/iPhone issue as Estate Guru — `window.open(url, "_blank")` inside async callbacks gets blocked as a popup. Three more files have this problem.
 
-The checkout button calls `window.open(data.url, "_blank")` inside an async `supabase.functions.invoke()` callback. Safari on iPhone treats this as a popup (not a direct user gesture) and blocks it silently. The user clicks "Get Started" and nothing happens.
+### Changes
 
-### Fix — `src/components/estate-guru/EstateGuruPricing.tsx`
+| File | Current | Fix |
+|------|---------|-----|
+| `src/components/sponsorship/GeneralSponsorshipForm.tsx` (line 125) | `window.open(data.url, '_blank')` | `window.location.href = data.url` |
+| `src/components/sponsorship/SponsorApplicationForm.tsx` (lines 187-195) | `window.open` with popup fallback | `window.location.href = checkoutData.url` (remove the fallback block) |
+| `src/components/shop/CartDrawer.tsx` (line 90) | `window.open(checkoutUrl, '_blank')` | `window.location.href = checkoutUrl` |
 
-Replace `window.open(data.url, "_blank")` with `window.location.href = data.url` to navigate in the same tab instead of opening a new one. This is never blocked by popup blockers.
-
-The Stripe success/cancel URLs already redirect back to the site, so same-tab navigation is the correct UX for mobile anyway.
-
-### Single line change
-
-```typescript
-// Before
-window.open(data.url, "_blank");
-
-// After
-window.location.href = data.url;
-```
+### Not changed (safe)
+- `ScheduleModal.tsx` — opens a scheduling link (Calendly/HubSpot), not a payment flow; acceptable to keep as `window.open`
+- `TFA2026KickoffSponsorship.tsx` — opens a local PDF file, not async; won't be blocked
 
 ### Files Changed
 
 | File | Change |
 |------|--------|
-| `src/components/estate-guru/EstateGuruPricing.tsx` | Replace `window.open` with `window.location.href` |
+| `src/components/sponsorship/GeneralSponsorshipForm.tsx` | Replace `window.open` with `window.location.href` |
+| `src/components/sponsorship/SponsorApplicationForm.tsx` | Replace popup logic with `window.location.href` |
+| `src/components/shop/CartDrawer.tsx` | Replace `window.open` with `window.location.href` |
 
