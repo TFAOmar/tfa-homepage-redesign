@@ -1,30 +1,37 @@
 
 
-## Plan: Fix Google Search Favicon (Lovable Heart Override)
+## Plan: Add Joseph Guzman — Advisor Profile + Landing Page
 
-### Problem
+### 1. Copy uploaded image to assets
+Copy `user-uploads://image-24.png` to `src/assets/advisors/joseph-guzman.png`
 
-Google Search (and many browsers) specifically request `/favicon.ico` by default. While `index.html` correctly points to `/favicon.svg`, there is no `favicon.ico` file in the project. The Lovable hosting platform injects its own heart-logo `favicon.ico` when one doesn't exist, which is what Google indexes.
+### 2. Add to advisor directory — `src/data/advisors.ts`
+- Import `josephGuzmanImg` from `@/assets/advisors/joseph-guzman.png`
+- Add entry with id `36`, name "Joseph Guzman", title "Financial Strategist", type "Advisor", city "Chino Hills", state "California", region "West", 8 years experience
+- Specialties: Real Estate, Living Trusts, Mortgage Protection, Life Insurance
+- Email: jguzman@tfainsuranceadvisors.com
+- Landing page: `/advisors/joseph-guzman`
 
-### Fix
+### 3. Create landing page — `src/pages/AdvisorJosephGuzman.tsx`
+Follow the established advisor page pattern (same as Fabian Serrano, Michelle Martinez, etc.):
+- Hero with uploaded photo, name, title, Chino Hills location
+- Bio highlighting 8 years in Real Estate, Living Trusts, and Mortgage Protection
+- Services cards: Real Estate Services, Living Trusts, Mortgage Protection, Life Insurance
+- 4-step process (Discovery, Analysis, Strategy, Implementation)
+- Schedule consultation modal + Contact modal
+- SEO metadata and JSON-LD schema
+- CTA section at bottom
 
-Generate a proper `favicon.ico` file from the existing `favicon.svg` and place it in `public/`. This will override the platform-injected Lovable heart.
-
-### Steps
-
-1. **Generate `public/favicon.ico`** from `public/favicon.svg` using a build script (convert SVG → ICO with 16×16, 32×32, and 48×48 sizes embedded)
-2. **Add an explicit ICO link** in `index.html` as the first favicon declaration:
-   ```html
-   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-   ```
+### 4. Register route — `src/App.tsx`
+- Import `AdvisorJosephGuzman`
+- Add route: `/advisors/joseph-guzman`
 
 ### Files Changed
 
 | File | Change |
 |------|--------|
-| `public/favicon.ico` | New file — generated from favicon.svg |
-| `index.html` | Add explicit `favicon.ico` link tag |
-
-### Note
-After deployment, Google may take days/weeks to re-crawl and update the cached favicon. You can request re-indexing via Google Search Console to speed this up.
+| `src/assets/advisors/joseph-guzman.png` | New — uploaded photo |
+| `src/data/advisors.ts` | Add Joseph Guzman entry (id 36) |
+| `src/pages/AdvisorJosephGuzman.tsx` | New — full advisor landing page |
+| `src/App.tsx` | Import + route for `/advisors/joseph-guzman` |
 
