@@ -606,6 +606,23 @@ export const advisors: Advisor[] = [
     phone: "(619) 571-2274",
     yearsOfExperience: 13,
     landingPage: "/advisors/michelle-martinez"
+  },
+  {
+    id: 36,
+    name: "Joseph Guzman",
+    title: "Financial Strategist",
+    type: "Advisor" as const,
+    state: "California",
+    city: "Chino Hills",
+    region: "West",
+    bio: "Financial Strategist with 8 years of experience in Real Estate services, providing Living Trusts and Mortgage protection. Joseph helps families protect their homes and secure their financial futures.",
+    specialties: ["Real Estate", "Living Trusts", "Mortgage Protection", "Life Insurance"],
+    licenses: [],
+    image: josephGuzmanImg,
+    email: "jguzman@tfainsuranceadvisors.com",
+    phone: "",
+    yearsOfExperience: 8,
+    landingPage: "/advisors/joseph-guzman"
   }
 ];
 

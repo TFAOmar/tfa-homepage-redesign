@@ -80,6 +80,7 @@ import AdvisorNeilClark from "./pages/AdvisorNeilClark";
 import AdvisorKevinWalters from "./pages/AdvisorKevinWalters";
 import AdvisorRubenDavis from "./pages/AdvisorRubenDavis";
 import AdvisorMichelleMartinez from "./pages/AdvisorMichelleMartinez";
+import AdvisorJosephGuzman from "./pages/AdvisorJosephGuzman";
 import RuthPachecoTaxStrategy from "./pages/RuthPachecoTaxStrategy";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
