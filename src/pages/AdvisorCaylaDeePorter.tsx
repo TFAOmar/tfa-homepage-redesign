@@ -337,6 +337,7 @@ const AdvisorCaylaDeePorter = () => {
         advisorEmail="cayladee@tfainsuranceadvisors.com"
         advisorImage={caylaDeePorterImg}
         advisorSlug="cayla-dee-porter"
+        schedulingLink="https://calendly.com/cayladee"
       />
       <ContactModal
         open={contactModalOpen}
