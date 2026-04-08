@@ -34,6 +34,7 @@ import kevinWaltersImg from "@/assets/advisors/kevin-walters.jpg";
 import rubenDavisImg from "@/assets/advisors/ruben-davis.jpg";
 import michelleMartinezImg from "@/assets/advisors/michelle-martinez.jpg";
 import josephGuzmanImg from "@/assets/advisors/joseph-guzman.png";
+import caylaDeePorterImg from "@/assets/advisors/cayla-dee-porter.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -623,6 +624,24 @@ export const advisors: Advisor[] = [
     phone: "",
     yearsOfExperience: 8,
     landingPage: "/advisors/joseph-guzman"
+  },
+  {
+    id: 37,
+    name: "Cayla Dee Porter",
+    title: "Certified Financial Fiduciary®",
+    type: "Advisor" as const,
+    state: "California",
+    city: "Brea",
+    region: "Southern California",
+    bio: "Certified Financial Fiduciary® focused on Indexed Strategies that help protect your wealth. Specializing in retirement planning, tax strategies, and financial literacy to help clients make powerful, informed decisions for their future.",
+    specialties: ["Indexed Strategies", "Retirement Planning", "Tax Strategies", "Financial Literacy"],
+    licenses: ["CA#4197988"],
+    image: caylaDeePorterImg,
+    email: "cayladee@tfainsuranceadvisors.com",
+    phone: "(707) 320-3087",
+    yearsOfExperience: 5,
+    landingPage: "/advisors/cayla-dee-porter",
+    schedulingLink: "https://calendly.com/cayladee"
   }
 ];
 
