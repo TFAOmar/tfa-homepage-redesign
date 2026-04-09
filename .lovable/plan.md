@@ -1,22 +1,24 @@
 
 
-## Plan: Fix Category Boxes in PDF Flyer
+## Plan: Generate `brand_guidelines.md`
 
-### Problem
+Create a comprehensive markdown file at `/mnt/documents/brand_guidelines.md` that documents TFA's complete brand identity system, extracted from the existing `BrandGuidelines.tsx`, `index.css`, `tailwind.config.ts`, and `brandGuidelinesPdf.ts`.
 
-The trophy emoji (`🏆`) used in the category boxes won't render in jsPDF's built-in Helvetica font — emojis are unsupported and appear as blank or garbled text. The "CATEGORY" label text is also crammed into a 3mm ribbon, making it hard to read. Together, this breaks the visual formatting of the two-category section.
+### Content Outline
 
-### Fix — `src/lib/salesContestPdf.ts`
+1. **Cover / Introduction** — Purpose, audience (internal teams, advisors, partners)
+2. **Logo Usage** — Clear space, minimum size, do's and don'ts
+3. **Color Palette** — All 8 primary colors + 3 dark mode colors with hex, HSL, and usage
+4. **Typography** — Inter font family, full type scale (Display through Caption)
+5. **Buttons & Components** — Primary CTA, Default, Outline, Secondary, Ghost + utility classes (glass, neuro-button)
+6. **Brand Voice & Messaging** — Tone attributes, key taglines, do's and don'ts
+7. **Photography & Imagery** — Style direction, advisor headshot specs, hero image specs
+8. **Co-Branding Rules** — Partner logo placement, page structure, white header requirement
+9. **Design Tokens** — CSS custom properties reference from `index.css`
 
-1. **Replace emoji trophies** with a text-based symbol that Helvetica supports — use a bold gold star character (`★` or simply the text "★") or a decorative gold circle/diamond drawn with jsPDF shapes
-2. **Increase box height** from 34mm to 40mm to give more breathing room
-3. **Move "CATEGORY" labels** below the gold ribbon instead of inside it (or enlarge ribbon to 5mm)
-4. **Add "Submitted Business" subtitle** to the Life & Annuity box to match the landing page copy
-5. **Center the boxes** better — currently at x=22 and x=116, adjust to be symmetrically spaced on the 210mm page
+### Files Created
 
-### Files Changed
-
-| File | Change |
-|------|--------|
-| `src/lib/salesContestPdf.ts` | Replace emoji with drawable gold star shape, increase box size, fix label positioning, add subtitle |
+| File | Description |
+|------|-------------|
+| `/mnt/documents/brand_guidelines.md` | Complete brand guidelines in Markdown format |
 
