@@ -1,24 +1,30 @@
 
 
-## Plan: Generate `brand_guidelines.md`
+## Plan: Update Chatsworth Location — Phone Number + Link to Hamlet
 
-Create a comprehensive markdown file at `/mnt/documents/brand_guidelines.md` that documents TFA's complete brand identity system, extracted from the existing `BrandGuidelines.tsx`, `index.css`, `tailwind.config.ts`, and `brandGuidelinesPdf.ts`.
+### Changes
 
-### Content Outline
+**1. Update Chatsworth phone — `src/data/locations.ts` (line 30)**
 
-1. **Cover / Introduction** — Purpose, audience (internal teams, advisors, partners)
-2. **Logo Usage** — Clear space, minimum size, do's and don'ts
-3. **Color Palette** — All 8 primary colors + 3 dark mode colors with hex, HSL, and usage
-4. **Typography** — Inter font family, full type scale (Display through Caption)
-5. **Buttons & Components** — Primary CTA, Default, Outline, Secondary, Ghost + utility classes (glass, neuro-button)
-6. **Brand Voice & Messaging** — Tone attributes, key taglines, do's and don'ts
-7. **Photography & Imagery** — Style direction, advisor headshot specs, hero image specs
-8. **Co-Branding Rules** — Partner logo placement, page structure, white header requirement
-9. **Design Tokens** — CSS custom properties reference from `index.css`
+Change the Chatsworth entry's phone from `(888) 350-5396` to `(818) 415-9109`.
 
-### Files Created
+**2. Add advisor linking to Location type — `src/data/locations.ts`**
 
-| File | Description |
-|------|-------------|
-| `/mnt/documents/brand_guidelines.md` | Complete brand guidelines in Markdown format |
+Add an optional `advisorSlug` field to the `Location` interface. Set `advisorSlug: "hamlet-ohandjanian"` on the Chatsworth entry.
+
+**3. Update Hamlet's city in advisors data — `src/data/advisors.ts`**
+
+Change Hamlet's `city` from `"Granada Hills"` to `"Chatsworth"` to match the location.
+
+**4. Show linked advisor on location card — `src/components/locations/LocationsList.tsx`**
+
+When a location has an `advisorSlug`, display the advisor's name and a "Meet Your Advisor" link below the card content, linking to their landing page (e.g. `/advisors/hamlet-ohandjanian`).
+
+### Files Changed
+
+| File | Change |
+|------|--------|
+| `src/data/locations.ts` | Add optional `advisorSlug` to interface; update Chatsworth phone + add `advisorSlug` |
+| `src/data/advisors.ts` | Update Hamlet's city to "Chatsworth" |
+| `src/components/locations/LocationsList.tsx` | Import advisors data, show linked advisor name + link on cards that have `advisorSlug` |
 
