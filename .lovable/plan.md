@@ -1,30 +1,34 @@
 
 
-## Plan: Add Live Countdown Timer + Redesign Category Cards
+## Plan: Enhance PDF Flyer with Leadership Headshots and Richer Design
 
-### 1. Add countdown timer — `src/pages/SalesContest.tsx`
+### What changes
 
-Add a `useState` + `useEffect` hook that calculates time remaining until April 30, 2026 23:59:59 PT. Updates every second. Displays 4 segments: Days, Hours, Minutes, Seconds — each in a styled box with gold borders and a label beneath.
+Add CEO and COO headshots to the PDF flyer, include their names/titles, and improve the overall layout to match the energy of the landing page. The PDF will load three images (logo + two headshots) and feature a "Meet Your Hosts" section.
 
-Place the countdown between the hero section and the categories section, or directly below the "Contest Period" badge — replacing the static date display with a live, ticking counter.
+### Changes — `src/lib/salesContestPdf.ts`
 
-If the contest hasn't started yet (before April 1), show "Contest starts in..." instead. If the contest is over, show "Contest has ended."
+**New imports**: Add leadership headshot imports (`@/assets/leadership/manny-soto.jpg`, `@/assets/leadership/omar-sanchez.jpg`)
 
-### 2. Redesign category cards (lines 101-133)
+**Layout redesign**:
 
-Transform the two cards from simple flat cards into more dramatic, premium-feeling cards:
+1. **Tighter hero section** — Keep logo, headline, subheadline, and intro text but optimize spacing
+2. **Category boxes** — Add a trophy/star symbol character and slightly enlarge the boxes with more visual weight
+3. **New "Meet Your Hosts" section** (replaces the plain prize text area):
+   - Load both headshots as base64 images using the existing `loadImageAsBase64` helper
+   - Draw two side-by-side circular-framed headshots (using clipping or rounded rect with gold border)
+   - Below each: Name, title, and a one-line edifying blurb
+   - Manny Soto: "CEO & Founder — Nearly two decades of experience. The architect behind TFA's mission."
+   - Omar Sanchez: "COO & Managing Partner — Leading TFA's national expansion with strategy and execution."
+4. **Prize section** — Repositioned below the hosts section with the dinner/mastermind details
+5. **Enhanced visual elements** — Add decorative gold corner accents, double gold bars at top/bottom, and additional divider lines for a more polished flyer feel
+6. **Contest period and tagline** — Keep at bottom, adjust Y positions to fit new content
 
-- Add a gold gradient top border (4px) simulating a "ribbon" effect
-- Larger icon area with a subtle radial glow behind it
-- Add a numbered badge ("Category 1" / "Category 2") as a chip at the top
-- Add a gold divider line between the title and description
-- Replace the emoji trophy with a pulsing gold dot or animated trophy icon
-- Add a subtle shimmer/shine animation on hover (CSS gradient sweep)
-- Slightly more padding and a more pronounced hover lift (`hover:-translate-y-1`)
+**Image handling**: All three images (logo, manny, omar) loaded in parallel with `Promise.all` for faster generation. Headshots rendered as square images with gold border strokes to simulate circular frames.
 
 ### Files Changed
 
 | File | Change |
 |------|--------|
-| `src/pages/SalesContest.tsx` | Add countdown state/effect, redesign category cards, replace static contest period section with live timer |
+| `src/lib/salesContestPdf.ts` | Add leadership headshot imports, "Meet Your Hosts" section, enhanced layout with images and bios |
 
