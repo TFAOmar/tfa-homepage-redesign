@@ -1,4 +1,5 @@
 import jsPDF from "jspdf";
+import tfaLogoUrl from "@/assets/tfa-logo.png";
 
 type RGB = [number, number, number];
 const NAVY: RGB = [30, 58, 95];
@@ -6,7 +7,24 @@ const GOLD: RGB = [201, 168, 76];
 const WHITE: RGB = [255, 255, 255];
 const LIGHT_GOLD: RGB = [240, 225, 180];
 
-export function generateSalesContestPdf() {
+async function loadImageAsBase64(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+export async function generateSalesContestPdf() {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const W = 210;
   const H = 297;
@@ -17,7 +35,15 @@ export function generateSalesContestPdf() {
 
   // Top gold accent bar
   doc.setFillColor(...GOLD);
-  doc.rect(30, 30, 150, 2, "F");
+  doc.rect(30, 15, 150, 2, "F");
+
+  // Add TFA logo
+  try {
+    const logoBase64 = await loadImageAsBase64(tfaLogoUrl);
+    doc.addImage(logoBase64, "PNG", 75, 22, 60, 15);
+  } catch {
+    // Fallback if logo fails to load
+  }
 
   // Headline
   doc.setTextColor(...GOLD);
@@ -65,14 +91,11 @@ export function generateSalesContestPdf() {
   doc.roundedRect(25, boxY, boxW, boxH, 3, 3, "S");
   doc.setTextColor(...GOLD);
   doc.setFontSize(10);
-  doc.text("🏆", 60, boxY + 10, { align: "center" });
+  doc.text("TOP 2 AGENTS", 60, boxY + 12, { align: "center" });
   doc.setTextColor(...WHITE);
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
-  doc.text("Top 2 Agents", 60, boxY + 18, { align: "center" });
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "normal");
-  doc.text("Living Trust Sales", 60, boxY + 24, { align: "center" });
+  doc.text("Living Trust Sales", 60, boxY + 20, { align: "center" });
 
   // Box 2 - Life & Annuity
   doc.setFillColor(25, 50, 82);
@@ -81,15 +104,14 @@ export function generateSalesContestPdf() {
   doc.roundedRect(115, boxY, boxW, boxH, 3, 3, "S");
   doc.setTextColor(...GOLD);
   doc.setFontSize(10);
-  doc.text("🏆", 150, boxY + 10, { align: "center" });
+  doc.text("TOP 2 AGENTS", 150, boxY + 12, { align: "center" });
   doc.setTextColor(...WHITE);
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
-  doc.text("Top 2 Agents", 150, boxY + 18, { align: "center" });
+  doc.text("Life & Annuity", 150, boxY + 20, { align: "center" });
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.text("Life & Annuity", 150, boxY + 23, { align: "center" });
-  doc.text("Submitted Business", 150, boxY + 28, { align: "center" });
+  doc.text("Submitted Business", 150, boxY + 26, { align: "center" });
 
   // Prize section
   doc.setFillColor(...GOLD);
