@@ -1,31 +1,40 @@
 
 
-## Plan: Add Calendly Link to Cayla Dee Porter's ScheduleModal
+## Plan: Sales Contest Landing Page + Downloadable PDF Flyer
 
-The `ScheduleModal` component already supports a `schedulingLink` prop — when provided, it opens the link after form submission. Currently, Cayla Dee's modal is missing this prop.
+### 1. Create PDF generator — `src/lib/salesContestPdf.ts`
 
-### Change — `src/pages/AdvisorCaylaDeePorter.tsx` (line 333–340)
+Using jsPDF (same pattern as `brandGuidelinesPdf.ts`), generate a single-page flyer with TFA brand colors (Navy #1E3A5F, Gold #C9A84C):
 
-Add `schedulingLink="https://calendly.com/cayladee"` to the `ScheduleModal` component:
+- Navy background with gold accents
+- Headline: "ARCHITECT YOUR BEST MONTH"
+- Subheadline: "April 2026 Sales Competition"
+- Body copy with two categories, prize details, contest period
+- Bottom tagline: "Only 4 seats at the table. Make them yours."
+- Footer: "The Financial Architects — Building Legacies Together"
 
-```tsx
-<ScheduleModal
-  open={scheduleModalOpen}
-  onOpenChange={setScheduleModalOpen}
-  advisorName="Cayla Dee Porter"
-  advisorEmail="cayladee@tfainsuranceadvisors.com"
-  advisorImage={caylaDeePorterImg}
-  advisorSlug="cayla-dee-porter"
-  schedulingLink="https://calendly.com/cayladee"
-/>
-```
+### 2. Create landing page — `src/pages/SalesContest.tsx`
 
-Also update the `schedulingLink` in `src/data/advisors.ts` for her directory entry if not already set.
+Internal-facing landing page with:
+- Hero section with headline, subheadline, and animated elements
+- Two category cards (Living Trust Sales / Life & Annuity)
+- Prize details section highlighting the dinner + mastermind
+- Contest period callout (April 1–30, 2026)
+- "Download Flyer" button that generates and downloads the PDF
+- Bottom CTA with the tagline
+- SEO with noIndex (internal page, not for public search)
+
+### 3. Register route — `src/App.tsx`
+
+- Import `SalesContest`
+- Add route: `/sales-contest`
+- Add to `standalonePages` array (no global header/footer — focused experience)
 
 ### Files Changed
 
 | File | Change |
 |------|--------|
-| `src/pages/AdvisorCaylaDeePorter.tsx` | Add `schedulingLink` prop to ScheduleModal |
-| `src/data/advisors.ts` | Confirm `schedulingLink` is set on her entry |
+| `src/lib/salesContestPdf.ts` | New — jsPDF flyer generator |
+| `src/pages/SalesContest.tsx` | New — sales contest landing page |
+| `src/App.tsx` | Import + route + standalone registration |
 
