@@ -124,37 +124,57 @@ const SalesContest = () => {
             </p>
 
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <Card className="bg-gradient-to-b from-[#1E3A5F]/60 to-[#1E3A5F]/20 border-[#C9A84C]/30 hover:border-[#C9A84C] hover:shadow-[0_0_40px_rgba(201,168,76,0.15)] transition-all duration-300 group">
-                <CardContent className="p-10 text-center">
-                  <div className="w-20 h-20 bg-[#C9A84C]/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#C9A84C]/20 transition-colors">
-                    <Crown className="w-10 h-10 text-[#C9A84C]" />
+              {/* Category 1 */}
+              <div className="relative group">
+                <div className="absolute -inset-[1px] bg-gradient-to-b from-[#C9A84C] via-[#C9A84C]/40 to-transparent rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative bg-gradient-to-b from-[#0a1628] to-[#030406] rounded-xl overflow-hidden hover:-translate-y-1 transition-transform duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C9A84C]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  <div className="h-1 bg-gradient-to-r from-[#C9A84C] via-[#E8D48B] to-[#C9A84C]" />
+                  <div className="p-10 text-center relative z-10">
+                    <span className="inline-block text-[#C9A84C] text-xs font-bold uppercase tracking-[0.2em] border border-[#C9A84C]/30 rounded-full px-4 py-1 mb-6">Category 1</span>
+                    <div className="w-20 h-20 mx-auto mb-6 relative">
+                      <div className="absolute inset-0 bg-[#C9A84C]/10 rounded-full animate-ping" style={{ animationDuration: "3s" }} />
+                      <div className="relative w-full h-full bg-[#C9A84C]/10 rounded-full flex items-center justify-center">
+                        <Crown className="w-10 h-10 text-[#C9A84C]" />
+                      </div>
+                    </div>
+                    <h3 className="text-2xl font-black text-[#C9A84C] mb-2">Top 2 Agents</h3>
+                    <p className="text-xl text-white font-semibold mb-3">Living Trust Sales</p>
+                    <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[#C9A84C] to-transparent mx-auto mb-4" />
+                    <p className="text-gray-400 mb-6">Close the most living trust cases this April and prove you're the go-to estate planning advisor.</p>
+                    <div className="flex items-center justify-center gap-2 text-[#C9A84C]/70">
+                      <div className="w-2 h-2 bg-[#C9A84C] rounded-full animate-pulse" />
+                      <span className="text-sm font-bold uppercase tracking-widest">You could be here</span>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-black text-[#C9A84C] mb-2">Top 2 Agents</h3>
-                  <p className="text-xl text-white font-semibold mb-4">Living Trust Sales</p>
-                  <p className="text-gray-400 mb-6">
-                    Close the most living trust cases this April and prove you're the go-to estate planning advisor.
-                  </p>
-                  <p className="text-[#C9A84C]/70 text-sm font-bold uppercase tracking-widest">
-                    🏆 You could be here
-                  </p>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
-              <Card className="bg-gradient-to-b from-[#1E3A5F]/60 to-[#1E3A5F]/20 border-[#C9A84C]/30 hover:border-[#C9A84C] hover:shadow-[0_0_40px_rgba(201,168,76,0.15)] transition-all duration-300 group">
-                <CardContent className="p-10 text-center">
-                  <div className="w-20 h-20 bg-[#C9A84C]/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#C9A84C]/20 transition-colors">
-                    <Flame className="w-10 h-10 text-[#C9A84C]" />
+              {/* Category 2 */}
+              <div className="relative group">
+                <div className="absolute -inset-[1px] bg-gradient-to-b from-[#C9A84C] via-[#C9A84C]/40 to-transparent rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative bg-gradient-to-b from-[#0a1628] to-[#030406] rounded-xl overflow-hidden hover:-translate-y-1 transition-transform duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C9A84C]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  <div className="h-1 bg-gradient-to-r from-[#C9A84C] via-[#E8D48B] to-[#C9A84C]" />
+                  <div className="p-10 text-center relative z-10">
+                    <span className="inline-block text-[#C9A84C] text-xs font-bold uppercase tracking-[0.2em] border border-[#C9A84C]/30 rounded-full px-4 py-1 mb-6">Category 2</span>
+                    <div className="w-20 h-20 mx-auto mb-6 relative">
+                      <div className="absolute inset-0 bg-[#C9A84C]/10 rounded-full animate-ping" style={{ animationDuration: "3s" }} />
+                      <div className="relative w-full h-full bg-[#C9A84C]/10 rounded-full flex items-center justify-center">
+                        <Flame className="w-10 h-10 text-[#C9A84C]" />
+                      </div>
+                    </div>
+                    <h3 className="text-2xl font-black text-[#C9A84C] mb-2">Top 2 Agents</h3>
+                    <p className="text-xl text-white font-semibold mb-3">Life & Annuity Submitted Business</p>
+                    <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[#C9A84C] to-transparent mx-auto mb-4" />
+                    <p className="text-gray-400 mb-6">Submit the most life and annuity business and demonstrate your sales excellence.</p>
+                    <div className="flex items-center justify-center gap-2 text-[#C9A84C]/70">
+                      <div className="w-2 h-2 bg-[#C9A84C] rounded-full animate-pulse" />
+                      <span className="text-sm font-bold uppercase tracking-widest">You could be here</span>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-black text-[#C9A84C] mb-2">Top 2 Agents</h3>
-                  <p className="text-xl text-white font-semibold mb-4">Life & Annuity Submitted Business</p>
-                  <p className="text-gray-400 mb-6">
-                    Submit the most life and annuity business and demonstrate your sales excellence.
-                  </p>
-                  <p className="text-[#C9A84C]/70 text-sm font-bold uppercase tracking-widest">
-                    🏆 You could be here
-                  </p>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </div>
         </section>
