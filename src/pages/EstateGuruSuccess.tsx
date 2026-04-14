@@ -1,8 +1,37 @@
+import { useEffect, useRef } from "react";
 import { CheckCircle, Mail, Phone, Calendar, ExternalLink } from "lucide-react";
 import { SEOHead } from "@/components/seo";
 import EstateGuruRegistrationForm from "@/components/estate-guru/EstateGuruRegistrationForm";
+import { supabase } from "@/integrations/supabase/client";
 
 const EstateGuruSuccess = () => {
+  const notificationSent = useRef(false);
+
+  useEffect(() => {
+    const sendCheckoutNotification = async () => {
+      if (notificationSent.current) return;
+      
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get("session_id");
+      if (!sessionId) return;
+
+      notificationSent.current = true;
+
+      try {
+        const { error } = await supabase.functions.invoke("send-estate-guru-checkout-notification", {
+          body: { sessionId },
+        });
+        if (error) {
+          console.error("Checkout notification error:", error);
+        }
+      } catch (err) {
+        console.error("Failed to send checkout notification:", err);
+      }
+    };
+
+    sendCheckoutNotification();
+  }, []);
+
   return (
     <>
       <SEOHead
