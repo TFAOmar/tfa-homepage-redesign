@@ -56,7 +56,7 @@ serve(async (req) => {
 
     const customerEmail = session.customer_details?.email || "Unknown";
     const customerName = session.customer_details?.name || "Unknown";
-    const amountTotal = session.amount_total ? `$${(session.amount_total / 100).toFixed(2)}` : "Unknown";
+    
     const planName = session.line_items?.data?.[0]?.description || "Estate Guru Subscription";
     const submittedAt = new Date().toLocaleString("en-US", {
       timeZone: "America/Los_Angeles",
@@ -97,10 +97,7 @@ serve(async (req) => {
                 <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666;">Plan</td>
                 <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #0B1F3B; font-weight: bold;">${planName}</td>
               </tr>
-              <tr>
-                <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666;">Amount Paid</td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #D4AF37; font-weight: bold; font-size: 18px;">${amountTotal}</td>
-              </tr>
+              
               <tr>
                 <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666;">Payment Time</td>
                 <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #0B1F3B;">${submittedAt}</td>
