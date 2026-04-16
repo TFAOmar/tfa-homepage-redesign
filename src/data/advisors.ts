@@ -28,6 +28,7 @@ import erinGraceVargasImg from "@/assets/advisors/erin-grace-vargas.jpg";
 import fabianSerranoImg from "@/assets/advisors/fabian-serrano.jpg";
 import ericaValenzuelaImg from "@/assets/advisors/erica-valenzuela.jpg";
 import sheilaRodriguezImg from "@/assets/advisors/sheila-rodriguez.jpg";
+import savannahRecinosImg from "@/assets/advisors/savannah-recinos.jpg";
 import manoloMonterImg from "@/assets/advisors/manolo-monter.jpg";
 import neilClarkImg from "@/assets/advisors/neil-clark.jpg";
 import kevinWaltersImg from "@/assets/advisors/kevin-walters.jpg";
@@ -324,6 +325,7 @@ export const advisors: Advisor[] = [
     bio: "Savannah is dedicated to helping businesses secure comprehensive commercial insurance coverage. She specializes in business liability, property insurance, workers' compensation, and tailored commercial policies that protect what business owners have worked hard to build.",
     specialties: ["Business Insurance", "Business Planning"],
     licenses: ["Life & Health"],
+    image: savannahRecinosImg,
     email: "srecinos@tfainsuranceadvisors.com",
     landingPage: "/advisors/recinos"
   },

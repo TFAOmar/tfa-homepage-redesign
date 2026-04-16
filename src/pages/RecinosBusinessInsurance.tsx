@@ -5,6 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import RecinosBusinessInsuranceForm from "@/components/business-insurance/RecinosBusinessInsuranceForm";
 import tfaLogo from "@/assets/tfa-logo.png";
 import rolandoRecinosImg from "@/assets/advisors/rolando-recinos.jpg";
+import savannahRecinosImg from "@/assets/advisors/savannah-recinos.jpg";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generateWebPageSchema, generateBreadcrumbSchema, generateInsuranceAgencySchema, generateFAQSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
@@ -192,11 +193,13 @@ const RecinosBusinessInsurance = () => {
                   <h4 className="text-white font-semibold">Rolando Recinos</h4>
                   <p className="text-white/70 text-sm">Business Insurance Specialist</p>
                 </div>
-                <div className="text-center">
-                  <div className="w-24 h-24 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-3">
-                    <Users className="h-12 w-12 text-white/60" />
-                  </div>
-                  <h4 className="text-white font-semibold">Savannah Recinos</h4>
+                 <div className="text-center">
+                  <img 
+                    src={savannahRecinosImg} 
+                    alt="Savannah Recinos" 
+                    className="w-24 h-24 mx-auto rounded-full object-cover border-2 border-accent mb-3"
+                  />
+                   <h4 className="text-white font-semibold">Savannah Recinos</h4>
                   <p className="text-white/70 text-sm">Business Insurance Specialist</p>
                 </div>
               </div>
