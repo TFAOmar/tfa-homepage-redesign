@@ -88,7 +88,8 @@ export const ONBOARDING_CHECKLIST: ChecklistSection[] = [
     id: "contracting-tools",
     title: "Section 5: Contracting + Tools",
     subtitle: "(Week 1)",
-    items: [
+     items: [
+      { id: "ct-notify-contracting", text: "🚨 CRITICAL: Email contracting@tfainsuranceadvisors.com ASAP — once agent has completed TFA onboarding, is licensed, and joined both Skool + WhatsApp group — to request their Signal Advisors email to begin contracting" },
       { id: "ct-1", text: "Signal Advisors access (if applicable)" },
       { id: "ct-2", text: "E&O active (if required)" },
       { id: "ct-3", text: "Carrier appointment requests submitted" },
