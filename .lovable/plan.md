@@ -1,18 +1,12 @@
 
+Add a new checklist item to Section 5 (Contracting + Tools) in `src/data/onboardingChecklist.ts`. Place it as the first item so it's prominent.
 
-## Plan: Remove Price from Estate Guru Notification Emails
+New item: "🚨 CRITICAL: Email contracting@tfainsuranceadvisors.com ASAP — once agent has completed TFA onboarding, is licensed, and joined both Skool + WhatsApp group — to request their Signal Advisors email to begin contracting"
 
-### What
-Remove the "Amount Paid" row from the checkout notification email sent to Heather and Nancy when someone signs up for Estate Guru.
-
-### Changes
+## Change
 
 | File | Change |
 |------|--------|
-| `supabase/functions/send-estate-guru-checkout-notification/index.ts` | Remove the "Amount Paid" table row (lines 100-103) and the `amountTotal` variable |
+| `src/data/onboardingChecklist.ts` | Insert new item `ct-notify-contracting` at the top of Section 5's items array |
 
-### Details
-- The checkout notification email currently includes a row showing "Amount Paid" with the dollar amount
-- Will remove that row from the HTML table while keeping all other info (name, email, plan, payment time, session ID)
-- Will redeploy the edge function after the change
-
+That's it — single one-line data edit. No component changes needed since the checklist renders dynamically from this config.
