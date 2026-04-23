@@ -659,7 +659,8 @@ export const advisors: Advisor[] = [
     licenses: ["CA Lic# 4348850", "FL Lic# G18507", "VA Lic# 1498765"],
     image: merrianeMcGuireImg,
     phone: "951-264-5347",
-    yearsOfExperience: 8
+    yearsOfExperience: 8,
+    landingPage: "/advisors/merriane-mcguire"
   }
 ];
 
