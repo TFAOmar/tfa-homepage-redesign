@@ -36,6 +36,7 @@ import rubenDavisImg from "@/assets/advisors/ruben-davis.jpg";
 import michelleMartinezImg from "@/assets/advisors/michelle-martinez.jpg";
 import josephGuzmanImg from "@/assets/advisors/joseph-guzman.png";
 import caylaDeePorterImg from "@/assets/advisors/cayla-dee-porter.jpg";
+import merrianeMcGuireImg from "@/assets/advisors/merriane-mcguire.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -644,6 +645,21 @@ export const advisors: Advisor[] = [
     yearsOfExperience: 5,
     landingPage: "/advisors/cayla-dee-porter",
     schedulingLink: "https://calendly.com/cayladee"
+  },
+  {
+    id: "merriane-mcguire",
+    name: "Merriane McGuire",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Riverside",
+    region: "West",
+    bio: "Before joining Financial Architects, I worked with the Social Security Administration, where I served the public and worked closely with seniors. During that time, I saw firsthand how many individuals rely solely on Social Security for retirement—often without enough income to live comfortably and with no additional plans in place. That experience highlighted the critical importance of retirement and protection planning. Personal experiences further shaped my passion for this work, including witnessing the impact of a serious illness and the absence of life insurance and estate planning within my own family. Today, as a licensed Life Insurance Agent and Financial Strategist serving Riverside and Chino Hills, CA, I focus on helping individuals and families understand and implement life insurance, retirement strategies, and living trusts to protect their future and provide lasting peace of mind.",
+    specialties: ["Retirement Planning", "Life Insurance", "Estate Planning"],
+    licenses: ["CA Lic# 4348850", "FL Lic# G18507", "VA Lic# 1498765"],
+    image: merrianeMcGuireImg,
+    phone: "951-264-5347",
+    yearsOfExperience: 8
   }
 ];
 
