@@ -1,12 +1,28 @@
 
-Add a new checklist item to Section 5 (Contracting + Tools) in `src/data/onboardingChecklist.ts`. Place it as the first item so it's prominent.
 
-New item: "🚨 CRITICAL: Email contracting@tfainsuranceadvisors.com ASAP — once agent has completed TFA onboarding, is licensed, and joined both Skool + WhatsApp group — to request their Signal Advisors email to begin contracting"
+## Plan: Add Merriane McGuire to Advisors
 
-## Change
+### Changes
 
 | File | Change |
 |------|--------|
-| `src/data/onboardingChecklist.ts` | Insert new item `ct-notify-contracting` at the top of Section 5's items array |
+| `src/assets/advisors/merriane-mcguire.jpg` | New file — copy uploaded headshot |
+| `src/data/advisors.ts` | Import the new image, add new advisor entry for Merriane McGuire |
 
-That's it — single one-line data edit. No component changes needed since the checklist renders dynamically from this config.
+### Advisor entry details
+- **id**: `"merriane-mcguire"`
+- **name**: Merriane McGuire
+- **title**: Financial Strategist
+- **type**: Advisor
+- **state**: California
+- **city**: Riverside / Chino Hills (will use "Riverside" primary, mention Chino Hills in bio)
+- **region**: West
+- **bio**: Full bio provided (about Social Security background, family experiences, focus on life insurance/retirement/living trusts)
+- **specialties**: Retirement Planning, Life Insurance, Estate Planning
+- **licenses**: Life & Health — CA Lic# 4348850, FL Lic# G18507, VA Lic# 1498765
+- **phone**: 951-264-5347
+- **yearsOfExperience**: 8
+- **image**: imported asset
+
+Card will appear on `/advisors` automatically — same look as the others.
+
