@@ -1294,6 +1294,10 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Received notification request for application:", data.applicationId);
     console.log("Form data steps received:", Object.keys(data.formData || {}).join(", "));
 
+    // Background work: do all PDF generation + email sending AFTER returning a response
+    // so the browser navigating to /thank-you can't kill the function mid-flight.
+    const backgroundWork = (async () => {
+    try {
     // Fetch advisor email - FIRST try from the application record itself
     let advisorEmail: string | undefined;
     
@@ -1383,45 +1387,8 @@ const handler = async (req: Request): Promise<Response> => {
     const pdfFilename = `TFA_Life_Insurance_Application_${data.applicationId.slice(0, 8).toUpperCase()}.pdf`;
     const emailResults: { recipient: string; success: boolean; error?: string }[] = [];
 
-    // 1. Send notification to admin team (with PDF)
-    try {
-      console.log("Sending admin notification to:", ADMIN_EMAIL);
-      const adminEmailOptions: {
-        from: string;
-        to: string[];
-        subject: string;
-        html: string;
-        attachments?: { filename: string; content: string }[];
-      } = {
-        from: FROM_EMAIL,
-        to: [ADMIN_EMAIL],
-        subject: `New Life Insurance Application - ${data.applicantName}`,
-        html: generateAdminEmail(dataWithEmail),
-      };
-
-      if (pdfBase64) {
-        adminEmailOptions.attachments = [
-          {
-            filename: pdfFilename,
-            content: pdfBase64,
-          },
-        ];
-      }
-
-      const adminSend = await sendEmailWithRetry(adminEmailOptions, "Admin email");
-      if (adminSend.success) {
-        console.log("Admin email sent successfully:", adminSend.result);
-        emailResults.push({ recipient: "admin", success: true });
-      } else {
-        console.error("Failed to send admin email:", adminSend.error);
-        emailResults.push({ recipient: "admin", success: false, error: adminSend.error });
-      }
-    } catch (error: unknown) {
-      console.error("Failed to send admin email:", error);
-      emailResults.push({ recipient: "admin", success: false, error: String(error) });
-    }
-
-    // 2. Send notification to advisor (if assigned, with PDF)
+    // 1. Send notification to ADVISOR FIRST (most important — they need the lead)
+    let advisorSentOk = false;
     if (advisorEmail) {
       try {
         console.log("Sending advisor notification to:", advisorEmail);
@@ -1451,6 +1418,7 @@ const handler = async (req: Request): Promise<Response> => {
         if (advisorSend.success) {
           console.log("Advisor email sent successfully:", advisorSend.result);
           emailResults.push({ recipient: "advisor", success: true });
+          advisorSentOk = true;
         } else {
           console.error("Failed to send advisor email:", advisorSend.error);
           emailResults.push({ recipient: "advisor", success: false, error: advisorSend.error });
@@ -1459,7 +1427,52 @@ const handler = async (req: Request): Promise<Response> => {
         console.error("Failed to send advisor email:", error);
         emailResults.push({ recipient: "advisor", success: false, error: String(error) });
       }
+
+      // Small delay to avoid Resend rate limiting (2 req/sec)
+      await new Promise((r) => setTimeout(r, 600));
     }
+
+    // 2. Send notification to admin team / leads inbox (with PDF)
+    let adminSentOk = false;
+    try {
+      console.log("Sending admin notification to:", ADMIN_EMAIL);
+      const adminEmailOptions: {
+        from: string;
+        to: string[];
+        subject: string;
+        html: string;
+        attachments?: { filename: string; content: string }[];
+      } = {
+        from: FROM_EMAIL,
+        to: [ADMIN_EMAIL],
+        subject: `New Life Insurance Application - ${data.applicantName}`,
+        html: generateAdminEmail(dataWithEmail),
+      };
+
+      if (pdfBase64) {
+        adminEmailOptions.attachments = [
+          {
+            filename: pdfFilename,
+            content: pdfBase64,
+          },
+        ];
+      }
+
+      const adminSend = await sendEmailWithRetry(adminEmailOptions, "Admin email");
+      if (adminSend.success) {
+        console.log("Admin email sent successfully:", adminSend.result);
+        emailResults.push({ recipient: "admin", success: true });
+        adminSentOk = true;
+      } else {
+        console.error("Failed to send admin email:", adminSend.error);
+        emailResults.push({ recipient: "admin", success: false, error: adminSend.error });
+      }
+    } catch (error: unknown) {
+      console.error("Failed to send admin email:", error);
+      emailResults.push({ recipient: "admin", success: false, error: String(error) });
+    }
+
+    await new Promise((r) => setTimeout(r, 600));
 
     // 3. Send confirmation to applicant (no PDF for privacy)
     try {
@@ -1483,14 +1496,55 @@ const handler = async (req: Request): Promise<Response> => {
       emailResults.push({ recipient: "applicant", success: false, error: String(error) });
     }
 
+      // Record send status on the application row so the cron retry can detect missed sends
+      try {
+        const updates: Record<string, unknown> = {
+          notification_attempts: (await supabaseAdmin
+            .from("life_insurance_applications")
+            .select("notification_attempts")
+            .eq("id", data.applicationId)
+            .single()).data?.notification_attempts ?? 0,
+        };
+        updates.notification_attempts = (updates.notification_attempts as number) + 1;
+        if (advisorSentOk) updates.advisor_notification_sent_at = new Date().toISOString();
+        if (adminSentOk) updates.admin_notification_sent_at = new Date().toISOString();
+        if (!advisorSentOk || !adminSentOk) {
+          updates.last_notification_error = JSON.stringify(
+            emailResults.filter((r) => !r.success)
+          );
+        }
+        await supabaseAdmin
+          .from("life_insurance_applications")
+          .update(updates)
+          .eq("id", data.applicationId);
+        console.log("Updated notification tracking on application", data.applicationId);
+      } catch (trackingErr) {
+        console.error("Failed to update notification tracking:", trackingErr);
+      }
+
+      console.log("Background notification work complete:", emailResults);
+    } catch (bgErr) {
+      console.error("Background notification work failed:", bgErr);
+    }
+    })();
+
+    // Keep the background work alive after we return the response.
+    // @ts-ignore EdgeRuntime is provided by Supabase Edge Functions runtime
+    if (typeof EdgeRuntime !== "undefined" && EdgeRuntime?.waitUntil) {
+      // @ts-ignore
+      EdgeRuntime.waitUntil(backgroundWork);
+    } else {
+      // Local/dev fallback — just await it
+      await backgroundWork;
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Notifications processed",
-        results: emailResults,
+        message: "Notification queued for background delivery",
       }),
       {
-        status: 200,
+        status: 202,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
