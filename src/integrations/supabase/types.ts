@@ -346,9 +346,11 @@ export type Database = {
       }
       life_insurance_applications: {
         Row: {
+          admin_notification_sent_at: string | null
           advisor_email: string | null
           advisor_id: string | null
           advisor_name: string | null
+          advisor_notification_sent_at: string | null
           applicant_email: string | null
           applicant_name: string | null
           applicant_phone: string | null
@@ -356,15 +358,19 @@ export type Database = {
           current_step: number
           form_data: Json
           id: string
+          last_notification_error: string | null
+          notification_attempts: number
           resume_email: string | null
           resume_token: string | null
           status: Database["public"]["Enums"]["application_status"]
           updated_at: string
         }
         Insert: {
+          admin_notification_sent_at?: string | null
           advisor_email?: string | null
           advisor_id?: string | null
           advisor_name?: string | null
+          advisor_notification_sent_at?: string | null
           applicant_email?: string | null
           applicant_name?: string | null
           applicant_phone?: string | null
@@ -372,15 +378,19 @@ export type Database = {
           current_step?: number
           form_data?: Json
           id?: string
+          last_notification_error?: string | null
+          notification_attempts?: number
           resume_email?: string | null
           resume_token?: string | null
           status?: Database["public"]["Enums"]["application_status"]
           updated_at?: string
         }
         Update: {
+          admin_notification_sent_at?: string | null
           advisor_email?: string | null
           advisor_id?: string | null
           advisor_name?: string | null
+          advisor_notification_sent_at?: string | null
           applicant_email?: string | null
           applicant_name?: string | null
           applicant_phone?: string | null
@@ -388,6 +398,8 @@ export type Database = {
           current_step?: number
           form_data?: Json
           id?: string
+          last_notification_error?: string | null
+          notification_attempts?: number
           resume_email?: string | null
           resume_token?: string | null
           status?: Database["public"]["Enums"]["application_status"]
@@ -771,9 +783,11 @@ export type Database = {
       get_draft_application_by_token: {
         Args: { p_resume_token: string }
         Returns: {
+          admin_notification_sent_at: string | null
           advisor_email: string | null
           advisor_id: string | null
           advisor_name: string | null
+          advisor_notification_sent_at: string | null
           applicant_email: string | null
           applicant_name: string | null
           applicant_phone: string | null
@@ -781,6 +795,8 @@ export type Database = {
           current_step: number
           form_data: Json
           id: string
+          last_notification_error: string | null
+          notification_attempts: number
           resume_email: string | null
           resume_token: string | null
           status: Database["public"]["Enums"]["application_status"]
