@@ -187,6 +187,37 @@ export const generateLifeInsurancePdf = (
   const formData = application.form_data as FormData;
   let yPos = addHeader(doc, pageWidth, margin);
 
+  // Top-level safety wrapper: a single malformed field must not crash the whole PDF.
+  try {
+    renderApplicationBody(doc, application, formData, yPos, margin, pageWidth);
+  } catch (err) {
+    console.error("[lifeInsurancePdfGenerator] Render error, emitting fallback page:", err);
+    doc.setTextColor(200, 0, 0);
+    doc.setFontSize(11);
+    doc.text(
+      "Note: Some fields could not be rendered. Please review the raw application data in the admin panel.",
+      margin,
+      yPos + 10,
+      { maxWidth: pageWidth - margin * 2 }
+    );
+  }
+
+  addFooter(doc, pageWidth);
+  const fileName = `TFA_Life_Insurance_Application_${application.id.slice(0, 8).toUpperCase()}.pdf`;
+  doc.save(fileName);
+};
+
+// Internal renderer — separated so the public entry can wrap it in try/catch.
+const renderApplicationBody = (
+  doc: jsPDF,
+  application: LifeInsuranceApplication,
+  formData: FormData,
+  startY: number,
+  margin: number,
+  pageWidth: number
+): void => {
+  let yPos = startY;
+
   // Application Info
   yPos = addSectionHeader(doc, "Application Information", yPos, margin, pageWidth);
   yPos = addField(doc, "Application ID", application.id.slice(0, 8).toUpperCase(), yPos, margin, pageWidth);
@@ -569,13 +600,6 @@ export const generateLifeInsurancePdf = (
   yPos = addField(doc, "Acknowledged", step9.acknowledged, yPos, margin, pageWidth);
   yPos = addField(doc, "Electronic Signature", step9.electronicSignature, yPos, margin, pageWidth);
   yPos = addField(doc, "Signature Date", formatDate(step9.signatureDate as string), yPos, margin, pageWidth);
-
-  // Add footer to all pages
-  addFooter(doc, pageWidth);
-
-  // Save the PDF
-  const fileName = `TFA_Life_Insurance_Application_${application.id.slice(0, 8).toUpperCase()}.pdf`;
-  doc.save(fileName);
 };
 
 export const downloadApplicationPdf = generateLifeInsurancePdf;
