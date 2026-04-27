@@ -84,6 +84,22 @@ export const step1Schema = z.object({
   // Identity Verification
   driversLicenseNumber: z.string().min(1, "Driver's license number is required"),
   driversLicenseState: z.string().min(1, "Driver's license state is required"),
+
+  // Reason for Insurance
+  reasonForInsurance: z.enum([
+    "income-protection",
+    "estate-planning",
+    "business",
+    "mortgage",
+    "final-expense",
+    "retirement",
+    "other"
+  ]).optional(),
+  reasonForInsuranceOther: z.string().optional(),
+
+  // U.S. ties (only relevant for non-citizens)
+  ownsUsProperty: z.boolean().optional(),
+  plansToRemainInUs: z.boolean().optional(),
 }).refine((data) => {
   if (data.mailingAddressDifferent) {
     return data.mailingStreet && data.mailingCity && data.mailingState && data.mailingZip;
@@ -120,6 +136,10 @@ export const step2Schema = z.object({
   industry: z.string().optional(),
   jobDuties: z.string().optional(),
   yearsEmployed: z.number().min(0).optional(),
+  hoursPerWeek: z.number().min(0).max(168).optional(),
+  activelyAtWork: z.boolean().optional(),
+  ableToPerformDuties: z.boolean().optional(),
+  workStatusExplanation: z.string().optional(),
 
   // Financials
   annualEarnedIncome: z.number().min(0, "Annual income is required"),
@@ -214,6 +234,13 @@ export const step5Schema = z.object({
   childrenDetails: z.array(z.object({
     name: z.string(),
     dateOfBirth: z.string(),
+    ssn: z.string().optional(),
+    livesWithParent: z.boolean().optional(),
+    takesPrescribedMedication: z.boolean().optional(),
+    hasDevelopmentalCondition: z.boolean().optional(), // ADD, dyslexia, autism, psychiatric
+    developmentalConditionDetails: z.string().optional(),
+    hasMedicalCondition: z.boolean().optional(), // seizures, diabetes, scoliosis, hemophilia, cancer, heart/lung
+    medicalConditionDetails: z.string().optional(),
   })).optional(),
 });
 
@@ -228,11 +255,18 @@ export const existingPolicySchema = z.object({
   policyNumber: z.string().min(1, "Policy number is required"),
   amountOfCoverage: z.number().min(0),
   isBeingReplaced: z.boolean().default(false),
+  yearOfIssue: z.string().optional(),
+  coverageType: z.enum(["life", "health", "annuity", "ltc", "disability"]).optional(),
+  classification: z.enum(["individual", "business", "group", "pending"]).optional(),
+  is1035Exchange: z.boolean().optional(),
 });
 
 export const step6Schema = z.object({
   hasExistingCoverage: z.boolean().default(false),
   existingPolicies: z.array(existingPolicySchema).optional(),
+  // Life settlement / third-party transfer (NLG Part H Q8)
+  lifeSettlementDiscussion: z.boolean().optional(),
+  lifeSettlementDetails: z.string().optional(),
 });
 
 export type ExistingPolicy = z.infer<typeof existingPolicySchema>;
@@ -242,6 +276,124 @@ export type Step6Data = z.infer<typeof step6Schema>;
 // Step 7: Medical & Lifestyle History
 // ==========================================
 export const step7Schema = z.object({
+  // ----- Physician -----
+  primaryPhysicianName: z.string().optional(),
+  primaryPhysicianPhone: z.string().optional(),
+  primaryPhysicianAddress: z.string().optional(),
+  lastVisitDate: z.string().optional(),
+  lastVisitReason: z.string().optional(),
+  pendingMedicalAppointment: z.boolean().default(false),
+  pendingAppointmentDetails: z.string().optional(),
+
+  // ----- Build / Weight -----
+  heightFeet: z.number().min(0).max(8).optional(),
+  heightInches: z.number().min(0).max(11).optional(),
+  weightLbs: z.number().min(0).max(900).optional(),
+  weightChangeOver10Lbs: z.boolean().default(false),
+  weightChangeAmount: z.number().optional(),
+  weightChangeDirection: z.enum(["gain", "loss"]).optional(),
+  weightChangeReason: z.string().optional(),
+
+  // ----- Family History -----
+  familyHistory: z.object({
+    father: z.object({
+      ageIfLiving: z.string().optional(),
+      ageAtDeath: z.string().optional(),
+      causeOfDeath: z.string().optional(),
+      heartDisease: z.boolean().optional(),
+      heartDiseaseAgeOfOnset: z.string().optional(),
+      cancer: z.boolean().optional(),
+      cancerAgeOfOnset: z.string().optional(),
+      cancerType: z.string().optional(),
+    }).optional(),
+    mother: z.object({
+      ageIfLiving: z.string().optional(),
+      ageAtDeath: z.string().optional(),
+      causeOfDeath: z.string().optional(),
+      heartDisease: z.boolean().optional(),
+      heartDiseaseAgeOfOnset: z.string().optional(),
+      cancer: z.boolean().optional(),
+      cancerAgeOfOnset: z.string().optional(),
+      cancerType: z.string().optional(),
+    }).optional(),
+    siblings: z.object({
+      ageIfLiving: z.string().optional(),
+      ageAtDeath: z.string().optional(),
+      causeOfDeath: z.string().optional(),
+      heartDisease: z.boolean().optional(),
+      heartDiseaseAgeOfOnset: z.string().optional(),
+      cancer: z.boolean().optional(),
+      cancerAgeOfOnset: z.string().optional(),
+      cancerType: z.string().optional(),
+    }).optional(),
+  }).optional(),
+  familyExtendedConditions: z.boolean().default(false), // heart<50, ALS, polycystic kidney, etc.
+  familyExtendedConditionsDetails: z.string().optional(),
+  familyMentalHealthHistory: z.boolean().default(false),
+  familyMentalHealthDetails: z.string().optional(),
+
+  // ----- 10-Year Diagnosis History -----
+  hx10HeartCondition: z.boolean().default(false),
+  hx10HeartConditionDetails: z.string().optional(),
+  hx10VascularCondition: z.boolean().default(false),
+  hx10VascularConditionDetails: z.string().optional(),
+  hx10RespiratoryCondition: z.boolean().default(false),
+  hx10RespiratoryConditionDetails: z.string().optional(),
+  hx10DigestiveCondition: z.boolean().default(false),
+  hx10DigestiveConditionDetails: z.string().optional(),
+  hx10CancerOrTumor: z.boolean().default(false),
+  hx10CancerOrTumorDetails: z.string().optional(),
+  hx10EndocrineDiabetes: z.boolean().default(false),
+  hx10EndocrineDiabetesDetails: z.string().optional(),
+  hx10KidneyUrinary: z.boolean().default(false),
+  hx10KidneyUrinaryDetails: z.string().optional(),
+  hx10NeurologicalCondition: z.boolean().default(false),
+  hx10NeurologicalConditionDetails: z.string().optional(),
+  hx10MentalEmotional: z.boolean().default(false),
+  hx10MentalEmotionalDetails: z.string().optional(),
+  hx10MusculoskeletalAutoimmune: z.boolean().default(false),
+  hx10MusculoskeletalAutoimmuneDetails: z.string().optional(),
+  hx10BloodImmune: z.boolean().default(false),
+  hx10BloodImmuneDetails: z.string().optional(),
+  hx10ReproductiveCondition: z.boolean().default(false),
+  hx10ReproductiveConditionDetails: z.string().optional(),
+
+  // ----- 12-Month Recent Care -----
+  recent12MonthsTreatment: z.boolean().default(false),
+  recent12MonthsTreatmentDetails: z.string().optional(),
+  recent12MonthsSymptomsUnconsulted: z.boolean().default(false),
+  recent12MonthsSymptomsDetails: z.string().optional(),
+  selfAdministeredLabTest: z.boolean().default(false),
+  selfAdministeredLabTestDetails: z.string().optional(),
+
+  // ----- 5-Year ER / Care Settings -----
+  erUrgentCareVisits5y: z.boolean().default(false),
+  erUrgentCareVisitsDetails: z.string().optional(),
+
+  // ----- Long-Term Care -----
+  advisedNursingHomeOrHospice: z.boolean().default(false),
+  advisedNursingHomeDetails: z.string().optional(),
+
+  // ----- Functional / ADL -----
+  usesAssistiveDevice: z.boolean().default(false),
+  usesAssistiveDeviceDetails: z.string().optional(),
+  needsHelpADLs: z.boolean().default(false),
+  needsHelpADLsDetails: z.string().optional(),
+  needsHelpIADLs: z.boolean().default(false),
+  needsHelpIADLsDetails: z.string().optional(),
+
+  // ----- Substance Use -----
+  usesAlcohol: z.boolean().default(false),
+  alcoholDrinksPerWeek: z.number().optional(),
+  treatedForAlcoholOrDrugUse: z.boolean().default(false),
+  treatedForAlcoholOrDrugUseDetails: z.string().optional(),
+  usedDrugs: z.boolean().default(false),
+  usedDrugsDetails: z.string().optional(),
+
+  // ----- Disability claims -----
+  disabilityClaim: z.boolean().default(false),
+  disabilityClaimDetails: z.string().optional(),
+
   // Tobacco
   usedTobacco: z.boolean().default(false),
   tobaccoType: z.string().optional(),
@@ -267,6 +419,10 @@ export const step7Schema = z.object({
   // Medical Knockout
   hasMedicalConditions: z.boolean().default(false),
   medicalConditionsDetails: z.string().optional(),
+
+  // Catch-all (any other condition not disclosed)
+  otherUndisclosedCondition: z.boolean().default(false),
+  otherUndisclosedConditionDetails: z.string().optional(),
 });
 
 export type Step7Data = z.infer<typeof step7Schema>;
