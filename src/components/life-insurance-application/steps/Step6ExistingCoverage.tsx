@@ -11,9 +11,17 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { CurrencyInput } from "@/components/ui/currency-input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { FileStack, Plus, Trash2 } from "lucide-react";
 import { Step6Data } from "@/types/lifeInsuranceApplication";
 import { ValidatedInput } from "../ValidatedInput";
+import { ValidatedTextarea } from "../ValidatedTextarea";
 import { generateUUID } from "@/lib/uuid";
 
 interface Step6ExistingCoverageProps {
@@ -35,6 +43,10 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
       policyNumber: "",
       amountOfCoverage: 0,
       isBeingReplaced: false,
+      yearOfIssue: "",
+      coverageType: "life",
+      classification: "individual",
+      is1035Exchange: false,
     });
   };
 
@@ -187,6 +199,75 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
 
                       <FormField
                         control={form.control}
+                        name={`existingPolicies.${index}.yearOfIssue`}
+                        render={({ field, fieldState }) => (
+                          <FormItem>
+                            <FormLabel className="text-sm md:text-base">Year of Issue</FormLabel>
+                            <FormControl>
+                              <ValidatedInput
+                                placeholder="e.g., 2018"
+                                maxLength={4}
+                                fieldState={fieldState}
+                                className="min-h-[44px]"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name={`existingPolicies.${index}.coverageType`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sm md:text-base">Coverage Type</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value || ""}>
+                              <FormControl>
+                                <SelectTrigger className="min-h-[44px]">
+                                  <SelectValue placeholder="Select type" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="life">Life Insurance</SelectItem>
+                                <SelectItem value="health">Health</SelectItem>
+                                <SelectItem value="annuity">Annuity</SelectItem>
+                                <SelectItem value="ltc">Long-Term Care</SelectItem>
+                                <SelectItem value="disability">Disability Income</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name={`existingPolicies.${index}.classification`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sm md:text-base">Classification</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value || ""}>
+                              <FormControl>
+                                <SelectTrigger className="min-h-[44px]">
+                                  <SelectValue placeholder="Select classification" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="individual">Individual</SelectItem>
+                                <SelectItem value="business">Business</SelectItem>
+                                <SelectItem value="group">Group</SelectItem>
+                                <SelectItem value="pending">Pending</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
                         name={`existingPolicies.${index}.isBeingReplaced`}
                         render={({ field }) => (
                           <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-border p-3">
@@ -205,11 +286,67 @@ const Step6ExistingCoverage = ({ form }: Step6ExistingCoverageProps) => {
                           </FormItem>
                         )}
                       />
+
+                      <FormField
+                        control={form.control}
+                        name={`existingPolicies.${index}.is1035Exchange`}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-border p-3">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-sm">1035 Exchange?</FormLabel>
+                              <FormDescription className="text-xs">
+                                Tax-free exchange under IRC §1035
+                              </FormDescription>
+                            </div>
+                            <FormControl className="self-start sm:self-center">
+                              <Switch
+                                checked={!!field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   </div>
                 ))}
               </div>
             )}
+
+            {/* Life settlement / 3rd-party transfer question */}
+            <div className="space-y-3 mt-4">
+              <FormField
+                control={form.control}
+                name="lifeSettlementDiscussion"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-border p-3 md:p-4 bg-background/50">
+                    <div className="space-y-1 flex-1">
+                      <FormLabel className="text-sm md:text-base leading-snug">
+                        Have you been involved in any discussions about selling or transferring this policy to an unrelated third party (e.g., life settlement company)?
+                      </FormLabel>
+                    </div>
+                    <FormControl className="self-start sm:self-center">
+                      <Switch checked={!!field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              {form.watch("lifeSettlementDiscussion") && (
+                <FormField
+                  control={form.control}
+                  name="lifeSettlementDetails"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm">Please provide details</FormLabel>
+                      <FormControl>
+                        <ValidatedTextarea fieldState={fieldState} className="min-h-[80px]" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+            </div>
           </div>
         )}
 

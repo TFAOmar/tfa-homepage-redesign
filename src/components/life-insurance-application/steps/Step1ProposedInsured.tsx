@@ -528,6 +528,43 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
                   </FormItem>
                 )}
               />
+
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+                <FormField
+                  control={form.control}
+                  name="ownsUsProperty"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-3 md:p-4 bg-background/50">
+                      <FormControl>
+                        <Checkbox
+                          checked={!!field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm md:text-base">Own property or have a mortgage in the U.S.?</FormLabel>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="plansToRemainInUs"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-3 md:p-4 bg-background/50">
+                      <FormControl>
+                        <Checkbox
+                          checked={!!field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm md:text-base">Plan to remain in the U.S. permanently?</FormLabel>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           )}
         </div>
@@ -578,6 +615,56 @@ const Step1ProposedInsured = ({ form }: Step1ProposedInsuredProps) => {
               )}
             />
           </div>
+        </div>
+
+        {/* Reason for Insurance Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            Reason for Insurance
+          </h3>
+
+          <FormField
+            control={form.control}
+            name="reasonForInsurance"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Why are you applying for life insurance?</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value || ""}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a reason" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="income-protection">Income Protection / Family Security</SelectItem>
+                    <SelectItem value="estate-planning">Estate Planning</SelectItem>
+                    <SelectItem value="business">Business (Key Person, Buy-Sell)</SelectItem>
+                    <SelectItem value="mortgage">Mortgage Protection</SelectItem>
+                    <SelectItem value="final-expense">Final Expense / Funeral</SelectItem>
+                    <SelectItem value="retirement">Retirement / Cash Value</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {form.watch("reasonForInsurance") === "other" && (
+            <FormField
+              control={form.control}
+              name="reasonForInsuranceOther"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Please specify</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Briefly describe the reason" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
       </div>
     </Form>

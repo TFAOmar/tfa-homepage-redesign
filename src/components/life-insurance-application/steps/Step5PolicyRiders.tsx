@@ -27,6 +27,8 @@ import { FileText, Shield, HelpCircle, Plus, Trash2, Baby } from "lucide-react";
 import { Step5Data } from "@/types/lifeInsuranceApplication";
 import { ValidatedInput } from "../ValidatedInput";
 import { ValidatedSelectTrigger } from "../ValidatedSelect";
+import { Switch } from "@/components/ui/switch";
+import { ValidatedTextarea } from "../ValidatedTextarea";
 
 interface Step5PolicyRidersProps {
   form: UseFormReturn<Step5Data>;
@@ -293,8 +295,9 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 p-3 md:p-4 rounded-lg border border-border bg-muted/30"
+                  className="p-3 md:p-4 rounded-lg border border-border bg-muted/30 space-y-3 md:space-y-4"
                 >
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
                   <FormField
                     control={form.control}
                     name={`childrenDetails.${index}.name`}
@@ -333,16 +336,127 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
                     )}
                   />
 
-                  <div className="flex items-end">
+                  <FormField
+                    control={form.control}
+                    name={`childrenDetails.${index}.ssn`}
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm md:text-base">SSN</FormLabel>
+                        <FormControl>
+                          <ValidatedInput
+                            placeholder="XXX-XX-XXXX"
+                            fieldState={fieldState}
+                            className="min-h-[44px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
+                      </FormItem>
+                    )}
+                  />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <FormField
+                      control={form.control}
+                      name={`childrenDetails.${index}.livesWithParent`}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between gap-2 rounded-md border border-border p-3 bg-background/50">
+                          <FormLabel className="text-sm">Lives with parent?</FormLabel>
+                          <FormControl>
+                            <Switch checked={!!field.value} onCheckedChange={field.onChange} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`childrenDetails.${index}.takesPrescribedMedication`}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between gap-2 rounded-md border border-border p-3 bg-background/50">
+                          <FormLabel className="text-sm">Takes prescribed medication?</FormLabel>
+                          <FormControl>
+                            <Switch checked={!!field.value} onCheckedChange={field.onChange} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name={`childrenDetails.${index}.hasDevelopmentalCondition`}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start justify-between gap-3 rounded-md border border-border p-3 bg-background/50">
+                        <div className="space-y-1 flex-1">
+                          <FormLabel className="text-sm leading-snug">
+                            Diagnosed with ADD, dyslexia, autism, or any psychiatric disease?
+                          </FormLabel>
+                        </div>
+                        <FormControl>
+                          <Switch checked={!!field.value} onCheckedChange={field.onChange} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  {form.watch(`childrenDetails.${index}.hasDevelopmentalCondition`) && (
+                    <FormField
+                      control={form.control}
+                      name={`childrenDetails.${index}.developmentalConditionDetails`}
+                      render={({ field, fieldState }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm">Details (diagnosis, physician, treatment)</FormLabel>
+                          <FormControl>
+                            <ValidatedTextarea fieldState={fieldState} className="min-h-[70px]" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  <FormField
+                    control={form.control}
+                    name={`childrenDetails.${index}.hasMedicalCondition`}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start justify-between gap-3 rounded-md border border-border p-3 bg-background/50">
+                        <div className="space-y-1 flex-1">
+                          <FormLabel className="text-sm leading-snug">
+                            Diagnosed/treated for seizures, juvenile diabetes, scoliosis, hemophilia, cancer, or heart/lung/respiratory disease?
+                          </FormLabel>
+                        </div>
+                        <FormControl>
+                          <Switch checked={!!field.value} onCheckedChange={field.onChange} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  {form.watch(`childrenDetails.${index}.hasMedicalCondition`) && (
+                    <FormField
+                      control={form.control}
+                      name={`childrenDetails.${index}.medicalConditionDetails`}
+                      render={({ field, fieldState }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm">Details (condition, physician, treatment)</FormLabel>
+                          <FormControl>
+                            <ValidatedTextarea fieldState={fieldState} className="min-h-[70px]" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  <div className="flex justify-end">
                     <Button
                       type="button"
                       variant="destructive"
                       size="sm"
                       onClick={() => remove(index)}
-                      className="gap-2 min-h-[44px] w-full md:w-auto"
+                      className="gap-2 min-h-[44px]"
                     >
                       <Trash2 className="w-4 h-4" />
-                      Remove
+                      Remove Child
                     </Button>
                   </div>
                 </div>
@@ -351,7 +465,7 @@ const Step5PolicyRiders = ({ form }: Step5PolicyRidersProps) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => append({ name: "", dateOfBirth: "" })}
+                onClick={() => append({ name: "", dateOfBirth: "", ssn: "" })}
                 className="gap-2 min-h-[44px] w-full sm:w-auto"
               >
                 <Plus className="w-4 h-4" />

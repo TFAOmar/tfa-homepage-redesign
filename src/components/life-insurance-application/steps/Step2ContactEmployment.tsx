@@ -13,6 +13,7 @@ import { Phone, Briefcase, DollarSign, Users } from "lucide-react";
 import { ValidatedInput } from "../ValidatedInput";
 import { ValidatedTextarea } from "../ValidatedTextarea";
 import { ValidatedPhoneInput } from "../ValidatedPhoneInput";
+import { Switch } from "@/components/ui/switch";
 
 interface Step2Props {
   form: UseFormReturn<Step2Data>;
@@ -220,6 +221,79 @@ const Step2ContactEmployment = ({ form }: Step2Props) => {
               </FormItem>
             )}
           />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+            <FormField
+              control={form.control}
+              name="hoursPerWeek"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel className="text-sm md:text-base">Avg Hours Worked per Week</FormLabel>
+                  <FormControl>
+                    <ValidatedInput
+                      type="number"
+                      min={0}
+                      max={168}
+                      placeholder="40"
+                      fieldState={fieldState}
+                      showSuccessIndicator={false}
+                      onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                      value={field.value ?? ""}
+                      className="bg-background/50 min-h-[44px]"
+                    />
+                  </FormControl>
+                  <FormMessage className="animate-slide-down-fade motion-reduce:animate-none" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="activelyAtWork"
+              render={({ field }) => (
+                <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-border p-3 bg-background/50">
+                  <FormLabel className="text-sm md:text-base">Actively at work?</FormLabel>
+                  <FormControl>
+                    <Switch checked={!!field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="ableToPerformDuties"
+              render={({ field }) => (
+                <FormItem className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-border p-3 bg-background/50">
+                  <FormLabel className="text-sm md:text-base">Able to perform all job duties?</FormLabel>
+                  <FormControl>
+                    <Switch checked={!!field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {(form.watch("activelyAtWork") === false || form.watch("ableToPerformDuties") === false) && (
+            <FormField
+              control={form.control}
+              name="workStatusExplanation"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel className="text-sm md:text-base">Please explain</FormLabel>
+                  <FormControl>
+                    <ValidatedTextarea
+                      placeholder="Explain why you're not actively at work or unable to perform your duties..."
+                      fieldState={fieldState}
+                      className="bg-background/50 min-h-[80px]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         {/* Financial Information Section */}
