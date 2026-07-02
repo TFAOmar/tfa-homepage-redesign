@@ -1,50 +1,24 @@
-# Ensure Every Advisor-Page Application Link Notifies That Advisor
-
 ## Goal
-Any application form opened from an advisor's page (profile or landing page) must carry that advisor's identity through to submission, so the advisor receives the notification email.
+Verify every form/application reachable from Patricia Serafin's advisor pages (English + Spanish) delivers notifications correctly end-to-end: advisor email → patricia@tfainsuranceadvisors.com, team → leads@tfainsuranceadvisors.com, applicant confirmation, and no Pipedrive deal creation (she's not in the owner map).
 
-## Audit results (see report)
-Most advisor pages already use the `/advisors/:advisorSlug/<form>` route pattern, which works correctly. Attribution breaks in a small number of specific places, listed below. This plan fixes only those gaps — no rework of already-working flows.
+## Forms in scope
+From `AdvisorPatriciaSerafin.tsx` and `AdvisorPatriciaSerafinSpanish.tsx`:
+1. **Contact modal** (`ContactModal`) — advisor contact form
+2. **Life Insurance Application** — `/life-insurance-application?advisor=patricia-serafin`
+3. **Non-Medical Term Life Application** — `/advisors/patricia-serafin/non-medical-life`
+4. **Book Consultation CTA** (if present) — verify routing
 
----
+## Test approach
+Mirror the last successful E2E pattern (insert test rows, invoke edge function, verify logs + DB timestamps + Resend delivery), rather than driving each wizard through Playwright:
 
-## Fixes
+1. **Discovery pass** — grep both Patricia pages to enumerate every CTA/link and confirm the advisor slug is passed on each. Report any link missing attribution.
+2. **Life Insurance Application** — insert draft row attributed to `patricia-serafin`, submit via RPC, invoke `send-life-insurance-notification`, verify:
+   - `advisor_notification_sent_at` set
+   - `admin_notification_sent_at` set
+   - Resend log shows 3 sends (advisor, leads, applicant)
+3. **Non-Medical Term Life** — same as above with `product_type = 'non_medical_term'`.
+4. **Contact modal** — submit via `pipedrive-submit` edge function with advisor context; verify lead lands in leads inbox and no deal is created (Patricia not in owner map).
+5. **Cleanup** — delete all test rows; report Resend message IDs + timestamps.
 
-### 1. AdvisorElenaEsquivel links to a non-attributed form
-`src/pages/AdvisorElenaEsquivel.tsx:328` links to `/living-trust-questionnaire` with no advisor.
-- Change to `/advisors/elena-esquivel/living-trust-questionnaire`.
-- Confirm `elena-esquivel` exists in `src/data/advisors.ts` with a real email; add/update if missing so `LivingTrustQuestionnaire` can resolve her advisor record.
-
-### 2. Application pages that ignore `?advisor=` query param
-Today only `LifeInsuranceApplication` reads `?advisor=`. Add the same fallback (route param first, then query param) to:
-- `src/pages/NonMedicalLifeApplication.tsx`
-- `src/pages/PrequalificationQuestionnaire.tsx`
-- `src/pages/LivingTrustQuestionnaire.tsx`
-
-This future-proofs any advisor landing/referral page that links with a query string instead of the slug route (mirrors the Patricia Serafin pattern) and prevents silent attribution loss.
-
-### 3. Sweep for any stale non-attributed links across the repo
-Ripgrep for direct links to `/life-insurance-application`, `/non-medical-life-application`, `/prequalification`, `/living-trust-questionnaire`, `/estate-planning` inside every `src/pages/Advisor*.tsx` and every advisor landing page (`AileenGutierrezReferral`, `AileenPartnerProgram`, `OmarConnect`, Patricia's pages, referral/partner variants). Any link found without either the `/advisors/:slug/...` route or an `?advisor=<slug>` query param gets fixed to include the advisor slug. (Current audit found only #1; this sweep guarantees no straggler.)
-
-### 4. Verification
-- Playwright: open one representative page from each fixed area (Elena's living trust link; a non-medical link with `?advisor=` query; a prequalification link with `?advisor=`) and assert the wizard's advisor context is populated (via a console log or the hidden field on the form).
-- Manual DB check on a test submission for Elena to confirm `advisor_slug` / `advisor_email` are saved and the notification edge function routes to her.
-
----
-
-## Out of scope (call out, do not silently expand)
-These pages have no advisor context by design today; changing them is a larger product decision, not a bug fix, so this plan does **not** touch them:
-- `EstatePlanning` (`/services/estate-planning`) — generic service page, no advisor scoping.
-- `BookConsultation` (`/book-consultation`) — general scheduling.
-- `AgentOnboardingApplication` — recruiting flow, not client-facing.
-- `HomeownerProtection` — intentionally hard-wired to Mariah Lorenzen.
-- 13 advisor profiles have no application CTAs at all (schedule/contact modals only). If you want application CTAs added to any of those, tell me which and I'll add them in a follow-up.
-
-## Technical notes
-Attribution fallback pattern to add to each application page:
-```ts
-const { advisorSlug: routeSlug } = useParams();
-const [searchParams] = useSearchParams();
-const advisorSlug = routeSlug ?? searchParams.get("advisor") ?? undefined;
-```
-Then resolve `advisorSlug` against `src/data/advisors.ts` exactly the way `LifeInsuranceApplication.tsx` already does, and pass `advisorId`/`advisorName`/`advisorEmail` into the existing wizard props. No schema, edge-function, or notification-logic changes required — those already handle advisor attribution correctly.
+## Deliverable
+A pass/fail table per form with Resend IDs, DB timestamps, and any attribution or delivery gaps found (with proposed fix if any).
