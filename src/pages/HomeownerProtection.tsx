@@ -42,8 +42,9 @@ const inputStyle = (hasErr: boolean): CSSProperties => ({
   width: "100%",
   boxSizing: "border-box",
   fontFamily: "inherit",
-  fontSize: 15,
-  padding: "12px 14px",
+  fontSize: 16,
+  padding: "14px 14px",
+  minHeight: 48,
   border: `1.5px solid ${hasErr ? ERR : BORDER}`,
   borderRadius: 10,
   background: "#FFFFFF",
@@ -53,12 +54,20 @@ const inputStyle = (hasErr: boolean): CSSProperties => ({
 });
 
 const labelStyle: CSSProperties = {
-  fontSize: 13,
+  fontSize: 14,
   fontWeight: 600,
   color: NAVY,
 };
 
-const errStyle: CSSProperties = { fontSize: 12.5, color: ERR };
+const errStyle: CSSProperties = {
+  fontSize: 13.5,
+  color: ERR,
+  fontWeight: 500,
+  display: "flex",
+  alignItems: "center",
+  gap: 6,
+  marginTop: 2,
+};
 
 const formatPhone = (v: string) => {
   const d = (v || "").replace(/\D/g, "").slice(0, 10);
@@ -556,10 +565,11 @@ const HomeownerProtection = () => {
                           style={{
                             display: "flex",
                             alignItems: "center",
-                          gap: 10,
+                          gap: 12,
                             width: "100%",
                             textAlign: "left",
-                          padding: "12px 12px",
+                          padding: "14px 14px",
+                          minHeight: 60,
                             borderRadius: 12,
                             cursor: "pointer",
                             font: "inherit",
@@ -579,8 +589,8 @@ const HomeownerProtection = () => {
                           <span
                             style={{
                               flex: "none",
-                              width: 36,
-                              height: 36,
+                              width: 40,
+                              height: 40,
                               borderRadius: 999,
                               display: "flex",
                               alignItems: "center",
@@ -615,7 +625,7 @@ const HomeownerProtection = () => {
                           >
                             <span
                               style={{
-                                fontSize: 14.5,
+                                fontSize: 15,
                                 fontWeight: 600,
                                 color: NAVY,
                                 lineHeight: 1.3,
@@ -632,8 +642,8 @@ const HomeownerProtection = () => {
                           <span
                             style={{
                               flex: "none",
-                              width: 22,
-                              height: 22,
+                              width: 24,
+                              height: 24,
                               borderRadius: 6,
                               marginLeft: "auto",
                               display: "flex",
@@ -691,8 +701,8 @@ const HomeownerProtection = () => {
                         }}
                         style={{
                           flex: "none",
-                          width: 20,
-                          height: 20,
+                          width: 24,
+                          height: 24,
                           borderRadius: 6,
                           marginTop: 1,
                           padding: 0,
@@ -729,7 +739,7 @@ const HomeownerProtection = () => {
                           clearErr("consent");
                         }}
                         style={{
-                          fontSize: 12.5,
+                          fontSize: 13.5,
                           lineHeight: 1.55,
                           color: MUTED,
                           cursor: "pointer",
@@ -758,15 +768,16 @@ const HomeownerProtection = () => {
                       border: "none",
                       cursor: submitting ? "default" : "pointer",
                       fontFamily: "inherit",
-                      fontSize: 16,
+                      fontSize: 17,
                       fontWeight: 700,
                       letterSpacing: "0.01em",
-                      padding: "16px 24px",
+                      padding: "18px 24px",
+                      minHeight: 56,
                       borderRadius: 999,
                       background: GOLD_BRIGHT,
                       color: "#1A2744",
                       boxShadow: "0 4px 12px rgba(30,58,95,0.08)",
-                      marginTop: 4,
+                      marginTop: 8,
                       opacity: submitting ? 0.7 : 1,
                     }}
                   >
