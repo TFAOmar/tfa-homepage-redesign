@@ -140,9 +140,9 @@ const HomeownerProtection = () => {
         description="Request a free consultation with a licensed TFA advisor. Trust, mortgage protection, and retirement planning for homeowners."
         noIndex
       />
-      <div className="min-h-screen bg-[#1E3A5F] text-white flex flex-col">
-        {/* Header */}
-        <header className="py-6 px-4 border-b border-white/10">
+      <div className="min-h-screen bg-background text-foreground flex flex-col">
+        {/* Header — navy band per DS */}
+        <header className="bg-primary py-6 px-4">
           <div className="max-w-md mx-auto flex justify-center">
             <Link to="/">
               <img
@@ -158,27 +158,21 @@ const HomeownerProtection = () => {
           <div className="max-w-md mx-auto">
             {/* Hero */}
             <div className="text-center mb-8">
-              <h1
-                className="text-3xl sm:text-4xl font-bold mb-3 leading-tight"
-                style={{ color: "#C9A84C" }}
-              >
+              <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight tracking-tight text-primary">
                 Protect What You've Worked Hard to Build
               </h1>
-              <p className="text-white/80 text-base sm:text-lg">
+              <p className="text-muted-foreground text-base sm:text-lg">
                 Tell us what matters most to your family — takes under 30 seconds.
               </p>
             </div>
 
             {submitted ? (
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
-                  style={{ backgroundColor: "rgba(201, 168, 76, 0.15)" }}
-                >
-                  <CheckCircle2 className="h-8 w-8" style={{ color: "#C9A84C" }} />
+              <div className="bg-card border border-border rounded-2xl p-8 text-center shadow-lg">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5 bg-accent/15">
+                  <CheckCircle2 className="h-8 w-8 text-accent" />
                 </div>
-                <h2 className="text-2xl font-bold mb-3">Thank you!</h2>
-                <p className="text-white/80">
+                <h2 className="text-2xl font-bold mb-3 text-primary">Thank you!</h2>
+                <p className="text-muted-foreground">
                   A licensed TFA advisor will reach out within 24 hours based on your
                   interests.
                 </p>
@@ -186,13 +180,13 @@ const HomeownerProtection = () => {
             ) : (
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-7 space-y-5"
+                className="bg-card border border-border rounded-2xl p-6 sm:p-7 space-y-5 shadow-lg"
               >
                 <input {...honeypotProps} className={honeypotClassName} />
 
                 {/* Interests */}
                 <div className="space-y-3">
-                  <Label className="text-white text-base font-medium">
+                  <Label className="text-foreground text-base font-medium">
                     What are you interested in?
                   </Label>
                   <div className="space-y-2">
@@ -205,59 +199,42 @@ const HomeownerProtection = () => {
                           onClick={() => toggle(opt.id)}
                           className={`w-full min-h-[56px] flex items-center gap-3 px-4 rounded-xl border text-left transition-colors ${
                             active
-                              ? "border-transparent"
-                              : "border-white/20 hover:border-white/40"
+                              ? "border-accent bg-accent/10"
+                              : "border-border bg-background hover:border-accent/60"
                           }`}
-                          style={
-                            active
-                              ? {
-                                  backgroundColor: "rgba(201, 168, 76, 0.15)",
-                                  borderColor: "#C9A84C",
-                                }
-                              : { backgroundColor: "rgba(255,255,255,0.03)" }
-                          }
                         >
                           <Checkbox
                             checked={active}
-                            className="border-white/40 data-[state=checked]:border-transparent"
-                            style={
-                              active
-                                ? { backgroundColor: "#C9A84C", borderColor: "#C9A84C" }
-                                : undefined
-                            }
+                            className="border-border data-[state=checked]:bg-accent data-[state=checked]:border-accent data-[state=checked]:text-primary"
                           />
-                          <span className="text-white text-base">{opt.label}</span>
+                          <span className="text-foreground text-base">{opt.label}</span>
                         </button>
                       );
                     })}
                   </div>
                   {errors.interests && (
-                    <p className="text-red-400 text-sm">{errors.interests.message}</p>
+                    <p className="text-destructive text-sm">{errors.interests.message}</p>
                   )}
                 </div>
 
                 {/* Full Name */}
                 <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-white/90">
-                    Full Name
-                  </Label>
+                  <Label htmlFor="fullName">Full Name</Label>
                   <Input
                     id="fullName"
                     {...register("fullName")}
                     autoComplete="name"
                     placeholder="Your full name"
-                    className="h-12 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="h-12"
                   />
                   {errors.fullName && (
-                    <p className="text-red-400 text-sm">{errors.fullName.message}</p>
+                    <p className="text-destructive text-sm">{errors.fullName.message}</p>
                   )}
                 </div>
 
                 {/* Phone */}
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-white/90">
-                    Phone Number
-                  </Label>
+                  <Label htmlFor="phone">Phone Number</Label>
                   <Input
                     id="phone"
                     type="tel"
@@ -265,18 +242,16 @@ const HomeownerProtection = () => {
                     autoComplete="tel"
                     {...register("phone")}
                     placeholder="(555) 555-5555"
-                    className="h-12 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="h-12"
                   />
                   {errors.phone && (
-                    <p className="text-red-400 text-sm">{errors.phone.message}</p>
+                    <p className="text-destructive text-sm">{errors.phone.message}</p>
                   )}
                 </div>
 
                 {/* Email */}
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white/90">
-                    Email Address
-                  </Label>
+                  <Label htmlFor="email">Email Address</Label>
                   <Input
                     id="email"
                     type="email"
@@ -284,18 +259,16 @@ const HomeownerProtection = () => {
                     autoComplete="email"
                     {...register("email")}
                     placeholder="you@email.com"
-                    className="h-12 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="h-12"
                   />
                   {errors.email && (
-                    <p className="text-red-400 text-sm">{errors.email.message}</p>
+                    <p className="text-destructive text-sm">{errors.email.message}</p>
                   )}
                 </div>
 
                 {/* ZIP */}
                 <div className="space-y-2">
-                  <Label htmlFor="zip" className="text-white/90">
-                    ZIP Code
-                  </Label>
+                  <Label htmlFor="zip">ZIP Code</Label>
                   <Input
                     id="zip"
                     inputMode="numeric"
@@ -303,14 +276,14 @@ const HomeownerProtection = () => {
                     maxLength={5}
                     {...register("zip")}
                     placeholder="12345"
-                    className="h-12 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="h-12"
                   />
                   {errors.zip && (
-                    <p className="text-red-400 text-sm">{errors.zip.message}</p>
+                    <p className="text-destructive text-sm">{errors.zip.message}</p>
                   )}
                 </div>
 
-                <p className="text-white/60 text-xs leading-relaxed">
+                <p className="text-muted-foreground text-xs leading-relaxed">
                   By submitting, you agree to be contacted by The Financial Architects
                   regarding your selected interests. No obligation.
                 </p>
@@ -318,13 +291,12 @@ const HomeownerProtection = () => {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full h-14 text-base font-semibold rounded-full text-[#1E3A5F] hover:opacity-90"
-                  style={{ backgroundColor: "#C9A84C" }}
+                  className="w-full h-14 text-base font-semibold rounded-full bg-accent text-primary hover:bg-accent/90"
                 >
                   {submitting ? "Submitting..." : "Request My Free Consultation"}
                 </Button>
 
-                <p className="text-center text-white/50 text-xs">
+                <p className="text-center text-muted-foreground text-xs">
                   Licensed professionals. Your information is never sold.
                 </p>
               </form>
