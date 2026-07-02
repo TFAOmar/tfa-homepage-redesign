@@ -372,7 +372,7 @@ const AdvisorPatriciaSerafinSpanish = () => {
                 className="px-8 py-6 text-lg"
                 asChild
               >
-                <Link to="/life-insurance-application">
+                <Link to="/life-insurance-application?advisor=patricia-serafin">
                   <Shield className="w-5 h-5 mr-2" />
                   Solicitar Seguro de Vida
                 </Link>
