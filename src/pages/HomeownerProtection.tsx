@@ -826,6 +826,43 @@ const HomeownerProtection = () => {
             textAlign: "center",
           }}
         >
+          <div
+            style={{
+              maxWidth: 560,
+              margin: "0 auto 18px",
+              padding: "16px 20px",
+              borderTop: "1px solid #E5E9EF",
+              borderBottom: "1px solid #E5E9EF",
+              display: "flex",
+              flexDirection: "column",
+              gap: 4,
+              fontSize: 13,
+              lineHeight: 1.55,
+              color: MUTED,
+            }}
+          >
+            <div style={{ fontSize: 14, fontWeight: 700, color: NAVY }}>
+              Mariah Lorenzen
+            </div>
+            <div>
+              <a
+                href="mailto:mariah@tfainsuranceadvisors.com"
+                style={{ color: MUTED, textDecoration: "none" }}
+              >
+                mariah@tfainsuranceadvisors.com
+              </a>
+              <span style={{ margin: "0 8px", color: "#C9CFDA" }}>·</span>
+              <a
+                href="tel:+19495145296"
+                style={{ color: MUTED, textDecoration: "none" }}
+              >
+                (949) 514-5296
+              </a>
+            </div>
+            <div style={{ fontSize: 12.5, color: "#98A2B3" }}>
+              CA Life & Health Lic# 0F93770
+            </div>
+          </div>
           <p
             style={{
               margin: 0,
