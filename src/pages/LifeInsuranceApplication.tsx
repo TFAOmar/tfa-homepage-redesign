@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, useSearchParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, Shield, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,13 @@ const findStaticAdvisor = (slug: string) => {
 };
 
 const LifeInsuranceApplication = () => {
-  const { advisorSlug } = useParams<{ advisorSlug: string }>();
+  const routeParams = useParams<{ advisorSlug: string }>();
+  const [searchParams] = useSearchParams();
+  // Allow attribution via either route param (/advisors/:slug/...) or
+  // ?advisor=<slug> query string so shared landing pages can route submissions
+  // to a specific advisor without a dedicated route.
+  const advisorSlug =
+    routeParams.advisorSlug ?? searchParams.get("advisor") ?? undefined;
   const { data: dbAdvisor, isLoading } = useAdvisorBySlug(advisorSlug);
   
   // Hybrid lookup: try database first, then fall back to static data
@@ -124,7 +130,7 @@ const LifeInsuranceApplication = () => {
           <ApplicationWizard
             advisorId={advisor?.id}
             advisorName={advisor?.name}
-            advisorEmail={undefined}
+            advisorEmail={advisor?.email ?? undefined}
           />
         </main>
 
