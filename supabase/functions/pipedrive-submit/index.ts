@@ -10,6 +10,13 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 const TEAM_EMAIL = "leads@tfainsuranceadvisors.com";
 
+// Advisor-specific Pipedrive user IDs. When an advisor-owned form comes in
+// and the advisor slug is listed here, we still create a Pipedrive lead and
+// assign it to that advisor as owner (instead of skipping Pipedrive).
+const ADVISOR_PIPEDRIVE_USER_IDS: Record<string, number> = {
+  "mariah-lorenzen": 22671934,
+};
+
 // CORS headers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
