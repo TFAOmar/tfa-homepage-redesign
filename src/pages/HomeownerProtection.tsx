@@ -230,7 +230,7 @@ const HomeownerProtection = () => {
           style={{
             background: "#FFFFFF",
             borderBottom: "1px solid #E5E9EF",
-            padding: "14px 20px",
+            padding: "12px 16px",
             display: "flex",
             justifyContent: "center",
           }}
@@ -238,7 +238,7 @@ const HomeownerProtection = () => {
           <img
             src="/images/tfa-stacked-logo.png"
             alt="The Financial Architects"
-            style={{ height: 46, width: "auto" }}
+            style={{ height: "clamp(38px, 10vw, 46px)", width: "auto" }}
           />
         </header>
 
@@ -248,7 +248,7 @@ const HomeownerProtection = () => {
             position: "relative",
             overflow: "hidden",
             textAlign: "center",
-            padding: "clamp(36px, 7vw, 60px) 24px 128px",
+            padding: "clamp(32px, 7vw, 60px) 20px clamp(96px, 18vw, 128px)",
             background: `linear-gradient(135deg, ${NAVY} 0%, #3D5A80 52%, ${NAVY} 100%)`,
           }}
         >
@@ -302,7 +302,7 @@ const HomeownerProtection = () => {
             <h1
               style={{
                 margin: 0,
-                fontSize: "clamp(30px, 6vw, 46px)",
+                fontSize: "clamp(26px, 6.4vw, 46px)",
                 fontWeight: 700,
                 lineHeight: 1.12,
                 letterSpacing: "-0.02em",
@@ -318,7 +318,7 @@ const HomeownerProtection = () => {
               style={{
                 margin: "14px auto 0",
                 maxWidth: 540,
-                fontSize: "clamp(15.5px, 2.5vw, 18px)",
+                fontSize: "clamp(14.5px, 3.6vw, 18px)",
                 lineHeight: 1.6,
                 color: "rgba(255,255,255,0.72)",
               }}
@@ -334,8 +334,10 @@ const HomeownerProtection = () => {
           style={{
             position: "relative",
             zIndex: 2,
-            width: "min(620px, calc(100% - 32px))",
-            margin: "-88px auto 0",
+            width: "min(620px, calc(100% - 24px))",
+            marginTop: "clamp(-104px, -14vw, -72px)",
+            marginLeft: "auto",
+            marginRight: "auto",
             animation: "tfaFadeUp 0.55s cubic-bezier(0.4,0,0.2,1) 0.05s both",
           }}
         >
@@ -346,7 +348,7 @@ const HomeownerProtection = () => {
               borderRadius: 20,
               boxShadow:
                 "0 24px 48px rgba(30,58,95,0.14), 0 6px 12px rgba(30,58,95,0.06)",
-              padding: "clamp(22px, 5vw, 36px)",
+              padding: "clamp(20px, 5vw, 36px)",
               animation: shaking
                 ? "tfaShake 0.45s cubic-bezier(0.36,0.07,0.19,0.97) both"
                 : "none",
@@ -554,10 +556,10 @@ const HomeownerProtection = () => {
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: 12,
+                          gap: 10,
                             width: "100%",
                             textAlign: "left",
-                            padding: "13px 14px",
+                          padding: "12px 12px",
                             borderRadius: 12,
                             cursor: "pointer",
                             font: "inherit",
@@ -577,8 +579,8 @@ const HomeownerProtection = () => {
                           <span
                             style={{
                               flex: "none",
-                              width: 40,
-                              height: 40,
+                              width: 36,
+                              height: 36,
                               borderRadius: 999,
                               display: "flex",
                               alignItems: "center",
@@ -613,7 +615,7 @@ const HomeownerProtection = () => {
                           >
                             <span
                               style={{
-                                fontSize: 15,
+                                fontSize: 14.5,
                                 fontWeight: 600,
                                 color: NAVY,
                                 lineHeight: 1.3,
@@ -809,7 +811,7 @@ const HomeownerProtection = () => {
         <footer
           style={{
             marginTop: "auto",
-            padding: "48px 24px 30px",
+            padding: "clamp(32px, 6vw, 48px) 20px 28px",
             textAlign: "center",
           }}
         >
