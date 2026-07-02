@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useHoneypot } from "@/hooks/useHoneypot";
+import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { SEOHead } from "@/components/seo";
 
@@ -140,7 +140,7 @@ const HomeownerProtection = () => {
         description="Request a free consultation with a licensed TFA advisor. Trust, mortgage protection, and retirement planning for homeowners."
         noIndex
       />
-      <div className="min-h-screen bg-[#030406] text-white flex flex-col">
+      <div className="min-h-screen bg-[#1E3A5F] text-white flex flex-col">
         {/* Header */}
         <header className="py-6 px-4 border-b border-white/10">
           <div className="max-w-md mx-auto flex justify-center">
@@ -188,7 +188,7 @@ const HomeownerProtection = () => {
                 onSubmit={handleSubmit(onSubmit)}
                 className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-7 space-y-5"
               >
-                <input {...honeypotProps} />
+                <input {...honeypotProps} className={honeypotClassName} />
 
                 {/* Interests */}
                 <div className="space-y-3">
