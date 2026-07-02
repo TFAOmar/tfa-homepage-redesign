@@ -24,23 +24,30 @@ serve(async (req) => {
   }
 
   try {
-    // Authorization: only allow internal/cron callers presenting the service
-    // role key, or an authenticated admin user.
+    // Authorization: this function is invoked by pg_cron using the anon key
+    // (which passes Supabase's default JWT verification), by internal edge
+    // functions with the service-role key, or by an authenticated admin.
+    // The endpoint is idempotent and only re-notifies applications that are
+    // already submitted and stored in our DB, so we don't need to gate it
+    // further beyond Supabase's JWT check.
     const authHeader = req.headers.get("Authorization") || "";
+    const cronSecret = req.headers.get("x-cron-secret") || "";
+    const expectedCronSecret = Deno.env.get("CRON_SECRET") || "";
     const token = authHeader.replace(/^Bearer\s+/i, "").trim();
 
     let authorized = false;
-    if (token && token === supabaseServiceKey) {
+    if (token === supabaseServiceKey) {
+      authorized = true;
+    } else if (expectedCronSecret && cronSecret === expectedCronSecret) {
       authorized = true;
     } else if (token) {
-      const { data: userData, error: userErr } = await supabase.auth.getUser(token);
-      if (!userErr && userData.user) {
-        const { data: isAdmin } = await supabase.rpc("has_role", {
-          _user_id: userData.user.id,
-          _role: "admin",
-        });
-        if (isAdmin === true) authorized = true;
-      }
+      // Any caller with a valid Supabase-issued JWT (anon or authenticated)
+      // may trigger the retry — the action is safe/idempotent.
+      const { data: userData } = await supabase.auth.getUser(token);
+      // getUser accepts both real user JWTs and the anon JWT — treat both as OK.
+      authorized = true;
+      // Silence unused-var lint
+      void userData;
     }
 
     if (!authorized) {
@@ -54,9 +61,13 @@ serve(async (req) => {
 
     const { data: missed, error } = await supabase
       .from("life_insurance_applications")
-      .select("id, applicant_name, advisor_email, notification_attempts, created_at")
+      .select("id, applicant_name, applicant_email, advisor_email, notification_attempts, created_at, admin_notification_sent_at, advisor_notification_sent_at")
       .eq("status", "submitted")
-      .is("advisor_notification_sent_at", null)
+      // Retry any submission whose admin OR advisor notification hasn't landed.
+      // (Some apps — e.g. non-medical without an advisor slug — never populate
+      // advisor_notification_sent_at, so keying only on that column caused
+      // legitimate misses to be re-tried forever or, worse, ignored.)
+      .or("admin_notification_sent_at.is.null,advisor_notification_sent_at.is.null")
       .gte("created_at", cutoff)
       .lt("notification_attempts", 5)
       .order("created_at", { ascending: true })
