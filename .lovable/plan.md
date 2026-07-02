@@ -1,40 +1,31 @@
-## Goal
-Ensure any life insurance application started from Patricia Serafin's landing page (English or Spanish) notifies **Patricia** in addition to `leads@tfainsuranceadvisors.com` and the applicant — matching how her advisor lead form already routes.
+## End-to-End Test: Life Insurance Application Notifications
 
-## Current behavior (why she's missing today)
-- Both `AdvisorPatriciaSerafin.tsx` and `AdvisorPatriciaSerafinSpanish.tsx` link to the generic `/life-insurance-application` route with no advisor slug or query param.
-- `LifeInsuranceApplication.tsx` reads `useParams<{ advisorSlug }>()`, but the route `/life-insurance-application` has no `:advisorSlug`, so `advisorSlug` is always `undefined`.
-- The wizard therefore saves `advisor_email = null` on the DB row and `send-life-insurance-notification` skips the advisor email step entirely.
-- Result: `leads@tfainsuranceadvisors.com` and the applicant get emailed; Patricia does not.
+Run a Playwright script against the live preview to verify that submitting a life insurance application triggers all three notifications (advisor, leads inbox, applicant) for both the medical and non-medical flows.
 
-## Change — attribute the advisor via query string (least-risk, reusable for future advisors)
+### Scenarios to cover
 
-### 1. `src/pages/AdvisorPatriciaSerafin.tsx` & `AdvisorPatriciaSerafinSpanish.tsx`
-Change the two `<Link to="/life-insurance-application">` tags to:
-`<Link to="/life-insurance-application?advisor=patricia-serafin">`
+1. **Medical Life Insurance – attributed via advisor slug**
+   - Navigate to `/life-insurance-application?advisor=patricia-serafin`
+   - Fill all 9 wizard steps with test data (applicant: `qa+patricia@tfainsuranceadvisors.com`)
+   - Submit and capture the network response from `send-life-insurance-notification`
 
-### 2. `src/pages/LifeInsuranceApplication.tsx`
-Currently reads only `useParams`. Add a `useSearchParams` fallback so the slug can also come from `?advisor=`:
-```ts
-const [params] = useSearchParams();
-const advisorSlug = routeParams.advisorSlug ?? params.get("advisor") ?? undefined;
-```
-Everything downstream (advisor lookup, header, wizard props) already keys off `advisorSlug`, so no other component logic changes.
+2. **Non-Medical Life Insurance – no advisor**
+   - Navigate to `/non-medical-life-application`
+   - Complete the wizard with test data (applicant: `qa+nonmed@tfainsuranceadvisors.com`)
+   - Submit and capture the notification response
 
-### 3. `src/components/life-insurance-application/ApplicationWizard.tsx`
-Already forwards `advisorId`, `advisorName`, and looks up `advisor_email` server-side via slug. Confirm the wizard also passes an `advisorEmail` (or slug) so the edge function's existing slug-lookup branch (`send-life-insurance-notification` lines 1352-1364) resolves `patricia@tfainsuranceadvisors.com`. If the wizard isn't passing a slug today, add `advisorSlug` to the invoke payload and read it in the edge function's advisor-email resolver alongside the existing `advisorId` / `advisorName` fallbacks.
+### Verification steps
 
-## Notification result after the fix
-When someone submits from Patricia's page:
-1. **Patricia** (`patricia@tfainsuranceadvisors.com`) — full application email + PDF attachment.
-2. **Team inbox** (`leads@tfainsuranceadvisors.com`) — admin copy + PDF.
-3. **Applicant** — confirmation email.
+- Screenshot the final "submitted" screen for each flow.
+- Query `life_insurance_applications` for the two new rows and confirm:
+  - `status = 'submitted'`
+  - `advisor_email` populated correctly (Patricia for #1, null for #2)
+  - `admin_notification_sent_at` and `advisor_notification_sent_at` populated
+- Query `email_send_log` (deduplicated by `message_id`) filtered to the two applicant addresses to confirm `sent` status for advisor, leads, and applicant emails.
+- If any row shows `admin_notification_sent_at IS NULL` after 30s, manually invoke `retry-missed-life-insurance-notifications` and re-check.
 
-## Verification
-- Submit a test application from `/life-insurance-application?advisor=patricia-serafin` and confirm three sends in the `send-life-insurance-notification` edge function logs (advisor / admin / applicant).
-- Check the DB row's `advisor_email` column is populated with Patricia's address.
-- Spot-check that visiting the plain `/life-insurance-application` URL (no query) still works and continues to email only leads@ + applicant, so no regression for un-attributed traffic.
+### Deliverable
 
-## Out of scope
-- No changes to routing structure, no new `/advisors/:slug/life-insurance-application` route.
-- No changes to the notification email template, PDF, or Pipedrive behavior (Patricia is intentionally excluded from Pipedrive per prior decision).
+Short report to the user with: submitted app IDs, notification timestamps, email log statuses per recipient, and screenshots. Flag any missing emails with the exact row that failed and the retry outcome.
+
+No code changes are expected — this is a verification run. If a gap is found, I'll come back with a follow-up plan before editing.
