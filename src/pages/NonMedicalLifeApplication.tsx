@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, useSearchParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, Shield, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,9 @@ const findStaticAdvisor = (slug: string) =>
   staticAdvisors.find((a) => a.landingPage === `/advisors/${slug}`);
 
 const NonMedicalLifeApplication = () => {
-  const { advisorSlug } = useParams<{ advisorSlug: string }>();
+  const { advisorSlug: routeSlug } = useParams<{ advisorSlug: string }>();
+  const [searchParams] = useSearchParams();
+  const advisorSlug = routeSlug ?? searchParams.get("advisor") ?? undefined;
   const { data: dbAdvisor, isLoading } = useAdvisorBySlug(advisorSlug);
 
   const staticAdvisor = advisorSlug ? findStaticAdvisor(advisorSlug) : null;

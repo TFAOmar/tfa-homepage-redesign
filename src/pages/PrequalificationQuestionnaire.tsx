@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
 import { Phone, Mail, FileText, ArrowLeft, Loader2 } from "lucide-react";
 import PrequalificationWizard from "@/components/prequalification/PrequalificationWizard";
 import { PrequalificationApplicationData } from "@/types/prequalificationApplication";
@@ -14,7 +14,9 @@ const findStaticAdvisor = (slug: string) => {
 
 const PrequalificationQuestionnaire = () => {
   const navigate = useNavigate();
-  const { advisorSlug } = useParams<{ advisorSlug: string }>();
+  const { advisorSlug: routeSlug } = useParams<{ advisorSlug: string }>();
+  const [searchParams] = useSearchParams();
+  const advisorSlug = routeSlug ?? searchParams.get("advisor") ?? undefined;
   const [isCompleted, setIsCompleted] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
 
