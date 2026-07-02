@@ -1216,7 +1216,7 @@ serve(async (req) => {
     let leadId: string | null = null;
     let pipedriveError: string | null = null;
     
-    if (!isAdvisorSpecificForm && PIPEDRIVE_API_TOKEN && ownerId && ownerId > 0) {
+    if (PIPEDRIVE_API_TOKEN && ownerId && ownerId > 0) {
       try {
         // 1. Upsert Person
         const personResult = await upsertPerson(formData, ownerId);
@@ -1234,6 +1234,13 @@ serve(async (req) => {
         // 3. Fetch lead labels and determine which to apply
         const labelMap = await fetchLeadLabels();
         const labelNames = determineLabelNames(formData);
+        // Advisor-owned forms (e.g. Homeowner Protection Squeeze) pass their
+        // interest selections via `tags` — treat those as Pipedrive labels too.
+        if (isAdvisorSpecificForm && Array.isArray(formData.tags)) {
+          for (const tag of formData.tags) {
+            if (tag && !labelNames.includes(tag)) labelNames.push(tag);
+          }
+        }
         const labelIds: string[] = [];
         
         for (const labelName of labelNames) {
@@ -1263,10 +1270,10 @@ serve(async (req) => {
         console.error("[Pipedrive Error]", error);
         pipedriveError = error instanceof Error ? error.message : "Pipedrive API error";
       }
-    } else if (!isAdvisorSpecificForm && !PIPEDRIVE_API_TOKEN) {
+    } else if (!PIPEDRIVE_API_TOKEN) {
       console.warn("[Config Warning] PIPEDRIVE_API_TOKEN not configured - skipping Pipedrive");
     } else if (isAdvisorSpecificForm) {
-      console.log(`[Pipedrive Skipped] Advisor-specific form for ${advisor?.name}`);
+      console.log(`[Pipedrive Skipped] Advisor-specific form for ${advisor?.name} — no Pipedrive owner mapped`);
     }
     
     // Update submission with results
@@ -1277,6 +1284,7 @@ serve(async (req) => {
         pipedrive_person_id: personId,
         pipedrive_org_id: orgId,
         pipedrive_lead_id: leadId,
+        pipedrive_owner_id: ownerId,
         status: finalStatus,
         error_message: pipedriveError || (emailResult.errors.length > 0 ? emailResult.errors.join("; ") : null),
         email_sent: emailResult.teamSent,
@@ -1290,11 +1298,11 @@ serve(async (req) => {
         ok: true,
         routed_to: routedToName,
         routing_result: routingResult,
-        pipedrive_ids: isAdvisorSpecificForm ? null : {
+        pipedrive_ids: leadId || personId ? {
           person_id: personId,
           org_id: orgId,
           lead_id: leadId,
-        },
+        } : null,
         submission_id: submissionId,
         emails: {
           team_sent: emailResult.teamSent,
