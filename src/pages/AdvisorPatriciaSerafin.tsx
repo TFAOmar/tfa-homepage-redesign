@@ -329,7 +329,7 @@ const AdvisorPatriciaSerafin = () => {
                   <Calendar className="mr-2 h-5 w-5" />
                   Book Your Free Consultation
                 </Button>
-                <Link to="/life-insurance-application">
+                <Link to="/life-insurance-application?advisor=patricia-serafin">
                   <Button size="lg" variant="hero" className="text-lg px-8 py-6 w-full sm:w-auto">
                     <Briefcase className="mr-2 h-5 w-5" />
                     Apply for Life Insurance
