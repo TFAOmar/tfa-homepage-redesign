@@ -1092,7 +1092,15 @@ serve(async (req) => {
     if (isAdvisorSpecificForm) {
       routingResult = "advisor_direct";
       routedToName = advisor?.name || "Advisor";
-      // Skip Pipedrive for advisor-specific forms
+      // If this advisor has a mapped Pipedrive user ID (or one from the DB),
+      // still create a Pipedrive lead assigned to them. Otherwise skip Pipedrive.
+      const mappedOwner =
+        advisor?.pipedrive_user_id ||
+        (advisor?.slug ? ADVISOR_PIPEDRIVE_USER_IDS[advisor.slug] : undefined) ||
+        (formData.advisor_slug ? ADVISOR_PIPEDRIVE_USER_IDS[formData.advisor_slug] : undefined);
+      if (mappedOwner) {
+        ownerId = mappedOwner;
+      }
     } else {
       // Get Manny Soto default user ID from system_settings for Pipedrive
       const { data: settings } = await supabase
