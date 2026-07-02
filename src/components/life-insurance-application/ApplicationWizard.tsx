@@ -1033,12 +1033,25 @@ const ApplicationWizard = ({
         );
         if (result?.error) {
           console.error("Notification invoke returned error:", result.error);
+          // Surface a non-blocking toast so the user (and us) know the send
+          // didn't confirm. The retry cron will still pick this up within 15
+          // minutes, but visibility matters for medical vs. non-medical parity.
+          toast({
+            title: "Application submitted, email pending",
+            description:
+              "Your application saved successfully, but our confirmation email is queued for a retry. You'll receive it shortly.",
+          });
         } else {
           console.log("Notification accepted for background delivery");
         }
       } catch (err) {
         // Don't block success — the retry cron will catch any missed sends.
         console.error("Notification invoke threw:", err);
+        toast({
+          title: "Application submitted, email pending",
+          description:
+            "Your application saved successfully, but our confirmation email is queued for a retry. You'll receive it shortly.",
+        });
       }
     } catch (emailError) {
       console.error("Email notification issue (application still saved):", emailError);
