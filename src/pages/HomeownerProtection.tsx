@@ -148,7 +148,7 @@ const HomeownerProtection = () => {
               <img
                 src="/images/tfa-stacked-logo.png"
                 alt="The Financial Architects"
-                className="h-14 w-auto"
+                className="h-14 w-auto brightness-0 invert"
               />
             </Link>
           </div>
