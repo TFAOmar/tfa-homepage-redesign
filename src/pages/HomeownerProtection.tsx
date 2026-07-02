@@ -42,8 +42,9 @@ const inputStyle = (hasErr: boolean): CSSProperties => ({
   width: "100%",
   boxSizing: "border-box",
   fontFamily: "inherit",
-  fontSize: 15,
-  padding: "12px 14px",
+  fontSize: 16,
+  padding: "14px 14px",
+  minHeight: 48,
   border: `1.5px solid ${hasErr ? ERR : BORDER}`,
   borderRadius: 10,
   background: "#FFFFFF",
@@ -53,12 +54,20 @@ const inputStyle = (hasErr: boolean): CSSProperties => ({
 });
 
 const labelStyle: CSSProperties = {
-  fontSize: 13,
+  fontSize: 14,
   fontWeight: 600,
   color: NAVY,
 };
 
-const errStyle: CSSProperties = { fontSize: 12.5, color: ERR };
+const errStyle: CSSProperties = {
+  fontSize: 13.5,
+  color: ERR,
+  fontWeight: 500,
+  display: "flex",
+  alignItems: "center",
+  gap: 6,
+  marginTop: 2,
+};
 
 const formatPhone = (v: string) => {
   const d = (v || "").replace(/\D/g, "").slice(0, 10);
