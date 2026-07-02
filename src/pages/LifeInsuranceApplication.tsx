@@ -130,7 +130,9 @@ const LifeInsuranceApplication = () => {
           <ApplicationWizard
             advisorId={advisor?.id}
             advisorName={advisor?.name}
-            advisorEmail={advisor?.email ?? undefined}
+            advisorEmail={
+              (advisor as { email?: string } | null)?.email ?? undefined
+            }
           />
         </main>
 
