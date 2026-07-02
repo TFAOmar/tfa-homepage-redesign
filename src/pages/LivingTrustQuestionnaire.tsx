@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
 import { Phone, Mail, FileText, ArrowLeft, Loader2 } from "lucide-react";
 import EstatePlanningWizard from "@/components/living-trust/EstatePlanningWizard";
 import { EstatePlanningApplicationData } from "@/types/estatePlanningApplication";
@@ -15,7 +15,9 @@ const findStaticAdvisor = (slug: string) => {
 
 const LivingTrustQuestionnaire = () => {
   const navigate = useNavigate();
-  const { advisorSlug } = useParams<{ advisorSlug: string }>();
+  const { advisorSlug: routeSlug } = useParams<{ advisorSlug: string }>();
+  const [searchParams] = useSearchParams();
+  const advisorSlug = routeSlug ?? searchParams.get("advisor") ?? undefined;
   const [isCompleted, setIsCompleted] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
 

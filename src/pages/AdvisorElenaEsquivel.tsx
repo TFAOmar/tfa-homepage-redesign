@@ -325,7 +325,7 @@ const AdvisorElenaEsquivel = () => {
               <Calendar className="mr-2 h-5 w-5" />
               Schedule a Consultation
             </Button>
-            <Link to="/living-trust-questionnaire">
+            <Link to="/advisors/elena-esquivel/living-trust-questionnaire">
               <Button 
                 size="lg" 
                 variant="hero"
