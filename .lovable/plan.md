@@ -1,24 +1,18 @@
-## Goal
-Verify every form/application reachable from Patricia Serafin's advisor pages (English + Spanish) delivers notifications correctly end-to-end: advisor email → patricia@tfainsuranceadvisors.com, team → leads@tfainsuranceadvisors.com, applicant confirmation, and no Pipedrive deal creation (she's not in the owner map).
+## Changes to `src/components/about/Leadership.tsx`
 
-## Forms in scope
-From `AdvisorPatriciaSerafin.tsx` and `AdvisorPatriciaSerafinSpanish.tsx`:
-1. **Contact modal** (`ContactModal`) — advisor contact form
-2. **Life Insurance Application** — `/life-insurance-application?advisor=patricia-serafin`
-3. **Non-Medical Term Life Application** — `/advisors/patricia-serafin/non-medical-life`
-4. **Book Consultation CTA** (if present) — verify routing
+**1. Omar Sanchez LinkedIn**
+- Update `linkedin: "https://linkedin.com/in/omarsanchez"` → `"https://www.linkedin.com/in/omarsito/"`
 
-## Test approach
-Mirror the last successful E2E pattern (insert test rows, invoke edge function, verify logs + DB timestamps + Resend delivery), rather than driving each wizard through Playwright:
+**2. Add `expertise` to Ravven Murphy** (using the list you provided):
+Program Management, Cross-Functional Leadership, Business Development, Customer Retention, Process Improvement, Employee Engagement, Internal Communications, Customer Success, Relationship Management, Event Planning & Coordination, Community Engagement
 
-1. **Discovery pass** — grep both Patricia pages to enumerate every CTA/link and confirm the advisor slug is passed on each. Report any link missing attribution.
-2. **Life Insurance Application** — insert draft row attributed to `patricia-serafin`, submit via RPC, invoke `send-life-insurance-notification`, verify:
-   - `advisor_notification_sent_at` set
-   - `admin_notification_sent_at` set
-   - Resend log shows 3 sends (advisor, leads, applicant)
-3. **Non-Medical Term Life** — same as above with `product_type = 'non_medical_term'`.
-4. **Contact modal** — submit via `pipedrive-submit` edge function with advisor context; verify lead lands in leads inbox and no deal is created (Patricia not in owner map).
-5. **Cleanup** — delete all test rows; report Resend message IDs + timestamps.
+**3. Add `expertise` to Omar Sanchez** (you asked me to decide — derived from his existing bio/role as COO & Managing Partner):
+Operations & Executive Leadership, Advisor Development & Training, National Expansion Strategy, Financial Planning Systems, Digital Client Experience, Strategic Partnerships, Business Process Design, Latino Community Financial Education
 
-## Deliverable
-A pass/fail table per form with Resend IDs, DB timestamps, and any attribution or delivery gaps found (with proposed fix if any).
+**4. Replace Manny Soto's photo**
+- Upload the provided `Manny_Soto_2.jpg` via `lovable-assets` to CDN.
+- Write pointer to `src/assets/leadership/manny-soto.jpg.asset.json`.
+- Delete the old `src/assets/leadership/manny-soto.jpg` binary.
+- Update the import in `Leadership.tsx` to consume the new `.asset.json` (`import mannySotoAsset from ".../manny-soto.jpg.asset.json"` and use `mannySotoAsset.url`).
+
+No other files touched; scope is About page only. If you want different expertise items for Omar, tell me and I'll swap them.
