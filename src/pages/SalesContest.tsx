@@ -6,7 +6,8 @@ import { SEOHead } from "@/components/seo";
 import { generateSalesContestPdf } from "@/lib/salesContestPdf";
 import { useConfetti } from "@/hooks/useConfetti";
 import tfaLogo from "@/assets/tfa-logo.png";
-import mannySotoImg from "@/assets/leadership/manny-soto.jpg";
+import mannySotoAsset from "@/assets/leadership/manny-soto.jpg.asset.json";
+const mannySotoImg = mannySotoAsset.url;
 import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
 
 const CONTEST_START = new Date("2026-04-01T00:00:00-07:00").getTime();
