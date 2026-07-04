@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Linkedin, Mail, Facebook, Instagram, Youtube, Quote, CheckCircle } from "lucide-react";
-import mannySotoImg from "@/assets/leadership/manny-soto.jpg";
+import mannySotoAsset from "@/assets/leadership/manny-soto.jpg.asset.json";
 import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
 import ravvenMurphyImg from "@/assets/leadership/ravven-murphy.jpg";
 import kristinRomoImg from "@/assets/leadership/kristin-romo.jpg";
@@ -27,7 +27,7 @@ const leaders: Leader[] = [
     name: "Manuel Soto",
     title: "CEO & Founder",
     subtitle: "National Financial Strategist | Founder | Speaker",
-    image: mannySotoImg,
+    image: mannySotoAsset.url,
     intro: `Manuel "Manny" Soto is the CEO and Founder of The Financial Architects, one of the fastest-growing financial services organizations in the country. With nearly two decades of experience across insurance, retirement planning, investments, business strategies, and income protection, Manny has dedicated his career to helping families and business owners gain clarity, confidence, and control over their financial future.`,
     mantra: "Change what you're doing to change what you're getting",
     highlights: [
@@ -65,8 +65,18 @@ const leaders: Leader[] = [
       "Oversees advisor onboarding, training, and professional development",
       "Drives strategic partnerships, new business divisions, and organizational growth",
     ],
+    expertise: [
+      "Operations & Executive Leadership",
+      "Advisor Development & Training",
+      "National Expansion Strategy",
+      "Financial Planning Systems",
+      "Digital Client Experience",
+      "Strategic Partnerships",
+      "Business Process Design",
+      "Latino Community Financial Education",
+    ],
     closing: `Omar is recognized for blending high-level financial strategy with real-world practicality, making him a trusted guide for both clients and advisors. Outside of work, Omar is a dedicated husband and father who values family above all. His purpose — both personally and professionally — is to help families build stability, wealth, and generational security.`,
-    linkedin: "https://linkedin.com/in/omarsanchez",
+    linkedin: "https://www.linkedin.com/in/omarsito/",
   },
   {
     name: "Ravven Murphy",
@@ -80,6 +90,19 @@ const leaders: Leader[] = [
       "Manages complex logistics and day-to-day CEO operations for a multi-million-dollar organization",
       "Prioritizes high-impact initiatives and ensures seamless execution across professional and personal priorities",
       "Known for adaptability, strong communication skills, and commitment to excellence",
+    ],
+    expertise: [
+      "Program Management",
+      "Cross-Functional Leadership",
+      "Business Development",
+      "Customer Retention",
+      "Process Improvement",
+      "Employee Engagement",
+      "Internal Communications",
+      "Customer Success",
+      "Relationship Management",
+      "Event Planning & Coordination",
+      "Community Engagement",
     ],
     closing: `As Executive Assistant, Ravven plays a critical role in managing the day-to-day operations of the CEO, ensuring efficiency, discretion, and seamless execution. Her ability to balance high-pressure demands with strategic problem-solving makes her an integral part of The Financial Architects leadership ecosystem — bringing structure, clarity, and momentum to fast-moving environments.`,
   },
