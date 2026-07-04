@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import tfaLogoUrl from "@/assets/tfa-logo.png";
-import mannySotoUrl from "@/assets/leadership/manny-soto.jpg";
+import mannySotoAsset from "@/assets/leadership/manny-soto.jpg.asset.json";
+const mannySotoUrl = mannySotoAsset.url;
 import omarSanchezUrl from "@/assets/leadership/omar-sanchez.jpg";
 
 type RGB = [number, number, number];
