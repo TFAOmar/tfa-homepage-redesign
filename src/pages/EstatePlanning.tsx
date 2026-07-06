@@ -1,4 +1,5 @@
 import { Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Shield, Lock, Users, FileText, Scale, CheckCircle, ChevronRight } from "lucide-react";
 import { EstatePlanningForm } from "@/components/estate-planning/EstatePlanningForm";
@@ -35,7 +36,11 @@ const EstatePlanning = () => {
         description="Protect your legacy with estate planning and living trusts. Avoid probate, maintain privacy, and ensure your wishes are honored. Free consultation in Chino Hills."
         canonical={`${siteConfig.url}/services/estate-planning`}
         keywords="estate planning, living trust, probate avoidance, wills, beneficiary review, Chino Hills estate planning"
-      />
+      >
+        <link rel="alternate" hrefLang="en" href={`${siteConfig.url}/services/estate-planning`} />
+        <link rel="alternate" hrefLang="es" href={`${siteConfig.url}/es/services/estate-planning`} />
+        <link rel="alternate" hrefLang="x-default" href={`${siteConfig.url}/services/estate-planning`} />
+      </SEOHead>
       <JsonLd data={[
         generateWebPageSchema("Estate Planning & Living Trusts", "Comprehensive estate planning services including living trusts, wills, and beneficiary review to protect your legacy.", `${siteConfig.url}/services/estate-planning`),
         generateServiceSchema("Estate Planning", "Estate planning and Living Trusts that protect your family, avoid probate, and ensure your wishes are carried out exactly as you intend.", `${siteConfig.url}/services/estate-planning`),
@@ -52,6 +57,11 @@ const EstatePlanning = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(228,181,72,0.08),transparent_50%)]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
+            {/* Language Toggle */}
+            <div className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 backdrop-blur px-1 py-1 mb-6 text-sm">
+              <span className="px-3 py-1 rounded-full bg-accent text-accent-foreground font-medium">EN</span>
+              <Link to="/es/services/estate-planning" className="px-3 py-1 rounded-full text-white/70 hover:text-white transition-colors">ES</Link>
+            </div>
             <span className="inline-block px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6">
               Estate Planning & Living Trusts
             </span>
