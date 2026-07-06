@@ -408,7 +408,7 @@ const EstatePlanningES = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 md:p-10">
-              <EstatePlanningForm />
+              <EstatePlanningForm lang="es" />
             </div>
           </div>
         </div>
