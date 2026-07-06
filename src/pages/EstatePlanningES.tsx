@@ -14,13 +14,16 @@ import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, gen
 import { siteConfig } from "@/lib/seo/siteConfig";
 
 const estatePlanningFaqs = [
-  { question: "What is a Living Trust?", answer: "A Living Trust is a legal document that places your assets into a trust during your lifetime. You maintain full control as the trustee, and upon your passing, your assets transfer directly to your beneficiaries without going through probate." },
-  { question: "How is a Living Trust different from a Will?", answer: "While both documents specify how your assets should be distributed, a Will must go through probate court—a public, expensive, and time-consuming process. A Living Trust bypasses probate entirely, keeping your affairs private and allowing immediate asset transfer." },
-  { question: "Do I need a Living Trust if I already have a Will?", answer: "A Will alone doesn't avoid probate. If you own real estate, have assets over $184,500 (in California), or value privacy, a Living Trust provides significant advantages." },
-  { question: "How much does estate planning cost?", answer: "Costs vary based on complexity. We offer competitive pricing and can discuss options during your free consultation. The cost is typically far less than what your family would pay in probate fees." },
+  { question: "¿Qué es un Fideicomiso en Vida (Living Trust)?", answer: "Un Fideicomiso en Vida es un documento legal que coloca sus bienes en un fideicomiso durante su vida. Usted mantiene el control total como fideicomisario y, al fallecer, sus bienes se transfieren directamente a sus beneficiarios sin pasar por el proceso de sucesión (probate)." },
+  { question: "¿En qué se diferencia un Fideicomiso en Vida de un Testamento?", answer: "Aunque ambos documentos indican cómo distribuir sus bienes, un testamento debe pasar por la corte de sucesión: un proceso público, costoso y lento. Un Fideicomiso en Vida evita la sucesión por completo, manteniendo sus asuntos privados y permitiendo la transferencia inmediata de bienes." },
+  { question: "¿Necesito un Fideicomiso en Vida si ya tengo un Testamento?", answer: "Un testamento por sí solo no evita la sucesión. Si posee bienes raíces, tiene activos superiores a $184,500 (en California) o valora la privacidad, un Fideicomiso en Vida ofrece ventajas significativas." },
+  { question: "¿Cuánto cuesta la planificación patrimonial?", answer: "Los costos varían según la complejidad. Ofrecemos precios competitivos y podemos hablar de las opciones durante su consulta gratuita. Suele ser mucho menos de lo que su familia pagaría en gastos de sucesión." },
 ];
 
-const EstatePlanning = () => {
+const EN_URL = `${siteConfig.url}/services/estate-planning`;
+const ES_URL = `${siteConfig.url}/es/services/estate-planning`;
+
+const EstatePlanningES = () => {
   const scrollToForm = () => {
     document.getElementById("consultation-form")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -32,22 +35,24 @@ const EstatePlanning = () => {
   return (
     <>
       <SEOHead
-        title="Estate Planning & Living Trusts"
-        description="Protect your legacy with estate planning and living trusts. Avoid probate, maintain privacy, and ensure your wishes are honored. Free consultation in Chino Hills."
-        canonical={`${siteConfig.url}/services/estate-planning`}
-        keywords="estate planning, living trust, probate avoidance, wills, beneficiary review, Chino Hills estate planning"
+        title="Planificación Patrimonial y Fideicomisos en Vida"
+        description="Proteja su legado con planificación patrimonial y fideicomisos en vida. Evite la sucesión, mantenga la privacidad y asegure que se cumplan sus deseos. Consulta gratuita en Chino Hills."
+        canonical={ES_URL}
+        keywords="planificación patrimonial, fideicomiso en vida, evitar sucesión, testamentos, revisión de beneficiarios, planificación patrimonial en español"
       >
-        <link rel="alternate" hrefLang="en" href={`${siteConfig.url}/services/estate-planning`} />
-        <link rel="alternate" hrefLang="es" href={`${siteConfig.url}/es/services/estate-planning`} />
-        <link rel="alternate" hrefLang="x-default" href={`${siteConfig.url}/services/estate-planning`} />
+        <html lang="es" />
+        <meta property="og:locale" content="es_US" />
+        <link rel="alternate" hrefLang="en" href={EN_URL} />
+        <link rel="alternate" hrefLang="es" href={ES_URL} />
+        <link rel="alternate" hrefLang="x-default" href={EN_URL} />
       </SEOHead>
       <JsonLd data={[
-        generateWebPageSchema("Estate Planning & Living Trusts", "Comprehensive estate planning services including living trusts, wills, and beneficiary review to protect your legacy.", `${siteConfig.url}/services/estate-planning`),
-        generateServiceSchema("Estate Planning", "Estate planning and Living Trusts that protect your family, avoid probate, and ensure your wishes are carried out exactly as you intend.", `${siteConfig.url}/services/estate-planning`),
+        generateWebPageSchema("Planificación Patrimonial y Fideicomisos en Vida", "Servicios integrales de planificación patrimonial que incluyen fideicomisos en vida, testamentos y revisión de beneficiarios para proteger su legado.", ES_URL),
+        generateServiceSchema("Planificación Patrimonial", "Planificación patrimonial y Fideicomisos en Vida que protegen a su familia, evitan la sucesión y aseguran que sus deseos se cumplan tal como los planeó.", ES_URL),
         generateBreadcrumbSchema([
-          { name: "Home", url: siteConfig.url },
-          { name: "Services", url: `${siteConfig.url}/services` },
-          { name: "Estate Planning", url: `${siteConfig.url}/services/estate-planning` }
+          { name: "Inicio", url: siteConfig.url },
+          { name: "Servicios", url: `${siteConfig.url}/services` },
+          { name: "Planificación Patrimonial", url: ES_URL }
         ]),
         generateFAQSchema(estatePlanningFaqs)
       ]} />
@@ -59,28 +64,28 @@ const EstatePlanning = () => {
           <div className="max-w-4xl mx-auto text-center">
             {/* Language Toggle */}
             <div className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 backdrop-blur px-1 py-1 mb-6 text-sm">
-              <span className="px-3 py-1 rounded-full bg-accent text-accent-foreground font-medium">EN</span>
-              <Link to="/es/services/estate-planning" className="px-3 py-1 rounded-full text-white/70 hover:text-white transition-colors">ES</Link>
+              <Link to="/services/estate-planning" className="px-3 py-1 rounded-full text-white/70 hover:text-white transition-colors">EN</Link>
+              <span className="px-3 py-1 rounded-full bg-accent text-accent-foreground font-medium">ES</span>
             </div>
-            <span className="inline-block px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6">
-              Estate Planning & Living Trusts
+            <span className="inline-block px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6 ml-2">
+              Planificación Patrimonial y Fideicomisos en Vida
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
-              Protect What You've Built.
+              Proteja lo que ha construido.
               <br />
-              <span className="text-accent">Plan Your Legacy.</span>
+              <span className="text-accent">Planifique su legado.</span>
             </h1>
             <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Estate planning and Living Trusts that protect your family, avoid probate, 
-              and ensure your wishes are carried out exactly as you intend.
+              Planificación patrimonial y Fideicomisos en Vida que protegen a su familia,
+              evitan la sucesión (probate) y aseguran que sus deseos se cumplan.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button onClick={scrollToForm} size="lg" className="btn-primary-cta px-8 py-6 text-lg">
-                Start Your Plan
+                Comience su Plan
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
               <Button onClick={scrollToTrusts} variant="hero" size="lg" className="px-8 py-6 text-lg">
-                Learn About Living Trusts
+                Conozca los Fideicomisos en Vida
               </Button>
             </div>
           </div>
@@ -93,19 +98,19 @@ const EstatePlanning = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-3xl md:text-4xl font-bold text-accent mb-2">67%</div>
-              <p className="text-muted-foreground text-sm">of Americans have no estate plan</p>
+              <p className="text-muted-foreground text-sm">de los estadounidenses no tienen plan patrimonial</p>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-accent mb-2">$50K+</div>
-              <p className="text-muted-foreground text-sm">average probate cost avoided</p>
+              <p className="text-muted-foreground text-sm">costo promedio de sucesión evitado</p>
             </div>
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-accent mb-2">18 mo</div>
-              <p className="text-muted-foreground text-sm">typical probate timeline</p>
+              <div className="text-3xl md:text-4xl font-bold text-accent mb-2">18 meses</div>
+              <p className="text-muted-foreground text-sm">duración típica del proceso de sucesión</p>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-accent mb-2">100%</div>
-              <p className="text-muted-foreground text-sm">private with a Living Trust</p>
+              <p className="text-muted-foreground text-sm">privado con un Fideicomiso en Vida</p>
             </div>
           </div>
         </div>
@@ -116,12 +121,12 @@ const EstatePlanning = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 tracking-tight">
-              Why Estate Planning Matters
+              Por qué es importante la planificación patrimonial
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Without proper estate planning, your family may face lengthy court proceedings, 
-              public records exposure, and unnecessary expenses. A well-crafted estate plan 
-              protects your loved ones and ensures your wishes are honored.
+              Sin una planificación patrimonial adecuada, su familia puede enfrentar largos procesos judiciales,
+              exposición pública de sus registros y gastos innecesarios. Un plan patrimonial bien elaborado
+              protege a sus seres queridos y asegura que se cumplan sus deseos.
             </p>
           </div>
 
@@ -130,10 +135,10 @@ const EstatePlanning = () => {
               <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
                 <Shield className="h-7 w-7 text-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Protect Your Family</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Proteja a su Familia</h3>
               <p className="text-muted-foreground">
-                Ensure your loved ones are taken care of and receive their inheritance without 
-                delays or complications.
+                Asegure que sus seres queridos estén cuidados y reciban su herencia sin
+                demoras ni complicaciones.
               </p>
             </div>
 
@@ -141,10 +146,10 @@ const EstatePlanning = () => {
               <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
                 <Lock className="h-7 w-7 text-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Maintain Privacy</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Mantenga la Privacidad</h3>
               <p className="text-muted-foreground">
-                Keep your financial affairs private. Unlike wills, trusts don't become 
-                public record.
+                Mantenga sus asuntos financieros privados. A diferencia de los testamentos, los fideicomisos
+                no se convierten en registro público.
               </p>
             </div>
 
@@ -152,10 +157,10 @@ const EstatePlanning = () => {
               <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
                 <Scale className="h-7 w-7 text-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Avoid Probate</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Evite la Sucesión</h3>
               <p className="text-muted-foreground">
-                Skip the expensive and time-consuming probate process, saving your family 
-                thousands in legal fees.
+                Evite el costoso y prolongado proceso de sucesión, ahorrándole a su familia
+                miles de dólares en gastos legales.
               </p>
             </div>
           </div>
@@ -167,10 +172,10 @@ const EstatePlanning = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 tracking-tight">
-              Our Estate Planning Services
+              Nuestros Servicios de Planificación Patrimonial
             </h2>
             <p className="text-lg text-muted-foreground">
-              Comprehensive solutions to protect your legacy and provide peace of mind.
+              Soluciones integrales para proteger su legado y brindarle tranquilidad.
             </p>
           </div>
 
@@ -179,10 +184,10 @@ const EstatePlanning = () => {
               <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
                 <FileText className="h-8 w-8 text-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Living Trusts</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Fideicomisos en Vida</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Avoid probate, maintain privacy, and keep control of your assets during your lifetime 
-                and beyond.
+                Evite la sucesión, mantenga la privacidad y conserve el control de sus bienes durante su vida
+                y después.
               </p>
             </div>
 
@@ -190,10 +195,10 @@ const EstatePlanning = () => {
               <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
                 <Users className="h-8 w-8 text-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Wills & Legacy Documents</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Testamentos y Documentos de Legado</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Ensure your wishes are legally documented with properly drafted wills, 
-                powers of attorney, and healthcare directives.
+                Documente legalmente sus deseos con testamentos debidamente redactados,
+                poderes notariales y directivas de atención médica.
               </p>
             </div>
 
@@ -201,10 +206,10 @@ const EstatePlanning = () => {
               <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
                 <CheckCircle className="h-8 w-8 text-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Beneficiary Review</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Revisión de Beneficiarios</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Coordinate your accounts and policies with your estate plan to ensure 
-                seamless asset transfer.
+                Coordine sus cuentas y pólizas con su plan patrimonial para asegurar
+                una transferencia de bienes sin contratiempos.
               </p>
             </div>
           </div>
@@ -216,14 +221,14 @@ const EstatePlanning = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <span className="inline-block px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6">
-              Featured Service
+              Servicio Destacado
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 tracking-tight">
-              The Power of a Living Trust
+              El Poder de un Fideicomiso en Vida
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              A Living Trust is one of the most effective tools for protecting your assets 
-              and ensuring your family's financial security.
+              Un Fideicomiso en Vida es una de las herramientas más eficaces para proteger sus bienes
+              y garantizar la seguridad financiera de su familia.
             </p>
           </div>
 
@@ -232,9 +237,9 @@ const EstatePlanning = () => {
               <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
                 <Scale className="h-6 w-6 text-accent" />
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Avoid Probate</h3>
+              <h3 className="font-semibold text-foreground mb-2">Evita la Sucesión</h3>
               <p className="text-muted-foreground text-sm">
-                Your assets transfer directly to beneficiaries without court involvement.
+                Sus bienes se transfieren directamente a los beneficiarios sin intervención judicial.
               </p>
             </div>
 
@@ -242,9 +247,9 @@ const EstatePlanning = () => {
               <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
                 <Lock className="h-6 w-6 text-accent" />
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Protect Privacy</h3>
+              <h3 className="font-semibold text-foreground mb-2">Protege la Privacidad</h3>
               <p className="text-muted-foreground text-sm">
-                Unlike wills, trusts don't become part of the public record.
+                A diferencia de los testamentos, los fideicomisos no forman parte del registro público.
               </p>
             </div>
 
@@ -252,9 +257,9 @@ const EstatePlanning = () => {
               <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
                 <Shield className="h-6 w-6 text-accent" />
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Maintain Control</h3>
+              <h3 className="font-semibold text-foreground mb-2">Mantiene el Control</h3>
               <p className="text-muted-foreground text-sm">
-                You remain in complete control of your assets during your lifetime.
+                Usted conserva el control total de sus bienes durante toda su vida.
               </p>
             </div>
 
@@ -262,9 +267,9 @@ const EstatePlanning = () => {
               <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
                 <Users className="h-6 w-6 text-accent" />
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Reduce Stress</h3>
+              <h3 className="font-semibold text-foreground mb-2">Reduce el Estrés</h3>
               <p className="text-muted-foreground text-sm">
-                Spare your family the emotional burden of navigating probate court.
+                Evítele a su familia la carga emocional de enfrentar la corte de sucesión.
               </p>
             </div>
           </div>
@@ -276,10 +281,10 @@ const EstatePlanning = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 tracking-tight">
-              How It Works
+              Cómo Funciona
             </h2>
             <p className="text-lg text-muted-foreground">
-              Getting started with your estate plan is simple and straightforward.
+              Comenzar su plan patrimonial es sencillo y directo.
             </p>
           </div>
 
@@ -288,9 +293,9 @@ const EstatePlanning = () => {
               <div className="w-16 h-16 rounded-full bg-accent text-accent-foreground flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
                 1
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Free Consultation</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Consulta Gratuita</h3>
               <p className="text-muted-foreground">
-                We'll discuss your family situation, assets, and goals in a no-pressure conversation.
+                Conversaremos sobre su situación familiar, bienes y metas sin ningún compromiso.
               </p>
               <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-accent to-transparent" />
             </div>
@@ -299,9 +304,9 @@ const EstatePlanning = () => {
               <div className="w-16 h-16 rounded-full bg-accent text-accent-foreground flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
                 2
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Customized Plan</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Plan Personalizado</h3>
               <p className="text-muted-foreground">
-                Receive tailored estate planning recommendations based on your unique needs.
+                Reciba recomendaciones de planificación patrimonial adaptadas a sus necesidades únicas.
               </p>
               <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-accent to-transparent" />
             </div>
@@ -310,9 +315,9 @@ const EstatePlanning = () => {
               <div className="w-16 h-16 rounded-full bg-accent text-accent-foreground flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
                 3
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Implementation</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Implementación</h3>
               <p className="text-muted-foreground">
-                Work with our trusted partners to execute your plan and protect your family.
+                Trabaje con nuestros socios de confianza para ejecutar su plan y proteger a su familia.
               </p>
             </div>
           </div>
@@ -325,63 +330,63 @@ const EstatePlanning = () => {
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 tracking-tight">
-                Frequently Asked Questions
+                Preguntas Frecuentes
               </h2>
             </div>
 
             <Accordion type="single" collapsible className="space-y-4">
               <AccordionItem value="item-1" className="bg-card border border-border rounded-xl px-6">
                 <AccordionTrigger className="text-left font-medium">
-                  What is a Living Trust?
+                  ¿Qué es un Fideicomiso en Vida?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  A Living Trust is a legal document that places your assets into a trust during your 
-                  lifetime. You maintain full control as the trustee, and upon your passing, your 
-                  assets transfer directly to your beneficiaries without going through probate.
+                  Un Fideicomiso en Vida es un documento legal que coloca sus bienes en un fideicomiso durante su
+                  vida. Usted mantiene el control total como fideicomisario y, al fallecer, sus
+                  bienes se transfieren directamente a sus beneficiarios sin pasar por el proceso de sucesión.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-2" className="bg-card border border-border rounded-xl px-6">
                 <AccordionTrigger className="text-left font-medium">
-                  How is a Living Trust different from a Will?
+                  ¿En qué se diferencia un Fideicomiso en Vida de un Testamento?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  While both documents specify how your assets should be distributed, a Will must go 
-                  through probate court—a public, expensive, and time-consuming process. A Living Trust 
-                  bypasses probate entirely, keeping your affairs private and allowing immediate asset transfer.
+                  Aunque ambos documentos especifican cómo distribuir sus bienes, un testamento debe pasar por
+                  la corte de sucesión: un proceso público, costoso y lento. Un Fideicomiso en Vida
+                  evita la sucesión por completo, manteniendo sus asuntos privados y permitiendo la transferencia inmediata.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-3" className="bg-card border border-border rounded-xl px-6">
                 <AccordionTrigger className="text-left font-medium">
-                  Do I need a Living Trust if I already have a Will?
+                  ¿Necesito un Fideicomiso en Vida si ya tengo un Testamento?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  A Will alone doesn't avoid probate. If you own real estate, have assets over $184,500 
-                  (in California), or value privacy, a Living Trust provides significant advantages. 
-                  Most comprehensive estate plans include both documents working together.
+                  Un testamento por sí solo no evita la sucesión. Si posee bienes raíces, tiene activos superiores a $184,500
+                  (en California) o valora la privacidad, un Fideicomiso en Vida ofrece ventajas significativas.
+                  La mayoría de los planes patrimoniales completos incluyen ambos documentos trabajando juntos.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-4" className="bg-card border border-border rounded-xl px-6">
                 <AccordionTrigger className="text-left font-medium">
-                  How much does estate planning cost?
+                  ¿Cuánto cuesta la planificación patrimonial?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  Costs vary based on complexity, but a comprehensive Living Trust package typically 
-                  ranges from $1,500 to $3,500. Compare this to probate costs of 3-7% of your estate 
-                  value—often tens of thousands of dollars—and the investment in proper planning becomes clear.
+                  Los costos varían según la complejidad, pero un paquete completo de Fideicomiso en Vida generalmente
+                  cuesta entre $1,500 y $3,500. Compare esto con los costos de sucesión del 3% al 7% del valor de su patrimonio
+                  —a menudo decenas de miles de dólares— y la inversión en una planificación adecuada se vuelve evidente.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-5" className="bg-card border border-border rounded-xl px-6">
                 <AccordionTrigger className="text-left font-medium">
-                  Who should have an estate plan?
+                  ¿Quién debería tener un plan patrimonial?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  Anyone who owns property, has children, or wants to protect their family should have 
-                  an estate plan. It's especially important if you're married, own a home, have retirement 
-                  accounts, or want to ensure your healthcare wishes are respected if you become incapacitated.
+                  Cualquier persona que posea bienes, tenga hijos o quiera proteger a su familia debería tener
+                  un plan patrimonial. Es especialmente importante si está casado, es dueño de casa, tiene cuentas de retiro,
+                  o desea asegurarse de que se respeten sus deseos médicos en caso de incapacidad.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -395,10 +400,10 @@ const EstatePlanning = () => {
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-                Start Planning Your Legacy Today
+                Comience a Planificar su Legado Hoy
               </h2>
               <p className="text-lg text-white/80">
-                Request your free consultation and take the first step toward protecting your family.
+                Solicite su consulta gratuita y dé el primer paso para proteger a su familia.
               </p>
             </div>
 
@@ -413,15 +418,15 @@ const EstatePlanning = () => {
       <section className="py-16 bg-background border-t border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-            Don't Leave Your Family's Future to Chance
+            No Deje el Futuro de su Familia al Azar
           </h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            Every day without an estate plan is a day your family isn't protected. 
-            Let's change that together.
+            Cada día sin un plan patrimonial es un día en que su familia no está protegida.
+            Cambiemos eso juntos.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button onClick={scrollToForm} className="btn-primary-cta px-8 py-6">
-              Get Started Now
+              Empiece Ahora
             </Button>
             <a href="tel:8883505396" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <Phone className="h-5 w-5" />
@@ -435,4 +440,4 @@ const EstatePlanning = () => {
   );
 };
 
-export default EstatePlanning;
+export default EstatePlanningES;
