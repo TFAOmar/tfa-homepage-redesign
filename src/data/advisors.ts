@@ -41,6 +41,7 @@ import elizabethRochaImg from "@/assets/advisors/elizabeth-rocha.jpg";
 import rosieNunoImg from "@/assets/advisors/rosie-nuno.jpg";
 import aileenGutierrezImg from "@/assets/advisors/aileen-gutierrez.jpg";
 import kristinRomoImg from "@/assets/advisors/kristin-romo.jpg";
+import anitaVegaAsset from "@/assets/advisors/anita-vega.jpg.asset.json";
 
 export interface Advisor {
   id: number | string;
@@ -731,6 +732,22 @@ export const advisors: Advisor[] = [
     image: kristinRomoImg,
     yearsOfExperience: 7,
     landingPage: "/advisors/kristin-romo"
+  },
+  {
+    id: "anita-vega",
+    name: "Anita Vega",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Long Beach",
+    region: "West",
+    bio: "With over 25 years of experience in finance, Anita helps individuals, families, and business owners build wealth, protect what matters most, and plan for a secure financial future.",
+    specialties: ["Retirement Planning", "Life Insurance", "Estate Planning", "Investment Management"],
+    licenses: ["CA Lic# 4484117"],
+    image: anitaVegaAsset.url,
+    phone: "310-930-4960",
+    yearsOfExperience: 25,
+    schedulingLink: "https://calendly.com/anitavega007/30min"
   }
 ];
 
