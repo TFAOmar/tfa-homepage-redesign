@@ -41,6 +41,7 @@ import elizabethRochaImg from "@/assets/advisors/elizabeth-rocha.jpg";
 import rosieNunoImg from "@/assets/advisors/rosie-nuno.jpg";
 import aileenGutierrezImg from "@/assets/advisors/aileen-gutierrez.jpg";
 import kristinRomoImg from "@/assets/advisors/kristin-romo.jpg";
+import anitaVegaAsset from "@/assets/advisors/anita-vega.jpg.asset.json";
 
 export interface Advisor {
   id: number | string;
