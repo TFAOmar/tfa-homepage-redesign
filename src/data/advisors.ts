@@ -747,7 +747,8 @@ export const advisors: Advisor[] = [
     image: anitaVegaAsset.url,
     phone: "310-930-4960",
     yearsOfExperience: 25,
-    schedulingLink: "https://calendly.com/anitavega007/30min"
+    schedulingLink: "https://calendly.com/anitavega007/30min",
+    landingPage: "/advisors/anita-vega"
   }
 ];
 
