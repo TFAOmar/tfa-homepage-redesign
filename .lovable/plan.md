@@ -1,23 +1,29 @@
-## Goal
-Make the intake form on `/es/services/estate-planning` fully Spanish (labels, placeholders, dropdown options, button, validation messages, toasts, disclaimer) without affecting the English form on `/services/estate-planning`.
+## Add Anita Vega to Advisors
 
-## Approach
-Add an optional `lang` prop to `EstatePlanningForm` (defaults to `"en"`). All user-visible strings are pulled from a small inline `copy` object keyed by language. The Spanish page passes `lang="es"`; the English page keeps default behavior.
+Add new advisor "Anita Vega" to the static advisors list on the /advisors page.
 
-Submitted values (dropdown `value` keys like `single`, `married`, `under-250k`) stay in English so backend/CRM tagging is unchanged. Only the visible option labels are translated.
+### Steps
 
-## Changes
+1. **Upload photo as Lovable Asset**
+   - Use `lovable-assets create` on `/mnt/user-uploads/Anita_Vega.jpg` → `src/assets/advisors/anita-vega.jpg.asset.json`
 
-### 1. `src/components/estate-planning/EstatePlanningForm.tsx`
-- Add `interface Props { lang?: "en" | "es" }`.
-- Define a `copy` map with both languages for: field labels, placeholders, all Select options, best-time-to-call options, additional info placeholder, submit button (idle + submitting), disclaimer, success/error toasts, and Zod validation messages.
-- Build the Zod schema inside the component using the localized messages.
-- Pass the honeypot success toast in the correct language.
-- Tag stays `"Estate Planning"`; add `"Spanish"` tag when `lang === "es"` so leads are easy to identify. `form_name` becomes `"Estate Planning Inquiry (Spanish)"` in ES.
+2. **Add advisor entry in `src/data/advisors.ts`**
+   - Import the asset pointer
+   - Append new `Advisor` object:
+     - id: `"anita-vega"`
+     - name: "Anita Vega"
+     - title: "Financial Strategist"
+     - type: "Advisor"
+     - state: "California", city: "Long Beach", region: "West"
+     - bio: The shorter first-person bio she provided ("I share practical financial strategies…")
+     - specialties: ["Retirement Planning", "Life Insurance", "Estate Planning", "Legacy Planning"]
+     - licenses: ["Life & Health (Lic# 4484117)"]
+     - image: imported asset URL
+     - phone: "310-930-4960"
+     - yearsOfExperience: 25
+     - schedulingLink: `https://calendly.com/anitavega007/30min`
 
-### 2. `src/pages/EstatePlanningES.tsx`
-- Pass `<EstatePlanningForm lang="es" />`.
-
-## Out of scope
-- Header, Footer, FloatingCTA translation.
-- Any change to English page behavior.
+### Not included (confirm if wanted)
+- No dedicated `/advisors/anita-vega` landing page (existing advisors mostly have one, but many don't — skipping unless requested).
+- No email address provided; omitting `email`.
+- Longer 25-year bio can replace the short one — let me know which you'd prefer as the card bio.
