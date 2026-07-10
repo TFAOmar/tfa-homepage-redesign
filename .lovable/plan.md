@@ -1,46 +1,46 @@
-## Update: Omar Referral Prequalification — Step 1 changes
+## Omar Referral Prequalification — Field trims & tweaks
 
-### 1. Simplify Step 1 (Referrer)
+### 1. Step 2 (Client Info) — hide fields for "Quotes only"
+When `referrer.handoffPreference === "Quotes only"`, hide these client fields entirely (not just optional):
+- ZIP code
+- Best phone
+- Email
+- Preferred contact method
+- Best time to reach
+- Occupation
+- Employer
+- Annual household income
+- Estimated net worth
 
-Remove these fields entirely:
-- Company / agency (required today)
-- License number
-- NPN
-- Relationship to client
-- How should we credit you
+Keep: First name, Last name, DOB, Gender, State of residence, Citizenship/residency (+ Visa type when applicable).
 
-Step 1 becomes just:
-- Referrer type (Referral Partner / Licensed Agent or Advisor / Other)
-- Full name (required)
-- Email (required)
-- Phone (required)
-- Notes (optional, keep)
+For "Full handoff", all current fields remain (phone/email required as today).
 
-### 2. Add "handoff preference" option
+### 2. Step 3 (Coverage) — Urgency options
+Add two options to the Urgency dropdown, placed at top:
+- "Within the next hour"
+- "Same day"
+- (then existing) Immediate (within days), This month, Next 1-3 months, Just exploring
 
-New required question on Step 1:
+Also remove the entire "Does the client currently have life insurance?" question and all its conditional follow-ups (carrier, amount, year, reason, replacement).
 
-**"How would you like Omar to handle this referral?"**
-- **Full handoff** — Omar contacts the client, presents quotes, and manages the case end-to-end.
-- **Quotes only** — Omar gathers quote options and sends them back to me; I'll present and share them with the client myself.
+### 3. Step 4 (Health Baseline) — remove fields
+Remove:
+- Primary physician name
+- Physician phone
+- Reason for last visit
+- Pending tests/surgeries/hospitalizations in the next 90 days? (+ its details field)
 
-Behavior:
-- Selection stored in `form_data.referrer.handoffPreference`.
-- On Step 2 (Client Info), when "Quotes only" is selected, the client email/phone/preferred-contact fields become **optional** (still collected if the referrer wants to share) and a note appears: "Since you'll be presenting to the client, contact info is optional — Omar will send quotes to you directly."
-- Review step shows the chosen preference prominently.
+Keep height, weight, BMI, and weight-change question.
 
-### 3. Email notification updates (`send-prequalification-notification`)
+### 4. Step 7 (Review / Consent) — remove authorization line
+Remove the sentence: "I confirm the information provided is accurate to the best of my knowledge and I authorize Omar Sanchez and The Financial Architects to contact the proposed insured for the purpose of providing a life insurance quote."
 
-For `source === 'omar-referral'`:
-- Add a **"Handoff preference"** banner at the top of the email to Omar + Miguelina:
-  - Full handoff → "Contact client directly"
-  - Quotes only → "Send quotes back to referrer — do NOT contact client"
-- Subject line suffix: ` [Quotes Only]` when applicable, so Omar can spot it in the inbox.
-- Referrer confirmation email reflects the chosen path in its intro paragraph.
+Keep the signature + date fields and submit button. (Adjust the consent checkbox label if it still references that authorization — replace with a simple accuracy acknowledgment.)
 
 ### Files to edit
-- `src/types/omarReferralPrequal.ts` — add `handoffPreference` to `ReferrerInfo`; drop unused fields from the type.
-- `src/components/prequalification/omar-referral/OmarReferralWizard.tsx` — update Step 1 form fields, Step 2 conditional-optional logic, Step 7 review summary, and validation.
-- `supabase/functions/send-prequalification-notification/index.ts` — add handoff banner + subject suffix in the Omar-referral branch.
+- `src/components/prequalification/omar-referral/OmarReferralWizard.tsx` — Step 2 conditional rendering, Step 3 urgency options + remove existing-coverage block, Step 4 field removals, Step 7 consent text, and remove review-summary rows referencing removed fields.
+- `src/types/omarReferralPrequal.ts` — no field removals required (types are all optional), no change needed unless we want to keep it clean. Leave as-is to avoid churn.
+- `supabase/functions/send-prequalification-notification/index.ts` — remove rendering of removed fields (physician, pending tests, existing coverage, and Step-2 fields when Quotes only) from the Omar-referral email template.
 
-No route, schema, or DB changes.
+No route or DB changes.
