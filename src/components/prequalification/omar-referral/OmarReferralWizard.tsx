@@ -833,7 +833,18 @@ function Step7Review({
       </div>
 
       <Section title="Referrer" step={1}>
-        <p className="text-sm">{data.referrer.fullName} — {data.referrer.company}<br />{data.referrer.email} · {data.referrer.phone}</p>
+        <p className="text-sm">
+          {data.referrer.fullName} ({data.referrer.referrerType || "—"})<br />
+          {data.referrer.email} · {data.referrer.phone}
+        </p>
+        <p className="text-sm mt-2">
+          <span className="font-semibold text-primary">Handoff:</span>{" "}
+          {data.referrer.handoffPreference === "Quotes only"
+            ? "Quotes only — referrer will present to client"
+            : data.referrer.handoffPreference === "Full handoff"
+            ? "Full handoff — Omar contacts the client"
+            : "—"}
+        </p>
       </Section>
       <Section title="Proposed Insured" step={2}>
         <p className="text-sm">{data.insured.firstName} {data.insured.lastName} · DOB {data.insured.dateOfBirth}<br />{data.insured.stateOfResidence} · {data.insured.email} · {data.insured.phone}</p>
