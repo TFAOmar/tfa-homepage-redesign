@@ -208,10 +208,15 @@ function Step1Referrer({ data, update, onNext }: StepProps<OmarReferralFormData>
 function Step2Insured({ data, update, onNext, onBack }: StepProps<OmarReferralFormData>) {
   const i = data.insured;
   const set = (patch: Partial<typeof i>) => update({ insured: { ...i, ...patch } });
+  const quotesOnly = data.referrer.handoffPreference === "Quotes only";
 
   const handleNext = () => {
-    if (!i.firstName || !i.lastName || !i.dateOfBirth || !i.gender || !i.stateOfResidence || !i.phone || !i.email) {
+    if (!i.firstName || !i.lastName || !i.dateOfBirth || !i.gender || !i.stateOfResidence) {
       toast.error("Please complete all required client fields.");
+      return;
+    }
+    if (!quotesOnly && (!i.phone || !i.email)) {
+      toast.error("Client phone and email are required for full handoff.");
       return;
     }
     onNext();
@@ -222,6 +227,11 @@ function Step2Insured({ data, update, onNext, onBack }: StepProps<OmarReferralFo
       <div>
         <h2 className="text-2xl font-bold">Proposed Insured</h2>
         <p className="text-muted-foreground mt-1">Basic information about the person seeking coverage.</p>
+        {quotesOnly && (
+          <div className="mt-3 p-3 bg-primary/5 border border-primary/30 rounded-lg text-sm">
+            Since you'll be presenting to the client, their contact info is optional — Omar will send quotes to you directly.
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TextField label="First name" value={i.firstName} onChange={(v) => set({ firstName: v })} required />
@@ -230,8 +240,8 @@ function Step2Insured({ data, update, onNext, onBack }: StepProps<OmarReferralFo
         <SelectField label="Gender" value={i.gender} onChange={(v) => set({ gender: v })} options={["Male", "Female", "Other"]} required />
         <SelectField label="State of residence" value={i.stateOfResidence} onChange={(v) => set({ stateOfResidence: v })} options={US_STATES} required />
         <TextField label="ZIP code" value={i.zip} onChange={(v) => set({ zip: v })} />
-        <TextField label="Best phone" type="tel" value={i.phone} onChange={(v) => set({ phone: v })} required />
-        <TextField label="Email" type="email" value={i.email} onChange={(v) => set({ email: v })} required />
+        <TextField label="Best phone" type="tel" value={i.phone} onChange={(v) => set({ phone: v })} required={!quotesOnly} />
+        <TextField label="Email" type="email" value={i.email} onChange={(v) => set({ email: v })} required={!quotesOnly} />
         <SelectField label="Preferred contact method" value={i.preferredContactMethod} onChange={(v) => set({ preferredContactMethod: v })} options={["Phone call", "Text", "Email"]} />
         <SelectField label="Best time to reach" value={i.preferredContactTime} onChange={(v) => set({ preferredContactTime: v })} options={["Morning", "Afternoon", "Evening", "Anytime"]} />
         <SelectField label="Citizenship / residency" value={i.citizenshipStatus} onChange={(v) => set({ citizenshipStatus: v })} options={["US Citizen", "Permanent Resident (Green Card)", "Visa Holder", "Other"]} />
