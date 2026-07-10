@@ -293,6 +293,7 @@ const AppLayout = () => {
           <Route path="/aileen" element={<Navigate to="/advisors/aileen-gutierrez/refer" replace />} />
           <Route path="/aileen/partners" element={<Navigate to="/advisors/aileen-gutierrez/partners" replace />} />
           <Route path="/connect-with-omar" element={<OmarConnect />} />
+          <Route path="/advisors/omar-sanchez/refer" element={<OmarReferralPrequalification />} />
           <Route path="/homeowner-protection" element={<HomeownerProtection />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
