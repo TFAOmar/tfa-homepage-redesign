@@ -248,7 +248,7 @@ function Step2Insured({ data, update, onNext, onBack }: StepProps<OmarReferralFo
             <SelectField label="Best time to reach" value={i.preferredContactTime} onChange={(v) => set({ preferredContactTime: v })} options={["Morning", "Afternoon", "Evening", "Anytime"]} />
           </>
         )}
-        <SelectField label="Citizenship / residency" value={i.citizenshipStatus} onChange={(v) => set({ citizenshipStatus: v })} options={["US Citizen", "Permanent Resident (Green Card)", "Visa Holder", "Other"]} />
+        <SelectField label="Citizenship / residency" value={i.citizenshipStatus} onChange={(v) => set({ citizenshipStatus: v })} options={["US Citizen", "Permanent Resident (Green Card)", "Visa Holder", "ITIN", "Other"]} />
         {i.citizenshipStatus === "Visa Holder" && (
           <TextField label="Visa type" value={i.visaType} onChange={(v) => set({ visaType: v })} />
         )}
