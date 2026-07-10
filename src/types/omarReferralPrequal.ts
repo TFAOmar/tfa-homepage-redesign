@@ -6,11 +6,7 @@ export interface ReferrerInfo {
   fullName?: string;
   email?: string;
   phone?: string;
-  company?: string;
-  licenseNumber?: string;
-  npn?: string;
-  relationshipToClient?: string;
-  creditPreference?: string;
+  handoffPreference?: "Full handoff" | "Quotes only";
   notes?: string;
 }
 

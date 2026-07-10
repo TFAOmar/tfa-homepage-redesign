@@ -129,14 +129,12 @@ function Step1Referrer({ data, update, onNext }: StepProps<OmarReferralFormData>
   const set = (patch: Partial<typeof r>) => update({ referrer: { ...r, ...patch } });
 
   const handleNext = () => {
-    if (!r.referrerType || !r.fullName || !r.email || !r.phone || !r.company) {
+    if (!r.referrerType || !r.fullName || !r.email || !r.phone || !r.handoffPreference) {
       toast.error("Please complete all required referrer fields.");
       return;
     }
     onNext();
   };
-
-  const isAgent = r.referrerType === "Licensed Agent/Advisor";
 
   return (
     <div className="space-y-6">
@@ -157,20 +155,48 @@ function Step1Referrer({ data, update, onNext }: StepProps<OmarReferralFormData>
         <TextField label="Full name" value={r.fullName} onChange={(v) => set({ fullName: v })} required />
         <TextField label="Email" type="email" value={r.email} onChange={(v) => set({ email: v })} required />
         <TextField label="Phone" type="tel" value={r.phone} onChange={(v) => set({ phone: v })} required />
-        <TextField label="Company / agency" value={r.company} onChange={(v) => set({ company: v })} required className="md:col-span-2" />
-        {isAgent && (
-          <>
-            <TextField label="License number" value={r.licenseNumber} onChange={(v) => set({ licenseNumber: v })} />
-            <TextField label="NPN" value={r.npn} onChange={(v) => set({ npn: v })} />
-          </>
-        )}
-        <TextField label="Relationship to client (optional)" value={r.relationshipToClient} onChange={(v) => set({ relationshipToClient: v })} />
-        <TextField label="How should we credit you? (optional)" value={r.creditPreference} onChange={(v) => set({ creditPreference: v })} />
         <div className="md:col-span-2 space-y-2">
           <Label>Notes for Omar (optional)</Label>
           <Textarea rows={3} value={r.notes || ""} onChange={(e) => set({ notes: e.target.value })} />
         </div>
       </div>
+
+      <div className="space-y-3 pt-2">
+        <Label>How would you like Omar to handle this referral? *</Label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {([
+            {
+              value: "Full handoff",
+              title: "Full handoff",
+              desc: "Omar contacts the client, presents quotes, and manages the case end-to-end.",
+            },
+            {
+              value: "Quotes only",
+              title: "Quotes only",
+              desc: "Omar gathers quote options and sends them back to me — I'll present and share them with the client myself.",
+            },
+          ] as const).map((opt) => {
+            const selected = r.handoffPreference === opt.value;
+            return (
+              <button
+                type="button"
+                key={opt.value}
+                onClick={() => set({ handoffPreference: opt.value })}
+                className={cn(
+                  "text-left p-4 border rounded-lg transition-colors",
+                  selected
+                    ? "border-primary bg-primary/5 ring-2 ring-primary/40"
+                    : "border-border hover:bg-muted/50"
+                )}
+              >
+                <div className="font-semibold text-sm">{opt.title}</div>
+                <div className="text-xs text-muted-foreground mt-1">{opt.desc}</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="flex justify-end pt-4">
         <Button size="lg" onClick={handleNext}>Continue</Button>
       </div>
@@ -182,10 +208,15 @@ function Step1Referrer({ data, update, onNext }: StepProps<OmarReferralFormData>
 function Step2Insured({ data, update, onNext, onBack }: StepProps<OmarReferralFormData>) {
   const i = data.insured;
   const set = (patch: Partial<typeof i>) => update({ insured: { ...i, ...patch } });
+  const quotesOnly = data.referrer.handoffPreference === "Quotes only";
 
   const handleNext = () => {
-    if (!i.firstName || !i.lastName || !i.dateOfBirth || !i.gender || !i.stateOfResidence || !i.phone || !i.email) {
+    if (!i.firstName || !i.lastName || !i.dateOfBirth || !i.gender || !i.stateOfResidence) {
       toast.error("Please complete all required client fields.");
+      return;
+    }
+    if (!quotesOnly && (!i.phone || !i.email)) {
+      toast.error("Client phone and email are required for full handoff.");
       return;
     }
     onNext();
@@ -196,6 +227,11 @@ function Step2Insured({ data, update, onNext, onBack }: StepProps<OmarReferralFo
       <div>
         <h2 className="text-2xl font-bold">Proposed Insured</h2>
         <p className="text-muted-foreground mt-1">Basic information about the person seeking coverage.</p>
+        {quotesOnly && (
+          <div className="mt-3 p-3 bg-primary/5 border border-primary/30 rounded-lg text-sm">
+            Since you'll be presenting to the client, their contact info is optional — Omar will send quotes to you directly.
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TextField label="First name" value={i.firstName} onChange={(v) => set({ firstName: v })} required />
@@ -204,8 +240,8 @@ function Step2Insured({ data, update, onNext, onBack }: StepProps<OmarReferralFo
         <SelectField label="Gender" value={i.gender} onChange={(v) => set({ gender: v })} options={["Male", "Female", "Other"]} required />
         <SelectField label="State of residence" value={i.stateOfResidence} onChange={(v) => set({ stateOfResidence: v })} options={US_STATES} required />
         <TextField label="ZIP code" value={i.zip} onChange={(v) => set({ zip: v })} />
-        <TextField label="Best phone" type="tel" value={i.phone} onChange={(v) => set({ phone: v })} required />
-        <TextField label="Email" type="email" value={i.email} onChange={(v) => set({ email: v })} required />
+        <TextField label="Best phone" type="tel" value={i.phone} onChange={(v) => set({ phone: v })} required={!quotesOnly} />
+        <TextField label="Email" type="email" value={i.email} onChange={(v) => set({ email: v })} required={!quotesOnly} />
         <SelectField label="Preferred contact method" value={i.preferredContactMethod} onChange={(v) => set({ preferredContactMethod: v })} options={["Phone call", "Text", "Email"]} />
         <SelectField label="Best time to reach" value={i.preferredContactTime} onChange={(v) => set({ preferredContactTime: v })} options={["Morning", "Afternoon", "Evening", "Anytime"]} />
         <SelectField label="Citizenship / residency" value={i.citizenshipStatus} onChange={(v) => set({ citizenshipStatus: v })} options={["US Citizen", "Permanent Resident (Green Card)", "Visa Holder", "Other"]} />
@@ -807,7 +843,18 @@ function Step7Review({
       </div>
 
       <Section title="Referrer" step={1}>
-        <p className="text-sm">{data.referrer.fullName} — {data.referrer.company}<br />{data.referrer.email} · {data.referrer.phone}</p>
+        <p className="text-sm">
+          {data.referrer.fullName} ({data.referrer.referrerType || "—"})<br />
+          {data.referrer.email} · {data.referrer.phone}
+        </p>
+        <p className="text-sm mt-2">
+          <span className="font-semibold text-primary">Handoff:</span>{" "}
+          {data.referrer.handoffPreference === "Quotes only"
+            ? "Quotes only — referrer will present to client"
+            : data.referrer.handoffPreference === "Full handoff"
+            ? "Full handoff — Omar contacts the client"
+            : "—"}
+        </p>
       </Section>
       <Section title="Proposed Insured" step={2}>
         <p className="text-sm">{data.insured.firstName} {data.insured.lastName} · DOB {data.insured.dateOfBirth}<br />{data.insured.stateOfResidence} · {data.insured.email} · {data.insured.phone}</p>

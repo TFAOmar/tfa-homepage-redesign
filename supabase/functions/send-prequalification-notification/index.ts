@@ -102,8 +102,18 @@ const handler = async (req: Request): Promise<Response> => {
       const referrerName = esc(referrer.fullName);
       const referrerEmail = esc(referrer.email);
       const referrerPhone = esc(referrer.phone);
-      const referrerCompany = esc(referrer.company);
       const referrerType = esc(referrer.referrerType);
+      const handoffPref = String(referrer.handoffPreference || "Full handoff");
+      const isQuotesOnly = handoffPref === "Quotes only";
+      const handoffBanner = isQuotesOnly
+        ? `<div style="background:#fff3cd;border:2px solid #C9A84C;border-radius:8px;padding:14px;margin:14px 0;">
+             <div style="font-weight:bold;color:#8a6d00;font-size:15px;">📨 QUOTES ONLY — Do NOT contact the client</div>
+             <div style="font-size:13px;margin-top:6px;">Referrer will present quotes to the client themselves. Send quote options back to <strong>${referrerEmail}</strong>.</div>
+           </div>`
+        : `<div style="background:#e7f5ff;border:2px solid #1E3A5F;border-radius:8px;padding:14px;margin:14px 0;">
+             <div style="font-weight:bold;color:#1E3A5F;font-size:15px;">🤝 FULL HANDOFF — Contact the client directly</div>
+             <div style="font-size:13px;margin-top:6px;">Omar will present quotes and manage the case end-to-end. Keep the referrer looped in.</div>
+           </div>`;
 
       // Yes-flagged conditions summary
       const yesFlagged: string[] = [];
@@ -171,16 +181,13 @@ ul{margin:4px 0 0 18px;padding:0;font-size:13px;}
     <table>
       <tr><td class="td-label"><span class="label">Type:</span></td><td>${referrerType}</td></tr>
       <tr><td class="td-label"><span class="label">Name:</span></td><td>${referrerName}</td></tr>
-      <tr><td class="td-label"><span class="label">Company:</span></td><td>${referrerCompany}</td></tr>
       <tr><td class="td-label"><span class="label">Email:</span></td><td>${referrerEmail}</td></tr>
       <tr><td class="td-label"><span class="label">Phone:</span></td><td>${referrerPhone}</td></tr>
-      ${referrer.licenseNumber ? `<tr><td class="td-label"><span class="label">License #:</span></td><td>${esc(referrer.licenseNumber)}</td></tr>` : ""}
-      ${referrer.npn ? `<tr><td class="td-label"><span class="label">NPN:</span></td><td>${esc(referrer.npn)}</td></tr>` : ""}
-      ${referrer.relationshipToClient ? `<tr><td class="td-label"><span class="label">Relationship:</span></td><td>${esc(referrer.relationshipToClient)}</td></tr>` : ""}
-      ${referrer.creditPreference ? `<tr><td class="td-label"><span class="label">Credit as:</span></td><td>${esc(referrer.creditPreference)}</td></tr>` : ""}
+      <tr><td class="td-label"><span class="label">Handoff:</span></td><td><strong>${esc(handoffPref)}</strong></td></tr>
       ${referrer.notes ? `<tr><td class="td-label"><span class="label">Notes:</span></td><td>${esc(referrer.notes)}</td></tr>` : ""}
     </table>
   </div>
+  ${handoffBanner}
 
   <div class="section">
     <h3>👤 Proposed Insured</h3>
@@ -286,7 +293,7 @@ ul{margin:4px 0 0 18px;padding:0;font-size:13px;}
         to: omarTo,
         cc: omarCc,
         reply_to: referrer.email ? String(referrer.email) : undefined,
-        subject: `New Referral Prequalification – ${String(insured.firstName || "")} ${String(insured.lastName || "")} (from ${String(referrer.fullName || "referral partner")})`,
+        subject: `${isQuotesOnly ? "[Quotes Only] " : ""}New Referral Prequalification – ${String(insured.firstName || "")} ${String(insured.lastName || "")} (from ${String(referrer.fullName || "referral partner")})`,
         html: omarHtml,
       });
       if (omarErr) console.error("Omar referral email error:", omarErr);
@@ -301,7 +308,9 @@ ul{margin:4px 0 0 18px;padding:0;font-size:13px;}
             html: `<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:20px;">
               <h2 style="color:#1E3A5F;">Thank you, ${esc(String(referrer.fullName || "").split(" ")[0])}!</h2>
               <p>Omar Sanchez has received your referral prequalification for <strong>${clientName}</strong> and will begin reviewing it right away.</p>
-              <p>He'll reach out to the client within 1–2 business days and keep you posted.</p>
+              <p>${isQuotesOnly
+                ? `You selected <strong>Quotes only</strong> — Omar will gather quote options and send them back to you so you can present to the client directly.`
+                : `You selected <strong>Full handoff</strong> — Omar will reach out to the client within 1–2 business days and keep you posted.`}</p>
               <p style="margin-top:16px;">Questions? Reply to this email or call Omar at <a href="tel:+18883505396">(888) 350-5396</a>.</p>
               <p style="color:#666;font-size:12px;margin-top:20px;">© ${new Date().getFullYear()} The Financial Architects. All rights reserved.</p>
             </div>`,
