@@ -239,21 +239,29 @@ function Step2Insured({ data, update, onNext, onBack }: StepProps<OmarReferralFo
         <TextField label="Date of birth" type="date" value={i.dateOfBirth} onChange={(v) => set({ dateOfBirth: v })} required />
         <SelectField label="Gender" value={i.gender} onChange={(v) => set({ gender: v })} options={["Male", "Female", "Other"]} required />
         <SelectField label="State of residence" value={i.stateOfResidence} onChange={(v) => set({ stateOfResidence: v })} options={US_STATES} required />
-        <TextField label="ZIP code" value={i.zip} onChange={(v) => set({ zip: v })} />
-        <TextField label="Best phone" type="tel" value={i.phone} onChange={(v) => set({ phone: v })} required={!quotesOnly} />
-        <TextField label="Email" type="email" value={i.email} onChange={(v) => set({ email: v })} required={!quotesOnly} />
-        <SelectField label="Preferred contact method" value={i.preferredContactMethod} onChange={(v) => set({ preferredContactMethod: v })} options={["Phone call", "Text", "Email"]} />
-        <SelectField label="Best time to reach" value={i.preferredContactTime} onChange={(v) => set({ preferredContactTime: v })} options={["Morning", "Afternoon", "Evening", "Anytime"]} />
+        {!quotesOnly && (
+          <>
+            <TextField label="ZIP code" value={i.zip} onChange={(v) => set({ zip: v })} />
+            <TextField label="Best phone" type="tel" value={i.phone} onChange={(v) => set({ phone: v })} required />
+            <TextField label="Email" type="email" value={i.email} onChange={(v) => set({ email: v })} required />
+            <SelectField label="Preferred contact method" value={i.preferredContactMethod} onChange={(v) => set({ preferredContactMethod: v })} options={["Phone call", "Text", "Email"]} />
+            <SelectField label="Best time to reach" value={i.preferredContactTime} onChange={(v) => set({ preferredContactTime: v })} options={["Morning", "Afternoon", "Evening", "Anytime"]} />
+          </>
+        )}
         <SelectField label="Citizenship / residency" value={i.citizenshipStatus} onChange={(v) => set({ citizenshipStatus: v })} options={["US Citizen", "Permanent Resident (Green Card)", "Visa Holder", "Other"]} />
         {i.citizenshipStatus === "Visa Holder" && (
           <TextField label="Visa type" value={i.visaType} onChange={(v) => set({ visaType: v })} />
         )}
-        <TextField label="Occupation" value={i.occupation} onChange={(v) => set({ occupation: v })} />
-        <TextField label="Employer" value={i.employer} onChange={(v) => set({ employer: v })} />
-        <SelectField label="Annual household income" value={i.annualIncome} onChange={(v) => set({ annualIncome: v })}
-          options={["Under $50k", "$50k - $100k", "$100k - $250k", "$250k - $500k", "$500k - $1M", "$1M+"]} />
-        <SelectField label="Estimated net worth" value={i.netWorth} onChange={(v) => set({ netWorth: v })}
-          options={["Under $100k", "$100k - $500k", "$500k - $1M", "$1M - $5M", "$5M+"]} />
+        {!quotesOnly && (
+          <>
+            <TextField label="Occupation" value={i.occupation} onChange={(v) => set({ occupation: v })} />
+            <TextField label="Employer" value={i.employer} onChange={(v) => set({ employer: v })} />
+            <SelectField label="Annual household income" value={i.annualIncome} onChange={(v) => set({ annualIncome: v })}
+              options={["Under $50k", "$50k - $100k", "$100k - $250k", "$250k - $500k", "$500k - $1M", "$1M+"]} />
+            <SelectField label="Estimated net worth" value={i.netWorth} onChange={(v) => set({ netWorth: v })}
+              options={["Under $100k", "$100k - $500k", "$500k - $1M", "$1M - $5M", "$5M+"]} />
+          </>
+        )}
       </div>
       <div className="flex justify-between pt-4">
         <Button variant="outline" onClick={onBack}>Back</Button>
@@ -317,7 +325,7 @@ function Step3Coverage({ data, update, onNext, onBack }: StepProps<OmarReferralF
         <SelectField label="Monthly budget" value={c.monthlyBudget} onChange={(v) => set({ monthlyBudget: v })}
           options={["Under $50", "$50 - $100", "$100 - $250", "$250 - $500", "$500 - $1,000", "$1,000+", "Not sure"]} />
         <SelectField label="Urgency" value={c.urgency} onChange={(v) => set({ urgency: v })} required
-          options={["Immediate (within days)", "This month", "Next 1-3 months", "Just exploring"]} />
+          options={["Within the next hour", "Same day", "Immediate (within days)", "This month", "Next 1-3 months", "Just exploring"]} />
       </div>
 
       <div className="space-y-2">
@@ -334,21 +342,6 @@ function Step3Coverage({ data, update, onNext, onBack }: StepProps<OmarReferralF
           <TextField label="Please specify" value={c.purposeOther} onChange={(v) => set({ purposeOther: v })} />
         )}
       </div>
-
-      <ConditionalYesNo
-        idBase="existing-coverage"
-        label="Does the client currently have life insurance?"
-        value={c.hasExistingCoverage}
-        onChange={(v) => set({ hasExistingCoverage: v })}
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <TextField label="Current carrier" value={c.existingCarrier} onChange={(v) => set({ existingCarrier: v })} />
-          <TextField label="Coverage amount" value={c.existingAmount} onChange={(v) => set({ existingAmount: v })} />
-          <TextField label="Year issued" value={c.existingYear} onChange={(v) => set({ existingYear: v })} />
-          <TextField label="Reason for keeping / replacing" value={c.existingReasonKeeping} onChange={(v) => set({ existingReasonKeeping: v })} />
-          <SelectField label="Is this a replacement?" value={c.isReplacement} onChange={(v) => set({ isReplacement: v as "Yes" | "No" })} options={["Yes", "No"]} />
-        </div>
-      </ConditionalYesNo>
 
       <div className="flex justify-between pt-4">
         <Button variant="outline" onClick={onBack}>Back</Button>
@@ -414,20 +407,8 @@ function Step4Baseline({ data, update, onNext, onBack }: StepProps<OmarReferralF
       </ConditionalYesNo>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <TextField label="Primary physician name" value={h.physicianName} onChange={(v) => set({ physicianName: v })} />
-        <TextField label="Physician phone" type="tel" value={h.physicianPhone} onChange={(v) => set({ physicianPhone: v })} />
         <TextField label="Date of last physician visit" type="date" value={h.lastVisitDate} onChange={(v) => set({ lastVisitDate: v })} />
-        <TextField label="Reason for last visit" value={h.lastVisitReason} onChange={(v) => set({ lastVisitReason: v })} />
       </div>
-
-      <ConditionalYesNo
-        idBase="pending-tests"
-        label="Any pending tests, surgeries, or hospitalizations in the next 90 days?"
-        value={h.pendingTests}
-        onChange={(v) => set({ pendingTests: v })}
-      >
-        <Textarea rows={2} placeholder="Describe" value={h.pendingTestsDetails || ""} onChange={(e) => set({ pendingTestsDetails: e.target.value })} />
-      </ConditionalYesNo>
 
       <div className="flex justify-between pt-4">
         <Button variant="outline" onClick={onBack}>Back</Button>
@@ -877,7 +858,7 @@ function Step7Review({
         <label className="flex items-start gap-3 cursor-pointer">
           <Checkbox checked={c.consent || false} onCheckedChange={(v) => setC({ consent: !!v })} className="mt-1" />
           <span className="text-sm">
-            I confirm the information provided is accurate to the best of my knowledge and I authorize Omar Sanchez and The Financial Architects to contact the proposed insured for the purpose of providing a life insurance quote.
+            I confirm the information provided is accurate to the best of my knowledge.
           </span>
         </label>
         <TextField label="Electronic signature (type full name)" value={c.signature} onChange={(v) => setC({ signature: v, signedDate: new Date().toISOString() })} required />
