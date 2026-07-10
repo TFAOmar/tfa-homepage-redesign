@@ -88,6 +88,234 @@ const handler = async (req: Request): Promise<Response> => {
     const step2 = (formData.step2 as Record<string, unknown>) || {};
     const step3 = (formData.step3 as Record<string, unknown>) || {};
 
+    // ---------- Omar Sanchez Referral branch ----------
+    const source = (formData.source as string | undefined) || "";
+    if (source === "omar-referral") {
+      const referrer = (formData.referrer as Record<string, unknown>) || {};
+      const insured = (formData.insured as Record<string, unknown>) || {};
+      const coverage = (formData.coverage as Record<string, unknown>) || {};
+      const baseline = (formData.healthBaseline as Record<string, unknown>) || {};
+      const history = (formData.healthHistory as Record<string, unknown>) || {};
+      const lifestyle = (formData.lifestyle as Record<string, unknown>) || {};
+      const consent = (formData.consent as Record<string, unknown>) || {};
+
+      const referrerName = esc(referrer.fullName);
+      const referrerEmail = esc(referrer.email);
+      const referrerPhone = esc(referrer.phone);
+      const referrerCompany = esc(referrer.company);
+      const referrerType = esc(referrer.referrerType);
+
+      // Yes-flagged conditions summary
+      const yesFlagged: string[] = [];
+      for (const [k, v] of Object.entries(history)) {
+        if (v && typeof v === "object" && (v as Record<string, unknown>).yes === "Yes") {
+          yesFlagged.push(k);
+        }
+      }
+
+      const conditionRow = (label: string, cond: Record<string, unknown> | undefined) => {
+        if (!cond || cond.yes !== "Yes") return "";
+        const details: string[] = [];
+        for (const [k, v] of Object.entries(cond)) {
+          if (k === "yes" || !v) continue;
+          details.push(`<div><span style="color:#666;">${esc(k)}:</span> ${esc(v)}</div>`);
+        }
+        return `<div style="margin-top:8px;padding:10px;background:#fff;border-left:3px solid #d4af37;border-radius:4px;">
+          <strong>${esc(label)}</strong>${details.length ? `<div style="margin-top:4px;font-size:13px;">${details.join("")}</div>` : ""}
+        </div>`;
+      };
+
+      const conditionBlocks = Object.entries(history)
+        .filter(([, v]) => v && typeof v === "object" && (v as Record<string, unknown>).yes === "Yes")
+        .map(([k, v]) => conditionRow(k, v as Record<string, unknown>))
+        .join("");
+
+      const medsList = Array.isArray(history.medications) && history.medications.length > 0
+        ? (history.medications as Array<Record<string, unknown>>).map((m) =>
+            `<li>${esc(m.name)} — ${esc(m.dose)} ${esc(m.frequency)} (${esc(m.condition)})</li>`).join("")
+        : "<li>None reported</li>";
+
+      const famList = Array.isArray(history.familyHistory) && history.familyHistory.length > 0
+        ? (history.familyHistory as Array<Record<string, unknown>>).map((f) =>
+            `<li>${esc(f.relative)} — ${esc(f.condition)} at age ${esc(f.ageAtDiagnosis)} (${esc(f.livingOrDeceased)})</li>`).join("")
+        : "<li>None reported</li>";
+
+      const clientName = esc(`${insured.firstName || ""} ${insured.lastName || ""}`.trim() || rawApplicantName);
+
+      const omarHtml = `
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+body{font-family:Arial,sans-serif;line-height:1.6;color:#333;}
+.container{max-width:640px;margin:0 auto;padding:20px;}
+.header{background:#1E3A5F;color:#fff;padding:20px;text-align:center;border-radius:8px 8px 0 0;}
+.header h1{margin:0;font-size:22px;}
+.section{margin:14px 0;padding:14px;background:#f8f9fa;border-radius:8px;}
+.section h3{margin:0 0 10px;color:#1E3A5F;border-bottom:2px solid #C9A84C;padding-bottom:6px;}
+.referrer{background:#fff8e1;border:2px solid #C9A84C;}
+.label{font-weight:bold;color:#666;}
+table{width:100%;border-collapse:collapse;}
+td{padding:5px 0;vertical-align:top;font-size:14px;}
+.td-label{width:40%;}
+.flag{background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:12px;margin:12px 0;}
+.footer{margin-top:16px;padding-top:12px;border-top:1px solid #ddd;font-size:12px;color:#666;}
+ul{margin:4px 0 0 18px;padding:0;font-size:13px;}
+</style></head><body>
+<div class="container">
+  <div class="header">
+    <h1>New Referral Prequalification</h1>
+    <p style="margin:6px 0 0;">Client: ${clientName} · Referred by ${referrerName}</p>
+  </div>
+
+  <div class="section referrer">
+    <h3>🤝 Referring Partner</h3>
+    <table>
+      <tr><td class="td-label"><span class="label">Type:</span></td><td>${referrerType}</td></tr>
+      <tr><td class="td-label"><span class="label">Name:</span></td><td>${referrerName}</td></tr>
+      <tr><td class="td-label"><span class="label">Company:</span></td><td>${referrerCompany}</td></tr>
+      <tr><td class="td-label"><span class="label">Email:</span></td><td>${referrerEmail}</td></tr>
+      <tr><td class="td-label"><span class="label">Phone:</span></td><td>${referrerPhone}</td></tr>
+      ${referrer.licenseNumber ? `<tr><td class="td-label"><span class="label">License #:</span></td><td>${esc(referrer.licenseNumber)}</td></tr>` : ""}
+      ${referrer.npn ? `<tr><td class="td-label"><span class="label">NPN:</span></td><td>${esc(referrer.npn)}</td></tr>` : ""}
+      ${referrer.relationshipToClient ? `<tr><td class="td-label"><span class="label">Relationship:</span></td><td>${esc(referrer.relationshipToClient)}</td></tr>` : ""}
+      ${referrer.creditPreference ? `<tr><td class="td-label"><span class="label">Credit as:</span></td><td>${esc(referrer.creditPreference)}</td></tr>` : ""}
+      ${referrer.notes ? `<tr><td class="td-label"><span class="label">Notes:</span></td><td>${esc(referrer.notes)}</td></tr>` : ""}
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>👤 Proposed Insured</h3>
+    <table>
+      <tr><td class="td-label"><span class="label">Name:</span></td><td>${esc(insured.firstName)} ${esc(insured.lastName)}</td></tr>
+      <tr><td class="td-label"><span class="label">DOB:</span></td><td>${esc(insured.dateOfBirth)}</td></tr>
+      <tr><td class="td-label"><span class="label">Gender:</span></td><td>${esc(insured.gender)}</td></tr>
+      <tr><td class="td-label"><span class="label">State / ZIP:</span></td><td>${esc(insured.stateOfResidence)} ${esc(insured.zip)}</td></tr>
+      <tr><td class="td-label"><span class="label">Phone:</span></td><td>${esc(insured.phone)}</td></tr>
+      <tr><td class="td-label"><span class="label">Email:</span></td><td>${esc(insured.email)}</td></tr>
+      <tr><td class="td-label"><span class="label">Preferred contact:</span></td><td>${esc(insured.preferredContactMethod)} — ${esc(insured.preferredContactTime)}</td></tr>
+      <tr><td class="td-label"><span class="label">Citizenship:</span></td><td>${esc(insured.citizenshipStatus)} ${insured.visaType ? `(Visa: ${esc(insured.visaType)})` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Occupation:</span></td><td>${esc(insured.occupation)} @ ${esc(insured.employer)}</td></tr>
+      <tr><td class="td-label"><span class="label">Income / Net worth:</span></td><td>${esc(insured.annualIncome)} · ${esc(insured.netWorth)}</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>📋 Coverage Requested</h3>
+    <table>
+      <tr><td class="td-label"><span class="label">Product interest:</span></td><td>${esc(Array.isArray(coverage.productInterest) ? (coverage.productInterest as string[]).join(", ") : "")}</td></tr>
+      <tr><td class="td-label"><span class="label">Amount:</span></td><td>${esc(coverage.coverageAmount)}</td></tr>
+      ${coverage.termLength ? `<tr><td class="td-label"><span class="label">Term length:</span></td><td>${esc(coverage.termLength)}</td></tr>` : ""}
+      <tr><td class="td-label"><span class="label">Purpose:</span></td><td>${esc(Array.isArray(coverage.purpose) ? (coverage.purpose as string[]).join(", ") : "")}</td></tr>
+      <tr><td class="td-label"><span class="label">Budget:</span></td><td>${esc(coverage.monthlyBudget)}</td></tr>
+      <tr><td class="td-label"><span class="label">Urgency:</span></td><td>${esc(coverage.urgency)}</td></tr>
+      <tr><td class="td-label"><span class="label">Existing coverage:</span></td><td>${esc(coverage.hasExistingCoverage)} ${coverage.existingCarrier ? `— ${esc(coverage.existingCarrier)} ${esc(coverage.existingAmount)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Replacement:</span></td><td>${esc(coverage.isReplacement)}</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>📏 Health Baseline</h3>
+    <table>
+      <tr><td class="td-label"><span class="label">Height / Weight:</span></td><td>${esc(baseline.heightFeet)}'${esc(baseline.heightInches)}" · ${esc(baseline.weight)} lbs</td></tr>
+      <tr><td class="td-label"><span class="label">Weight change 12mo:</span></td><td>${esc(baseline.weightChange12mo)} ${baseline.weightChangeAmount ? `— ${esc(baseline.weightChangeAmount)} lbs (${esc(baseline.weightChangeReason)})` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Physician:</span></td><td>${esc(baseline.physicianName)} · ${esc(baseline.physicianPhone)}</td></tr>
+      <tr><td class="td-label"><span class="label">Last visit:</span></td><td>${esc(baseline.lastVisitDate)} — ${esc(baseline.lastVisitReason)}</td></tr>
+      <tr><td class="td-label"><span class="label">Pending tests/surgery:</span></td><td>${esc(baseline.pendingTests)} ${baseline.pendingTestsDetails ? `— ${esc(baseline.pendingTestsDetails)}` : ""}</td></tr>
+    </table>
+  </div>
+
+  ${yesFlagged.length > 0 ? `
+  <div class="flag">
+    <strong>⚠️ Underwriting Flags (${yesFlagged.length}):</strong>
+    <div style="margin-top:6px;font-size:13px;">${esc(yesFlagged.join(", "))}</div>
+  </div>` : ""}
+
+  <div class="section">
+    <h3>🏥 Health History (yes-flagged only)</h3>
+    ${conditionBlocks || "<p style=\"color:#666;font-size:13px;\">No conditions flagged.</p>"}
+  </div>
+
+  <div class="section">
+    <h3>💊 Current Medications</h3>
+    <ul>${medsList}</ul>
+  </div>
+
+  <div class="section">
+    <h3>🧬 Family History</h3>
+    <ul>${famList}</ul>
+  </div>
+
+  <div class="section">
+    <h3>🎯 Lifestyle & Risk</h3>
+    <table>
+      <tr><td class="td-label"><span class="label">Tobacco:</span></td><td>${esc(lifestyle.tobaccoUse)} ${lifestyle.tobaccoTypes ? `(${esc((lifestyle.tobaccoTypes as string[]).join(", "))})` : ""} ${lifestyle.tobaccoFrequency ? `· ${esc(lifestyle.tobaccoFrequency)}` : ""} ${lifestyle.tobaccoQuitDate ? `· quit ${esc(lifestyle.tobaccoQuitDate)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Marijuana:</span></td><td>${esc(lifestyle.marijuanaUse)} ${lifestyle.marijuanaFrequency ? `— ${esc(lifestyle.marijuanaFrequency)} (${esc(lifestyle.marijuanaMedicalRec)}, ${esc(lifestyle.marijuanaRoute)})` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">DUI:</span></td><td>${esc(lifestyle.duiHistory)} ${lifestyle.duiDetails ? `— ${esc(lifestyle.duiDetails)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Reckless driving:</span></td><td>${esc(lifestyle.recklessDriving)} ${lifestyle.recklessDetails ? `— ${esc(lifestyle.recklessDetails)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">License suspended:</span></td><td>${esc(lifestyle.licenseSuspended)} ${lifestyle.suspendedDetails ? `— ${esc(lifestyle.suspendedDetails)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Moving violations 5yr:</span></td><td>${esc(lifestyle.movingViolations5yr)}</td></tr>
+      <tr><td class="td-label"><span class="label">Felony/misdemeanor:</span></td><td>${esc(lifestyle.felonyMisdemeanor)} ${lifestyle.felonyDetails ? `— ${esc(lifestyle.felonyDetails)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Probation/pending:</span></td><td>${esc(lifestyle.probationOrPending)} ${lifestyle.probationDetails ? `— ${esc(lifestyle.probationDetails)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Bankruptcy 7yr:</span></td><td>${esc(lifestyle.bankruptcy7yr)} ${lifestyle.bankruptcyDischargeDate ? `— discharged ${esc(lifestyle.bankruptcyDischargeDate)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Aviation:</span></td><td>${esc(lifestyle.aviation)} ${lifestyle.aviationHours ? `— ${esc(lifestyle.aviationHours)} hrs (${esc(lifestyle.aviationRatings)})` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Scuba:</span></td><td>${esc(lifestyle.scuba)} ${lifestyle.scubaMaxDepth ? `— max ${esc(lifestyle.scubaMaxDepth)}ft, ${esc(lifestyle.scubaDivesPerYear)}/yr` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Racing/climbing/skydiving/BASE/MMA:</span></td><td>${esc(lifestyle.racing)} / ${esc(lifestyle.climbing)} / ${esc(lifestyle.skydiving)} / ${esc(lifestyle.baseJumping)} / ${esc(lifestyle.mma)}</td></tr>
+      <tr><td class="td-label"><span class="label">Foreign travel 12mo:</span></td><td>${esc(lifestyle.foreignTravel12mo)} ${lifestyle.foreignTravelCountries ? `— ${esc(lifestyle.foreignTravelCountries)}` : ""}</td></tr>
+      <tr><td class="td-label"><span class="label">Military:</span></td><td>${esc(lifestyle.militaryStatus)} ${lifestyle.deploymentPlans === "Yes" ? `· deployment pending: ${esc(lifestyle.deploymentDetails)}` : ""}</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>✍️ Consent</h3>
+    <p style="font-size:13px;">Signature: <strong>${esc(consent.signature)}</strong> · Signed ${esc(consent.signedDate)}</p>
+  </div>
+
+  <div class="footer">
+    <p>Submitted: ${new Date().toLocaleString()}</p>
+    ${sourceUrlEsc ? `<p>Source: ${sourceUrlEsc}</p>` : ""}
+    <p>Reply directly to reach the referring partner: ${referrerEmail}</p>
+  </div>
+</div>
+</body></html>`;
+
+      const omarTo = ["omar@tfainsuranceadvisors.com"];
+      const omarCc = ["miguelina@tfainsuranceadvisors.com"];
+
+      console.log("Sending Omar referral notification to:", omarTo, "CC:", omarCc);
+      const { error: omarErr } = await resend.emails.send({
+        from: "TFA Referrals <noreply@tfainsuranceadvisors.com>",
+        to: omarTo,
+        cc: omarCc,
+        reply_to: referrer.email ? String(referrer.email) : undefined,
+        subject: `New Referral Prequalification – ${String(insured.firstName || "")} ${String(insured.lastName || "")} (from ${String(referrer.fullName || "referral partner")})`,
+        html: omarHtml,
+      });
+      if (omarErr) console.error("Omar referral email error:", omarErr);
+
+      // Confirmation to referring partner
+      if (referrer.email) {
+        try {
+          await resend.emails.send({
+            from: "TFA Referrals <noreply@tfainsuranceadvisors.com>",
+            to: [String(referrer.email)],
+            subject: `Referral received – Omar Sanchez will follow up on ${String(insured.firstName || "your client")}`,
+            html: `<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:20px;">
+              <h2 style="color:#1E3A5F;">Thank you, ${esc(String(referrer.fullName || "").split(" ")[0])}!</h2>
+              <p>Omar Sanchez has received your referral prequalification for <strong>${clientName}</strong> and will begin reviewing it right away.</p>
+              <p>He'll reach out to the client within 1–2 business days and keep you posted.</p>
+              <p style="margin-top:16px;">Questions? Reply to this email or call Omar at <a href="tel:+18883505396">(888) 350-5396</a>.</p>
+              <p style="color:#666;font-size:12px;margin-top:20px;">© ${new Date().getFullYear()} The Financial Architects. All rights reserved.</p>
+            </div>`,
+          });
+        } catch (e) { console.error("Referrer confirmation email error:", e); }
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, message: "Referral submitted" }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    // ---------- End Omar referral branch ----------
+
     const medicalConditions = (step2.medicalConditions as string[]) || [];
     const conditionsSummary = medicalConditions.length > 0 ? esc(medicalConditions.join(", ")) : "None reported";
     const conditionDetails = (step2.conditionDetails as Record<string, Record<string, string>>) || {};
