@@ -205,6 +205,16 @@ const AdvisorOmarSanchez = () => {
                     </Button>
                   </Link>
                   <NonMedicalLifeCTA advisorSlug="omar-sanchez" />
+                  <Link to="/advisors/omar-sanchez/refer">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="border-accent bg-transparent text-accent hover:bg-accent/20"
+                    >
+                      <Users className="mr-2 h-5 w-5" />
+                      Referral Partner Prequalification
+                    </Button>
+                  </Link>
                 </div>
               </div>
 
