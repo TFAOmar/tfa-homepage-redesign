@@ -93,12 +93,15 @@ const EventSubmissionForm = () => {
   };
 
   const uploadImage = async (file: File, prefix: string): Promise<string | null> => {
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${prefix}-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+    const fileExt = (file.name.split(".").pop() || "jpg").toLowerCase();
+    // Scope every upload to its own UUID folder so RLS can restrict inserts
+    // and prevent overwriting other users' files.
+    const uploadId = crypto.randomUUID();
+    const fileName = `${uploadId}/${prefix}-${uploadId}.${fileExt}`;
 
     const { error } = await supabase.storage
       .from("event-images")
-      .upload(fileName, file);
+      .upload(fileName, file, { upsert: false });
 
     if (error) {
       console.error("Image upload error:", error);
