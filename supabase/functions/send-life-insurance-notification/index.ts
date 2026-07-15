@@ -1314,6 +1314,51 @@ const handler = async (req: Request): Promise<Response> => {
     
     const data: NotificationRequest = parseResult.data;
     console.log("Received notification request for application:", data.applicationId);
+
+    // Rate-limit by IP and applicationId to prevent advisor-inbox flooding.
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+    for (const key of [`ip:${ip}`, `app:${data.applicationId}`]) {
+      const limit = checkRateLimit(key);
+      if (!limit.allowed) {
+        return new Response(
+          JSON.stringify({ error: "Too many requests. Please try again shortly." }),
+          {
+            status: 429,
+            headers: {
+              "Content-Type": "application/json",
+              "Retry-After": Math.ceil(limit.resetIn / 1000).toString(),
+              ...corsHeaders,
+            },
+          }
+        );
+      }
+    }
+
+    // Confirm the applicationId corresponds to a real submitted application
+    // before doing any PDF work or sending emails. Blocks fabricated payloads.
+    try {
+      const { data: appRow, error: appErr } = await supabaseAdmin
+        .from("life_insurance_applications")
+        .select("id")
+        .eq("id", data.applicationId)
+        .maybeSingle();
+      if (appErr || !appRow) {
+        return new Response(
+          JSON.stringify({ error: "Unknown application" }),
+          { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    } catch (e) {
+      console.error("applicationId lookup failed:", e);
+      return new Response(
+        JSON.stringify({ error: "Application verification failed" }),
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     console.log("Form data steps received:", Object.keys(data.formData || {}).join(", "));
 
     // Product label for subject/body wording (default to medical for backward compat)
