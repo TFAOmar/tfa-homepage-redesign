@@ -16,7 +16,10 @@ const ResourceCard = ({ resource }: Props) => {
   const handleOpen = async (mode: "preview" | "download") => {
     try {
       setBusy(mode);
-      const url = await getSignedUrl(resource.file_path, mode === "download");
+      const url = await getSignedUrl(
+        resource.file_path,
+        mode === "download" ? resource.file_name : false,
+      );
       if (mode === "preview") {
         window.open(url, "_blank", "noopener,noreferrer");
       } else {
