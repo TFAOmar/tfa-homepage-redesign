@@ -6,6 +6,27 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
+// Rate limiting: max 5 notification requests per minute per IP+applicationId pair.
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+const checkRateLimit = (key: string): { allowed: boolean; resetIn: number } => {
+  const now = Date.now();
+  for (const [k, v] of rateLimitStore.entries()) {
+    if (now > v.resetTime) rateLimitStore.delete(k);
+  }
+  const rec = rateLimitStore.get(key);
+  if (!rec || now > rec.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, resetIn: RATE_LIMIT_WINDOW_MS };
+  }
+  if (rec.count >= MAX_REQUESTS_PER_WINDOW) {
+    return { allowed: false, resetIn: rec.resetTime - now };
+  }
+  rec.count++;
+  return { allowed: true, resetIn: rec.resetTime - now };
+};
+
 // Create Supabase client with service role for fetching advisor email
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -1293,6 +1314,51 @@ const handler = async (req: Request): Promise<Response> => {
     
     const data: NotificationRequest = parseResult.data;
     console.log("Received notification request for application:", data.applicationId);
+
+    // Rate-limit by IP and applicationId to prevent advisor-inbox flooding.
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+    for (const key of [`ip:${ip}`, `app:${data.applicationId}`]) {
+      const limit = checkRateLimit(key);
+      if (!limit.allowed) {
+        return new Response(
+          JSON.stringify({ error: "Too many requests. Please try again shortly." }),
+          {
+            status: 429,
+            headers: {
+              "Content-Type": "application/json",
+              "Retry-After": Math.ceil(limit.resetIn / 1000).toString(),
+              ...corsHeaders,
+            },
+          }
+        );
+      }
+    }
+
+    // Confirm the applicationId corresponds to a real submitted application
+    // before doing any PDF work or sending emails. Blocks fabricated payloads.
+    try {
+      const { data: appRow, error: appErr } = await supabaseAdmin
+        .from("life_insurance_applications")
+        .select("id")
+        .eq("id", data.applicationId)
+        .maybeSingle();
+      if (appErr || !appRow) {
+        return new Response(
+          JSON.stringify({ error: "Unknown application" }),
+          { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    } catch (e) {
+      console.error("applicationId lookup failed:", e);
+      return new Response(
+        JSON.stringify({ error: "Application verification failed" }),
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     console.log("Form data steps received:", Object.keys(data.formData || {}).join(", "));
 
     // Product label for subject/body wording (default to medical for backward compat)

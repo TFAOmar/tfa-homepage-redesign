@@ -4,6 +4,28 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
+// Rate limiting: max 5 send requests per minute per IP+recipient pair.
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+const checkRateLimit = (key: string): { allowed: boolean; resetIn: number } => {
+  const now = Date.now();
+  for (const [k, v] of rateLimitStore.entries()) {
+    if (now > v.resetTime) rateLimitStore.delete(k);
+  }
+  const record = rateLimitStore.get(key);
+  if (!record || now > record.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, resetIn: RATE_LIMIT_WINDOW_MS };
+  }
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
+    return { allowed: false, resetIn: record.resetTime - now };
+  }
+  record.count++;
+  return { allowed: true, resetIn: record.resetTime - now };
+};
+
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
   "https://tfainsuranceadvisors.com",
@@ -37,7 +59,8 @@ const requestSchema = z.object({
   email: z.string().email().max(255),
   firstName: z.string().min(1).max(100),
   calculatorName: z.string().min(1).max(100),
-  pdfBase64: z.string(),
+  // ~5 MB PDF as base64 (base64 ≈ 4/3 of raw size).
+  pdfBase64: z.string().min(1).max(7_000_000),
   resultsSummary: z.array(z.object({
     label: z.string().max(200),
     value: z.string().max(200)
@@ -54,6 +77,26 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Basic per-IP rate limiting to prevent email abuse.
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+    const ipLimit = checkRateLimit(`ip:${ip}`);
+    if (!ipLimit.allowed) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again shortly." }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": Math.ceil(ipLimit.resetIn / 1000).toString(),
+            ...corsHeaders,
+          },
+        }
+      );
+    }
+
     // Parse and validate input
     const rawBody = await req.json();
     const validationResult = requestSchema.safeParse(rawBody);
@@ -70,6 +113,23 @@ const handler = async (req: Request): Promise<Response> => {
     }
     
     const { email, firstName, calculatorName, pdfBase64, resultsSummary } = validationResult.data;
+
+    // Second rate-limit bucket keyed on recipient email so a rotating-IP
+    // attacker can't spam the same address.
+    const recipientLimit = checkRateLimit(`to:${email.toLowerCase()}`);
+    if (!recipientLimit.allowed) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again shortly." }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": Math.ceil(recipientLimit.resetIn / 1000).toString(),
+            ...corsHeaders,
+          },
+        }
+      );
+    }
 
     console.log(`Sending ${calculatorName} results to ${email}`);
 

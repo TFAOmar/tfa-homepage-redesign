@@ -41,13 +41,13 @@ serve(async (req) => {
     } else if (expectedCronSecret && cronSecret === expectedCronSecret) {
       authorized = true;
     } else if (token) {
-      // Any caller with a valid Supabase-issued JWT (anon or authenticated)
-      // may trigger the retry — the action is safe/idempotent.
-      const { data: userData } = await supabase.auth.getUser(token);
-      // getUser accepts both real user JWTs and the anon JWT — treat both as OK.
-      authorized = true;
-      // Silence unused-var lint
-      void userData;
+      // Any caller with a valid Supabase-issued user JWT may trigger the retry —
+      // the action is safe/idempotent. Verify the token before authorizing;
+      // getUser returns an error for fake/invalid tokens.
+      const { data: userData, error: userErr } = await supabase.auth.getUser(token);
+      if (!userErr && userData?.user) {
+        authorized = true;
+      }
     }
 
     if (!authorized) {

@@ -90,12 +90,15 @@ export const SponsorApplicationForm = ({ selectedPackage, onPackageChange }: Spo
   }, [selectedPackage, setValue]);
 
   const uploadLogo = async (file: File): Promise<string | null> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-    
+    const fileExt = (file.name.split('.').pop() || 'png').toLowerCase();
+    // Scope every upload to its own UUID folder so RLS can restrict inserts
+    // and prevent overwriting other sponsors' files.
+    const uploadId = crypto.randomUUID();
+    const fileName = `${uploadId}/${uploadId}.${fileExt}`;
+
     const { data, error } = await supabase.storage
       .from('sponsor-logos')
-      .upload(fileName, file);
+      .upload(fileName, file, { upsert: false });
 
     if (error) {
       console.error('Logo upload error:', error);

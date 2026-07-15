@@ -95,11 +95,12 @@ export const BusinessCardOrderForm = ({
   const uploadHeadshot = async (): Promise<{ url: string; fileName: string } | null> => {
     if (!headshotFile) return null;
 
-    const timestamp = Date.now();
-    const randomId = Math.random().toString(36).substring(2, 9);
     const extension = headshotFile.name.split(".").pop()?.toLowerCase() || "jpg";
-    const fileName = `${timestamp}-${randomId}.${extension}`;
-    const filePath = `headshots/${fileName}`;
+    // Scope each upload to its own UUID folder so RLS can prevent path collisions
+    // and overwriting of other users' files.
+    const uploadId = crypto.randomUUID();
+    const fileName = `${uploadId}.${extension}`;
+    const filePath = `${uploadId}/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from("business-card-uploads")
