@@ -6,6 +6,27 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
+// Rate limiting: max 5 notification requests per minute per IP+applicationId pair.
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+const checkRateLimit = (key: string): { allowed: boolean; resetIn: number } => {
+  const now = Date.now();
+  for (const [k, v] of rateLimitStore.entries()) {
+    if (now > v.resetTime) rateLimitStore.delete(k);
+  }
+  const rec = rateLimitStore.get(key);
+  if (!rec || now > rec.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, resetIn: RATE_LIMIT_WINDOW_MS };
+  }
+  if (rec.count >= MAX_REQUESTS_PER_WINDOW) {
+    return { allowed: false, resetIn: rec.resetTime - now };
+  }
+  rec.count++;
+  return { allowed: true, resetIn: rec.resetTime - now };
+};
+
 // Create Supabase client with service role for fetching advisor email
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
