@@ -51,10 +51,15 @@ export const useResources = () =>
     },
   });
 
-export const getSignedUrl = async (path: string, download = false) => {
+export const getSignedUrl = async (
+  path: string,
+  download: boolean | string = false,
+) => {
+  const downloadOption =
+    typeof download === "string" ? { download: download } : download ? { download: true } : undefined;
   const { data, error } = await supabase.storage
     .from(BUCKET)
-    .createSignedUrl(path, 60 * 60, download ? { download: true } : undefined);
+    .createSignedUrl(path, 60 * 60, downloadOption);
   if (error) throw error;
   return data.signedUrl;
 };
