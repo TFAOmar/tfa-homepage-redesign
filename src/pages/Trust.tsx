@@ -467,25 +467,6 @@ const Trust = () => {
         </div>
       </section>
 
-      {/* Sticky mobile CTA */}
-      {!submitted && (
-        <div className="md:hidden fixed bottom-0 inset-x-0 z-40 p-3 bg-navy/95 backdrop-blur border-t border-accent/30 space-y-2">
-          <Button
-            className="w-full bg-accent hover:bg-accent/90 text-navy font-semibold"
-            onClick={() => scrollTo("lead-form")}
-          >
-            Free consult
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="w-full border-accent/60 text-accent hover:bg-accent/10 hover:text-accent bg-transparent font-semibold"
-          >
-            <Link to="/living-trust-questionnaire">Do intake now</Link>
-          </Button>
-        </div>
-      )}
-
       {/* Compliance footer note */}
       <div className="py-6 bg-background border-t">
         <div className="container mx-auto px-4 max-w-3xl text-xs text-muted-foreground text-center">
