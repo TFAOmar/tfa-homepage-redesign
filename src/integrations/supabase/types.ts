@@ -395,6 +395,81 @@ export type Database = {
         }
         Relationships: []
       }
+      leads: {
+        Row: {
+          admin_notes: string | null
+          consent_at: string | null
+          consent_text: string | null
+          created_at: string
+          email: string | null
+          first_name: string | null
+          funnel: string
+          id: string
+          is_complete: boolean
+          landing_page: string | null
+          last_name: string | null
+          last_step: number | null
+          payload: Json
+          phone: string | null
+          referral_source: string | null
+          state: string | null
+          status: string
+          updated_at: string
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          consent_at?: string | null
+          consent_text?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          funnel: string
+          id?: string
+          is_complete?: boolean
+          landing_page?: string | null
+          last_name?: string | null
+          last_step?: number | null
+          payload?: Json
+          phone?: string | null
+          referral_source?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          consent_at?: string | null
+          consent_text?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          funnel?: string
+          id?: string
+          is_complete?: boolean
+          landing_page?: string | null
+          last_name?: string | null
+          last_step?: number | null
+          payload?: Json
+          phone?: string | null
+          referral_source?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       life_insurance_applications: {
         Row: {
           admin_notification_sent_at: string | null

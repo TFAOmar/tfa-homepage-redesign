@@ -5,3 +5,9 @@ verify_jwt = false
 
 [functions.send-agent-onboarding-notification]
 verify_jwt = false
+
+[functions.notify-lead]
+verify_jwt = false
+
+[functions.save-lead-progress]
+verify_jwt = false
