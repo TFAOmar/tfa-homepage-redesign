@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Scale, ShieldCheck, EyeOff, KeyRound, CheckCircle2, Loader2, FileText, PenLine, Handshake } from "lucide-react";
+import { Scale, ShieldCheck, EyeOff, KeyRound, CheckCircle2, Loader2, FileText, PenLine, Handshake, MessageSquare, ClipboardList, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -131,13 +132,26 @@ const Trust = () => {
           <p className="text-lg md:text-xl text-white/85 max-w-2xl mx-auto mb-8">
             A living trust puts your home, savings, and wishes in one place — so your family doesn't get stuck in court.
           </p>
-          <Button
-            size="lg"
-            className="bg-accent hover:bg-accent/90 text-navy font-semibold"
-            onClick={() => scrollTo("lead-form")}
-          >
-            Start with a free consult
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              size="lg"
+              className="bg-accent hover:bg-accent/90 text-navy font-semibold"
+              onClick={() => scrollTo("lead-form")}
+            >
+              Start with a free consult
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-accent/60 text-accent hover:bg-accent/10 hover:text-accent bg-transparent font-semibold"
+            >
+              <Link to="/living-trust-questionnaire">Complete intake yourself</Link>
+            </Button>
+          </div>
+          <p className="text-white/70 text-sm mt-4 max-w-xl mx-auto">
+            Prefer to get a jump start? Fill out the intake now and we'll review it before your call.
+          </p>
         </div>
       </section>
 
@@ -209,6 +223,54 @@ const Trust = () => {
                 <p className="text-muted-foreground text-sm leading-relaxed">{body}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Two ways to start */}
+      <section className="py-14 bg-background">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-navy mb-2 text-center">Two ways to start</h2>
+          <p className="text-center text-muted-foreground mb-8 text-sm">
+            Pick whichever feels right. Both land in the same place — a trust that's ready to sign.
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="p-6 rounded-lg border bg-card flex flex-col">
+              <MessageSquare className="h-8 w-8 text-accent mb-3" />
+              <h3 className="text-lg font-semibold text-navy mb-2">Talk first</h3>
+              <ul className="text-sm text-muted-foreground space-y-2 mb-6 flex-1">
+                <li>• 20-minute call with a licensed specialist</li>
+                <li>• We explain the process and pricing up front</li>
+                <li>• No forms until you're ready</li>
+              </ul>
+              <Button
+                variant="outline"
+                className="w-full border-navy/20 text-navy hover:bg-navy hover:text-white"
+                onClick={() => scrollTo("lead-form")}
+              >
+                Request a consult <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </div>
+            <div className="p-6 rounded-lg border-2 border-accent bg-card flex flex-col relative">
+              <div className="absolute -top-3 right-4 px-2 py-0.5 rounded-full bg-accent text-navy text-xs font-semibold">
+                Fastest
+              </div>
+              <ClipboardList className="h-8 w-8 text-accent mb-3" />
+              <h3 className="text-lg font-semibold text-navy mb-2">Jump-start yourself</h3>
+              <ul className="text-sm text-muted-foreground space-y-2 mb-6 flex-1">
+                <li>• 8-step guided intake — about 20 minutes</li>
+                <li>• Save and resume anytime from the same device</li>
+                <li>• We review your answers before your consult</li>
+              </ul>
+              <Button
+                asChild
+                className="w-full bg-accent hover:bg-accent/90 text-navy font-semibold"
+              >
+                <Link to="/living-trust-questionnaire">
+                  Start the intake <ArrowRight className="h-4 w-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -407,12 +469,19 @@ const Trust = () => {
 
       {/* Sticky mobile CTA */}
       {!submitted && (
-        <div className="md:hidden fixed bottom-0 inset-x-0 z-40 p-3 bg-navy/95 backdrop-blur border-t border-accent/30">
+        <div className="md:hidden fixed bottom-0 inset-x-0 z-40 p-3 bg-navy/95 backdrop-blur border-t border-accent/30 space-y-2">
           <Button
             className="w-full bg-accent hover:bg-accent/90 text-navy font-semibold"
             onClick={() => scrollTo("lead-form")}
           >
-            Get started
+            Free consult
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            className="w-full border-accent/60 text-accent hover:bg-accent/10 hover:text-accent bg-transparent font-semibold"
+          >
+            <Link to="/living-trust-questionnaire">Do intake now</Link>
           </Button>
         </div>
       )}
