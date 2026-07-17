@@ -121,7 +121,7 @@ const Trust = () => {
         canonical="/trust"
       />
 
-      <LandingHeader />
+      <LandingHeader ctaLabel="Start Intake" ctaHref="/living-trust-questionnaire" />
 
       {/* Hero */}
       <section className="relative py-16 md:py-24 bg-gradient-to-br from-navy via-navy/95 to-navy text-white overflow-hidden">
