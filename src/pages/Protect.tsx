@@ -79,9 +79,11 @@ const Protect = () => {
 
     setSubmitting(true);
     try {
-      const { data, error } = await supabase
+      const leadId = crypto.randomUUID();
+      const { error } = await supabase
         .from("leads")
         .insert({
+          id: leadId,
           funnel: "protect",
           status: "new",
           first_name: form.first_name.trim(),
@@ -103,12 +105,10 @@ const Protect = () => {
             mortgage_balance: form.mortgage_balance,
             best_time: form.best_time,
           },
-        })
-        .select("id")
-        .single();
+        });
 
       if (error) throw error;
-      await notifyLead(data.id);
+      await notifyLead(leadId);
       setSubmitted(true);
     } catch (err) {
       console.error(err);
