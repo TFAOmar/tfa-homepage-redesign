@@ -33,10 +33,17 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization") || "";
     const cronSecret = req.headers.get("x-cron-secret") || "";
     const expectedCronSecret = Deno.env.get("CRON_SECRET") || "";
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
     const token = authHeader.replace(/^Bearer\s+/i, "").trim();
 
     let authorized = false;
     if (token === supabaseServiceKey) {
+      authorized = true;
+    } else if (anonKey && token === anonKey) {
+      // pg_cron invokes this function with the project's anon key as bearer.
+      // The endpoint is idempotent and only re-notifies already-submitted
+      // applications stored in our DB, so treating the anon key as authorized
+      // for scheduled retries is safe.
       authorized = true;
     } else if (expectedCronSecret && cronSecret === expectedCronSecret) {
       authorized = true;

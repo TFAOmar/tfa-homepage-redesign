@@ -72,9 +72,11 @@ const Trust = () => {
 
     setSubmitting(true);
     try {
-      const { data, error } = await supabase
+      const leadId = crypto.randomUUID();
+      const { error } = await supabase
         .from("leads")
         .insert({
+          id: leadId,
           funnel: "trust",
           status: "new",
           first_name: form.first_name.trim(),
@@ -98,12 +100,10 @@ const Trust = () => {
             estate_value: form.estate_value,
             best_time: form.best_time,
           },
-        })
-        .select("id")
-        .single();
+        });
 
       if (error) throw error;
-      await notifyLead(data.id);
+      await notifyLead(leadId);
       setSubmitted(true);
     } catch (err) {
       console.error(err);
@@ -287,8 +287,8 @@ const Trust = () => {
               <h2 className="text-2xl font-bold text-navy mb-2">Got it.</h2>
               <p className="text-muted-foreground">
                 You'll hear from a licensed specialist within one business day. If it's urgent, call{" "}
-                <a href="tel:+18885555555" className="text-accent font-medium">
-                  (888) 555-5555
+                <a href="tel:+18883505396" className="text-accent font-medium">
+                  (888) 350-5396
                 </a>
                 .
               </p>
