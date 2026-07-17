@@ -1,18 +1,23 @@
-## Remove the /trust page's local sticky mobile CTA
+# Simplify Header on /trust and /protect
 
-The page already has:
-- Two prominent CTAs in the hero (consult + intake)
-- The "Two ways to start" section with the same two CTAs
-- The site-wide `FloatingCTA` that renders globally on all non-standalone pages (including `/trust`)
+Give the `/trust` and `/protect` landing pages a focused landing-page header (logo + single CTA, no site nav) instead of the full website header. Footer and global sticky mobile CTA are also removed to keep them fully standalone landing pages.
 
-The page-level sticky bar at the bottom is therefore duplicative of the hero on the same viewport and stacks on top of the global floating CTA, causing visual conflict on mobile.
+## Changes
 
-### Change
+1. **Create `src/components/LandingHeader.tsx`**
+   - Sticky top bar, white background, subtle border/shadow.
+   - Left: TFA logo (`@/assets/tfa-logo.png`) linking to `/`.
+   - Right: single "Book Consultation" button linking to `/book-consultation` (hidden on very small screens where the page already has its own CTA if needed — keep visible by default).
+   - No nav menu, no mobile hamburger, no Resources/Services dropdowns, no cart, no Agent Login.
 
-- `src/pages/Trust.tsx`: delete the `{!submitted && (...)}` sticky mobile CTA block at the bottom of the page. Keep the global `FloatingCTA` as the only persistent mobile CTA.
-- Remove now-unused `Link` import only if nothing else uses it (it's still used by the "Two ways to start" section, so it stays).
+2. **`src/App.tsx`**
+   - Add `/trust` and `/protect` to the existing `standalonePages` array so the global `Header`, `Footer`, and `FloatingCTA` are not rendered on those routes.
 
-### Out of scope
+3. **`src/pages/Trust.tsx` and `src/pages/Protect.tsx`**
+   - Import and render `<LandingHeader />` at the top of the page.
+   - Leave the rest of the page content untouched (hero, quoter section, existing compliance footer text on Trust, etc.).
 
-- `/protect` is not changed — the user's report is scoped to `/trust`. If the same fix should apply there, we can do it as a follow-up.
-- No changes to the global `FloatingCTA` or `standalonePages` list.
+## Out of scope
+
+- No changes to page copy, hero, quoter embed, or compliance disclosures.
+- No changes to any other route.
