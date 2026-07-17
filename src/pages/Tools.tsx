@@ -1,4 +1,4 @@
-import { TrendingUp, PiggyBank, Receipt, Target, Landmark, Shield, Heart } from "lucide-react";
+import { TrendingUp, PiggyBank, Receipt, Target, Landmark, Shield, Heart, Umbrella } from "lucide-react";
 import ToolsHero from "@/components/tools/ToolsHero";
 import ToolCard from "@/components/tools/ToolCard";
 import ToolsCTA from "@/components/tools/ToolsCTA";
@@ -48,6 +48,12 @@ const tools = [
     title: "Final Expense Quote Tool",
     description: "Quickly generate Final Expense insurance quotes for clients using our integrated quoting system.",
     link: "/tools/final-expense-quote",
+  },
+  {
+    icon: Umbrella,
+    title: "Term Life Quote Tool",
+    description: "Generate instant Term Life insurance quotes across multiple top-rated carriers.",
+    link: "/tools/term-life-quote",
   },
 ];
 
