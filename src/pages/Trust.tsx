@@ -287,8 +287,8 @@ const Trust = () => {
               <h2 className="text-2xl font-bold text-navy mb-2">Got it.</h2>
               <p className="text-muted-foreground">
                 You'll hear from a licensed specialist within one business day. If it's urgent, call{" "}
-                <a href="tel:+18885555555" className="text-accent font-medium">
-                  (888) 555-5555
+                <a href="tel:+18883505396" className="text-accent font-medium">
+                  (888) 350-5396
                 </a>
                 .
               </p>
