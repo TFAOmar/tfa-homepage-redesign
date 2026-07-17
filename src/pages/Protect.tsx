@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { useAttribution, notifyLead } from "@/hooks/useLeads";
 import { SEOHead } from "@/components/seo";
+import LandingHeader from "@/components/LandingHeader";
 
 const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
 
@@ -124,6 +125,8 @@ const Protect = () => {
         description="Referred here for straight answers on protecting your mortgage? Get an instant quote and speak with a licensed advisor at The Financial Architects."
         canonical="/protect"
       />
+
+      <LandingHeader />
 
       {/* Hero */}
       <section className="relative py-16 md:py-24 bg-gradient-to-br from-navy via-navy/95 to-navy text-white overflow-hidden">
