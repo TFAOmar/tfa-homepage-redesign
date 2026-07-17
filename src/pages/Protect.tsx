@@ -126,7 +126,7 @@ const Protect = () => {
         canonical="/protect"
       />
 
-      <LandingHeader />
+      <LandingHeader ctaLabel="Free Quote" ctaHref="https://quotes.tfawealthplanning.com" ctaExternal />
 
       {/* Hero */}
       <section className="relative py-16 md:py-24 bg-gradient-to-br from-navy via-navy/95 to-navy text-white overflow-hidden">
