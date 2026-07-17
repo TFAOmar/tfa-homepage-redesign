@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Shield, Home, DollarSign, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +46,18 @@ const Protect = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  const quoterRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!quoterRef.current) return;
+    const script = document.createElement("script");
+    script.src = "https://quoter.quoteplicity.com/qp-widget/2128483199ca64cc538bc6ebacc39986";
+    script.async = true;
+    quoterRef.current.appendChild(script);
+    return () => {
+      if (script.parentNode) script.parentNode.removeChild(script);
+    };
   }, []);
 
   const scrollTo = (id: string) => {
@@ -175,15 +187,10 @@ const Protect = () => {
           </p>
           <div
             id="quoter-embed"
-            className="mx-auto w-full max-w-[720px] bg-card border rounded-lg flex items-center justify-center text-muted-foreground text-sm"
+            ref={quoterRef}
+            className="mx-auto w-full max-w-[720px] bg-card border rounded-lg p-4"
             style={{ minHeight: 600 }}
-          >
-            {/* QUOTER EMBED PLACEHOLDER — replace with the provided shortcode/iframe */}
-            <div className="text-center p-8">
-              <p className="mb-2 font-medium">Quoter loads here.</p>
-              <p className="text-xs">Ask your admin to paste the embed shortcode.</p>
-            </div>
-          </div>
+          />
         </div>
       </section>
 
