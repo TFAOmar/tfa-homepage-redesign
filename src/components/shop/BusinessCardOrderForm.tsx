@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/jpg", "application/pdf"];
+const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "image/jpg"];
 
 const businessCardSchema = z.object({
   fullName: z.string().min(1, "Full name is required").max(100),
@@ -61,7 +61,7 @@ export const BusinessCardOrderForm = ({
 
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
       toast.error("Invalid file type", {
-        description: "Please upload a PNG, JPG, or PDF file.",
+        description: "Please upload a PNG or JPG image.",
       });
       return;
     }
@@ -261,10 +261,10 @@ export const BusinessCardOrderForm = ({
               {!headshotFile && (
                 <label className="flex items-center gap-2 px-4 py-3 bg-white/10 border border-white/20 border-dashed rounded-lg cursor-pointer hover:bg-white/20 transition-colors">
                   <Upload className="h-5 w-5 text-white/70" />
-                  <span className="text-white/70 text-sm">Upload PNG, JPG, or PDF</span>
+                  <span className="text-white/70 text-sm">Upload PNG or JPG</span>
                   <input
                     type="file"
-                    accept=".png,.jpg,.jpeg,.pdf"
+                    accept=".png,.jpg,.jpeg"
                     onChange={handleFileChange}
                     className="hidden"
                   />
