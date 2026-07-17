@@ -36,6 +36,7 @@ import GuaranteedIncomeCalculator from "./pages/GuaranteedIncomeCalculator";
 import Tools from "./pages/Tools";
 import BrandGuidelines from "./pages/BrandGuidelines";
 import FinalExpenseQuote from "./pages/FinalExpenseQuote";
+import TermLifeQuote from "./pages/TermLifeQuote";
 import BusinessInsurance from "./pages/BusinessInsurance";
 import BookConsultation from "./pages/BookConsultation";
 import ThankYou from "./pages/ThankYou";
@@ -224,6 +225,7 @@ const AppLayout = () => {
           <Route path="/tools/kai-zen-calculator" element={<KaiZenCalculatorPage />} />
           <Route path="/tools/guaranteed-income-calculator" element={<GuaranteedIncomeCalculator />} />
           <Route path="/tools/final-expense-quote" element={<FinalExpenseQuote />} />
+          <Route path="/tools/term-life-quote" element={<TermLifeQuote />} />
           <Route path="/business-insurance" element={<BusinessInsurance />} />
           <Route path="/book-consultation" element={<BookConsultation />} />
           <Route path="/thank-you" element={<ThankYou />} />
