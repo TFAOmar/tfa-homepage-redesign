@@ -83,9 +83,11 @@ export function useAttribution(): Record<string, string | null> {
   return attr;
 }
 
-export async function notifyLead(leadId: string) {
+export async function notifyLead(leadId: string, resumeToken: string) {
   try {
-    await supabase.functions.invoke("notify-lead", { body: { lead_id: leadId } });
+    await supabase.functions.invoke("notify-lead", {
+      body: { lead_id: leadId, resume_token: resumeToken },
+    });
   } catch (e) {
     console.error("notify-lead failed:", e);
   }
@@ -93,6 +95,7 @@ export async function notifyLead(leadId: string) {
 
 export async function saveLeadProgress(args: {
   lead_id: string;
+  resume_token: string;
   last_step: number;
   payload: Record<string, unknown>;
   is_complete?: boolean;

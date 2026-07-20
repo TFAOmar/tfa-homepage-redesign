@@ -33,12 +33,19 @@ Deno.serve(async (req) => {
     }
     const body = JSON.parse(raw || "{}");
     const leadId = typeof body?.lead_id === "string" ? body.lead_id : "";
+    const resumeToken = typeof body?.resume_token === "string" ? body.resume_token : "";
     const lastStep = Number.isInteger(body?.last_step) ? body.last_step : 0;
     const payload = body?.payload && typeof body.payload === "object" ? body.payload : {};
     const isComplete = body?.is_complete === true;
 
     if (!/^[0-9a-f-]{36}$/i.test(leadId)) {
       return new Response(JSON.stringify({ error: "invalid lead_id" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!resumeToken || resumeToken.length < 8 || resumeToken.length > 128) {
+      return new Response(JSON.stringify({ error: "invalid resume_token" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -62,6 +69,25 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    // Verify caller possesses the resume_token for this lead.
+    const { data: existing, error: fetchErr } = await supabase
+      .from("leads")
+      .select("resume_token")
+      .eq("id", leadId)
+      .maybeSingle();
+    if (fetchErr || !existing) {
+      return new Response(JSON.stringify({ error: "not found" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (String(existing.resume_token) !== resumeToken) {
+      return new Response(JSON.stringify({ error: "forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const updates: Record<string, unknown> = {
       payload,

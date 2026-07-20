@@ -37,8 +37,15 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json().catch(() => ({}));
     const leadId = typeof body?.lead_id === "string" ? body.lead_id : "";
+    const resumeToken = typeof body?.resume_token === "string" ? body.resume_token : "";
     if (!/^[0-9a-f-]{36}$/i.test(leadId)) {
       return new Response(JSON.stringify({ error: "invalid lead_id" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!resumeToken || resumeToken.length < 8 || resumeToken.length > 128) {
+      return new Response(JSON.stringify({ error: "invalid resume_token" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -66,6 +73,19 @@ Deno.serve(async (req) => {
     if (error || !lead) {
       return new Response(JSON.stringify({ error: "not found" }), {
         status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Constant-time-ish comparison of resume token
+    const a = new TextEncoder().encode(String(lead.resume_token ?? ""));
+    const b = new TextEncoder().encode(resumeToken);
+    let ok = a.length === b.length;
+    const len = Math.max(a.length, b.length);
+    for (let i = 0; i < len; i++) ok = ok && (a[i] === b[i]);
+    if (!ok) {
+      return new Response(JSON.stringify({ error: "forbidden" }), {
+        status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

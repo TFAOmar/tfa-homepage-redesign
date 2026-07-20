@@ -30,10 +30,19 @@ const schema = z.object({
   applicantPhone: z.string().trim().min(1).max(40),
   formData: z.record(z.unknown()),
   advisorId: z.string().trim().max(120).optional(),
-  advisorEmail: z.string().trim().email().max(255).optional(),
+  advisorEmail: z.string().trim().email().max(255).optional(), // ignored server-side; kept for backward compat
   advisorName: z.string().trim().max(120).optional(),
   sourceUrl: z.string().trim().max(2000).optional(),
-});
+}).strict();
+
+// Server-side allowlist of advisor destinations. Any caller-supplied
+// advisorEmail must be in this list; otherwise falls back to the default.
+const ADVISOR_EMAIL_ALLOWLIST = new Set<string>([
+  "info@tfainsuranceadvisors.com",
+  "omar@tfainsuranceadvisors.com",
+  "clients@tfainsuranceadvisors.com",
+]);
+const DEFAULT_ADVISOR_EMAIL = "info@tfainsuranceadvisors.com";
 
 const handler = async (req: Request): Promise<Response> => {
   console.log("Prequalification notification function invoked");
@@ -67,10 +76,14 @@ const handler = async (req: Request): Promise<Response> => {
       applicantEmail: rawApplicantEmail,
       applicantPhone: rawApplicantPhone,
       formData,
-      advisorEmail = "info@tfainsuranceadvisors.com",
+      advisorEmail: rawAdvisorEmail,
       advisorName = "TFA Advisor",
       sourceUrl,
     } = requestData;
+    const advisorEmail =
+      rawAdvisorEmail && ADVISOR_EMAIL_ALLOWLIST.has(rawAdvisorEmail.toLowerCase())
+        ? rawAdvisorEmail.toLowerCase()
+        : DEFAULT_ADVISOR_EMAIL;
     const applicantName = esc(rawApplicantName);
     const applicantEmail = esc(rawApplicantEmail);
     const applicantPhone = esc(rawApplicantPhone);

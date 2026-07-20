@@ -73,10 +73,12 @@ const Trust = () => {
     setSubmitting(true);
     try {
       const leadId = crypto.randomUUID();
+      const resumeToken = crypto.randomUUID();
       const { error } = await supabase
         .from("leads")
         .insert({
           id: leadId,
+          resume_token: resumeToken,
           funnel: "trust",
           status: "new",
           first_name: form.first_name.trim(),
@@ -103,7 +105,7 @@ const Trust = () => {
         });
 
       if (error) throw error;
-      await notifyLead(leadId);
+      await notifyLead(leadId, resumeToken);
       setSubmitted(true);
     } catch (err) {
       console.error(err);

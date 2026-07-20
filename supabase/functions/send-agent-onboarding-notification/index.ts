@@ -33,7 +33,10 @@ const getCorsHeaders = (origin: string | null): Record<string, string> => ({
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 });
 
-const BodySchema = z.object({ applicationId: z.string().uuid() });
+const BodySchema = z.object({
+  applicationId: z.string().uuid(),
+  resumeToken: z.string().min(8).max(128),
+});
 
 const TO_EMAIL = "contracting@tfainsuranceadvisors.com";
 const FROM_EMAIL = "TFA Onboarding <noreply@tfainsuranceadvisors.com>";
@@ -43,6 +46,24 @@ const esc = (s: unknown): string =>
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
+
+/** Show only the last N chars of a sensitive value. Empty stays empty. */
+const maskTail = (val: unknown, keep = 4): string => {
+  const digits = String(val ?? "").replace(/\D/g, "");
+  if (!digits) return "";
+  if (digits.length <= keep) return "•".repeat(digits.length);
+  return "••••" + digits.slice(-keep);
+};
+const maskSSN = (val: unknown): string => {
+  const digits = String(val ?? "").replace(/\D/g, "");
+  if (!digits) return "";
+  return "•••-••-" + (digits.length >= 4 ? digits.slice(-4) : digits);
+};
+const yearOnly = (val: unknown): string => {
+  const s = String(val ?? "");
+  const m = s.match(/(\d{4})/);
+  return m ? m[1] : "";
+};
 
 function row(label: string, value: unknown): string {
   const v = value === undefined || value === null || value === "" ? "—" : value;
@@ -109,10 +130,10 @@ async function buildHtml(app: any): Promise<string> {
         ${section("01","Applicant Information",
           row("Full legal name", d.fullLegalName) +
           row("Preferred name", d.preferredName) +
-          row("Date of birth", d.dateOfBirth) +
-          row("SSN", d.ssn) +
+          row("Date of birth (year)", yearOnly(d.dateOfBirth)) +
+          row("SSN (last 4)", maskSSN(d.ssn)) +
           row("U.S. citizen / work authorization", d.citizenshipStatus) +
-          row("Driver's license #", d.driversLicense) +
+          row("Driver's license (last 4)", maskTail(d.driversLicense)) +
           row("Issuing state", d.driversLicenseState)
         )}
         ${section("02","Contact Information",
@@ -178,15 +199,15 @@ async function buildHtml(app: any): Promise<string> {
         ${section("12","Commission Direct Deposit",
           row("Bank name", d.bankName) +
           row("Account type", d.accountType) +
-          row("Routing #", d.routingNumber) +
-          row("Account #", d.accountNumber) +
+          row("Routing # (last 4)", maskTail(d.routingNumber)) +
+          row("Account # (last 4)", maskTail(d.accountNumber)) +
           row("Name on account", d.nameOnAccount)
         )}
         ${link("Voided check / direct deposit letter", bankUrl)}
         ${section("13","Tax Information",
           row("Tax classification", d.taxClassification) +
           row("Business / entity name", d.businessName) +
-          row("EIN", d.ein)
+          row("EIN (last 4)", maskTail(d.ein))
         )}
         ${section("14","Authorization",
           row("Background check consent", d.authConsent ? "✓ Authorized" : "Not authorized")
@@ -219,7 +240,7 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const { applicationId } = parsed.data;
+    const { applicationId, resumeToken } = parsed.data;
 
     const work = (async () => {
       const { data: app, error } = await supabaseAdmin
@@ -229,6 +250,10 @@ serve(async (req) => {
         .maybeSingle();
       if (error || !app) {
         console.error("Application not found", applicationId, error);
+        return;
+      }
+      if (String(app.resume_token) !== resumeToken) {
+        console.error("Resume token mismatch for application", applicationId);
         return;
       }
 

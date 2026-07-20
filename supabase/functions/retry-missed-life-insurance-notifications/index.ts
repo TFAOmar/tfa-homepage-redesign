@@ -24,37 +24,19 @@ serve(async (req) => {
   }
 
   try {
-    // Authorization: this function is invoked by pg_cron using the anon key
-    // (which passes Supabase's default JWT verification), by internal edge
-    // functions with the service-role key, or by an authenticated admin.
-    // The endpoint is idempotent and only re-notifies applications that are
-    // already submitted and stored in our DB, so we don't need to gate it
-    // further beyond Supabase's JWT check.
+    // Authorization: only the pg_cron job (passing CRON_SECRET) or internal
+    // edge functions using the service-role key may invoke this. The
+    // publishable anon key is public and must NOT authorize privileged retries.
     const authHeader = req.headers.get("Authorization") || "";
-    const cronSecret = req.headers.get("x-cron-secret") || "";
+    const cronSecretHeader = req.headers.get("x-cron-secret") || "";
     const expectedCronSecret = Deno.env.get("CRON_SECRET") || "";
-    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
     const token = authHeader.replace(/^Bearer\s+/i, "").trim();
 
     let authorized = false;
-    if (token === supabaseServiceKey) {
-      authorized = true;
-    } else if (anonKey && token === anonKey) {
-      // pg_cron invokes this function with the project's anon key as bearer.
-      // The endpoint is idempotent and only re-notifies already-submitted
-      // applications stored in our DB, so treating the anon key as authorized
-      // for scheduled retries is safe.
-      authorized = true;
-    } else if (expectedCronSecret && cronSecret === expectedCronSecret) {
-      authorized = true;
-    } else if (token) {
-      // Any caller with a valid Supabase-issued user JWT may trigger the retry —
-      // the action is safe/idempotent. Verify the token before authorizing;
-      // getUser returns an error for fake/invalid tokens.
-      const { data: userData, error: userErr } = await supabase.auth.getUser(token);
-      if (!userErr && userData?.user) {
-        authorized = true;
-      }
+    if (token && token === supabaseServiceKey) authorized = true;
+    if (!authorized && expectedCronSecret) {
+      if (cronSecretHeader && cronSecretHeader === expectedCronSecret) authorized = true;
+      if (!authorized && token === expectedCronSecret) authorized = true;
     }
 
     if (!authorized) {
