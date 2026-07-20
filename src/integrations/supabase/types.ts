@@ -412,6 +412,7 @@ export type Database = {
           payload: Json
           phone: string | null
           referral_source: string | null
+          resume_token: string
           state: string | null
           status: string
           updated_at: string
@@ -436,6 +437,7 @@ export type Database = {
           payload?: Json
           phone?: string | null
           referral_source?: string | null
+          resume_token?: string
           state?: string | null
           status?: string
           updated_at?: string
@@ -460,6 +462,7 @@ export type Database = {
           payload?: Json
           phone?: string | null
           referral_source?: string | null
+          resume_token?: string
           state?: string | null
           status?: string
           updated_at?: string
@@ -1071,7 +1074,11 @@ export type Database = {
         Returns: boolean
       }
       submit_agent_onboarding_application: {
-        Args: { p_application_id: string; p_signature: string }
+        Args: {
+          p_application_id: string
+          p_resume_token: string
+          p_signature: string
+        }
         Returns: undefined
       }
       submit_life_insurance_application: {
