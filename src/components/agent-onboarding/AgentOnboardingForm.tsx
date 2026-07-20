@@ -232,15 +232,17 @@ export const AgentOnboardingForm = () => {
     setSubmitting(true);
     try {
       await persist();
+      if (!resumeToken) throw new Error("Missing resume token");
       const { error: submitErr } = await supabase.rpc("submit_agent_onboarding_application", {
         p_application_id: applicationId,
+        p_resume_token: resumeToken,
         p_signature: data.signature.trim(),
       });
       if (submitErr) throw submitErr;
 
       try {
         await supabase.functions.invoke("send-agent-onboarding-notification", {
-          body: { applicationId },
+          body: { applicationId, resumeToken },
         });
       } catch (err) {
         console.error("Notification dispatch failed (will be retried by cron)", err);
