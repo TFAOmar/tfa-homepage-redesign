@@ -130,10 +130,10 @@ async function buildHtml(app: any): Promise<string> {
         ${section("01","Applicant Information",
           row("Full legal name", d.fullLegalName) +
           row("Preferred name", d.preferredName) +
-          row("Date of birth", d.dateOfBirth) +
-          row("SSN", d.ssn) +
+          row("Date of birth (year)", yearOnly(d.dateOfBirth)) +
+          row("SSN (last 4)", maskSSN(d.ssn)) +
           row("U.S. citizen / work authorization", d.citizenshipStatus) +
-          row("Driver's license #", d.driversLicense) +
+          row("Driver's license (last 4)", maskTail(d.driversLicense)) +
           row("Issuing state", d.driversLicenseState)
         )}
         ${section("02","Contact Information",
@@ -199,15 +199,15 @@ async function buildHtml(app: any): Promise<string> {
         ${section("12","Commission Direct Deposit",
           row("Bank name", d.bankName) +
           row("Account type", d.accountType) +
-          row("Routing #", d.routingNumber) +
-          row("Account #", d.accountNumber) +
+          row("Routing # (last 4)", maskTail(d.routingNumber)) +
+          row("Account # (last 4)", maskTail(d.accountNumber)) +
           row("Name on account", d.nameOnAccount)
         )}
         ${link("Voided check / direct deposit letter", bankUrl)}
         ${section("13","Tax Information",
           row("Tax classification", d.taxClassification) +
           row("Business / entity name", d.businessName) +
-          row("EIN", d.ein)
+          row("EIN (last 4)", maskTail(d.ein))
         )}
         ${section("14","Authorization",
           row("Background check consent", d.authConsent ? "✓ Authorized" : "Not authorized")
