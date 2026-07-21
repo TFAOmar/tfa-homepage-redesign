@@ -1,55 +1,55 @@
-## Goal
-Address the six findings from Martin/Nova's security review. Keep minhwin80@gmail.com on notify-lead. Mask sensitive fields in the agent-onboarding notification email.
+# Minh Newsletter Landing Page
 
-## Changes
+Create a new standalone landing page at `/whatsamortgage-newsletter` matching the look and behavior of `/protect` and `/trust`, targeted at visitors coming from Minh's newsletter who want info on Living Trust, Term Life Insurance, or Retirement Planning.
 
-### 1. `save-lead-progress` — require per-lead secret
-- Add a `resume_token` column (text, unique, indexed) to `leads`, generated at insert time by clients (crypto.randomUUID).
-- Frontend (`Protect.tsx`, `Trust.tsx`, any other caller): mint `resume_token` alongside `id`, insert both, and pass `resume_token` on every `save-lead-progress` / `notify-lead` call.
-- Edge function: require `resume_token` in body; look up the lead by `id`, compare token in constant time, reject 403 on mismatch. Keep rate limit + size cap.
+## Route & framing
 
-### 2. `notify-lead` — require the same resume_token
-- Same token check as above before any read/email. Retain existing recipients (leads@ + minhwin80@gmail.com per user confirmation).
+- Path: `/whatsamortgage-newsletter`
+- Added to `standalonePages` in `src/App.tsx` so global Header/Footer/FloatingCTA are suppressed.
+- Uses `LandingHeader` with CTA "Get Started" scrolling to the form.
+- SEO: title/description tuned for "newsletter reader landing page"; canonical `/whatsamortgage-newsletter`.
 
-### 3. Agent onboarding submit — require resume_token
-- Replace `submit_agent_onboarding_application(p_application_id)` with `submit_agent_onboarding_application(p_application_id, p_resume_token, p_signature)`. The function verifies token match before flipping status to `submitted`. Update `AgentOnboardingForm` submit call to pass the token it already holds.
+## Page sections
 
-### 4. `send-agent-onboarding-notification` — require resume_token + mask PII
-- Accept `{ applicationId, resumeToken }`. Load row, verify token, else 403.
-- Mask in email body:
-  - SSN → last-4 only (`***-**-1234`)
-  - Bank routing → last-4 only
-  - Bank account → last-4 only
-  - DOB → year only
-  - Driver's license → last-4 only
-- Keep signed doc links (14-day expiry) and the rest of the summary as-is.
-- Applicant confirmation email unchanged.
+1. **Hero** — "You were referred by Minh for straight answers." Subheadline covering the three topics. Primary CTA scrolls to form.
+2. **Three-tile explainer** — one card each for Living Trust, Term Life Insurance, Retirement Planning (icon + one-line plain-English description).
+3. **Lead form** — the newsletter-style intake (see below).
+4. **FAQ** — 4–5 short Q&As covering "Who is TFA?", "Is there a cost?", "What happens after I submit?", "How did Minh get my info?".
+5. **Compliance footer note** identical style to `/protect`.
 
-### 5. `retry-missed-life-insurance-notifications` — replace anon-key gate with CRON_SECRET
-- Add `CRON_SECRET` via `generate_secret` (64 chars).
-- Function requires `Authorization: Bearer <CRON_SECRET>`; reject anon key and user JWTs.
-- Update the pg_cron job SQL to send the new header (user runs the shown SQL in the SQL editor — I'll include it in a follow-up message since it embeds the secret and can't go through the migration tool).
+## Form (minimal + multi-select interests with priority)
 
-### 6. `send-prequalification-notification` — lock destinations, tighten input
-- Remove any caller-controllable recipient field. Hardcode server-side recipient list (Omar + Miguelina + existing internal addresses already in the function).
-- Zod-validate body; reject unknown fields.
-- Add IP+applicationId rate limit (5/min) consistent with other functions.
+Fields:
+- First name, Last name (required)
+- Email (required)
+- Phone (required)
+- State (required, US dropdown)
+- Interests — checkboxes: Living Trust, Term Life Insurance, Retirement Planning (at least one required)
+- Most urgent — dropdown populated from the checked interests (required if 2+ checked; auto-set if only one)
+- TCPA consent checkbox (required)
+- Honeypot via existing `useHoneypot`
 
-## Files touched
-- Migration: add `leads.resume_token`, replace `submit_agent_onboarding_application` signature.
-- `supabase/functions/save-lead-progress/index.ts`
-- `supabase/functions/notify-lead/index.ts`
-- `supabase/functions/send-agent-onboarding-notification/index.ts`
-- `supabase/functions/retry-missed-life-insurance-notifications/index.ts`
-- `supabase/functions/send-prequalification-notification/index.ts`
-- `src/pages/Protect.tsx`, `src/pages/Trust.tsx` (insert + call sites)
-- `src/components/agent-onboarding/AgentOnboardingForm.tsx` (pass token to submit + notify)
-- Any other caller of `notify-lead` / `save-lead-progress` found during implementation.
+Submission: insert into `leads` table with:
+- `funnel: "newsletter"`
+- `resume_token` minted client-side (matches recent security hardening)
+- `referral_source: "minh"` (default from `useAttribution`)
+- `payload: { interests: [...], priority: "..." }`
+- `is_complete: true`, `last_step: 1`
+- Attribution + consent fields identical to `/protect`
 
-## Out of scope (per email)
-- Making the repo private, log review, Supabase dashboard verification, and formal PR authorization stages — these are owner actions on Martin's checklist, not code changes.
+After insert: call `notifyLead(leadId, resumeToken)` so it flows through the existing lead notification pipeline (leads inbox + Gmail per current config). No changes to edge functions or DB schema — `funnel` is a free text column and `payload` is JSON.
 
-## Post-deploy steps for you
-1. Run the provided `cron.schedule` update SQL with the new CRON_SECRET header.
-2. Confirm the retry cron ran successfully once.
-3. Optionally rotate any leaked lead UUIDs by marking old rows read-only (not automated here).
+## Success state
+
+Same pattern as `/protect`: replace the form with a confirmation card ("Got it.") and the (888) 350-5396 phone fallback.
+
+## Files
+
+- New: `src/pages/MinhNewsletter.tsx`
+- Edit: `src/App.tsx` — register route and add to `standalonePages`
+- Edit: `public/sitemap.xml` — add the new URL
+
+## Out of scope
+
+- No newsletter/ESP integration (Mailchimp/Beehiiv/etc.) — this is a lead capture landing page only.
+- No changes to edge functions, DB schema, or existing lead pipeline.
