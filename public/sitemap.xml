@@ -355,4 +355,12 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+
+  <!-- Minh Newsletter Landing -->
+  <url>
+    <loc>https://tfawealthplanning.com/whatsamortgage-newsletter</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>
