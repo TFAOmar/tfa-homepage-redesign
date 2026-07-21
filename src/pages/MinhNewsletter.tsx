@@ -127,7 +127,7 @@ const MinhNewsletter = () => {
     <>
       <SEOHead
         title="Newsletter Readers — Straight Answers | The Financial Architects"
-        description="Referred by Minh's newsletter? Get straight answers on living trusts, term life insurance, and retirement planning from a licensed advisor at The Financial Architects."
+        description="Referred by our newsletter partner? Get straight answers on living trusts, term life insurance, and retirement planning from a licensed advisor at The Financial Architects."
         canonical="/whatsamortgage-newsletter"
       />
 
@@ -140,7 +140,7 @@ const MinhNewsletter = () => {
             <Newspaper className="h-4 w-4" /> Newsletter Readers
           </div>
           <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
-            You were referred by Minh for straight answers.
+            You were referred for straight answers.
           </h1>
           <p className="text-lg md:text-xl text-white/85 max-w-2xl mx-auto mb-8">
             Living trusts, term life insurance, and retirement planning — explained in plain English, with no pressure.
@@ -299,7 +299,7 @@ const MinhNewsletter = () => {
             {[
               {
                 q: "Who is The Financial Architects?",
-                a: "A licensed insurance and financial services agency helping families protect what they've built and plan for retirement. Minh partners with us to make sure his readers get straight, honest information.",
+                a: "A licensed insurance and financial services agency helping families protect what they've built and plan for retirement. We partner with the newsletter to make sure readers get straight, honest information.",
               },
               {
                 q: "Is there a cost to talk?",
@@ -310,8 +310,8 @@ const MinhNewsletter = () => {
                 a: "A licensed advisor reaches out within one business day to answer your questions and, if helpful, walk through options tailored to your situation. No pressure.",
               },
               {
-                q: "How did Minh get my info?",
-                a: "He didn't — you're here because you clicked through from his newsletter. Nothing is submitted until you fill out the form above.",
+                q: "How did you get my info?",
+                a: "We didn't — you're here because you clicked through from the newsletter. Nothing is submitted until you fill out the form above.",
               },
             ].map((f, i) => (
               <AccordionItem key={i} value={`q-${i}`}>
