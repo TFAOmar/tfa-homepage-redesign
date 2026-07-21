@@ -11,3 +11,12 @@ verify_jwt = false
 
 [functions.save-lead-progress]
 verify_jwt = false
+
+# The scheduled pg_cron job authenticates with CRON_SECRET (a non-JWT secret)
+# sent in the x-cron-secret header. The platform JWT gate must therefore be
+# disabled so the request reaches the function, which performs its own strong,
+# constant-time, fail-closed authorization (see ./functions/.../auth.ts).
+# This does NOT weaken auth: the function treats the platform as untrusted and
+# rejects anon/missing/wrong callers with 401 regardless of this setting.
+[functions.retry-missed-life-insurance-notifications]
+verify_jwt = false
