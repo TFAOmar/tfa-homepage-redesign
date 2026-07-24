@@ -1,86 +1,85 @@
-# Intake Submission Handling + Group-SMS Automation
+## Goal
 
-Extends the existing `/start` + `/concierge` intake system with automated bilingual group-SMS handoff, quiet-hours queuing, opt-out handling, and legal footers. All Twilio work goes through the Twilio connector gateway; no credentials in the codebase.
+Rip Twilio/SMS/email automation out of this app. Supabase remains the lead + TCPA system of record. Every lead insert (submitted or abandoned) forwards a single flat JSON to GoHighLevel, which now owns all messaging, quiet hours, routing sends, and opt-outs.
 
-## 1. Prerequisites (user actions)
+## 1. Remove Twilio / SMS send code
 
-Before Twilio code can run:
-1. Connect the **Twilio** connector (I'll open the connect card in build mode).
-2. Confirm A2P 10DLC brand + campaign is registered on the Twilio account, or acknowledge sends will be blocked until it is.
-3. Provide the real CA license number to replace the `0XXXXXX` footer placeholder (optional — I'll ship with the placeholder + `system_settings` key so you can edit later without a code change).
+Delete (edge functions + config entries):
+- `supabase/functions/dispatch-group-sms/`
+- `supabase/functions/dispatch-queued-sms/`
+- `supabase/functions/sms-inbound/`
+- Corresponding `[functions.*]` blocks in `supabase/config.toml`.
 
-## 2. Database migration
+Database migration:
+- Drop trigger `intake_leads_after_insert` and function `public.intake_leads_after_insert()`.
+- `cron.unschedule(...)` for the quiet-hours flush job.
+- Leave columns (`conversation_sid`, `sms_status`, `intro_sent_at`, `intro_scheduled_for`, `intro_fallback`, `assigned_member_id`) and tables (`intake_sms_events`, `intake_sms_templates`, `intake_teams`, `intake_team_members`) in place as inert. No code will read/write them.
+- Keep `intake_suppressions` (now populated only by GHL sync).
 
-One migration, additive only:
+Secrets: leave `TWILIO_*` and `TWILIO_CONVERSATIONS_SERVICE_SID` in Supabase for now (unused). Note in admin doc that they can be deleted from the dashboard.
 
-- `intake_sms_templates(team_key, language, body)` — seeded with the 8 team×lang intros + the 2 referrer-declined variants + the 2 opt-out confirmations.
-- `intake_teams` — add `scheduling_url_es`, ensure `twilio_projected_address` populated (seed rows if empty).
-- `intake_team_members` — atomic increment RPC `intake_assign_member(team_key, language)` returning the winning `member_id` and bumping `open_lead_count` in one statement (prevents race under concurrent inserts).
-- `intake_leads` — add `assigned_member_id uuid`, `routing_reason text`, `intro_scheduled_for timestamptz` (for quiet-hours queue), `intro_sent_at timestamptz`, `intro_fallback boolean`.
-- `intake_sms_events` — add `severity text` and `needs_review boolean` for the "unrecognized negative-intent" queue.
-- Database webhook trigger: `AFTER INSERT ON intake_leads WHEN status='new'` → `pg_net.http_post` to `dispatch-group-sms` with `Authorization: Bearer <CRON_SECRET>` (reuses existing secret).
-- pg_cron: every 5 min, call `dispatch-queued-sms` for leads with `sms_status='queued_quiet_hours' AND intro_scheduled_for <= now()`.
-- GRANTs + RLS on new table; policies mirror existing intake_ tables (staff/admin read, service_role write).
+Frontend: remove any UI copy/logic referencing Twilio Conversations, projected addresses, or SMS status. `LegalFooter` and the /sms-terms page stay (still accurate as a policy page).
 
-## 3. Edge functions
+## 2. Keep intact (verify only, no functional change)
 
-### `dispatch-group-sms` (new)
-Auth: requires `Authorization: Bearer <CRON_SECRET>` header (webhook + cron only).
+- `/start` wizard, `/concierge` form, all branch questions, EN/ES i18n, both consent checkboxes and exact copy, footers, 65+ senior-trust banner, honeypot, rate limiting.
+- `/dashboard`, `/admin`, `/admin/intake-templates` (repurposed — see §5).
+- `intake-submit` edge function still writes `intake_leads` + `intake_consent_log` atomically. Keep RLS. Keep ZIP→IANA (`src/lib/zipTimezone.ts`) — value flows into GHL payload `timezone`.
 
-Flow per lead_id in body:
-1. Load lead + referrer + team + templates.
-2. **Route**: `services.length > 1 → 'multi'`; else map `trust/term_life/retirement → team`. Honor `routing_overridden`. Prefer ES-capable members when `language='es'`. Call `intake_assign_member(team_key, language)` RPC.
-3. **Quiet hours**: compute local time from `timezone`; if outside 08:05–20:55, set `sms_status='queued_quiet_hours'`, `intro_scheduled_for = next 08:05 local`, return 202.
-4. **Suppression**: filter client + referrer phones against `intake_suppressions`.
-5. **Participants**: client (SMS binding to their phone), team (chat participant with `twilio_projected_address` as identity), referrer (SMS binding) only if `lead.referrer_in_thread && referrer.sms_notify_optin`.
-6. **Send**: `POST /v1/Services/{sid}/Conversations` with `Participant` array in one call, then `POST /Conversations/{sid}/Messages` with rendered template (variables: `first_name`, `referrer_name`, `member_name`, `scheduling_url`) using the team's projected address as `Author`. Store `conversation_sid`, `assigned_member_id`, `intro_sent_at`.
-7. **Fallback on Conversations failure**: two independent Messaging API sends:
-   - Client: intro + link + opt-out.
-   - Referrer: referrer-declined variant (no client PII beyond first name).
-   Set `intro_fallback=true`, log to `sms_events`.
-8. Log every Twilio call (success or error) to `intake_sms_events`.
-9. Return structured `{status, sms_status, conversation_sid?, fallback?}` — surface provider errors verbatim, never a bare 500.
+## 3. New: forward-to-ghl
 
-### `dispatch-queued-sms` (new)
-Cron-triggered. Selects due queued leads, calls `dispatch-group-sms` per lead.
+New edge function `supabase/functions/forward-to-ghl/index.ts` invoked by DB webhook on `intake_leads` INSERT (both `submitted` and `abandoned`). Runs after the row + consent row are written.
 
-### `sms-inbound` (new)
-Public webhook (`verify_jwt = false`) for Twilio Conversations `onMessageAdded`.
-1. Validate `X-Twilio-Signature` against `TWILIO_AUTH_TOKEN`.
-2. Insert every event into `intake_sms_events`.
-3. Stop-word detection (case-insensitive, whole-token match): `STOP|END|QUIT|CANCEL|UNSUBSCRIBE|REVOKE|OPT OUT|ALTO|CANCELAR`.
-   - If sender = **client** → remove participant, close conversation (`state=closed`), insert `intake_suppressions`, update `lead.sms_status='opted_out'`, send single opt-out confirmation in the message's language, alert staff via `notify-lead`.
-   - If sender = **referrer** → remove only referrer participant, insert suppression, update `lead.referrer_in_thread=false`, alert staff.
-4. Fuzzy negative-intent phrases ("please stop texting me", "no me llamen", "not interested", etc.) → flag `sms_events.needs_review=true`, alert staff; do NOT auto-suppress.
+Payload: one flat JSON, snake_case keys, every listed key always present (`""` when N/A), booleans as `"yes"`/`"no"`, multi-selects comma-joined, no arrays. Keys exactly as specified in the spec (secret, event_type, schema_version, supabase_lead_id, submitted_at, source, lead_status, contact fields, service fields, senior_trust_flag, branch-specific fields, referrer fields, consent fields, staff fields, hold_automation, `answers_json` stringified backup).
 
-Register in `supabase/config.toml`: `dispatch-group-sms` (JWT on, cron-auth), `dispatch-queued-sms` (JWT off, cron-auth), `sms-inbound` (JWT off, signature-verified).
+Delivery:
+- POST to `GHL_WEBHOOK_URL` with `Content-Type: application/json`.
+- On non-2xx / network error: 3 retries with exponential backoff (e.g. 1s / 4s / 15s).
+- Success → update lead `ghl_forward_status='sent'`, `ghl_forward_attempts`, clear `ghl_last_error`.
+- Failure after retries → `ghl_forward_status='failed'`, store `ghl_forward_attempts`, `ghl_last_error`.
+- Never blocks user's confirmation screen (webhook-driven, out of request path).
 
-## 4. Footers (both surfaces)
+New columns on `intake_leads`: `ghl_forward_status text default 'pending'`, `ghl_forward_attempts int default 0`, `ghl_last_error text`, `preferred_contact_at timestamptz`, `hold_automation boolean default false`.
 
-New `src/components/intake/LegalFooter.tsx` — bilingual, rendered on `/start` and `/concierge`:
-- `CA License #{value from system_settings}` (fallback `0XXXXXX`)
-- Links: `/privacy-policy`, `/terms-of-service`, `/sms-terms` (new lightweight page)
-- Legal line: *"TFA does not provide legal advice; trust documents are prepared by independent licensed attorneys."* + ES translation added to `src/lib/i18n/dictionary.ts`.
+Secrets to add: `GHL_WEBHOOK_URL`, `GHL_SHARED_SECRET` (Edge Function env only).
 
-New page: `src/pages/SmsTerms.tsx` (EN + ES) covering message frequency, msg&data rates, HELP/STOP, carrier disclaimer. Added to `standalonePages` + sitemap.
+DB webhook: Supabase Realtime/DB webhook on `intake_leads` INSERT → POST to `forward-to-ghl` with service-role auth header. (Replaces the old `intake_leads_after_insert` trigger.)
 
-## 5. Admin surface (minimal, for QA)
+## 4. Dashboard
 
-`src/pages/AdminIntakeTemplates.tsx` (staff/admin only) — read-only view of the 8 seeded templates + variable preview, so you can eyeball what will send before wiring Twilio. Full CRUD deferred unless you ask.
+`src/pages/IntakeDashboard.tsx`:
+- Add filter chip "Failed to GHL" (`ghl_forward_status = 'failed'`).
+- Row/detail action "Resend to GHL" (staff/admin only) → calls a small `resend-to-ghl` endpoint (or `forward-to-ghl` with `{ lead_id }` param) that re-builds and re-sends the identical payload keyed by `supabase_lead_id` for idempotency.
+- Replace any `sms_status` badge with `ghl_forward_status`.
 
-## 6. What this plan does NOT do
+## 5. GHL → Supabase opt-out sync
 
-- No A2P 10DLC brand registration (you handle in Twilio console).
-- No admin CRUD for referrers/teams/members yet (still deferred from prior turn — say the word and I'll add).
-- No SMS analytics dashboard.
+New edge function `supabase/functions/ghl-optout-sync/index.ts`:
+- Auth: verifies `GHL_SHARED_SECRET` header.
+- Body: `{ phone, reason, occurred_at }`.
+- Inserts into `intake_suppressions` (idempotent on phone). Read-only mirror; app does not enforce.
+
+Repurpose `/admin/intake-templates` → static "Messaging lives in GoHighLevel" info page (or hide from nav). Keeps the route from 404'ing.
+
+## 6. UI copy updates
+
+- Confirmation screen: keep "Watch your texts — we're introducing you to your TFA specialist now" and the after-9pm variant as a purely client-side display choice (no send logic anywhere).
+- Concierge buttons:
+  - "Save & send intro text now" → **"Save & send to GHL"**
+  - "Save & schedule text" → saves `preferred_contact_at`, included in GHL payload
+  - "Save without text" → forwards with `hold_automation='yes'`
+- Add `src/pages/AdminGhlNotes.tsx` (or a section in existing admin) documenting: `GHL_WEBHOOK_URL`, `GHL_SHARED_SECRET`, and that all messaging / routing sends / quiet hours / opt-outs are owned by GoHighLevel.
 
 ## Technical details
 
-- **New files** (~8): 3 edge functions, `LegalFooter.tsx`, `SmsTerms.tsx`, `AdminIntakeTemplates.tsx`, migration, template seed.
-- **Edited files** (~5): `App.tsx` (routes), `Start.tsx` + `Concierge.tsx` (footer mount), `config.toml` (function entries), `sitemap.xml`.
-- **Untouched**: everything outside `intake_*` / `/start` / `/concierge` / `/dashboard`.
-- **Secrets used**: `LOVABLE_API_KEY` (already set), `TWILIO_API_KEY` (from connector), `TWILIO_AUTH_TOKEN` (for webhook signature — will request via `add_secret` after Twilio connect), `TWILIO_CONVERSATIONS_SERVICE_SID` (same), `CRON_SECRET` (already set).
-- **Concurrency safety**: `intake_assign_member` runs `UPDATE ... RETURNING` in one statement so two simultaneous webhook fires cannot double-assign.
-- **Idempotency**: `dispatch-group-sms` no-ops if `lead.intro_sent_at IS NOT NULL` (webhook retries won't double-send).
+- Edge functions: `verify_jwt = false` for `forward-to-ghl` (called by DB webhook with service-role bearer); `ghl-optout-sync` uses shared-secret header; `resend-to-ghl` requires authenticated staff/admin JWT.
+- `answers_json`: `JSON.stringify(lead.answers)` as a debug backup blob in the payload.
+- `senior_trust_flag`: `'yes'` iff `services` includes `living_trust` AND `age_range` band ≥ 65.
+- Idempotency: GHL side keyed on `supabase_lead_id`; retries and manual resends use the same ID.
+- Migration ordering: (a) add new columns, (b) drop old trigger + cron, (c) create DB webhook to new function.
 
-Ready to proceed? If yes, I'll start with the migration + template seed in build mode, then open the Twilio connect card before writing the edge functions.
+## Open questions
+
+1. Confirm you'll paste `GHL_WEBHOOK_URL` and `GHL_SHARED_SECRET` when I request them via `add_secret`.
+2. OK to hide `/admin/intake-templates` from nav (route stays, shows "Managed in GHL")? Or delete it outright?
+3. OK to leave legacy Twilio secrets in Supabase (unused) so I don't disturb any other project sharing them? I'll flag them in the admin note either way.
