@@ -12,7 +12,7 @@ import { CONSENT_VERSION } from "@/lib/i18n/dictionary";
 import { LanguageProvider, LangToggle, useLang } from "@/lib/i18n/LanguageContext";
 
 function ConciergeInner() {
-  const { user, loading } = useAuth();
+  const { user, isLoading: loading } = useAuth();
   const { lang, t } = useLang();
   const [services, setServices] = useState<string[]>([]);
   const [speakingWith, setSpeakingWith] = useState("client");

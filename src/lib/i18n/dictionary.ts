@@ -110,6 +110,6 @@ export const dict = {
     invalidZip: "Ingresa un código postal de 5 dígitos",
     mustConsent: "Debes dar tu consentimiento para ser contactado",
   },
-} as const;
+};
 
 export type Dict = typeof dict.en;

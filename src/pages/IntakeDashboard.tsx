@@ -28,7 +28,7 @@ interface Lead {
 }
 
 export default function IntakeDashboard() {
-  const { user, loading } = useAuth();
+  const { user, isLoading: loading } = useAuth();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [fetching, setFetching] = useState(true);
   const [search, setSearch] = useState("");
