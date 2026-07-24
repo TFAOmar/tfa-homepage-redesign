@@ -137,7 +137,7 @@ Deno.serve(async (req) => {
         appointment_at: b.appointment_at ?? null,
         preferred_contact_at: b.preferred_contact_at ?? null,
         hold_automation: !!b.hold_automation,
-        sms_status: "n/a",
+        sms_status: "skipped",
       })
       .select("id, resume_token")
       .single();
