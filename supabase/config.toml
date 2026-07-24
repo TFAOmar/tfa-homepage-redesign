@@ -12,11 +12,8 @@ verify_jwt = false
 [functions.save-lead-progress]
 verify_jwt = false
 
-[functions.dispatch-group-sms]
+[functions.forward-to-ghl]
 verify_jwt = false
 
-[functions.dispatch-queued-sms]
-verify_jwt = false
-
-[functions.sms-inbound]
+[functions.ghl-optout-sync]
 verify_jwt = false

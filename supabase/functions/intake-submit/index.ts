@@ -35,7 +35,8 @@ const BodySchema = z.object({
   staff_notes: z.string().max(4000).optional(),
   appointment_status: z.string().max(30).nullable().optional(),
   appointment_at: z.string().nullable().optional(),
-  send_intro: z.boolean().optional(),
+  preferred_contact_at: z.string().nullable().optional(),
+  hold_automation: z.boolean().optional(),
   consent: ConsentSchema.optional(),
   page_url: z.string().max(500).optional(),
   user_agent: z.string().max(500).optional(),
@@ -99,7 +100,6 @@ Deno.serve(async (req) => {
       b.routing_team_key || (b.services.length > 1 ? "multi" : b.primary_service || b.services[0] || null);
 
     const status = b.partial ? "abandoned" : b.status || "new";
-    const smsStatus = b.partial ? "skipped" : b.send_intro || b.source === "consumer" ? "pending" : "skipped";
 
     // De-dupe abandoned → replace previous abandoned with same phone
     if (b.partial && b.phone_e164) {
@@ -135,7 +135,9 @@ Deno.serve(async (req) => {
         staff_notes: b.staff_notes,
         appointment_status: b.appointment_status ?? null,
         appointment_at: b.appointment_at ?? null,
-        sms_status: smsStatus,
+        preferred_contact_at: b.preferred_contact_at ?? null,
+        hold_automation: !!b.hold_automation,
+        sms_status: "n/a",
       })
       .select("id, resume_token")
       .single();
@@ -186,8 +188,9 @@ Deno.serve(async (req) => {
       }
     }
 
-    // NOTE: intro SMS handoff is a follow-up (requires Twilio connector + A2P).
-    return new Response(JSON.stringify({ lead_id: lead.id, sms_status: smsStatus }), {
+    // Messaging, quiet-hours, routing sends, and opt-outs are handled by GoHighLevel.
+    // A DB trigger on intake_leads INSERT forwards this lead to the forward-to-ghl edge function.
+    return new Response(JSON.stringify({ lead_id: lead.id }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

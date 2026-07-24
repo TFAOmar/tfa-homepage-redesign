@@ -458,6 +458,11 @@ export type Database = {
           email: string | null
           email_normalized: string | null
           first_name: string | null
+          ghl_forward_attempts: number
+          ghl_forward_status: string
+          ghl_forwarded_at: string | null
+          ghl_last_error: string | null
+          hold_automation: boolean
           id: string
           intro_fallback: boolean
           intro_scheduled_for: string | null
@@ -466,6 +471,7 @@ export type Database = {
           last_name: string | null
           phone_e164: string | null
           phone_normalized: string | null
+          preferred_contact_at: string | null
           primary_service: string | null
           referrer_id: string | null
           referrer_in_thread: boolean
@@ -496,6 +502,11 @@ export type Database = {
           email?: string | null
           email_normalized?: string | null
           first_name?: string | null
+          ghl_forward_attempts?: number
+          ghl_forward_status?: string
+          ghl_forwarded_at?: string | null
+          ghl_last_error?: string | null
+          hold_automation?: boolean
           id?: string
           intro_fallback?: boolean
           intro_scheduled_for?: string | null
@@ -504,6 +515,7 @@ export type Database = {
           last_name?: string | null
           phone_e164?: string | null
           phone_normalized?: string | null
+          preferred_contact_at?: string | null
           primary_service?: string | null
           referrer_id?: string | null
           referrer_in_thread?: boolean
@@ -534,6 +546,11 @@ export type Database = {
           email?: string | null
           email_normalized?: string | null
           first_name?: string | null
+          ghl_forward_attempts?: number
+          ghl_forward_status?: string
+          ghl_forwarded_at?: string | null
+          ghl_last_error?: string | null
+          hold_automation?: boolean
           id?: string
           intro_fallback?: boolean
           intro_scheduled_for?: string | null
@@ -542,6 +559,7 @@ export type Database = {
           last_name?: string | null
           phone_e164?: string | null
           phone_normalized?: string | null
+          preferred_contact_at?: string | null
           primary_service?: string | null
           referrer_id?: string | null
           referrer_in_thread?: boolean

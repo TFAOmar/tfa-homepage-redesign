@@ -1,65 +1,51 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/seo";
 
-interface Template {
-  id: string;
-  team_key: string;
-  language: string;
-  kind: string;
-  body: string;
-}
-
-function render(tpl: string) {
-  return tpl
-    .replace(/\{first_name\}/g, "Alex")
-    .replace(/\{referrer_name\}/g, "Jamie")
-    .replace(/\{member_name\}/g, "Sam")
-    .replace(/\{scheduling_url\}/g, "https://cal.example.com/sam");
-}
-
+/**
+ * Messaging automation has moved to GoHighLevel (GHL).
+ * This app forwards every intake_leads insert to the GHL webhook
+ * (edge function `forward-to-ghl`). GHL owns all SMS/email templates,
+ * quiet hours, routing sends, and opt-outs.
+ */
 export default function AdminIntakeTemplates() {
-  const [rows, setRows] = useState<Template[]>([]);
-  const [preview, setPreview] = useState(true);
-
-  useEffect(() => {
-    void (async () => {
-      const { data } = await supabase
-        .from("intake_sms_templates")
-        .select("*")
-        .order("team_key")
-        .order("language")
-        .order("kind");
-      setRows((data || []) as Template[]);
-    })();
-  }, []);
-
   return (
     <>
-      <SEOHead title="Intake SMS Templates" description="Preview intake SMS templates." />
+      <SEOHead title="Messaging — Managed in GoHighLevel" description="Messaging automation is owned by GHL." noIndex />
       <main className="min-h-screen bg-gray-50 py-10 px-4">
-        <div className="container mx-auto max-w-5xl">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl font-serif font-bold text-navy">Intake SMS Templates</h1>
-            <label className="text-sm flex items-center gap-2">
-              <input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} />
-              Show rendered preview
-            </label>
+        <div className="container mx-auto max-w-3xl">
+          <h1 className="text-3xl font-serif font-bold text-navy mb-4">Messaging lives in GoHighLevel</h1>
+          <p className="text-muted-foreground mb-6">
+            All SMS and email automation for intake leads is now managed inside GoHighLevel.
+            This app no longer sends texts or emails directly.
+          </p>
+
+          <div className="rounded-lg bg-white border p-5 space-y-3 text-sm">
+            <h2 className="font-semibold text-navy">What this app still does</h2>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Collects leads at <code>/start</code> and <code>/concierge</code>.</li>
+              <li>Writes each lead to Supabase (system of record) with an append-only consent log.</li>
+              <li>Forwards every lead (submitted <em>and</em> abandoned) to the GHL inbound webhook.</li>
+              <li>Mirrors GHL opt-outs back into <code>intake_suppressions</code> via the <code>ghl-optout-sync</code> endpoint.</li>
+            </ul>
           </div>
-          <div className="space-y-4">
-            {rows.map((t) => (
-              <div key={t.id} className="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground uppercase tracking-wide">
-                  <span className="rounded bg-navy/10 text-navy px-2 py-0.5">{t.team_key}</span>
-                  <span className="rounded bg-accent/10 text-accent px-2 py-0.5">{t.language}</span>
-                  <span className="rounded bg-gray-100 text-gray-600 px-2 py-0.5">{t.kind}</span>
-                </div>
-                <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap">
-                  {preview ? render(t.body) : t.body}
-                </p>
-              </div>
-            ))}
-            {rows.length === 0 && <p className="text-muted-foreground">No templates loaded.</p>}
+
+          <div className="rounded-lg bg-white border p-5 space-y-3 text-sm mt-4">
+            <h2 className="font-semibold text-navy">What GoHighLevel owns</h2>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>SMS &amp; email templates (EN + ES)</li>
+              <li>Contact-timezone-aware quiet hours</li>
+              <li>Routing sends, drip campaigns, opt-out handling</li>
+            </ul>
+          </div>
+
+          <div className="rounded-lg bg-white border p-5 space-y-3 text-sm mt-4">
+            <h2 className="font-semibold text-navy">Required Supabase secrets</h2>
+            <ul className="list-disc pl-5 space-y-1">
+              <li><code>GHL_WEBHOOK_URL</code> — the inbound webhook URL GHL provides.</li>
+              <li><code>GHL_SHARED_SECRET</code> — matches the secret set on GHL's outbound opt-out webhook.</li>
+            </ul>
+            <p className="text-xs text-muted-foreground">
+              Legacy <code>TWILIO_*</code> secrets are unused and can be removed from Supabase &gt; Edge Function Secrets.
+            </p>
           </div>
         </div>
       </main>
