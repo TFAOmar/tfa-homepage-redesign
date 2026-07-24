@@ -36,6 +36,7 @@ function ConciergeInner() {
   const [employer, setEmployer] = useState("");
   const [appointmentStatus, setAppointmentStatus] = useState("");
   const [appointmentAt, setAppointmentAt] = useState("");
+  const [preferredContactAt, setPreferredContactAt] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   if (loading) return <div className="p-12 text-center">…</div>;
@@ -48,9 +49,12 @@ function ConciergeInner() {
       ? "Antes de continuar, ¿está bien si le enviamos mensajes de texto y llamadas de The Financial Architects sobre su consulta? Puede responder STOP en cualquier momento."
       : "Before we continue, is it OK if The Financial Architects sends you calls and texts about your inquiry? You can reply STOP any time.";
 
-  const submit = async (action: "send_now" | "save_only") => {
+  const submit = async (action: "send_now" | "schedule" | "hold") => {
     if (!verbalConsent) return toast.error("Verbal consent required");
     if (!first || !phone) return toast.error("Name and phone required");
+    if (action === "schedule" && !preferredContactAt) {
+      return toast.error("Set a preferred contact time to schedule");
+    }
     setSubmitting(true);
     try {
       const { error } = await supabase.functions.invoke("intake-submit", {
@@ -73,7 +77,8 @@ function ConciergeInner() {
           referrer_in_thread: refIncluded,
           appointment_status: appointmentStatus || null,
           appointment_at: appointmentAt || null,
-          send_intro: action === "send_now",
+          preferred_contact_at: action === "schedule" ? preferredContactAt : null,
+          hold_automation: action === "hold",
           consent: {
             verbal: true,
             verbal_script: script,
@@ -85,7 +90,13 @@ function ConciergeInner() {
         },
       });
       if (error) throw error;
-      toast.success(action === "send_now" ? "Lead saved and intro text queued" : "Lead saved");
+      toast.success(
+        action === "send_now"
+          ? "Lead saved and sent to GHL"
+          : action === "schedule"
+            ? "Lead saved with preferred contact time"
+            : "Lead saved with automation on hold",
+      );
       // reset lightly
       setFirst(""); setLast(""); setPhone(""); setEmail(""); setNotes("");
     } catch (e: any) {
@@ -236,15 +247,25 @@ function ConciergeInner() {
                   <Label>Datetime</Label>
                   <Input type="datetime-local" value={appointmentAt} onChange={(e) => setAppointmentAt(e.target.value)} />
                 </div>
+                <div className="col-span-2">
+                  <Label>Preferred contact time (for GHL scheduling)</Label>
+                  <Input type="datetime-local" value={preferredContactAt} onChange={(e) => setPreferredContactAt(e.target.value)} />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    GoHighLevel honors this window and the contact's timezone for outreach.
+                  </p>
+                </div>
               </div>
             </section>
           </div>
 
           <div className="flex flex-wrap gap-3 mt-6 sticky bottom-3 bg-white/95 backdrop-blur rounded-lg border p-3 shadow-md">
             <Button className="btn-primary-cta" disabled={submitting} onClick={() => submit("send_now")}>
-              Save & send intro text now
+              Save & send to GHL
             </Button>
-            <Button variant="outline" disabled={submitting} onClick={() => submit("save_only")}>
+            <Button variant="outline" disabled={submitting} onClick={() => submit("schedule")}>
+              Save & schedule text
+            </Button>
+            <Button variant="outline" disabled={submitting} onClick={() => submit("hold")}>
               Save without text
             </Button>
           </div>
