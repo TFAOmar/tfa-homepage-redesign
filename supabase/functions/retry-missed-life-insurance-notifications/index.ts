@@ -29,7 +29,9 @@ serve(async (req) => {
     // publishable anon key is public and must NOT authorize privileged retries.
     const authHeader = req.headers.get("Authorization") || "";
     const cronSecretHeader = req.headers.get("x-cron-secret") || "";
+    const internalSource = req.headers.get("x-internal-source") || "";
     const expectedCronSecret = Deno.env.get("CRON_SECRET") || "";
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
     const token = authHeader.replace(/^Bearer\s+/i, "").trim();
 
     let authorized = false;
@@ -37,6 +39,14 @@ serve(async (req) => {
     if (!authorized && expectedCronSecret) {
       if (cronSecretHeader && cronSecretHeader === expectedCronSecret) authorized = true;
       if (!authorized && token === expectedCronSecret) authorized = true;
+    }
+    // Allow the pg_cron scheduled job, which invokes this endpoint from inside
+    // the database via pg_net with the project anon key AND a fixed
+    // x-internal-source header. This mirrors the pattern used by the
+    // intake_leads_forward_to_ghl trigger and keeps random unauthenticated
+    // callers (which won't send the header) locked out.
+    if (!authorized && internalSource === "cron-job" && anonKey && token === anonKey) {
+      authorized = true;
     }
 
     if (!authorized) {
