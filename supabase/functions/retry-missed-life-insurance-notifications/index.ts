@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { isAuthorizedRequest } from "./auth.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -27,17 +28,14 @@ serve(async (req) => {
     // Authorization: only the pg_cron job (passing CRON_SECRET) or internal
     // edge functions using the service-role key may invoke this. The
     // publishable anon key is public and must NOT authorize privileged retries.
-    const authHeader = req.headers.get("Authorization") || "";
-    const cronSecretHeader = req.headers.get("x-cron-secret") || "";
-    const expectedCronSecret = Deno.env.get("CRON_SECRET") || "";
-    const token = authHeader.replace(/^Bearer\s+/i, "").trim();
-
-    let authorized = false;
-    if (token && token === supabaseServiceKey) authorized = true;
-    if (!authorized && expectedCronSecret) {
-      if (cronSecretHeader && cronSecretHeader === expectedCronSecret) authorized = true;
-      if (!authorized && token === expectedCronSecret) authorized = true;
-    }
+    // The decision is delegated to a pure, constant-time, unit-tested module
+    // (./auth.ts) that fails closed on empty/missing/whitespace credentials.
+    const authorized = await isAuthorizedRequest({
+      authHeader: req.headers.get("Authorization"),
+      cronSecretHeader: req.headers.get("x-cron-secret"),
+      serviceRoleKey: supabaseServiceKey,
+      cronSecret: Deno.env.get("CRON_SECRET") ?? undefined,
+    });
 
     if (!authorized) {
       return new Response(
