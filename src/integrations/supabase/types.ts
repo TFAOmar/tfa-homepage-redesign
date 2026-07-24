@@ -395,6 +395,369 @@ export type Database = {
         }
         Relationships: []
       }
+      intake_consent_log: {
+        Row: {
+          agent_user_id: string | null
+          consent_text_snapshot: string
+          consent_text_version: string
+          consent_type: string
+          id: string
+          ip: string | null
+          language: string
+          lead_id: string | null
+          occurred_at: string
+          page_url: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          agent_user_id?: string | null
+          consent_text_snapshot: string
+          consent_text_version: string
+          consent_type: string
+          id?: string
+          ip?: string | null
+          language?: string
+          lead_id?: string | null
+          occurred_at?: string
+          page_url?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          agent_user_id?: string | null
+          consent_text_snapshot?: string
+          consent_text_version?: string
+          consent_type?: string
+          id?: string
+          ip?: string | null
+          language?: string
+          lead_id?: string | null
+          occurred_at?: string
+          page_url?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_consent_log_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "intake_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      intake_leads: {
+        Row: {
+          answers: Json
+          appointment_at: string | null
+          appointment_status: string | null
+          best_time: string | null
+          conversation_sid: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          email_normalized: string | null
+          first_name: string | null
+          id: string
+          language: string
+          last_name: string | null
+          phone_e164: string | null
+          phone_normalized: string | null
+          primary_service: string | null
+          referrer_id: string | null
+          referrer_in_thread: boolean
+          resume_token: string
+          routing_overridden: boolean
+          routing_reason: string | null
+          routing_team_key: string | null
+          services: string[]
+          sms_status: string
+          source: string
+          speaking_with: string | null
+          staff_notes: string | null
+          status: string
+          temperature: string | null
+          timezone: string | null
+          updated_at: string
+          zip: string | null
+        }
+        Insert: {
+          answers?: Json
+          appointment_at?: string | null
+          appointment_status?: string | null
+          best_time?: string | null
+          conversation_sid?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          email_normalized?: string | null
+          first_name?: string | null
+          id?: string
+          language?: string
+          last_name?: string | null
+          phone_e164?: string | null
+          phone_normalized?: string | null
+          primary_service?: string | null
+          referrer_id?: string | null
+          referrer_in_thread?: boolean
+          resume_token?: string
+          routing_overridden?: boolean
+          routing_reason?: string | null
+          routing_team_key?: string | null
+          services?: string[]
+          sms_status?: string
+          source: string
+          speaking_with?: string | null
+          staff_notes?: string | null
+          status?: string
+          temperature?: string | null
+          timezone?: string | null
+          updated_at?: string
+          zip?: string | null
+        }
+        Update: {
+          answers?: Json
+          appointment_at?: string | null
+          appointment_status?: string | null
+          best_time?: string | null
+          conversation_sid?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          email_normalized?: string | null
+          first_name?: string | null
+          id?: string
+          language?: string
+          last_name?: string | null
+          phone_e164?: string | null
+          phone_normalized?: string | null
+          primary_service?: string | null
+          referrer_id?: string | null
+          referrer_in_thread?: boolean
+          resume_token?: string
+          routing_overridden?: boolean
+          routing_reason?: string | null
+          routing_team_key?: string | null
+          services?: string[]
+          sms_status?: string
+          source?: string
+          speaking_with?: string | null
+          staff_notes?: string | null
+          status?: string
+          temperature?: string | null
+          timezone?: string | null
+          updated_at?: string
+          zip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_leads_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "intake_referrers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "intake_leads_routing_team_key_fkey"
+            columns: ["routing_team_key"]
+            isOneToOne: false
+            referencedRelation: "intake_teams"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      intake_referrers: {
+        Row: {
+          active: boolean
+          agreement_signed_at: string | null
+          avatar_url: string | null
+          created_at: string
+          display_name: string
+          id: string
+          phone_e164: string | null
+          slug: string
+          sms_notify_optin: boolean
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          agreement_signed_at?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          display_name: string
+          id?: string
+          phone_e164?: string | null
+          slug: string
+          sms_notify_optin?: boolean
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          agreement_signed_at?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          phone_e164?: string | null
+          slug?: string
+          sms_notify_optin?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      intake_sms_events: {
+        Row: {
+          author: string | null
+          body: string | null
+          conversation_sid: string | null
+          direction: string | null
+          event_type: string | null
+          id: string
+          lead_id: string | null
+          occurred_at: string
+          raw: Json | null
+        }
+        Insert: {
+          author?: string | null
+          body?: string | null
+          conversation_sid?: string | null
+          direction?: string | null
+          event_type?: string | null
+          id?: string
+          lead_id?: string | null
+          occurred_at?: string
+          raw?: Json | null
+        }
+        Update: {
+          author?: string | null
+          body?: string | null
+          conversation_sid?: string | null
+          direction?: string | null
+          event_type?: string | null
+          id?: string
+          lead_id?: string | null
+          occurred_at?: string
+          raw?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_sms_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "intake_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      intake_suppressions: {
+        Row: {
+          id: string
+          occurred_at: string
+          phone_e164: string
+          reason: string
+        }
+        Insert: {
+          id?: string
+          occurred_at?: string
+          phone_e164: string
+          reason?: string
+        }
+        Update: {
+          id?: string
+          occurred_at?: string
+          phone_e164?: string
+          reason?: string
+        }
+        Relationships: []
+      }
+      intake_team_members: {
+        Row: {
+          active: boolean
+          calendar_link: string | null
+          created_at: string
+          id: string
+          language_capabilities: string[]
+          name: string
+          open_lead_count: number
+          phone_e164: string
+          priority: number
+          team_key: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          calendar_link?: string | null
+          created_at?: string
+          id?: string
+          language_capabilities?: string[]
+          name: string
+          open_lead_count?: number
+          phone_e164: string
+          priority?: number
+          team_key: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          calendar_link?: string | null
+          created_at?: string
+          id?: string
+          language_capabilities?: string[]
+          name?: string
+          open_lead_count?: number
+          phone_e164?: string
+          priority?: number
+          team_key?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_team_members_team_key_fkey"
+            columns: ["team_key"]
+            isOneToOne: false
+            referencedRelation: "intake_teams"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      intake_teams: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          language_capabilities: string[]
+          member_name: string | null
+          name_en: string
+          name_es: string
+          scheduling_url: string | null
+          twilio_projected_address: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          language_capabilities?: string[]
+          member_name?: string | null
+          name_en: string
+          name_es: string
+          scheduling_url?: string | null
+          twilio_projected_address?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          language_capabilities?: string[]
+          member_name?: string | null
+          name_en?: string
+          name_es?: string
+          scheduling_url?: string | null
+          twilio_projected_address?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           admin_notes: string | null
@@ -1043,6 +1406,15 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      get_intake_referrer_by_slug: {
+        Args: { p_slug: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          id: string
+          slug: string
+        }[]
+      }
       get_public_advisors: {
         Args: never
         Returns: {
@@ -1111,7 +1483,7 @@ export type Database = {
     Enums: {
       advisor_status: "pending" | "published" | "hidden" | "archived"
       advisor_type: "Advisor" | "Broker"
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "staff"
       application_status:
         | "draft"
         | "submitted"
@@ -1249,7 +1621,7 @@ export const Constants = {
     Enums: {
       advisor_status: ["pending", "published", "hidden", "archived"],
       advisor_type: ["Advisor", "Broker"],
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "staff"],
       application_status: [
         "draft",
         "submitted",
