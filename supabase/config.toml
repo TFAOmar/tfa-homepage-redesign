@@ -11,3 +11,12 @@ verify_jwt = false
 
 [functions.save-lead-progress]
 verify_jwt = false
+
+[functions.dispatch-group-sms]
+verify_jwt = false
+
+[functions.dispatch-queued-sms]
+verify_jwt = false
+
+[functions.sms-inbound]
+verify_jwt = false
