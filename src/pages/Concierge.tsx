@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { CONSENT_VERSION } from "@/lib/i18n/dictionary";
 import { LanguageProvider, LangToggle, useLang } from "@/lib/i18n/LanguageContext";
+import LegalFooter from "@/components/intake/LegalFooter";
 
 function ConciergeInner() {
   const { user, isLoading: loading } = useAuth();
@@ -248,6 +249,7 @@ function ConciergeInner() {
             </Button>
           </div>
         </main>
+        <LegalFooter />
       </div>
     </>
   );

@@ -11,6 +11,7 @@ import ContactStep, { type ContactData } from "@/components/start/ContactStep";
 import { CONSENT_VERSION } from "@/lib/i18n/dictionary";
 import { zipToTimezone, isQuietHours } from "@/lib/zipTimezone";
 import { Button } from "@/components/ui/button";
+import LegalFooter from "@/components/intake/LegalFooter";
 
 type Stage = "pick" | "wizard" | "contact" | "done";
 
@@ -169,6 +170,7 @@ function StartInner() {
           )}
         </div>
       </main>
+      <LegalFooter />
     </>
   );
 }
