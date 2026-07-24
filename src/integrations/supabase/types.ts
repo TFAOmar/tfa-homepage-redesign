@@ -1111,7 +1111,7 @@ export type Database = {
     Enums: {
       advisor_status: "pending" | "published" | "hidden" | "archived"
       advisor_type: "Advisor" | "Broker"
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "staff"
       application_status:
         | "draft"
         | "submitted"
@@ -1249,7 +1249,7 @@ export const Constants = {
     Enums: {
       advisor_status: ["pending", "published", "hidden", "archived"],
       advisor_type: ["Advisor", "Broker"],
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "staff"],
       application_status: [
         "draft",
         "submitted",
