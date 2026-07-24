@@ -1,70 +1,86 @@
-# TFA Bilingual Lead Intake System
+# Intake Submission Handling + Group-SMS Automation
 
-Two new surfaces (`/start` public, `/concierge` staff), a full Supabase schema, and Twilio-backed intro texts. Scoped to be additive — no changes to `/trust`, `/protect`, `/minh*`, or existing advisor pages.
+Extends the existing `/start` + `/concierge` intake system with automated bilingual group-SMS handoff, quiet-hours queuing, opt-out handling, and legal footers. All Twilio work goes through the Twilio connector gateway; no credentials in the codebase.
 
-## 1. Database (single migration)
+## 1. Prerequisites (user actions)
 
-New tables per spec — `referrers`, `teams`, `team_members`, `leads`, `consent_log`, `sms_events`, `suppressions`. Each with `GRANT`s + RLS:
+Before Twilio code can run:
+1. Connect the **Twilio** connector (I'll open the connect card in build mode).
+2. Confirm A2P 10DLC brand + campaign is registered on the Twilio account, or acknowledge sends will be blocked until it is.
+3. Provide the real CA license number to replace the `0XXXXXX` footer placeholder (optional — I'll ship with the placeholder + `system_settings` key so you can edit later without a code change).
 
-- `leads`, `consent_log`: `INSERT` allowed to `anon` (public intake). `SELECT/UPDATE` on `leads` restricted to staff/admin via `has_role`. `consent_log` is append-only (no UPDATE/DELETE policies, no grants for those).
-- `referrers`, `teams`, `team_members`, `suppressions`: admin-only writes; staff read.
-- `sms_events`: service_role only (edge functions write).
-- Add `profiles` table + trigger for staff/admin role bootstrapping via existing `user_roles` + `app_role` enum (already has `admin`, `moderator`, `user` — add `staff` value).
-- Realtime enabled on `leads` for dashboard.
-- Indexes: normalized phone/email on `leads` for duplicate detection; `referrers.slug`.
+## 2. Database migration
 
-## 2. i18n
+One migration, additive only:
 
-New `src/lib/i18n/` with `en.ts` / `es.ts` dictionaries covering every string in both surfaces + consent block (verbatim EN, human-quality ES). Lightweight `useT()` hook + `LanguageContext` that persists to `localStorage`. Global EN/ES toggle in top-right of both surface layouts.
+- `intake_sms_templates(team_key, language, body)` — seeded with the 8 team×lang intros + the 2 referrer-declined variants + the 2 opt-out confirmations.
+- `intake_teams` — add `scheduling_url_es`, ensure `twilio_projected_address` populated (seed rows if empty).
+- `intake_team_members` — atomic increment RPC `intake_assign_member(team_key, language)` returning the winning `member_id` and bumping `open_lead_count` in one statement (prevents race under concurrent inserts).
+- `intake_leads` — add `assigned_member_id uuid`, `routing_reason text`, `intro_scheduled_for timestamptz` (for quiet-hours queue), `intro_sent_at timestamptz`, `intro_fallback boolean`.
+- `intake_sms_events` — add `severity text` and `needs_review boolean` for the "unrecognized negative-intent" queue.
+- Database webhook trigger: `AFTER INSERT ON intake_leads WHEN status='new'` → `pg_net.http_post` to `dispatch-group-sms` with `Authorization: Bearer <CRON_SECRET>` (reuses existing secret).
+- pg_cron: every 5 min, call `dispatch-queued-sms` for leads with `sms_status='queued_quiet_hours' AND intro_scheduled_for <= now()`.
+- GRANTs + RLS on new table; policies mirror existing intake_ tables (staff/admin read, service_role write).
 
-## 3. Public intake — `/start`
+## 3. Edge functions
 
-Route added to `standalonePages` in `App.tsx` (uses `LandingHeader` with EN/ES toggle instead of nav).
+### `dispatch-group-sms` (new)
+Auth: requires `Authorization: Bearer <CRON_SECRET>` header (webhook + cron only).
 
-- `src/pages/Start.tsx` — hero + referrer lookup by `?ref=` slug (via public RPC `get_referrer_by_slug`).
-- `src/components/start/ServicePicker.tsx` — Step 0 four cards; "Combination" opens multi-select.
-- `src/components/start/Wizard.tsx` — one-question-per-screen engine driven by JSON step configs:
-  - `src/components/start/steps/trust.ts` (6 Qs)
-  - `src/components/start/steps/life.ts` (7 Qs)
-  - `src/components/start/steps/retirement.ts` (7 Qs)
-  - `src/components/start/steps/combination.ts` (adaptive, max 8)
-- `src/components/start/ContactStep.tsx` — name/phone/email/ZIP/best time/language, E.164 validation, US mask.
-- `src/components/start/ConsentBlock.tsx` — two separate unchecked checkboxes with exact verbatim text (EN + ES from dictionary).
-- `src/components/start/Confirmation.tsx` — time-aware message using timezone derived from ZIP (lookup via lightweight ZIP→TZ map in `src/lib/zipTimezone.ts`, quiet hours 9pm–8am local); scheduling-URL fallback button.
-- Partial-lead capture: after phone or email entered, debounce-save `status='abandoned'` via edge function; overwrite on later completion.
-- Anti-abuse: `useHoneypot` hook (already exists), per-IP rate limit in edge function, phone validator.
+Flow per lead_id in body:
+1. Load lead + referrer + team + templates.
+2. **Route**: `services.length > 1 → 'multi'`; else map `trust/term_life/retirement → team`. Honor `routing_overridden`. Prefer ES-capable members when `language='es'`. Call `intake_assign_member(team_key, language)` RPC.
+3. **Quiet hours**: compute local time from `timezone`; if outside 08:05–20:55, set `sms_status='queued_quiet_hours'`, `intro_scheduled_for = next 08:05 local`, return 202.
+4. **Suppression**: filter client + referrer phones against `intake_suppressions`.
+5. **Participants**: client (SMS binding to their phone), team (chat participant with `twilio_projected_address` as identity), referrer (SMS binding) only if `lead.referrer_in_thread && referrer.sms_notify_optin`.
+6. **Send**: `POST /v1/Services/{sid}/Conversations` with `Participant` array in one call, then `POST /Conversations/{sid}/Messages` with rendered template (variables: `first_name`, `referrer_name`, `member_name`, `scheduling_url`) using the team's projected address as `Author`. Store `conversation_sid`, `assigned_member_id`, `intro_sent_at`.
+7. **Fallback on Conversations failure**: two independent Messaging API sends:
+   - Client: intro + link + opt-out.
+   - Referrer: referrer-declined variant (no client PII beyond first name).
+   Set `intro_fallback=true`, log to `sms_events`.
+8. Log every Twilio call (success or error) to `intake_sms_events`.
+9. Return structured `{status, sms_status, conversation_sid?, fallback?}` — surface provider errors verbatim, never a bare 500.
 
-## 4. Staff surface — `/concierge` + `/dashboard` + `/admin`
+### `dispatch-queued-sms` (new)
+Cron-triggered. Selects due queued leads, calls `dispatch-group-sms` per lead.
 
-Auth-gated via existing `useAuth` + new `ProtectedRoute` role check (`staff` or `admin`).
+### `sms-inbound` (new)
+Public webhook (`verify_jwt = false`) for Twilio Conversations `onMessageAdded`.
+1. Validate `X-Twilio-Signature` against `TWILIO_AUTH_TOKEN`.
+2. Insert every event into `intake_sms_events`.
+3. Stop-word detection (case-insensitive, whole-token match): `STOP|END|QUIT|CANCEL|UNSUBSCRIBE|REVOKE|OPT OUT|ALTO|CANCELAR`.
+   - If sender = **client** → remove participant, close conversation (`state=closed`), insert `intake_suppressions`, update `lead.sms_status='opted_out'`, send single opt-out confirmation in the message's language, alert staff via `notify-lead`.
+   - If sender = **referrer** → remove only referrer participant, insert suppression, update `lead.referrer_in_thread=false`, alert staff.
+4. Fuzzy negative-intent phrases ("please stop texting me", "no me llamen", "not interested", etc.) → flag `sms_events.needs_review=true`, alert staff; do NOT auto-suppress.
 
-- `src/pages/Concierge.tsx` — dense keyboard-navigable grid form with all fields per spec, including collapsible "Advisor extras", verbal consent module (records `agent_user_id`, `script_version` into `consent_log`), separate referrer-inclusion checkbox, three action buttons (send now / schedule / save only). Persistent amber CA Art. 6.3 banner when `services` includes trust AND age band ≥65 (logged to `consent_log`).
-- `src/pages/LeadsDashboard.tsx` — filterable table (service, team, temperature, language, referrer, date + name/phone search), pipeline status column, duplicate badge, detail drawer with answers/consent log/SMS thread/quick actions. Uses realtime `leads` channel.
-- `src/pages/AdminConcierge.tsx` — CRUD for referrers, teams, team_members, consent versions, privacy/terms URLs, Spanish copy overrides; CSV export (admin only).
+Register in `supabase/config.toml`: `dispatch-group-sms` (JWT on, cron-auth), `dispatch-queued-sms` (JWT off, cron-auth), `sms-inbound` (JWT off, signature-verified).
 
-## 5. Edge functions
+## 4. Footers (both surfaces)
 
-- `intake-submit` — validates payload (Zod), rate-limits by IP, inserts `leads` + `consent_log` rows, computes routing (see below), triggers `send-intro-sms`. Returns confirmation copy key.
-- `save-partial-lead` — upserts abandoned leads (dedup by phone/email + resume token).
-- `send-intro-sms` — Twilio Conversations API via connector gateway. Creates group thread (client + assigned team member + optionally referrer). Honors quiet hours → status `queued_quiet_hours`. Logs to `sms_events`. Skips numbers in `suppressions`. Handles STOP/HELP via `twilio-sms-webhook`.
-- `twilio-sms-webhook` — inbound handler: STOP→insert `suppressions`, log all events, update `leads.sms_status`.
-- `schedule-intro-sms` — scheduled dispatcher (pg_cron every 5m) that flushes `queued_quiet_hours` when local time enters daytime.
+New `src/components/intake/LegalFooter.tsx` — bilingual, rendered on `/start` and `/concierge`:
+- `CA License #{value from system_settings}` (fallback `0XXXXXX`)
+- Links: `/privacy-policy`, `/terms-of-service`, `/sms-terms` (new lightweight page)
+- Legal line: *"TFA does not provide legal advice; trust documents are prepared by independent licensed attorneys."* + ES translation added to `src/lib/i18n/dictionary.ts`.
 
-Routing: choose highest-priority active `team_members` row for `primary_service` matching language capability; override respected when set by concierge.
+New page: `src/pages/SmsTerms.tsx` (EN + ES) covering message frequency, msg&data rates, HELP/STOP, carrier disclaimer. Added to `standalonePages` + sitemap.
 
-## 6. Twilio
+## 5. Admin surface (minimal, for QA)
 
-I'll initiate the Twilio connector connect flow. Requires: purchased Twilio number, A2P 10DLC registration (or accept SMS deferral until approved — email-only fallback exists in `notify-lead` pattern).
+`src/pages/AdminIntakeTemplates.tsx` (staff/admin only) — read-only view of the 8 seeded templates + variable preview, so you can eyeball what will send before wiring Twilio. Full CRUD deferred unless you ask.
 
-## 7. What I need before build
+## 6. What this plan does NOT do
 
-1. Approval to connect Twilio (I'll open the connect card).
-2. Verbatim Spanish translation approval for the consent block (I'll draft; you approve in a follow-up).
-3. Confirmation that the `staff` role should be added to the existing `app_role` enum (vs a separate table).
+- No A2P 10DLC brand registration (you handle in Twilio console).
+- No admin CRUD for referrers/teams/members yet (still deferred from prior turn — say the word and I'll add).
+- No SMS analytics dashboard.
 
 ## Technical details
 
-**Files created:** ~30 (pages: 4, components: ~15, edge functions: 4, i18n: 3, lib: 2, migration: 1).
-**Files edited:** `src/App.tsx` (routes + `standalonePages`), `public/sitemap.xml` (`/start` only, not `/concierge`), `supabase/config.toml` (new function entries only if non-default config needed).
-**Untouched:** all existing advisor pages, `/trust`, `/protect`, `/minh*`, existing edge functions, existing admin dashboards.
-**Security:** append-only `consent_log` enforced via absence of update/delete policies; PII never in logs; `SUPABASE_SERVICE_ROLE_KEY` only in edge fns; anon has zero SELECT access.
+- **New files** (~8): 3 edge functions, `LegalFooter.tsx`, `SmsTerms.tsx`, `AdminIntakeTemplates.tsx`, migration, template seed.
+- **Edited files** (~5): `App.tsx` (routes), `Start.tsx` + `Concierge.tsx` (footer mount), `config.toml` (function entries), `sitemap.xml`.
+- **Untouched**: everything outside `intake_*` / `/start` / `/concierge` / `/dashboard`.
+- **Secrets used**: `LOVABLE_API_KEY` (already set), `TWILIO_API_KEY` (from connector), `TWILIO_AUTH_TOKEN` (for webhook signature — will request via `add_secret` after Twilio connect), `TWILIO_CONVERSATIONS_SERVICE_SID` (same), `CRON_SECRET` (already set).
+- **Concurrency safety**: `intake_assign_member` runs `UPDATE ... RETURNING` in one statement so two simultaneous webhook fires cannot double-assign.
+- **Idempotency**: `dispatch-group-sms` no-ops if `lead.intro_sent_at IS NOT NULL` (webhook retries won't double-send).
+
+Ready to proceed? If yes, I'll start with the migration + template seed in build mode, then open the Twilio connect card before writing the edge functions.
