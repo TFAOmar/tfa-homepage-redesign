@@ -450,6 +450,7 @@ export type Database = {
           answers: Json
           appointment_at: string | null
           appointment_status: string | null
+          assigned_member_id: string | null
           best_time: string | null
           conversation_sid: string | null
           created_at: string
@@ -458,6 +459,9 @@ export type Database = {
           email_normalized: string | null
           first_name: string | null
           id: string
+          intro_fallback: boolean
+          intro_scheduled_for: string | null
+          intro_sent_at: string | null
           language: string
           last_name: string | null
           phone_e164: string | null
@@ -484,6 +488,7 @@ export type Database = {
           answers?: Json
           appointment_at?: string | null
           appointment_status?: string | null
+          assigned_member_id?: string | null
           best_time?: string | null
           conversation_sid?: string | null
           created_at?: string
@@ -492,6 +497,9 @@ export type Database = {
           email_normalized?: string | null
           first_name?: string | null
           id?: string
+          intro_fallback?: boolean
+          intro_scheduled_for?: string | null
+          intro_sent_at?: string | null
           language?: string
           last_name?: string | null
           phone_e164?: string | null
@@ -518,6 +526,7 @@ export type Database = {
           answers?: Json
           appointment_at?: string | null
           appointment_status?: string | null
+          assigned_member_id?: string | null
           best_time?: string | null
           conversation_sid?: string | null
           created_at?: string
@@ -526,6 +535,9 @@ export type Database = {
           email_normalized?: string | null
           first_name?: string | null
           id?: string
+          intro_fallback?: boolean
+          intro_scheduled_for?: string | null
+          intro_sent_at?: string | null
           language?: string
           last_name?: string | null
           phone_e164?: string | null
@@ -549,6 +561,13 @@ export type Database = {
           zip?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "intake_leads_assigned_member_id_fkey"
+            columns: ["assigned_member_id"]
+            isOneToOne: false
+            referencedRelation: "intake_team_members"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "intake_leads_referrer_id_fkey"
             columns: ["referrer_id"]
@@ -613,8 +632,10 @@ export type Database = {
           event_type: string | null
           id: string
           lead_id: string | null
+          needs_review: boolean
           occurred_at: string
           raw: Json | null
+          severity: string
         }
         Insert: {
           author?: string | null
@@ -624,8 +645,10 @@ export type Database = {
           event_type?: string | null
           id?: string
           lead_id?: string | null
+          needs_review?: boolean
           occurred_at?: string
           raw?: Json | null
+          severity?: string
         }
         Update: {
           author?: string | null
@@ -635,8 +658,10 @@ export type Database = {
           event_type?: string | null
           id?: string
           lead_id?: string | null
+          needs_review?: boolean
           occurred_at?: string
           raw?: Json | null
+          severity?: string
         }
         Relationships: [
           {
@@ -647,6 +672,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      intake_sms_templates: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          language: string
+          team_key: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          kind?: string
+          language: string
+          team_key: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          language?: string
+          team_key?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       intake_suppressions: {
         Row: {
@@ -729,6 +784,7 @@ export type Database = {
           name_en: string
           name_es: string
           scheduling_url: string | null
+          scheduling_url_es: string | null
           twilio_projected_address: string | null
           updated_at: string
         }
@@ -741,6 +797,7 @@ export type Database = {
           name_en: string
           name_es: string
           scheduling_url?: string | null
+          scheduling_url_es?: string | null
           twilio_projected_address?: string | null
           updated_at?: string
         }
@@ -753,6 +810,7 @@ export type Database = {
           name_en?: string
           name_es?: string
           scheduling_url?: string | null
+          scheduling_url_es?: string | null
           twilio_projected_address?: string | null
           updated_at?: string
         }
@@ -1444,6 +1502,16 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      intake_assign_member: {
+        Args: { p_language: string; p_team_key: string }
+        Returns: {
+          member_id: string
+          member_name: string
+          member_phone: string
+          scheduling_link: string
+          was_language_preferred: boolean
+        }[]
       }
       submit_agent_onboarding_application: {
         Args: {
