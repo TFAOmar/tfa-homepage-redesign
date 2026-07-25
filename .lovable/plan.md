@@ -1,70 +1,87 @@
-## Goals
+## Overview
 
-Round out the partner system with the three items previously flagged out-of-scope:
+Add three capabilities to the partner system:
+1. **Bulk CSV import** of partners from `/admin/partners`.
+2. **Sub-referrer hierarchy** so partners can refer other partners and get credit for downstream leads.
+3. **Custom per-partner branding** on `/concierge` (logo, accent color, welcome copy).
 
-1. Admin CRUD for `intake_referrers` including linking a Supabase auth user as owner.
-2. Per-partner analytics beyond the raw leads table.
-3. Email invitations for new partner accounts.
+---
 
-## 1. `/admin/partners` — CRUD page
+## 1. Bulk CSV Import
 
-New page `src/pages/AdminPartners.tsx` (admin-only via `ProtectedRoute requireRole="admin"`), linked from `AdminDashboard` and `AdminTopBar`.
+**UI (`AdminPartners.tsx`)**
+- New "Import CSV" button opens a dialog.
+- Download-template link generates a sample CSV.
+- Paste-or-upload zone parses client-side with PapaParse.
+- Preview table shows rows with validation status (valid / warning / error) before commit.
+- On confirm, rows are processed in batches via `admin_bulk_upsert_referrers` RPC; results panel shows created / updated / skipped / failed counts.
 
-Table of `intake_referrers` with columns: display name, slug, phone, active, owner (email if linked, "—" if not), leads (30d), created. Actions per row: Edit, Invite / Re-invite owner, Unlink owner, Deactivate/Activate, Delete (only if 0 leads).
+**CSV columns**
+`slug, display_name, phone_e164, avatar_url, active, sms_notify_optin, owner_email, parent_slug` (last two optional).
 
-Create/Edit dialog fields: `display_name`, `slug` (auto-generated, editable), `phone_e164`, `avatar_url` (upload to existing `advisor-photos` bucket or paste URL), `active`, `sms_notify_optin`, `owner_email` (optional — triggers invite flow).
+**Backend**
+- New RPC `admin_bulk_upsert_referrers(p_rows jsonb)` — admin-only, wraps existing upsert + optional owner link + optional parent link, returns per-row result jsonb.
+- Reuses `admin_link_referrer_owner` logic; skips owner link when email has no auth user (returns a warning row instead of failing).
 
-Filters: search by name/slug/email, active toggle.
+---
 
-### Owner linking
+## 2. Sub-referrer Hierarchy
 
-We can't join `intake_referrers.owner_user_id` to `auth.users` from the client. Add a security-definer RPC `admin_list_referrers_with_owner()` returning referrers plus `owner_email` (checks `has_role(auth.uid(),'admin')`, joins `auth.users`). A parallel `admin_link_referrer_owner(referrer_id, email)` RPC resolves the email to a user id and updates `owner_user_id`, granting them the `partner` role in `user_roles` if missing.
+**Schema**
+- Add `parent_referrer_id uuid references intake_referrers(id)` and `depth int` to `intake_referrers`.
+- Guard against cycles with a trigger that walks parents.
+- Add `origin_referrer_id uuid` on `intake_leads` (denormalized top-of-tree) plus `attribution_path uuid[]` for reporting.
+- Backfill: existing rows get `parent_referrer_id = null`, `depth = 0`, `origin_referrer_id = referrer_id`.
 
-## 2. Per-partner analytics
+**Lead attribution**
+- When a lead is created with `referrer_id = X`, a trigger fills `attribution_path` (X + all ancestors) and `origin_referrer_id` (root).
+- Existing GHL forward payload unchanged; extra ancestor slugs added as custom fields.
 
-New tab/section on `/admin/partners/:id` (or expandable row) showing, for the selected referrer:
+**Visibility rules (updated policies + RPCs)**
+- Partner sees leads where `auth.uid()` owns any referrer in `attribution_path`.
+- `admin_partner_stats` gains `include_descendants boolean` param; when true, aggregates across the subtree.
+- New RPC `partner_list_children()` returns the current partner's direct sub-referrers with basic KPIs.
 
-- KPI cards: total leads, leads last 30d, leads last 7d, appointments booked, GHL forward success rate.
-- Chart: leads per week (last 12 weeks) — recharts line/bar, already in the project.
-- Breakdown: top services (from `intake_leads.services`/`primary_service`), language mix (EN/ES), status mix.
-- Recent 20 leads with link into the existing detail sheet pattern.
+**UI**
+- `AdminPartners.tsx`: parent selector on create/edit; tree view toggle.
+- `Concierge.tsx` (partner view): "My Sub-Referrers" panel with rollup stats and a link to invite a new sub-referrer (reuses `invite-partner` with `parent_referrer_id` param). Partners can only create children under themselves; admins can move nodes anywhere.
 
-Data via a security-definer RPC `admin_partner_stats(referrer_id uuid)` returning a single JSON payload so the UI is one query. Admin-only guard inside the function.
+---
 
-Partners viewing `/concierge` get a lighter version of the KPI cards (their own referrer only) above their leads table, reusing the same RPC gated by `owner_user_id = auth.uid()` — no new endpoint.
+## 3. Custom Per-Partner Branding on /concierge
 
-## 3. Email invites for new partner accounts
+**Schema**
+- Add columns on `intake_referrers`: `brand_logo_url text`, `brand_primary_hex text`, `brand_accent_hex text`, `brand_welcome_headline text`, `brand_welcome_body text`, `brand_support_email text`.
+- Constrained hex validation via trigger.
 
-Flow when admin clicks Invite (or provides `owner_email` while creating a referrer):
+**Storage**
+- Reuse existing `advisor-photos` bucket (public) under a `partner-branding/` prefix, or add a new `partner-branding` public bucket if we want separation. Default: new public bucket `partner-branding` with 2MB image-only insert policy scoped to admins + the owning partner.
 
-1. Admin UI calls edge function `invite-partner` with `{ referrer_id, email }`.
-2. Function (verify_jwt=false; validates caller is admin via JWT + `has_role` RPC using service role):
-   - Looks up existing user by email. If none, creates one via `supabase.auth.admin.inviteUserByEmail(email, { redirectTo: <site>/auth?next=/concierge })`.
-   - Upserts `user_roles` row `(user_id, 'partner')`.
-   - Updates `intake_referrers.owner_user_id = user_id`.
-   - Sends a branded TFA welcome email via Resend (Navy/Gold, same style as `send-test-email`) from `noreply@tfainsuranceadvisors.com` explaining what `/concierge` is, with a magic sign-in link (from `generateLink` type `magiclink`) as a fallback to the Supabase invite.
-3. Returns `{ status: 'invited' | 'linked_existing', owner_email }`.
+**Admin & partner editing**
+- Admin: new "Branding" tab in the partner sheet on `/admin/partners`.
+- Partner: new "Branding" section on `/concierge` (own referrer only), same form component.
 
-Re-invite = same function; if user exists and is already linked, it resends the magic link email only.
+**Rendering on /concierge**
+- `useMyReferrer()` hook returns branding fields.
+- New `<PartnerBrandingProvider>` wraps `/concierge` and injects CSS variables (`--partner-primary`, `--partner-accent`) plus header block (logo + headline + body).
+- Falls back to TFA Navy/Gold when a partner has no branding set.
+- Admins/staff viewing `/concierge` see default TFA branding (no partner scope).
 
-Unlink = new RPC `admin_unlink_referrer_owner(referrer_id)` that nulls `owner_user_id` and removes the `partner` role if that user owns no other active referrers.
+---
 
-## Technical details
+## Technical Notes
 
-- Migration:
-  - RPCs: `admin_list_referrers_with_owner()`, `admin_partner_stats(uuid)`, `admin_link_referrer_owner(uuid, text)`, `admin_unlink_referrer_owner(uuid)` — all `SECURITY DEFINER`, first line `IF NOT has_role(auth.uid(),'admin') THEN RAISE EXCEPTION 'Not authorized'; END IF;` (partner-stats also permits the owner).
-  - `GRANT EXECUTE ... TO authenticated` on each.
-  - No schema change to `intake_referrers` (column already exists). Optional index on `intake_leads(referrer_id, created_at desc)` for analytics.
-- Edge function `supabase/functions/invite-partner/index.ts`:
-  - CORS via `npm:@supabase/supabase-js@2/cors`.
-  - Uses `SUPABASE_SERVICE_ROLE_KEY` for admin auth API + Resend for branded email. Both secrets already configured.
-  - Zod-validated body; JWT extracted from `Authorization` header, verified with anon client, admin check via `has_role` RPC before doing anything.
-- Frontend files:
-  - New: `src/pages/AdminPartners.tsx`, `src/components/admin/PartnerFormDialog.tsx`, `src/components/admin/PartnerStatsPanel.tsx`.
-  - Edits: `src/App.tsx` (route `/admin/partners`, admin-guarded), `src/pages/AdminDashboard.tsx` (tile), `src/components/admin/AdminTopBar.tsx` (admin link), `src/components/concierge/ReferralLeadsPanel.tsx` (mount `PartnerStatsPanel` above table for partners; skip for staff/admin overview or show aggregated stats — TBD, defaulting to per-partner-only view for now).
+- All new DB objects follow project rules: explicit GRANTs, RLS enabled, security-definer RPCs with `has_role` checks, `search_path = public`.
+- No changes to Twilio (removed) — GHL forward payload gains optional `parent_slug` / `root_slug` fields only.
+- CSV parser and preview kept client-side; no new deps beyond `papaparse` (already used? add if missing).
+- Branding CSS variables are scoped to the concierge layout so they don't leak into admin surfaces.
+- Cycle protection + max depth cap (e.g. 5) enforced in trigger and validated in UI.
 
-## Out of scope
+---
 
-- Bulk CSV import of partners.
-- Partner-to-partner sub-referrers / hierarchy.
-- Custom per-partner branding on `/concierge`.
+## Rollout Order
+
+1. Migration: hierarchy columns, branding columns, bulk-upsert RPC, updated policies, storage bucket.
+2. Backend: `admin_bulk_upsert_referrers`, `partner_list_children`, updated `admin_partner_stats`.
+3. Frontend: CSV importer → hierarchy UI → branding editor + provider.
+4. Verify: build, admin flow (import + link parent + edit branding), partner flow (see subtree + edit own branding).
