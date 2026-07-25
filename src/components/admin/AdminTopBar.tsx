@@ -40,6 +40,9 @@ const AdminTopBar = () => {
             {isAdmin && (
               <Link to="/admin" className="hover:text-navy">Admin</Link>
             )}
+            {isAdmin && (
+              <Link to="/admin/partners" className="hover:text-navy">Partners</Link>
+            )}
             {(isAdmin || isStaff) && (
               <Link to="/dashboard" className="hover:text-navy">Intake Dashboard</Link>
             )}

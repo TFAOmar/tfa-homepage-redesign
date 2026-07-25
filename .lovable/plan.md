@@ -1,83 +1,70 @@
 ## Goals
 
-1. When an **admin** lands on `/concierge`, they should see the full referral‑partner lead feed (not just the empty intake form).
-2. Clearly separate four roles — **admin**, **staff**, **partner**, **user** — with predictable views and routing.
-3. Clean up `/auth` so login goes to the right place for each role and every screen shows who you are.
+Round out the partner system with the three items previously flagged out-of-scope:
 
-## Current state (verified)
+1. Admin CRUD for `intake_referrers` including linking a Supabase auth user as owner.
+2. Per-partner analytics beyond the raw leads table.
+3. Email invitations for new partner accounts.
 
-- `has_role()` + `user_roles` table already exist with an `app_role` enum: `admin, moderator, user, staff`. No `partner` role yet.
-- `/concierge` (`src/pages/Concierge.tsx`) is gated only by "logged in". Any signed‑in user reaches the intake form. There is no admin-specific view.
-- `/dashboard` (`src/pages/IntakeDashboard.tsx`) already lists all `intake_leads` and is also gated only by "logged in" — RLS on `intake_leads` is what actually restricts reads to `staff`/`admin`, so partners currently see an empty table with no explanation.
-- `intake_referrers` has no link to `auth.users`, so we can't scope "a partner's own leads".
-- `useAuth` only exposes `isAdmin`. There is no `isStaff` / `isPartner`.
-- `AdminTopBar` exists but is not on `/concierge`.
+## 1. `/admin/partners` — CRUD page
 
-## What to build
+New page `src/pages/AdminPartners.tsx` (admin-only via `ProtectedRoute requireRole="admin"`), linked from `AdminDashboard` and `AdminTopBar`.
 
-### 1. Role model
+Table of `intake_referrers` with columns: display name, slug, phone, active, owner (email if linked, "—" if not), leads (30d), created. Actions per row: Edit, Invite / Re-invite owner, Unlink owner, Deactivate/Activate, Delete (only if 0 leads).
 
-- Add `'partner'` to the `app_role` enum.
-- Add `owner_user_id uuid` to `public.intake_referrers` (nullable, FK `auth.users`) so a partner account can be linked to their referrer record.
-- Extend RLS on `intake_leads`:
-  - Keep existing staff/admin read.
-  - Add: partners may `SELECT` rows where `referrer_id` belongs to an `intake_referrers` row whose `owner_user_id = auth.uid()`.
-- Add a small helper view/RPC `my_referrer_id()` (security definer) so the client can query "my leads" cleanly.
+Create/Edit dialog fields: `display_name`, `slug` (auto-generated, editable), `phone_e164`, `avatar_url` (upload to existing `advisor-photos` bucket or paste URL), `active`, `sms_notify_optin`, `owner_email` (optional — triggers invite flow).
 
-### 2. `useAuth` cleanup
+Filters: search by name/slug/email, active toggle.
 
-- Expose `role: 'admin' | 'staff' | 'partner' | 'user'` and booleans `isAdmin`, `isStaff`, `isPartner`.
-- Compute once from `user_roles` (single query returning all rows for the user), with `admin > staff > partner > user` precedence.
+### Owner linking
 
-### 3. `/concierge` — role-aware
+We can't join `intake_referrers.owner_user_id` to `auth.users` from the client. Add a security-definer RPC `admin_list_referrers_with_owner()` returning referrers plus `owner_email` (checks `has_role(auth.uid(),'admin')`, joins `auth.users`). A parallel `admin_link_referrer_owner(referrer_id, email)` RPC resolves the email to a user id and updates `owner_user_id`, granting them the `partner` role in `user_roles` if missing.
 
-Split the page by role inside `ConciergeInner`:
+## 2. Per-partner analytics
 
-- **Admin / staff:** render a new "Referral Partner Leads" panel above the intake form:
-  - Table of `intake_leads` filtered to `source in ('concierge','partner')`, columns: date, partner (referrer name), client name, services, GHL status, staff notes.
-  - Filters: partner, service, GHL status, date range.
-  - Row click opens the same detail Sheet used in `IntakeDashboard`.
-  - Admins also see a "View full intake dashboard" link to `/dashboard`.
-  - The intake form stays below, collapsed by default for admins ("New concierge intake" toggle).
-- **Partner:** show only *their* referrals (via `owner_user_id` link) plus a simplified "Send new referral" form (a trimmed version of the concierge form — no routing overrides, no staff‑only extras).
-- **Plain user (no role):** show a friendly "This area is for TFA staff and referral partners" screen with a link home; do not render the form.
+New tab/section on `/admin/partners/:id` (or expandable row) showing, for the selected referrer:
 
-Add `AdminTopBar` to `/concierge` for signed‑in admins/staff so logout is always visible.
+- KPI cards: total leads, leads last 30d, leads last 7d, appointments booked, GHL forward success rate.
+- Chart: leads per week (last 12 weeks) — recharts line/bar, already in the project.
+- Breakdown: top services (from `intake_leads.services`/`primary_service`), language mix (EN/ES), status mix.
+- Recent 20 leads with link into the existing detail sheet pattern.
 
-### 4. `/auth` post‑login routing
+Data via a security-definer RPC `admin_partner_stats(referrer_id uuid)` returning a single JSON payload so the UI is one query. Admin-only guard inside the function.
 
-Update the redirect in `src/pages/Auth.tsx`:
+Partners viewing `/concierge` get a lighter version of the KPI cards (their own referrer only) above their leads table, reusing the same RPC gated by `owner_user_id = auth.uid()` — no new endpoint.
 
-```text
-if next -> honor it
-else if isAdmin -> /admin
-else if isStaff -> /dashboard
-else if isPartner -> /concierge
-else -> /
-```
+## 3. Email invites for new partner accounts
 
-Also:
-- Show the current role as a small badge under "Signed in as …".
-- Rename card copy: "Admin Login" → "Staff & Partner Login" when no `next` is set.
+Flow when admin clicks Invite (or provides `owner_email` while creating a referrer):
 
-### 5. Nav polish
+1. Admin UI calls edge function `invite-partner` with `{ referrer_id, email }`.
+2. Function (verify_jwt=false; validates caller is admin via JWT + `has_role` RPC using service role):
+   - Looks up existing user by email. If none, creates one via `supabase.auth.admin.inviteUserByEmail(email, { redirectTo: <site>/auth?next=/concierge })`.
+   - Upserts `user_roles` row `(user_id, 'partner')`.
+   - Updates `intake_referrers.owner_user_id = user_id`.
+   - Sends a branded TFA welcome email via Resend (Navy/Gold, same style as `send-test-email`) from `noreply@tfainsuranceadvisors.com` explaining what `/concierge` is, with a magic sign-in link (from `generateLink` type `magiclink`) as a fallback to the Supabase invite.
+3. Returns `{ status: 'invited' | 'linked_existing', owner_email }`.
 
-- `AdminTopBar` gets a role badge (Admin / Staff / Partner) and links tuned to the role: Admin → Admin Dashboard, Intake Dashboard, Concierge; Staff → Intake Dashboard, Concierge; Partner → Concierge (My Referrals).
-- `ProtectedRoute` gains an optional `requireRole` prop (`'admin' | 'staff' | 'partner'`) used by `/admin/*` and `/dashboard`.
+Re-invite = same function; if user exists and is already linked, it resends the magic link email only.
+
+Unlink = new RPC `admin_unlink_referrer_owner(referrer_id)` that nulls `owner_user_id` and removes the `partner` role if that user owns no other active referrers.
 
 ## Technical details
 
 - Migration:
-  - `ALTER TYPE app_role ADD VALUE 'partner';`
-  - `ALTER TABLE public.intake_referrers ADD COLUMN owner_user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL;` + index.
-  - New RLS policy `"Partners read own referred leads"` on `intake_leads` using an `EXISTS` against `intake_referrers` where `owner_user_id = auth.uid()`.
-  - New security‑definer function `public.get_my_referrer_id() returns uuid` used by the partner UI.
-  - No changes to existing staff/admin policies.
-- Frontend files touched: `src/hooks/useAuth.tsx`, `src/pages/Auth.tsx`, `src/pages/Concierge.tsx` (split into `ConciergeAdminView`, `ConciergePartnerView`, `ConciergeIntakeForm`), `src/components/admin/AdminTopBar.tsx`, `src/components/ProtectedRoute.tsx`, `src/App.tsx` (wrap `/admin/*` and `/dashboard` with `requireRole`).
-- Assigning partners: admins link a user to a referrer from the existing admin surface (a small "Owner user email" field on the intake_referrers row); if we skip that UI this pass, it can be done directly in Supabase — I'll flag this in the shipped notes.
+  - RPCs: `admin_list_referrers_with_owner()`, `admin_partner_stats(uuid)`, `admin_link_referrer_owner(uuid, text)`, `admin_unlink_referrer_owner(uuid)` — all `SECURITY DEFINER`, first line `IF NOT has_role(auth.uid(),'admin') THEN RAISE EXCEPTION 'Not authorized'; END IF;` (partner-stats also permits the owner).
+  - `GRANT EXECUTE ... TO authenticated` on each.
+  - No schema change to `intake_referrers` (column already exists). Optional index on `intake_leads(referrer_id, created_at desc)` for analytics.
+- Edge function `supabase/functions/invite-partner/index.ts`:
+  - CORS via `npm:@supabase/supabase-js@2/cors`.
+  - Uses `SUPABASE_SERVICE_ROLE_KEY` for admin auth API + Resend for branded email. Both secrets already configured.
+  - Zod-validated body; JWT extracted from `Authorization` header, verified with anon client, admin check via `has_role` RPC before doing anything.
+- Frontend files:
+  - New: `src/pages/AdminPartners.tsx`, `src/components/admin/PartnerFormDialog.tsx`, `src/components/admin/PartnerStatsPanel.tsx`.
+  - Edits: `src/App.tsx` (route `/admin/partners`, admin-guarded), `src/pages/AdminDashboard.tsx` (tile), `src/components/admin/AdminTopBar.tsx` (admin link), `src/components/concierge/ReferralLeadsPanel.tsx` (mount `PartnerStatsPanel` above table for partners; skip for staff/admin overview or show aggregated stats — TBD, defaulting to per-partner-only view for now).
 
-## Out of scope (ask if you want it added)
+## Out of scope
 
-- A full "Partners" admin CRUD page for managing `intake_referrers` linkage.
-- Per‑partner analytics/dashboards beyond the leads table.
-- Email invites for new partner accounts.
+- Bulk CSV import of partners.
+- Partner-to-partner sub-referrers / hierarchy.
+- Custom per-partner branding on `/concierge`.

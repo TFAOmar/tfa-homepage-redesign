@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Shield, Users, Clock, EyeOff, Archive, Loader2, FileText, Send, FolderOpen, Inbox } from "lucide-react";
+import { Shield, Users, Clock, EyeOff, Archive, Loader2, FileText, Send, FolderOpen, Inbox, Handshake } from "lucide-react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdminTopBar from "@/components/admin/AdminTopBar";
 import AdvisorTable from "@/components/admin/AdvisorTable";
@@ -188,6 +188,12 @@ const AdminDashboard = () => {
               <Link to="/admin/leads">
                 <Inbox className="h-4 w-4 mr-2" />
                 Referral Leads
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/admin/partners">
+                <Handshake className="h-4 w-4 mr-2" />
+                Partners
               </Link>
             </Button>
             <div className="flex items-center gap-3 p-3 rounded-lg bg-card border shadow-sm">

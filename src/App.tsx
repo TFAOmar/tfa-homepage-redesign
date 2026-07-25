@@ -133,6 +133,7 @@ import Protect from "./pages/Protect";
 import MinhNewsletter from "./pages/MinhNewsletter";
 import Trust from "./pages/Trust";
 import AdminLeads from "./pages/AdminLeads";
+import AdminPartners from "./pages/AdminPartners";
 import Start from "./pages/Start";
 import Concierge from "./pages/Concierge";
 import IntakeDashboard from "./pages/IntakeDashboard";
@@ -142,7 +143,7 @@ import AdminIntakeTemplates from "./pages/AdminIntakeTemplates";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/admin/resources', '/admin/leads', '/admin/intake-templates', '/life-insurance-application', '/non-medical-life-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners', '/agent-onboarding-application', '/connect-with-omar', '/homeowner-protection', '/advisors/omar-sanchez/refer', '/resources', '/trust', '/protect', '/whatsamortgage-newsletter', '/start', '/concierge', '/dashboard', '/sms-terms'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/admin/resources', '/admin/leads', '/admin/partners', '/admin/intake-templates', '/life-insurance-application', '/non-medical-life-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners', '/agent-onboarding-application', '/connect-with-omar', '/homeowner-protection', '/advisors/omar-sanchez/refer', '/resources', '/trust', '/protect', '/whatsamortgage-newsletter', '/start', '/concierge', '/dashboard', '/sms-terms'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -214,6 +215,11 @@ const AppLayout = () => {
           <Route path="/admin/leads" element={
             <ProtectedRoute requireAdmin>
               <AdminLeads />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/partners" element={
+            <ProtectedRoute requireAdmin>
+              <AdminPartners />
             </ProtectedRoute>
           } />
           <Route path="/protect" element={<Protect />} />
