@@ -1,29 +1,23 @@
-## Backfill all historical Minh leads
+## Send Minh a branded invite (uses existing flow)
 
-Tag every historical submission that can reasonably be attributed to Minh with `partner_slug = 'minh'` so they show up in his `/concierge` dashboard once his auth account is linked to the `minh` partner record.
+Everything needed is already built — no new code required.
 
-### Scope (all-time, no date filter)
+### What to do
 
-**1. `form_submissions` table** — set `partner_slug = 'minh'` where any of:
-- `form_type ILIKE '%homeowner%'` (covers `/homeowner-protection`)
-- `advisor_slug = 'minh'`
-- `utm_source ILIKE 'minh%'`
-- `source_url ILIKE '%/homeowner-protection%'` OR `%/whatsamortgage%` OR `%/protect%` OR `%/trust%`
-- `partner ILIKE 'minh%'` OR `advisor ILIKE '%minh%'`
+1. Open `/admin/partners`.
+2. Find **Minh Nguyen** in the list.
+3. Click the **Invite owner** icon on that row.
+4. Enter `minhwin80@gmail.com` when prompted.
 
-**2. `leads` table** — top up anything the first migration missed:
-- `utm_source ILIKE 'minh%'`
-- `landing_page ILIKE '%/whatsamortgage%'` OR `%/protect%` OR `%/trust%` OR `%/homeowner-protection%`
-- (Rows already tagged by the previous migration are skipped via `WHERE partner_slug IS NULL`.)
+### What happens
 
-**3. `intake_leads` table** — this is the `/start` funnel, which is not Minh-specific. **Skip** unless you confirm otherwise; tagging all `/start` leads to Minh would over-attribute.
+The existing `invite-partner` edge function will:
+- Create Minh's `auth.users` account (or find it if it exists)
+- Set `intake_referrers.owner_user_id` for `slug = 'minh'` and grant him the `partner` role
+- Send a TFA-branded (Navy/Gold) email from `noreply@tfainsuranceadvisors.com` with a magic sign-in link to `/concierge`
 
-### Deliverable
+Once he signs in, all the historical leads we just backfilled (`partner_slug = 'minh'`) will appear in his dashboard automatically.
 
-One migration that runs the two `UPDATE` statements above and returns row counts for verification. No frontend or edge function changes needed — the RPCs and dashboard panel from the previous change already surface anything tagged with `partner_slug = 'minh'`.
+### Nothing to build
 
-### Reminder
-
-An admin still has to link Minh's auth user to the `minh` partner row in `/admin/partners` (via `admin_link_referrer_owner`) before he sees anything. The backfill alone doesn't grant him access.
-
-Confirm and I'll run the migration. If `/start` leads should also be attributed to Minh, say so and I'll add that clause.
+If any of the above doesn't work (button missing, email doesn't arrive, link fails), tell me the symptom and I'll debug — otherwise there's no code change to plan.
