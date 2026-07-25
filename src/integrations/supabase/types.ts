@@ -610,6 +610,7 @@ export type Database = {
           created_at: string
           display_name: string
           id: string
+          owner_user_id: string | null
           phone_e164: string | null
           slug: string
           sms_notify_optin: boolean
@@ -622,6 +623,7 @@ export type Database = {
           created_at?: string
           display_name: string
           id?: string
+          owner_user_id?: string | null
           phone_e164?: string | null
           slug: string
           sms_notify_optin?: boolean
@@ -634,6 +636,7 @@ export type Database = {
           created_at?: string
           display_name?: string
           id?: string
+          owner_user_id?: string | null
           phone_e164?: string | null
           slug?: string
           sms_notify_optin?: boolean
@@ -1515,6 +1518,7 @@ export type Database = {
           slug: string
         }[]
       }
+      get_my_referrer_id: { Args: never; Returns: string }
       get_public_advisors: {
         Args: never
         Returns: {
@@ -1593,7 +1597,7 @@ export type Database = {
     Enums: {
       advisor_status: "pending" | "published" | "hidden" | "archived"
       advisor_type: "Advisor" | "Broker"
-      app_role: "admin" | "moderator" | "user" | "staff"
+      app_role: "admin" | "moderator" | "user" | "staff" | "partner"
       application_status:
         | "draft"
         | "submitted"
@@ -1731,7 +1735,7 @@ export const Constants = {
     Enums: {
       advisor_status: ["pending", "published", "hidden", "archived"],
       advisor_type: ["Advisor", "Broker"],
-      app_role: ["admin", "moderator", "user", "staff"],
+      app_role: ["admin", "moderator", "user", "staff", "partner"],
       application_status: [
         "draft",
         "submitted",
