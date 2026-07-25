@@ -8,7 +8,7 @@ interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, redirectPath?: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -81,8 +81,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error: error as Error | null };
   };
 
-  const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+  const signUp = async (email: string, password: string, redirectPath?: string) => {
+    // If a post-auth destination was requested (e.g. /concierge), route the email
+    // confirmation link back through /auth so it can complete the redirect.
+    const redirectUrl = redirectPath
+      ? `${window.location.origin}/auth?next=${encodeURIComponent(redirectPath)}`
+      : `${window.location.origin}/`;
     const { error } = await supabase.auth.signUp({
       email,
       password,

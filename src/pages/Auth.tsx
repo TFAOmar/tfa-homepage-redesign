@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,7 +23,13 @@ const Auth = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, isAdmin, isLoading, signIn, signUp, signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
+
+  // Optional post-auth destination, e.g. /auth?next=/concierge
+  // Only allow internal paths (must start with a single '/') to prevent open redirects
+  const rawNext = searchParams.get('next');
+  const next = rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : null;
 
   const form = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
@@ -39,7 +45,10 @@ const Auth = () => {
     if (!isLoading && user) {
       // Small delay to ensure state has fully settled after role check
       const timer = setTimeout(() => {
-        if (isAdmin) {
+        if (next) {
+          // Honor the requested destination (e.g. /concierge for referral partners)
+          navigate(next, { replace: true });
+        } else if (isAdmin) {
           navigate('/admin');
         } else {
           navigate('/');
@@ -47,7 +56,7 @@ const Auth = () => {
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [user, isAdmin, isLoading, navigate]);
+  }, [user, isAdmin, isLoading, navigate, next]);
 
   const onSubmit = async (data: AuthFormData) => {
     setIsSubmitting(true);
@@ -70,7 +79,7 @@ const Auth = () => {
           }
         }
       } else {
-        const { error } = await signUp(data.email, data.password);
+        const { error } = await signUp(data.email, data.password, next ?? undefined);
         if (error) {
           if (error.message.includes('already registered')) {
             toast({
