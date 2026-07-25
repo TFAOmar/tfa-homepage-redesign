@@ -220,7 +220,11 @@ const AppLayout = () => {
           <Route path="/trust" element={<Trust />} />
           <Route path="/start" element={<Start />} />
           <Route path="/concierge" element={<ProtectedRoute><Concierge /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><IntakeDashboard /></ProtectedRoute>} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute requireRole={["staff", "admin"]}>
+              <IntakeDashboard />
+            </ProtectedRoute>
+          } />
           <Route path="/sms-terms" element={<SmsTerms />} />
           <Route path="/admin/intake-templates" element={<ProtectedRoute requireAdmin><AdminIntakeTemplates /></ProtectedRoute>} />
           <Route path="/whatsamortgage-newsletter" element={<MinhNewsletter />} />
