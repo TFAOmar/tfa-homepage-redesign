@@ -28,6 +28,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 import {
   Shield,
   Search,
@@ -180,6 +181,7 @@ const AdminFormSubmissions = () => {
         description="View and manage form submissions"
         noIndex={true}
       />
+      <AdminTopBar />
       <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           {/* Header */}

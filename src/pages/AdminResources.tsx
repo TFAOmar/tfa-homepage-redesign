@@ -29,6 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -171,6 +172,7 @@ const AdminResources = () => {
   return (
     <>
       <SEOHead title="Resource Library — Admin" description="Manage TFA resource library" noIndex />
+      <AdminTopBar />
       <div className="min-h-screen py-16 bg-gradient-to-b from-secondary/30 to-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">

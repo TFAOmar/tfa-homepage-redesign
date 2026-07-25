@@ -1,4 +1,5 @@
 import { SEOHead } from "@/components/seo";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 
 /**
  * Messaging automation has moved to GoHighLevel (GHL).
@@ -10,6 +11,7 @@ export default function AdminIntakeTemplates() {
   return (
     <>
       <SEOHead title="Messaging — Managed in GoHighLevel" description="Messaging automation is owned by GHL." noIndex />
+      <AdminTopBar />
       <main className="min-h-screen bg-gray-50 py-10 px-4">
         <div className="container mx-auto max-w-3xl">
           <h1 className="text-3xl font-serif font-bold text-navy mb-4">Messaging lives in GoHighLevel</h1>

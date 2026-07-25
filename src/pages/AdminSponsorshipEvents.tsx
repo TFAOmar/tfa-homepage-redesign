@@ -28,6 +28,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Calendar, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -101,6 +102,7 @@ const AdminSponsorshipEvents = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AdminTopBar />
       <div className="border-b border-border bg-card">
         <div className="container px-4 py-4 flex items-center gap-4">
           <Link to="/admin">

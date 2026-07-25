@@ -26,6 +26,7 @@ import { ApplicationsTable } from "@/components/admin/ApplicationsTable";
 import { ApplicationDetailModal } from "@/components/admin/ApplicationDetailModal";
 import { SubmissionsTable } from "@/components/admin/SubmissionsTable";
 import { SubmissionDetailModal } from "@/components/admin/SubmissionDetailModal";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 import type { Database } from "@/integrations/supabase/types";
 
 type LifeStatus = Database["public"]["Enums"]["application_status"];
@@ -186,6 +187,7 @@ const AdminSubmissions = () => {
   return (
     <>
       <SEOHead title="Submissions" description="Admin view for application submissions" noIndex />
+      <AdminTopBar />
       <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 animate-fade-in">
