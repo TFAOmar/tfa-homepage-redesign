@@ -1,87 +1,54 @@
-## Overview
+## Goal
 
-Add three capabilities to the partner system:
-1. **Bulk CSV import** of partners from `/admin/partners`.
-2. **Sub-referrer hierarchy** so partners can refer other partners and get credit for downstream leads.
-3. **Custom per-partner branding** on `/concierge` (logo, accent color, welcome copy).
+Make every lead from Minh's pages belong to a single "Minh" partner account, visible only to him (and admins/staff) in `/concierge`, and add a "View in your Partner Dashboard" link to the notification emails he receives.
 
----
+## Pages in scope
 
-## 1. Bulk CSV Import
+- `/whatsamortgage-newsletter` (MinhNewsletter) — writes to `leads`
+- `/protect` (Protect) — writes to `leads`
+- `/homeowner-protection` (HomeownerProtection) — writes to `leads`
+- `/trust` (Trust) — writes to `leads`
+- `/start` (Start wizard) — writes to `intake_leads` (already supports `?ref=` referrer)
 
-**UI (`AdminPartners.tsx`)**
-- New "Import CSV" button opens a dialog.
-- Download-template link generates a sample CSV.
-- Paste-or-upload zone parses client-side with PapaParse.
-- Preview table shows rows with validation status (valid / warning / error) before commit.
-- On confirm, rows are processed in batches via `admin_bulk_upsert_referrers` RPC; results panel shows created / updated / skipped / failed counts.
+## 1. Create Minh's partner record
 
-**CSV columns**
-`slug, display_name, phone_e164, avatar_url, active, sms_notify_optin, owner_email, parent_slug` (last two optional).
+Migration + seed:
+- Insert into `intake_referrers`: `slug='minh'`, `display_name='Minh Nguyen'`, `active=true`. `owner_user_id` left NULL until he signs up.
+- Once Minh creates an account at `/auth` with `minhwin80@gmail.com`, admin runs the existing `admin_link_referrer_owner('minh-id','minhwin80@gmail.com')` from `/admin/partners` (already built) to link ownership and grant the `partner` role.
 
-**Backend**
-- New RPC `admin_bulk_upsert_referrers(p_rows jsonb)` — admin-only, wraps existing upsert + optional owner link + optional parent link, returns per-row result jsonb.
-- Reuses `admin_link_referrer_owner` logic; skips owner link when email has no auth user (returns a warning row instead of failing).
+## 2. Tag `leads`-table submissions with the partner
 
----
+Schema change (migration on `public.leads`):
+- Add `partner_slug text` column, index it.
+- Backfill: `UPDATE leads SET partner_slug='minh' WHERE referral_source='minh' OR funnel IN ('protect','trust','newsletter','homeowner_protection')` (scoped so existing Minh-attributed leads are captured).
+- RLS: new SELECT policy — a partner may read a lead when their owned `intake_referrers.slug` equals `leads.partner_slug` (via a security-definer helper `is_my_partner_slug(text)`).
+- New RPC `partner_list_my_leads()` returning the caller's leads for their owned referrer slugs.
 
-## 2. Sub-referrer Hierarchy
+Frontend change on the four landing pages: pass `partner_slug: 'minh'` in the insert payload alongside the existing `referral_source`. `/start` already writes `referrer_id` to `intake_leads`, no change needed beyond ensuring the marketing links use `?ref=minh`.
 
-**Schema**
-- Add `parent_referrer_id uuid references intake_referrers(id)` and `depth int` to `intake_referrers`.
-- Guard against cycles with a trigger that walks parents.
-- Add `origin_referrer_id uuid` on `intake_leads` (denormalized top-of-tree) plus `attribution_path uuid[]` for reporting.
-- Backfill: existing rows get `parent_referrer_id = null`, `depth = 0`, `origin_referrer_id = referrer_id`.
+## 3. Show Minh's leads in `/concierge`
 
-**Lead attribution**
-- When a lead is created with `referrer_id = X`, a trigger fills `attribution_path` (X + all ancestors) and `origin_referrer_id` (root).
-- Existing GHL forward payload unchanged; extra ancestor slugs added as custom fields.
+- New `src/components/concierge/PartnerNewsletterLeadsPanel.tsx` — calls `partner_list_my_leads()`, renders a table matching the visual style of `ReferralLeadsPanel` (date, funnel, name, contact, status, complete/incomplete).
+- `src/pages/Concierge.tsx`: for `partner` role, render this new panel in addition to the existing `intake_leads` view. For admin/staff, add it as a second tab so all Minh's `leads` submissions are visible too.
 
-**Visibility rules (updated policies + RPCs)**
-- Partner sees leads where `auth.uid()` owns any referrer in `attribution_path`.
-- `admin_partner_stats` gains `include_descendants boolean` param; when true, aggregates across the subtree.
-- New RPC `partner_list_children()` returns the current partner's direct sub-referrers with basic KPIs.
+## 4. Add partner-dashboard link to notification emails
 
-**UI**
-- `AdminPartners.tsx`: parent selector on create/edit; tree view toggle.
-- `Concierge.tsx` (partner view): "My Sub-Referrers" panel with rollup stats and a link to invite a new sub-referrer (reuses `invite-partner` with `parent_referrer_id` param). Partners can only create children under themselves; admins can move nodes anywhere.
+- `supabase/functions/notify-lead/index.ts`: if `lead.partner_slug` is set, append a "View this lead in your Partner Dashboard" button linking to `https://tfawealthplanning.com/concierge`. Look up the partner's owner email via service-role query and add it to the `to` array (dedup with existing recipients).
+- `supabase/functions/send-form-notification/index.ts` (and any Minh-page notifier that uses it): same treatment — append the dashboard CTA when a partner slug is present.
+- Copy: "View this lead in your Partner Dashboard" button in Navy/Gold, plus a plaintext link fallback.
 
----
+## 5. Marketing/QR links
 
-## 3. Custom Per-Partner Branding on /concierge
+Document that Minh's outbound links (QR codes, email sigs) should include `?ref=minh` so `/start` attributes to his referrer automatically; the four landing pages hardcode the partner slug regardless.
 
-**Schema**
-- Add columns on `intake_referrers`: `brand_logo_url text`, `brand_primary_hex text`, `brand_accent_hex text`, `brand_welcome_headline text`, `brand_welcome_body text`, `brand_support_email text`.
-- Constrained hex validation via trigger.
+## Technical notes
 
-**Storage**
-- Reuse existing `advisor-photos` bucket (public) under a `partner-branding/` prefix, or add a new `partner-branding` public bucket if we want separation. Default: new public bucket `partner-branding` with 2MB image-only insert policy scoped to admins + the owning partner.
+- No changes to `intake_leads` schema; it already has `referrer_id` and hierarchy attribution.
+- `is_my_partner_slug(slug text)` is a `SECURITY DEFINER` SQL function returning boolean, used only inside the new RLS policy on `leads`.
+- Grants: keep existing `leads` grants; the new SELECT policy widens read access to owning partner only.
+- Notification emails continue to send to `leads@tfainsuranceadvisors.com` and `minhwin80@gmail.com`; the owner lookup will typically match the latter (deduped).
 
-**Admin & partner editing**
-- Admin: new "Branding" tab in the partner sheet on `/admin/partners`.
-- Partner: new "Branding" section on `/concierge` (own referrer only), same form component.
+## Out of scope
 
-**Rendering on /concierge**
-- `useMyReferrer()` hook returns branding fields.
-- New `<PartnerBrandingProvider>` wraps `/concierge` and injects CSS variables (`--partner-primary`, `--partner-accent`) plus header block (logo + headline + body).
-- Falls back to TFA Navy/Gold when a partner has no branding set.
-- Admins/staff viewing `/concierge` see default TFA branding (no partner scope).
-
----
-
-## Technical Notes
-
-- All new DB objects follow project rules: explicit GRANTs, RLS enabled, security-definer RPCs with `has_role` checks, `search_path = public`.
-- No changes to Twilio (removed) — GHL forward payload gains optional `parent_slug` / `root_slug` fields only.
-- CSV parser and preview kept client-side; no new deps beyond `papaparse` (already used? add if missing).
-- Branding CSS variables are scoped to the concierge layout so they don't leak into admin surfaces.
-- Cycle protection + max depth cap (e.g. 5) enforced in trigger and validated in UI.
-
----
-
-## Rollout Order
-
-1. Migration: hierarchy columns, branding columns, bulk-upsert RPC, updated policies, storage bucket.
-2. Backend: `admin_bulk_upsert_referrers`, `partner_list_children`, updated `admin_partner_stats`.
-3. Frontend: CSV importer → hierarchy UI → branding editor + provider.
-4. Verify: build, admin flow (import + link parent + edit branding), partner flow (see subtree + edit own branding).
+- Building a per-lead deep-link page (dashboard link goes to the list view).
+- Migrating the `leads` table into `intake_leads` — kept separate to avoid disrupting existing funnels.

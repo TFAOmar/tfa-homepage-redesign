@@ -94,6 +94,24 @@ Deno.serve(async (req) => {
     const nameStr = `${lead.first_name ?? ""} ${lead.last_name ?? ""}`.trim();
     const subject = `New ${label} lead${nameStr ? ` — ${nameStr}` : ""}`;
 
+    // Look up partner owner email (CC) if this lead is attributed to a partner
+    let partnerOwnerEmail: string | null = null;
+    const partnerSlug = typeof (lead as any).partner_slug === "string" ? (lead as any).partner_slug : null;
+    if (partnerSlug) {
+      const { data: ownerRow } = await supabase.rpc("get_partner_owner_email_by_slug", {
+        _slug: partnerSlug,
+      });
+      if (typeof ownerRow === "string") partnerOwnerEmail = ownerRow;
+    }
+    const dashboardCta = partnerSlug
+      ? `<p style="margin:16px 0 0">
+          <a href="https://tfawealthplanning.com/concierge"
+             style="display:inline-block;background:#1E3A5F;color:#fff;text-decoration:none;padding:10px 16px;border-radius:4px;font-size:13px">
+             View in your Partner Dashboard
+          </a>
+        </p>`
+      : "";
+
     const rows = Object.entries(lead.payload ?? {})
       .map(
         ([k, v]) =>
@@ -124,6 +142,7 @@ Deno.serve(async (req) => {
             }
           </p>
           <table style="font-size:14px;border-top:1px solid #eee;padding-top:12px;width:100%">${rows}</table>
+          ${dashboardCta}
           <p style="font-size:12px;color:#888;margin-top:16px">
             Submitted ${new Date(lead.created_at).toLocaleString("en-US", {
               timeZone: "America/Los_Angeles",
@@ -151,6 +170,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         from: FROM,
         to: RECIPIENTS,
+        cc: partnerOwnerEmail ? [partnerOwnerEmail] : undefined,
         reply_to: lead.email ?? undefined,
         subject,
         html,

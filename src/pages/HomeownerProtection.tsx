@@ -184,6 +184,7 @@ const HomeownerProtection = () => {
         advisor_email: "mariah@tfainsuranceadvisors.com",
         tags: ["Homeowner Protection", ...interestLabels],
         interest_category: interestLabels.join(", "),
+        partner_slug: "minh",
         utm_source: hidden.utm_source || undefined,
         utm_medium: hidden.utm_medium || undefined,
         utm_campaign: hidden.utm_campaign || undefined,

@@ -78,6 +78,7 @@ const formSubmitSchema = z.object({
   tags: z.array(z.string().max(50)).max(20).optional(),
   honeypot: z.string().optional(), // Bot trap - should be empty
   interest_category: z.string().max(100).optional(), // For Pipedrive lead labels
+  partner_slug: z.string().max(100).optional(), // Referral partner slug for attribution
 });
 
 type FormSubmitData = z.infer<typeof formSubmitSchema>;
@@ -835,14 +836,26 @@ const sendEmails = async (
   formData: FormSubmitData,
   submissionId: string,
   advisorEmail?: string,
-  advisorName?: string
+  advisorName?: string,
+  partnerOwnerEmail?: string | null,
 ): Promise<{ teamSent: boolean; advisorSent: boolean; partnerSent: boolean; errors: string[] }> => {
   const errors: string[] = [];
   let teamSent = false;
   let advisorSent = false;
   let partnerSent = false;
 
-  const teamHtml = generateTeamNotificationHtml(formData, submissionId, advisorName);
+  let teamHtml = generateTeamNotificationHtml(formData, submissionId, advisorName);
+  if (formData.partner_slug) {
+    const dashUrl = "https://tfawealthplanning.com/concierge";
+    const cta = `
+      <div style="margin:16px 0;padding:12px 16px;background:#f7f5ee;border:1px solid #C9A84C;border-radius:6px;font-family:'Segoe UI',sans-serif;">
+        <p style="margin:0 0 8px;color:#1E3A5F;font-size:14px;">
+          <strong>Referral partner:</strong> ${formData.partner_slug}
+        </p>
+        <a href="${dashUrl}" style="display:inline-block;background:#1E3A5F;color:#fff;text-decoration:none;padding:8px 14px;border-radius:4px;font-size:13px;">View in Partner Dashboard</a>
+      </div>`;
+    teamHtml = teamHtml.replace("</body>", `${cta}</body>`);
+  }
   const subject = `New ${getFormDisplayName(formData.form_name)} - ${formData.first_name} ${formData.last_name}`;
 
   // 1. Send to team email (use branded template for health insurance leads)
@@ -855,6 +868,7 @@ const sendEmails = async (
     const teamResult = await resend.emails.send({
       from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
       to: [TEAM_EMAIL],
+      cc: partnerOwnerEmail ? [partnerOwnerEmail] : undefined,
       subject,
       html: finalTeamHtml,
     });
@@ -1133,6 +1147,7 @@ serve(async (req) => {
         utm_term: formData.utm_term,
         advisor_slug: formData.advisor_slug || advisor?.slug,
         advisor: advisor?.name || null,
+        partner_slug: formData.partner_slug || null,
         routing_result: routingResult,
         pipedrive_owner_id: ownerId,
         notes: formData.notes,
@@ -1156,12 +1171,20 @@ serve(async (req) => {
     let emailResult = { teamSent: false, advisorSent: false, errors: [] as string[] };
     
     if (resend) {
+      let partnerOwnerEmail: string | null = null;
+      if (formData.partner_slug) {
+        const { data: ownerRow } = await supabase.rpc("get_partner_owner_email_by_slug", {
+          _slug: formData.partner_slug,
+        });
+        if (typeof ownerRow === "string") partnerOwnerEmail = ownerRow;
+      }
       emailResult = await sendEmails(
         resend,
         formData,
         submissionId,
         advisor?.email,
-        advisor?.name
+        advisor?.name,
+        partnerOwnerEmail,
       );
     }
     
