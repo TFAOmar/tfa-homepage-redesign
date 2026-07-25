@@ -52,7 +52,7 @@ export const useSponsorshipTiers = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("sponsorship_tiers" as any)
-        .select("*")
+        .select("id, tier_id, name, price, price_note, features, highlight, is_popular, display_order, is_active")
         .eq("is_active", true)
         .order("display_order", { ascending: true });
       if (error) throw error;
@@ -80,10 +80,7 @@ export const useAllSponsorshipTiers = () => {
   return useQuery({
     queryKey: ["sponsorship-tiers-admin"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("sponsorship_tiers" as any)
-        .select("*")
-        .order("display_order", { ascending: true });
+      const { data, error } = await supabase.rpc("admin_get_sponsorship_tiers" as any);
       if (error) throw error;
       return (data || []) as unknown as SponsorshipTier[];
     },
