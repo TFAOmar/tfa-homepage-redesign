@@ -1419,6 +1419,7 @@ export type Database = {
       }
     }
     Functions: {
+      admin_delete_referrer: { Args: { p_id: string }; Returns: undefined }
       admin_get_sponsorship_tiers: {
         Args: never
         Returns: {
@@ -1442,6 +1443,46 @@ export type Database = {
           isOneToOne: false
           isSetofReturn: true
         }
+      }
+      admin_link_referrer_owner: {
+        Args: { p_email: string; p_referrer_id: string }
+        Returns: string
+      }
+      admin_list_referrers_with_owner: {
+        Args: never
+        Returns: {
+          active: boolean
+          agreement_signed_at: string
+          avatar_url: string
+          created_at: string
+          display_name: string
+          id: string
+          leads_30d: number
+          leads_total: number
+          owner_email: string
+          owner_user_id: string
+          phone_e164: string
+          slug: string
+          sms_notify_optin: boolean
+          updated_at: string
+        }[]
+      }
+      admin_partner_stats: { Args: { p_referrer_id: string }; Returns: Json }
+      admin_unlink_referrer_owner: {
+        Args: { p_referrer_id: string }
+        Returns: undefined
+      }
+      admin_upsert_referrer: {
+        Args: {
+          p_active: boolean
+          p_avatar_url: string
+          p_display_name: string
+          p_id: string
+          p_phone_e164: string
+          p_slug: string
+          p_sms_notify_optin: boolean
+        }
+        Returns: string
       }
       generate_advisor_slug: { Args: { advisor_name: string }; Returns: string }
       get_advisor_by_slug: {
