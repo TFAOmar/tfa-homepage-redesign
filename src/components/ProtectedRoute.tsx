@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth, AppRole } from '@/hooks/useAuth';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useRef } from 'react';
@@ -7,23 +7,33 @@ import { useEffect, useRef } from 'react';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requireAdmin?: boolean;
+  requireRole?: AppRole | AppRole[];
 }
 
-const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps) => {
-  const { user, isAdmin, isLoading } = useAuth();
+const ProtectedRoute = ({ children, requireAdmin = false, requireRole }: ProtectedRouteProps) => {
+  const { user, isAdmin, roles, isLoading } = useAuth();
   const { toast } = useToast();
   const hasShownToast = useRef(false);
 
+  const requiredRoles: AppRole[] = requireRole
+    ? Array.isArray(requireRole)
+      ? requireRole
+      : [requireRole]
+    : [];
+  // Admin always passes role checks.
+  const meetsRole =
+    requiredRoles.length === 0 || isAdmin || requiredRoles.some((r) => roles.includes(r));
+
   useEffect(() => {
-    if (!isLoading && user && requireAdmin && !isAdmin && !hasShownToast.current) {
+    if (!isLoading && user && ((requireAdmin && !isAdmin) || !meetsRole) && !hasShownToast.current) {
       hasShownToast.current = true;
       toast({
         title: 'Access Denied',
-        description: 'You do not have admin privileges.',
+        description: 'You do not have permission to view that page.',
         variant: 'destructive'
       });
     }
-  }, [isLoading, user, isAdmin, requireAdmin, toast]);
+  }, [isLoading, user, isAdmin, requireAdmin, meetsRole, toast]);
 
   if (isLoading) {
     return (
@@ -38,6 +48,10 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
   }
 
   if (requireAdmin && !isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (!meetsRole) {
     return <Navigate to="/" replace />;
   }
 
