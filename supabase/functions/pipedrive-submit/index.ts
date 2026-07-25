@@ -78,6 +78,7 @@ const formSubmitSchema = z.object({
   tags: z.array(z.string().max(50)).max(20).optional(),
   honeypot: z.string().optional(), // Bot trap - should be empty
   interest_category: z.string().max(100).optional(), // For Pipedrive lead labels
+  partner_slug: z.string().max(100).optional(), // Referral partner slug for attribution
 });
 
 type FormSubmitData = z.infer<typeof formSubmitSchema>;
@@ -1133,6 +1134,7 @@ serve(async (req) => {
         utm_term: formData.utm_term,
         advisor_slug: formData.advisor_slug || advisor?.slug,
         advisor: advisor?.name || null,
+        partner_slug: formData.partner_slug || null,
         routing_result: routingResult,
         pipedrive_owner_id: ownerId,
         notes: formData.notes,
