@@ -451,6 +451,7 @@ export type Database = {
           appointment_at: string | null
           appointment_status: string | null
           assigned_member_id: string | null
+          attribution_path: string[]
           best_time: string | null
           conversation_sid: string | null
           created_at: string
@@ -469,6 +470,7 @@ export type Database = {
           intro_sent_at: string | null
           language: string
           last_name: string | null
+          origin_referrer_id: string | null
           phone_e164: string | null
           phone_normalized: string | null
           preferred_contact_at: string | null
@@ -495,6 +497,7 @@ export type Database = {
           appointment_at?: string | null
           appointment_status?: string | null
           assigned_member_id?: string | null
+          attribution_path?: string[]
           best_time?: string | null
           conversation_sid?: string | null
           created_at?: string
@@ -513,6 +516,7 @@ export type Database = {
           intro_sent_at?: string | null
           language?: string
           last_name?: string | null
+          origin_referrer_id?: string | null
           phone_e164?: string | null
           phone_normalized?: string | null
           preferred_contact_at?: string | null
@@ -539,6 +543,7 @@ export type Database = {
           appointment_at?: string | null
           appointment_status?: string | null
           assigned_member_id?: string | null
+          attribution_path?: string[]
           best_time?: string | null
           conversation_sid?: string | null
           created_at?: string
@@ -557,6 +562,7 @@ export type Database = {
           intro_sent_at?: string | null
           language?: string
           last_name?: string | null
+          origin_referrer_id?: string | null
           phone_e164?: string | null
           phone_normalized?: string | null
           preferred_contact_at?: string | null
@@ -607,10 +613,18 @@ export type Database = {
           active: boolean
           agreement_signed_at: string | null
           avatar_url: string | null
+          brand_accent_hex: string | null
+          brand_logo_url: string | null
+          brand_primary_hex: string | null
+          brand_support_email: string | null
+          brand_welcome_body: string | null
+          brand_welcome_headline: string | null
           created_at: string
+          depth: number
           display_name: string
           id: string
           owner_user_id: string | null
+          parent_referrer_id: string | null
           phone_e164: string | null
           slug: string
           sms_notify_optin: boolean
@@ -620,10 +634,18 @@ export type Database = {
           active?: boolean
           agreement_signed_at?: string | null
           avatar_url?: string | null
+          brand_accent_hex?: string | null
+          brand_logo_url?: string | null
+          brand_primary_hex?: string | null
+          brand_support_email?: string | null
+          brand_welcome_body?: string | null
+          brand_welcome_headline?: string | null
           created_at?: string
+          depth?: number
           display_name: string
           id?: string
           owner_user_id?: string | null
+          parent_referrer_id?: string | null
           phone_e164?: string | null
           slug: string
           sms_notify_optin?: boolean
@@ -633,16 +655,32 @@ export type Database = {
           active?: boolean
           agreement_signed_at?: string | null
           avatar_url?: string | null
+          brand_accent_hex?: string | null
+          brand_logo_url?: string | null
+          brand_primary_hex?: string | null
+          brand_support_email?: string | null
+          brand_welcome_body?: string | null
+          brand_welcome_headline?: string | null
           created_at?: string
+          depth?: number
           display_name?: string
           id?: string
           owner_user_id?: string | null
+          parent_referrer_id?: string | null
           phone_e164?: string | null
           slug?: string
           sms_notify_optin?: boolean
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "intake_referrers_parent_referrer_id_fkey"
+            columns: ["parent_referrer_id"]
+            isOneToOne: false
+            referencedRelation: "intake_referrers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       intake_sms_events: {
         Row: {
@@ -1419,6 +1457,7 @@ export type Database = {
       }
     }
     Functions: {
+      admin_bulk_upsert_referrers: { Args: { p_rows: Json }; Returns: Json }
       admin_delete_referrer: { Args: { p_id: string }; Returns: undefined }
       admin_get_sponsorship_tiers: {
         Args: never
@@ -1454,20 +1493,32 @@ export type Database = {
           active: boolean
           agreement_signed_at: string
           avatar_url: string
+          brand_accent_hex: string
+          brand_logo_url: string
+          brand_primary_hex: string
+          brand_support_email: string
+          brand_welcome_body: string
+          brand_welcome_headline: string
           created_at: string
+          depth: number
           display_name: string
           id: string
           leads_30d: number
           leads_total: number
           owner_email: string
           owner_user_id: string
+          parent_referrer_id: string
+          parent_slug: string
           phone_e164: string
           slug: string
           sms_notify_optin: boolean
           updated_at: string
         }[]
       }
-      admin_partner_stats: { Args: { p_referrer_id: string }; Returns: Json }
+      admin_partner_stats: {
+        Args: { p_include_descendants?: boolean; p_referrer_id: string }
+        Returns: Json
+      }
       admin_unlink_referrer_owner: {
         Args: { p_referrer_id: string }
         Returns: undefined
@@ -1476,8 +1527,15 @@ export type Database = {
         Args: {
           p_active: boolean
           p_avatar_url: string
+          p_brand_accent_hex?: string
+          p_brand_logo_url?: string
+          p_brand_primary_hex?: string
+          p_brand_support_email?: string
+          p_brand_welcome_body?: string
+          p_brand_welcome_headline?: string
           p_display_name: string
           p_id: string
+          p_parent_referrer_id?: string
           p_phone_e164: string
           p_slug: string
           p_sms_notify_optin: boolean
@@ -1559,6 +1617,22 @@ export type Database = {
           slug: string
         }[]
       }
+      get_my_partner_branding: {
+        Args: never
+        Returns: {
+          brand_accent_hex: string
+          brand_logo_url: string
+          brand_primary_hex: string
+          brand_support_email: string
+          brand_welcome_body: string
+          brand_welcome_headline: string
+          depth: number
+          display_name: string
+          id: string
+          parent_referrer_id: string
+          slug: string
+        }[]
+      }
       get_my_referrer_id: { Args: never; Returns: string }
       get_public_advisors: {
         Args: never
@@ -1598,6 +1672,18 @@ export type Database = {
           member_phone: string
           scheduling_link: string
           was_language_preferred: boolean
+        }[]
+      }
+      partner_list_children: {
+        Args: { p_referrer_id?: string }
+        Returns: {
+          active: boolean
+          depth: number
+          display_name: string
+          id: string
+          leads_30d: number
+          leads_total: number
+          slug: string
         }[]
       }
       submit_agent_onboarding_application: {
