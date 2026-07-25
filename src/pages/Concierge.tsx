@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { CONSENT_VERSION } from "@/lib/i18n/dictionary";
 import { LanguageProvider, LangToggle, useLang } from "@/lib/i18n/LanguageContext";
 import LegalFooter from "@/components/intake/LegalFooter";
+import AdminTopBar from "@/components/admin/AdminTopBar";
+import ReferralLeadsPanel from "@/components/concierge/ReferralLeadsPanel";
 
 function ConciergeInner() {
-  const { user, isLoading: loading } = useAuth();
+  const { user, isLoading: loading, isAdmin, isStaff, isPartner, role } = useAuth();
   const { lang, t } = useLang();
   const [services, setServices] = useState<string[]>([]);
   const [speakingWith, setSpeakingWith] = useState("client");
@@ -38,6 +40,22 @@ function ConciergeInner() {
   const [appointmentAt, setAppointmentAt] = useState("");
   const [preferredContactAt, setPreferredContactAt] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [myReferrerId, setMyReferrerId] = useState<string | null>(null);
+
+  // For partners: look up which referrer record they own.
+  useEffect(() => {
+    if (!user || !isPartner || isAdmin || isStaff) return;
+    void (async () => {
+      const { data } = await supabase.rpc("get_my_referrer_id");
+      setMyReferrerId((data as string) ?? null);
+    })();
+  }, [user, isPartner, isAdmin, isStaff]);
+
+  // Admins/staff: collapse the intake form by default so leads are foregrounded.
+  useEffect(() => {
+    setShowForm(!(isAdmin || isStaff));
+  }, [isAdmin, isStaff]);
 
   if (loading) return <div className="p-12 text-center">…</div>;
   if (!user) {
@@ -46,6 +64,9 @@ function ConciergeInner() {
     } catch {}
     return <Navigate to="/auth?next=/concierge" replace />;
   }
+
+  const hasStaffAccess = isAdmin || isStaff;
+  const isPlainUser = role === "user";
 
   const seniorTrust = services.includes("trust") && ageBand === "65+";
 
@@ -114,19 +135,86 @@ function ConciergeInner() {
   return (
     <>
       <SEOHead title="Concierge Intake — TFA" description="Internal intake" noIndex />
+      {hasStaffAccess && <AdminTopBar />}
       <div className="min-h-screen bg-gray-50">
         <header className="bg-white border-b sticky top-0 z-40">
           <div className="container mx-auto px-4 h-14 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Link to="/dashboard" className="text-sm font-medium text-navy hover:underline">Dashboard</Link>
-              <span className="text-muted-foreground">·</span>
-              <h1 className="font-serif text-lg font-bold text-navy">Concierge Intake</h1>
+              {hasStaffAccess && (
+                <>
+                  <Link to="/dashboard" className="text-sm font-medium text-navy hover:underline">
+                    Full Intake Dashboard
+                  </Link>
+                  <span className="text-muted-foreground">·</span>
+                </>
+              )}
+              <h1 className="font-serif text-lg font-bold text-navy">
+                {hasStaffAccess
+                  ? "Concierge — Referral Partner Leads"
+                  : isPartner
+                    ? "My Referrals"
+                    : "Concierge Intake"}
+              </h1>
             </div>
             <LangToggle />
           </div>
         </header>
 
         <main className="container mx-auto px-4 py-6 max-w-5xl">
+          {isPlainUser && (
+            <div className="bg-white rounded-lg border p-8 text-center max-w-2xl mx-auto">
+              <h2 className="font-serif text-2xl font-bold text-navy mb-3">
+                This area is for TFA staff and referral partners
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Your account doesn't have concierge access yet. If you're a referral
+                partner, please contact your TFA advisor to be granted access.
+              </p>
+              <Link to="/" className="text-navy underline text-sm">
+                Return to homepage
+              </Link>
+            </div>
+          )}
+
+          {hasStaffAccess && (
+            <div className="mb-8">
+              <ReferralLeadsPanel
+                referrerOnly={false}
+                title="All Referral Partner Leads"
+                allowResend
+              />
+              <div className="mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowForm((v) => !v)}
+                >
+                  {showForm ? "Hide" : "+ New"} concierge intake form
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {isPartner && !hasStaffAccess && (
+            <div className="mb-8 space-y-4">
+              {myReferrerId ? (
+                <ReferralLeadsPanel
+                  referrerOnly
+                  scopedReferrerId={myReferrerId}
+                  title="My Referred Leads"
+                  allowResend={false}
+                />
+              ) : (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-900">
+                  Your partner account isn't linked to a referrer record yet.
+                  Ask a TFA admin to link your account so your referrals show up here.
+                </div>
+              )}
+            </div>
+          )}
+
+          {!isPlainUser && showForm && (
+          <>
           {seniorTrust && (
             <div className="mb-6 rounded-lg border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-900">
               <strong>Senior client (65+), trust interest</strong> — CA Insurance Code Art. 6.3 workflow applies:
@@ -274,6 +362,8 @@ function ConciergeInner() {
               Save without text
             </Button>
           </div>
+          </>
+          )}
         </main>
         <LegalFooter />
       </div>
