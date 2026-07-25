@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Shield, Users, Clock, EyeOff, Archive, Loader2, FileText, Send, FolderOpen, Inbox } from "lucide-react";
 import AdminHeader from "@/components/admin/AdminHeader";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 import AdvisorTable from "@/components/admin/AdvisorTable";
 import AdvisorEditModal from "@/components/admin/AdvisorEditModal";
 import BulkActionsBar from "@/components/admin/BulkActionsBar";
@@ -152,6 +153,7 @@ const AdminDashboard = () => {
         description="Manage advisor profiles and visibility"
         noIndex={true}
       />
+      <AdminTopBar />
       <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header with Inline Workflow Toggle */}
