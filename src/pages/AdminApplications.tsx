@@ -21,6 +21,7 @@ import {
 } from "@/hooks/useLifeInsuranceApplications";
 import { ApplicationsTable } from "@/components/admin/ApplicationsTable";
 import { ApplicationDetailModal } from "@/components/admin/ApplicationDetailModal";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 import type { Database } from "@/integrations/supabase/types";
 
 type ApplicationStatus = Database["public"]["Enums"]["application_status"];
@@ -97,6 +98,7 @@ const AdminApplications = () => {
         description="Admin view for managing life insurance applications"
         noIndex={true}
       />
+      <AdminTopBar />
       <div className="min-h-screen py-24 bg-gradient-to-b from-secondary/30 to-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           {/* Header */}
