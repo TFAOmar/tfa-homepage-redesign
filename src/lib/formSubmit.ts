@@ -22,6 +22,7 @@ export interface FormSubmitPayload {
   tags?: string[];
   honeypot?: string; // Bot trap field - should always be empty
   interest_category?: string; // For Pipedrive lead labels
+  partner_slug?: string; // Attributes the submission to a referral partner account
 }
 
 export interface FormSubmitResponse {

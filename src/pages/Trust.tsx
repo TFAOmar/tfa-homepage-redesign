@@ -91,6 +91,7 @@ const Trust = () => {
           consent_text: CONSENT_TEXT,
           consent_at: new Date().toISOString(),
           referral_source: attr.referral_source ?? "minh",
+          partner_slug: "minh",
           utm_source: attr.utm_source,
           utm_medium: attr.utm_medium,
           utm_campaign: attr.utm_campaign,
