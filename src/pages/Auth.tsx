@@ -21,7 +21,7 @@ type AuthFormData = z.infer<typeof authSchema>;
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { user, isAdmin, isLoading, signIn, signUp } = useAuth();
+  const { user, isAdmin, isLoading, signIn, signUp, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -182,6 +182,17 @@ const Auth = () => {
               {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
             </button>
           </div>
+          {user && (
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="text-xs text-muted-foreground hover:text-foreground hover:underline"
+              >
+                Signed in as {user.email} — Log out
+              </button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
