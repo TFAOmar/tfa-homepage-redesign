@@ -45,14 +45,14 @@ const Auth = () => {
   // Context-aware copy: referral partners arrive via /auth?next=/concierge
   const isPartnerFlow = next?.startsWith('/concierge') ?? false;
   const cardTitle = isLogin
-    ? (isPartnerFlow ? 'Partner Login' : next ? 'Sign In' : 'Admin Login')
+    ? (isPartnerFlow ? 'Partner Login' : next ? 'Sign In' : 'Staff & Partner Login')
     : (isPartnerFlow ? 'Create Partner Account' : 'Create Account');
   const cardDescription = isLogin
     ? (isPartnerFlow
         ? 'Sign in to access the referral concierge'
         : next
           ? 'Sign in to continue'
-          : 'Sign in to access the admin dashboard')
+          : 'Sign in — you\'ll be routed to the right dashboard for your role')
     : (isPartnerFlow
         ? 'Create your partner account to access the referral concierge'
         : 'Create an account to get started');
