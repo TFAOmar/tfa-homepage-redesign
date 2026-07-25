@@ -43,7 +43,7 @@ export const siteConfig = {
   },
   foundingDate: "2005",
   areasServed: ["California", "Arizona", "Oregon", "Ohio"],
-  numberOfLocations: 32,
+  numberOfLocations: 33,
 };
 
 export const defaultMeta = {

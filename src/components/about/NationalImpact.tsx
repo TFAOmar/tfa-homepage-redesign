@@ -10,7 +10,7 @@ const stats = [
   },
   {
     icon: MapPin,
-    value: "32",
+    value: "33",
     label: "Office Locations",
     description: "Nationwide presence from coast to coast",
   },
