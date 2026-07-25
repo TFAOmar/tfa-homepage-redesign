@@ -1171,12 +1171,20 @@ serve(async (req) => {
     let emailResult = { teamSent: false, advisorSent: false, errors: [] as string[] };
     
     if (resend) {
+      let partnerOwnerEmail: string | null = null;
+      if (formData.partner_slug) {
+        const { data: ownerRow } = await supabase.rpc("get_partner_owner_email_by_slug", {
+          _slug: formData.partner_slug,
+        });
+        if (typeof ownerRow === "string") partnerOwnerEmail = ownerRow;
+      }
       emailResult = await sendEmails(
         resend,
         formData,
         submissionId,
         advisor?.email,
-        advisor?.name
+        advisor?.name,
+        partnerOwnerEmail,
       );
     }
     
