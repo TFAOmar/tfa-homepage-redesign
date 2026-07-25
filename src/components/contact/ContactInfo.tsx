@@ -77,7 +77,7 @@ const ContactInfo = () => {
             <p className="text-foreground">200 W Imperial Hwy</p>
             <p className="text-foreground mb-2">Brea, CA 92821</p>
             <Link to="/locations" className="text-accent hover:underline text-sm font-medium">
-              View all 32 office locations →
+              View all 33 office locations →
             </Link>
           </div>
         </div>
