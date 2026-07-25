@@ -4,6 +4,7 @@ import { Loader2, Search, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { SEOHead } from "@/components/seo";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -118,6 +119,7 @@ export default function IntakeDashboard() {
   return (
     <>
       <SEOHead title="Intake Dashboard — TFA" description="Staff dashboard" noIndex />
+      <AdminTopBar />
       <div className="min-h-screen bg-gray-50">
         <header className="bg-white border-b">
           <div className="container mx-auto px-4 h-14 flex items-center justify-between">
