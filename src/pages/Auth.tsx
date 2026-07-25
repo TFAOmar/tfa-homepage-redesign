@@ -31,6 +31,21 @@ const Auth = () => {
   const rawNext = searchParams.get('next');
   const next = rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : null;
 
+  // Context-aware copy: referral partners arrive via /auth?next=/concierge
+  const isPartnerFlow = next?.startsWith('/concierge') ?? false;
+  const cardTitle = isLogin
+    ? (isPartnerFlow ? 'Partner Login' : next ? 'Sign In' : 'Admin Login')
+    : (isPartnerFlow ? 'Create Partner Account' : 'Create Account');
+  const cardDescription = isLogin
+    ? (isPartnerFlow
+        ? 'Sign in to access the referral concierge'
+        : next
+          ? 'Sign in to continue'
+          : 'Sign in to access the admin dashboard')
+    : (isPartnerFlow
+        ? 'Create your partner account to access the referral concierge'
+        : 'Create an account to get started');
+
   const form = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -119,12 +134,10 @@ const Auth = () => {
       <Card className="w-full max-w-md bg-card/50 backdrop-blur-xl border-border/20">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold text-foreground">
-            {isLogin ? 'Admin Login' : 'Create Account'}
+            {cardTitle}
           </CardTitle>
           <CardDescription className="text-muted-foreground">
-            {isLogin 
-              ? 'Sign in to access the admin dashboard' 
-              : 'Create an account to get started'}
+            {cardDescription}
           </CardDescription>
         </CardHeader>
         <CardContent>
