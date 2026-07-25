@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { SEOHead } from "@/components/seo";
 import { useLeads, useUpdateLead, type Lead } from "@/hooks/useLeads";
+import AdminTopBar from "@/components/admin/AdminTopBar";
 
 const STATUS_OPTIONS = ["new", "contacted", "in_progress", "closed", "dead"] as const;
 
@@ -138,6 +139,7 @@ const AdminLeads = () => {
   return (
     <>
       <SEOHead title="Admin — Referral Leads" description="Referral leads dashboard" noIndex />
+      <AdminTopBar />
       <div className="min-h-screen py-12 bg-gradient-to-b from-secondary/30 to-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="mb-6 flex items-center justify-between gap-3 flex-wrap">
