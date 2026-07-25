@@ -13,6 +13,7 @@ import { LanguageProvider, LangToggle, useLang } from "@/lib/i18n/LanguageContex
 import LegalFooter from "@/components/intake/LegalFooter";
 import AdminTopBar from "@/components/admin/AdminTopBar";
 import ReferralLeadsPanel from "@/components/concierge/ReferralLeadsPanel";
+import PartnerStatsPanel from "@/components/admin/PartnerStatsPanel";
 
 function ConciergeInner() {
   const { user, isLoading: loading, isAdmin, isStaff, isPartner, role } = useAuth();
@@ -198,12 +199,15 @@ function ConciergeInner() {
           {isPartner && !hasStaffAccess && (
             <div className="mb-8 space-y-4">
               {myReferrerId ? (
-                <ReferralLeadsPanel
+                <>
+                  <PartnerStatsPanel referrerId={myReferrerId} />
+                  <ReferralLeadsPanel
                   referrerOnly
                   scopedReferrerId={myReferrerId}
                   title="My Referred Leads"
                   allowResend={false}
-                />
+                  />
+                </>
               ) : (
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-900">
                   Your partner account isn't linked to a referrer record yet.
