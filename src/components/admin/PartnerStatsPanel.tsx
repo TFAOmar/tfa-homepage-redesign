@@ -25,7 +25,13 @@ interface Stats {
   by_status: Record<string, number>;
 }
 
-export default function PartnerStatsPanel({ referrerId }: { referrerId: string }) {
+export default function PartnerStatsPanel({
+  referrerId,
+  includeDescendants = false,
+}: {
+  referrerId: string;
+  includeDescendants?: boolean;
+}) {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +41,7 @@ export default function PartnerStatsPanel({ referrerId }: { referrerId: string }
       setLoading(true);
       const { data, error } = await supabase.rpc("admin_partner_stats", {
         p_referrer_id: referrerId,
+        p_include_descendants: includeDescendants,
       });
       if (!cancelled) {
         if (error) console.error(error);
@@ -45,7 +52,7 @@ export default function PartnerStatsPanel({ referrerId }: { referrerId: string }
     return () => {
       cancelled = true;
     };
-  }, [referrerId]);
+  }, [referrerId, includeDescendants]);
 
   if (loading) {
     return (
