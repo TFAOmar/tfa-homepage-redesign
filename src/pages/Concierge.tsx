@@ -15,6 +15,7 @@ import AdminTopBar from "@/components/admin/AdminTopBar";
 import ReferralLeadsPanel from "@/components/concierge/ReferralLeadsPanel";
 import PartnerStatsPanel from "@/components/admin/PartnerStatsPanel";
 import PartnerChildrenPanel from "@/components/concierge/PartnerChildrenPanel";
+import PartnerLegacyLeadsPanel from "@/components/concierge/PartnerLegacyLeadsPanel";
 import PartnerBrandingForm from "@/components/admin/PartnerBrandingForm";
 import {
   PartnerBrandingProvider,
@@ -252,6 +253,7 @@ function ConciergeInner() {
                   title="My Referred Leads"
                   allowResend={false}
                   />
+                  <PartnerLegacyLeadsPanel />
                 </>
               ) : (
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-900">
