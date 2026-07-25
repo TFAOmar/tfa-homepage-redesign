@@ -2,10 +2,16 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
+export type AppRole = 'admin' | 'staff' | 'partner' | 'user';
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   isAdmin: boolean;
+  isStaff: boolean;
+  isPartner: boolean;
+  role: AppRole;
+  roles: AppRole[];
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string, redirectPath?: string) => Promise<{ error: Error | null }>;
@@ -17,25 +23,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [roles, setRoles] = useState<AppRole[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCheckingRole, setIsCheckingRole] = useState(false);
 
-  const checkAdminRole = async (userId: string) => {
+  const loadRoles = async (userId: string) => {
     try {
-      const { data, error } = await supabase.rpc('has_role', {
-        _user_id: userId,
-        _role: 'admin'
-      });
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId);
       if (error) {
-        console.error('Error checking admin role:', error);
-        setIsAdmin(false);
+        console.error('Error loading roles:', error);
+        setRoles([]);
       } else {
-        setIsAdmin(data === true);
+        setRoles(((data ?? []) as { role: AppRole }[]).map((r) => r.role));
       }
     } catch (err) {
-      console.error('Error in checkAdminRole:', err);
-      setIsAdmin(false);
+      console.error('Error in loadRoles:', err);
+      setRoles([]);
     } finally {
       setIsCheckingRole(false);
     }
@@ -49,12 +55,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Defer role check to prevent deadlock
       if (session?.user) {
-        setIsCheckingRole(true);  // Set BEFORE setTimeout so effectiveLoading stays true
+        setIsCheckingRole(true);
         setTimeout(() => {
-          checkAdminRole(session.user.id);
+          loadRoles(session.user.id);
         }, 0);
       } else {
-        setIsAdmin(false);
+        setRoles([]);
         setIsCheckingRole(false);
       }
       setIsLoading(false);
@@ -65,8 +71,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        setIsCheckingRole(true);  // Set BEFORE calling checkAdminRole
-        checkAdminRole(session.user.id);
+        setIsCheckingRole(true);
+        loadRoles(session.user.id);
       } else {
         setIsCheckingRole(false);
       }
@@ -99,13 +105,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    setIsAdmin(false);
+    setRoles([]);
   };
 
   const effectiveLoading = isLoading || isCheckingRole;
+  const isAdmin = roles.includes('admin');
+  const isStaff = roles.includes('staff');
+  const isPartner = roles.includes('partner');
+  const role: AppRole = isAdmin ? 'admin' : isStaff ? 'staff' : isPartner ? 'partner' : 'user';
 
   return (
-    <AuthContext.Provider value={{ user, session, isAdmin, isLoading: effectiveLoading, signIn, signUp, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        session,
+        isAdmin,
+        isStaff,
+        isPartner,
+        role,
+        roles,
+        isLoading: effectiveLoading,
+        signIn,
+        signUp,
+        signOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

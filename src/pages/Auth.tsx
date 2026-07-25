@@ -21,7 +21,7 @@ type AuthFormData = z.infer<typeof authSchema>;
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { user, isAdmin, isLoading, signIn, signUp, signOut } = useAuth();
+  const { user, isAdmin, isStaff, isPartner, role, isLoading, signIn, signUp, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
@@ -45,14 +45,14 @@ const Auth = () => {
   // Context-aware copy: referral partners arrive via /auth?next=/concierge
   const isPartnerFlow = next?.startsWith('/concierge') ?? false;
   const cardTitle = isLogin
-    ? (isPartnerFlow ? 'Partner Login' : next ? 'Sign In' : 'Admin Login')
+    ? (isPartnerFlow ? 'Partner Login' : next ? 'Sign In' : 'Staff & Partner Login')
     : (isPartnerFlow ? 'Create Partner Account' : 'Create Account');
   const cardDescription = isLogin
     ? (isPartnerFlow
         ? 'Sign in to access the referral concierge'
         : next
           ? 'Sign in to continue'
-          : 'Sign in to access the admin dashboard')
+          : 'Sign in — you\'ll be routed to the right dashboard for your role')
     : (isPartnerFlow
         ? 'Create your partner account to access the referral concierge'
         : 'Create an account to get started');
@@ -73,17 +73,20 @@ const Auth = () => {
       const timer = setTimeout(() => {
         if (next) {
           try { sessionStorage.removeItem('tfa:postLoginRedirect'); } catch {}
-          // Honor the requested destination (e.g. /concierge for referral partners)
           navigate(next, { replace: true });
         } else if (isAdmin) {
-          navigate('/admin');
+          navigate('/admin', { replace: true });
+        } else if (isStaff) {
+          navigate('/dashboard', { replace: true });
+        } else if (isPartner) {
+          navigate('/concierge', { replace: true });
         } else {
-          navigate('/');
+          navigate('/', { replace: true });
         }
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [user, isAdmin, isLoading, navigate, next]);
+  }, [user, isAdmin, isStaff, isPartner, isLoading, navigate, next]);
 
   const onSubmit = async (data: AuthFormData) => {
     setIsSubmitting(true);
@@ -218,6 +221,9 @@ const Auth = () => {
           </div>
           {user && (
             <div className="mt-4 text-center">
+              <div className="text-xs text-muted-foreground mb-1">
+                Role: <span className="capitalize font-medium text-foreground">{role}</span>
+              </div>
               <button
                 type="button"
                 onClick={() => signOut()}
