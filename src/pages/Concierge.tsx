@@ -40,7 +40,12 @@ function ConciergeInner() {
   const [submitting, setSubmitting] = useState(false);
 
   if (loading) return <div className="p-12 text-center">…</div>;
-  if (!user) return <Navigate to="/auth?next=/concierge" replace />;
+  if (!user) {
+    try {
+      sessionStorage.setItem("tfa:postLoginRedirect", "/concierge");
+    } catch {}
+    return <Navigate to="/auth?next=/concierge" replace />;
+  }
 
   const seniorTrust = services.includes("trust") && ageBand === "65+";
 

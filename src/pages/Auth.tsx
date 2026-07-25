@@ -29,7 +29,18 @@ const Auth = () => {
   // Optional post-auth destination, e.g. /auth?next=/concierge
   // Only allow internal paths (must start with a single '/') to prevent open redirects
   const rawNext = searchParams.get('next');
-  const next = rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : null;
+  const isSafeInternalPath = (p: string | null | undefined): p is string =>
+    !!p && p.startsWith('/') && !p.startsWith('//');
+  const queryNext = isSafeInternalPath(rawNext) ? rawNext : null;
+  const storedNext = (() => {
+    try {
+      const v = sessionStorage.getItem('tfa:postLoginRedirect');
+      return isSafeInternalPath(v) ? v : null;
+    } catch {
+      return null;
+    }
+  })();
+  const next = queryNext ?? storedNext;
 
   // Context-aware copy: referral partners arrive via /auth?next=/concierge
   const isPartnerFlow = next?.startsWith('/concierge') ?? false;
@@ -61,6 +72,7 @@ const Auth = () => {
       // Small delay to ensure state has fully settled after role check
       const timer = setTimeout(() => {
         if (next) {
+          try { sessionStorage.removeItem('tfa:postLoginRedirect'); } catch {}
           // Honor the requested destination (e.g. /concierge for referral partners)
           navigate(next, { replace: true });
         } else if (isAdmin) {
