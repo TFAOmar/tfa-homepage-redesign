@@ -15,10 +15,13 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Mail, Plus, RefreshCw, Trash2, Unlink, BarChart3 } from "lucide-react";
+import { Loader2, Mail, Plus, RefreshCw, Trash2, Unlink, BarChart3, Upload, Palette } from "lucide-react";
 import AdminTopBar from "@/components/admin/AdminTopBar";
 import PartnerStatsPanel from "@/components/admin/PartnerStatsPanel";
+import PartnerCsvImport from "@/components/admin/PartnerCsvImport";
+import PartnerBrandingForm from "@/components/admin/PartnerBrandingForm";
 import { SEOHead } from "@/components/seo";
 
 interface Partner {
@@ -34,6 +37,15 @@ interface Partner {
   leads_total: number;
   leads_30d: number;
   created_at: string;
+  parent_referrer_id: string | null;
+  parent_slug: string | null;
+  depth: number;
+  brand_logo_url: string | null;
+  brand_primary_hex: string | null;
+  brand_accent_hex: string | null;
+  brand_welcome_headline: string | null;
+  brand_welcome_body: string | null;
+  brand_support_email: string | null;
 }
 
 const emptyForm = {
@@ -45,6 +57,7 @@ const emptyForm = {
   active: true,
   sms_notify_optin: false,
   owner_email: "",
+  parent_referrer_id: "" as string,
 };
 
 const slugify = (s: string) =>
@@ -60,6 +73,9 @@ export default function AdminPartners() {
   const [saving, setSaving] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [statsFor, setStatsFor] = useState<Partner | null>(null);
+  const [brandingFor, setBrandingFor] = useState<Partner | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
+  const [includeDescendants, setIncludeDescendants] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -104,6 +120,7 @@ export default function AdminPartners() {
       active: p.active,
       sms_notify_optin: p.sms_notify_optin,
       owner_email: p.owner_email ?? "",
+      parent_referrer_id: p.parent_referrer_id ?? "",
     });
     setFormOpen(true);
   };
@@ -123,6 +140,7 @@ export default function AdminPartners() {
       p_avatar_url: form.avatar_url.trim(),
       p_active: form.active,
       p_sms_notify_optin: form.sms_notify_optin,
+      p_parent_referrer_id: form.parent_referrer_id || null,
     });
     if (error) {
       toast.error(error.message);
@@ -193,6 +211,13 @@ export default function AdminPartners() {
       p_avatar_url: p.avatar_url ?? "",
       p_active: !p.active,
       p_sms_notify_optin: p.sms_notify_optin,
+      p_parent_referrer_id: p.parent_referrer_id,
+      p_brand_logo_url: p.brand_logo_url ?? "",
+      p_brand_primary_hex: p.brand_primary_hex ?? "",
+      p_brand_accent_hex: p.brand_accent_hex ?? "",
+      p_brand_welcome_headline: p.brand_welcome_headline ?? "",
+      p_brand_welcome_body: p.brand_welcome_body ?? "",
+      p_brand_support_email: p.brand_support_email ?? "",
     });
     if (error) toast.error(error.message);
     else void load();
@@ -215,6 +240,10 @@ export default function AdminPartners() {
               <Button variant="outline" size="sm" onClick={() => load()}>
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Refresh
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => setImportOpen(true)}>
+                <Upload className="h-4 w-4 mr-2" />
+                Import CSV
               </Button>
               <Button onClick={openCreate}>
                 <Plus className="h-4 w-4 mr-2" />
@@ -246,6 +275,7 @@ export default function AdminPartners() {
                   <TableHead>Partner</TableHead>
                   <TableHead>Slug</TableHead>
                   <TableHead>Owner</TableHead>
+                  <TableHead>Parent</TableHead>
                   <TableHead className="text-right">Leads (30d / total)</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
@@ -254,14 +284,14 @@ export default function AdminPartners() {
               <TableBody>
                 {loading && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8">
+                    <TableCell colSpan={7} className="text-center py-8">
                       <Loader2 className="h-5 w-5 animate-spin inline" />
                     </TableCell>
                   </TableRow>
                 )}
                 {!loading && filtered.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                       No partners yet.
                     </TableCell>
                   </TableRow>
@@ -293,6 +323,13 @@ export default function AdminPartners() {
                         <span className="text-muted-foreground">Not linked</span>
                       )}
                     </TableCell>
+                    <TableCell className="text-xs">
+                      {p.parent_slug ? (
+                        <span className="font-mono">{p.parent_slug}</span>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
+                    </TableCell>
                     <TableCell className="text-right text-xs">
                       {p.leads_30d} / {p.leads_total}
                     </TableCell>
@@ -314,6 +351,14 @@ export default function AdminPartners() {
                           title="View stats"
                         >
                           <BarChart3 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setBrandingFor(p)}
+                          title="Branding"
+                        >
+                          <Palette className="h-4 w-4" />
                         </Button>
                         <Button
                           size="sm"
@@ -411,6 +456,25 @@ export default function AdminPartners() {
                 placeholder="partner@example.com"
               />
             </div>
+          <div>
+            <Label>Parent partner (optional)</Label>
+            <select
+              value={form.parent_referrer_id}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, parent_referrer_id: e.target.value }))
+              }
+              className="w-full h-10 rounded-md border px-3 text-sm"
+            >
+              <option value="">— None (top level) —</option>
+              {partners
+                .filter((p) => p.id !== form.id)
+                .map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.display_name} ({p.slug})
+                  </option>
+                ))}
+            </select>
+          </div>
             <div className="flex items-center gap-6">
               <label className="flex items-center gap-2 text-sm">
                 <Switch
@@ -447,13 +511,68 @@ export default function AdminPartners() {
               <SheetHeader>
                 <SheetTitle>{statsFor.display_name} — Analytics</SheetTitle>
               </SheetHeader>
+              <div className="mt-3 flex items-center gap-2 text-sm">
+                <Switch
+                  checked={includeDescendants}
+                  onCheckedChange={setIncludeDescendants}
+                />
+                <Label className="cursor-pointer">Include sub-partners</Label>
+              </div>
               <div className="mt-4">
-                <PartnerStatsPanel referrerId={statsFor.id} />
+                <PartnerStatsPanel
+                  referrerId={statsFor.id}
+                  includeDescendants={includeDescendants}
+                />
               </div>
             </>
           )}
         </SheetContent>
       </Sheet>
+
+      <Sheet open={!!brandingFor} onOpenChange={(o) => !o && setBrandingFor(null)}>
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
+          {brandingFor && (
+            <>
+              <SheetHeader>
+                <SheetTitle>{brandingFor.display_name} — Branding</SheetTitle>
+              </SheetHeader>
+              <div className="mt-4">
+                <PartnerBrandingForm
+                  referrerId={brandingFor.id}
+                  adminMode
+                  partnerRecord={{
+                    slug: brandingFor.slug,
+                    display_name: brandingFor.display_name,
+                    phone_e164: brandingFor.phone_e164,
+                    avatar_url: brandingFor.avatar_url,
+                    active: brandingFor.active,
+                    sms_notify_optin: brandingFor.sms_notify_optin,
+                    parent_referrer_id: brandingFor.parent_referrer_id,
+                  }}
+                  initial={{
+                    brand_logo_url: brandingFor.brand_logo_url,
+                    brand_primary_hex: brandingFor.brand_primary_hex,
+                    brand_accent_hex: brandingFor.brand_accent_hex,
+                    brand_welcome_headline: brandingFor.brand_welcome_headline,
+                    brand_welcome_body: brandingFor.brand_welcome_body,
+                    brand_support_email: brandingFor.brand_support_email,
+                  }}
+                  onSaved={() => {
+                    setBrandingFor(null);
+                    void load();
+                  }}
+                />
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
+
+      <PartnerCsvImport
+        open={importOpen}
+        onOpenChange={setImportOpen}
+        onDone={() => void load()}
+      />
     </>
   );
 }
