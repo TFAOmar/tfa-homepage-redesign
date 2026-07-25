@@ -14,6 +14,15 @@ import LegalFooter from "@/components/intake/LegalFooter";
 import AdminTopBar from "@/components/admin/AdminTopBar";
 import ReferralLeadsPanel from "@/components/concierge/ReferralLeadsPanel";
 import PartnerStatsPanel from "@/components/admin/PartnerStatsPanel";
+import PartnerChildrenPanel from "@/components/concierge/PartnerChildrenPanel";
+import PartnerBrandingForm from "@/components/admin/PartnerBrandingForm";
+import {
+  PartnerBrandingProvider,
+  PartnerBrandingHeader,
+  usePartnerBranding,
+} from "@/components/concierge/PartnerBrandingProvider";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Palette } from "lucide-react";
 
 function ConciergeInner() {
   const { user, isLoading: loading, isAdmin, isStaff, isPartner, role } = useAuth();
@@ -43,6 +52,8 @@ function ConciergeInner() {
   const [submitting, setSubmitting] = useState(false);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [myReferrerId, setMyReferrerId] = useState<string | null>(null);
+  const { branding, refresh: refreshBranding } = usePartnerBranding();
+  const [brandingOpen, setBrandingOpen] = useState(false);
 
   // For partners: look up which referrer record they own.
   useEffect(() => {
@@ -200,7 +211,41 @@ function ConciergeInner() {
             <div className="mb-8 space-y-4">
               {myReferrerId ? (
                 <>
+                  <PartnerBrandingHeader />
+                  <div className="flex justify-end">
+                    <Sheet open={brandingOpen} onOpenChange={setBrandingOpen}>
+                      <SheetTrigger asChild>
+                        <Button variant="outline" size="sm">
+                          <Palette className="h-4 w-4 mr-2" />
+                          Customize branding
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
+                        <SheetHeader>
+                          <SheetTitle>My branding</SheetTitle>
+                        </SheetHeader>
+                        <div className="mt-4">
+                          <PartnerBrandingForm
+                            referrerId={myReferrerId}
+                            initial={{
+                              brand_logo_url: branding?.brand_logo_url ?? "",
+                              brand_primary_hex: branding?.brand_primary_hex ?? "",
+                              brand_accent_hex: branding?.brand_accent_hex ?? "",
+                              brand_welcome_headline: branding?.brand_welcome_headline ?? "",
+                              brand_welcome_body: branding?.brand_welcome_body ?? "",
+                              brand_support_email: branding?.brand_support_email ?? "",
+                            }}
+                            onSaved={() => {
+                              setBrandingOpen(false);
+                              refreshBranding();
+                            }}
+                          />
+                        </div>
+                      </SheetContent>
+                    </Sheet>
+                  </div>
                   <PartnerStatsPanel referrerId={myReferrerId} />
+                  <PartnerChildrenPanel />
                   <ReferralLeadsPanel
                   referrerOnly
                   scopedReferrerId={myReferrerId}
@@ -378,7 +423,9 @@ function ConciergeInner() {
 export default function Concierge() {
   return (
     <LanguageProvider>
-      <ConciergeInner />
+      <PartnerBrandingProvider>
+        <ConciergeInner />
+      </PartnerBrandingProvider>
     </LanguageProvider>
   );
 }
