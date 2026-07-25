@@ -133,6 +133,7 @@ import Protect from "./pages/Protect";
 import MinhNewsletter from "./pages/MinhNewsletter";
 import Trust from "./pages/Trust";
 import AdminLeads from "./pages/AdminLeads";
+import AdminPartners from "./pages/AdminPartners";
 import Start from "./pages/Start";
 import Concierge from "./pages/Concierge";
 import IntakeDashboard from "./pages/IntakeDashboard";
@@ -214,6 +215,11 @@ const AppLayout = () => {
           <Route path="/admin/leads" element={
             <ProtectedRoute requireAdmin>
               <AdminLeads />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/partners" element={
+            <ProtectedRoute requireAdmin>
+              <AdminPartners />
             </ProtectedRoute>
           } />
           <Route path="/protect" element={<Protect />} />
