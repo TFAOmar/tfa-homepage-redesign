@@ -1,26 +1,28 @@
-## Location updates in `src/data/locations.ts`
+## Problem
 
-### Remove (4)
-- Rancho Cucamonga — `9267 Haven Ave` (id 3)
-- Glendora — `223 S Glendora Ave` (id 7)
-- Anaheim (Satellite) — duplicate, keep the Katella one (id 13)
-- Tempe, AZ — `60 E. Rio Salado Pkwy` (id 17)
+Logging in and landing back on `/concierge` only works when the user arrives at `/auth?next=/concierge` (via the `<Navigate>` inside `Concierge.tsx`). If they instead reach `/auth` directly — bookmark, header login link, page reload that drops the query string, or the email-confirmation return — the `next` param is missing and `Auth.tsx` falls back to `/admin` (admins) or `/` (everyone else). That matches the reported symptom: sign-in from `/auth` on the live site redirects to home.
 
-### Add (5, all CA)
-- Whittier — 7648 Painter Ave Ste A, Whittier, CA 90602
-- Whittier — 13112 Hadley St Unit 101, Whittier, CA
-- Riverside — 1650 Spruce St Suite 500, Riverside, CA 92507
-- Corona — 4160 Temescal Canyon Rd #401, Corona, CA
-- Fresno — 191 W Shaw Ave #110, Fresno, CA 93704 (added alongside existing Fresno location; no removal was requested for the current Del Mar Fresno office)
+## Fix
 
-New entries will use the shared `(888) 350-5396` line, `Mon-Fri: 9am-5pm`, `Southern California` region (Central California for the new Fresno), and approximate lat/lng coordinates for map display.
+Persist the intended destination so it survives a lost query string, and consume it after login.
 
-### Location count updates (net change: 32 → 33)
-- `src/lib/seo/siteConfig.ts` — `numberOfLocations: 33`
-- `src/components/about/NationalImpact.tsx` — stats card "32" → "33"
-- `src/components/Locations.tsx` — "32 locations across the United States" → "33"
-- `src/pages/Locations.tsx` — SEO title/description copy mentioning 32
-- `src/components/contact/ContactInfo.tsx` — stat block currently shows "21"; update to "33" for consistency
-- `src/components/locations/LocationsHero.tsx` — check and update any "32" references
+### 1. `src/pages/Concierge.tsx`
+Before rendering `<Navigate to="/auth?next=/concierge" replace />`, write `sessionStorage.setItem('tfa:postLoginRedirect', '/concierge')`. Keep the `?next=/concierge` query string too so the existing path still works.
 
-No changes to routing, schemas, or DB. LocalBusiness JSON-LD is generated from the `locations` array, so it updates automatically.
+### 2. `src/pages/Auth.tsx`
+- Read `next` from the query string as today. If missing, fall back to `sessionStorage.getItem('tfa:postLoginRedirect')` (validated the same way — must start with a single `/`).
+- In the post-login `useEffect`, use that resolved value:
+  - If present → `navigate(resolvedNext, { replace: true })` and `sessionStorage.removeItem('tfa:postLoginRedirect')`.
+  - Else keep current behavior (`/admin` for admins, `/` otherwise).
+- Same resolved value drives the "Partner Login" copy so the labeling stays correct when the user arrived via the sessionStorage path.
+- Pass the resolved value into `signUp(..., resolvedNext ?? undefined)` so the email-confirm link also returns to `/concierge`.
+
+### 3. No other files change
+`useAuth.tsx`, `ProtectedRoute.tsx`, and admin pages are unaffected. This is a pure client-side redirect fix — no schema, RLS, or edge-function changes.
+
+## Verification
+
+- Visit `/concierge` while signed out → redirected to `/auth?next=/concierge`, sign in → land on `/concierge`. (regression check, already works)
+- Visit `/auth` directly after previously being bounced from `/concierge` in the same tab → sign in → land on `/concierge` (new behavior, via sessionStorage).
+- Visit `/auth` with no prior `/concierge` visit → sign in → admins go to `/admin`, others to `/` (unchanged).
+- Sign-up confirmation email from the partner flow returns to `/auth?next=/concierge` and completes the redirect (unchanged path, still covered).
