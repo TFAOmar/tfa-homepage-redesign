@@ -17,11 +17,12 @@ import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Mail, Plus, RefreshCw, Trash2, Unlink, BarChart3, Upload, Palette } from "lucide-react";
+import { Loader2, Mail, Plus, RefreshCw, Trash2, Unlink, BarChart3, Upload, Palette, Inbox } from "lucide-react";
 import AdminTopBar from "@/components/admin/AdminTopBar";
 import PartnerStatsPanel from "@/components/admin/PartnerStatsPanel";
 import PartnerCsvImport from "@/components/admin/PartnerCsvImport";
 import PartnerBrandingForm from "@/components/admin/PartnerBrandingForm";
+import AdminPartnerLeadsPanel from "@/components/admin/AdminPartnerLeadsPanel";
 import { SEOHead } from "@/components/seo";
 
 interface Partner {
@@ -74,6 +75,7 @@ export default function AdminPartners() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [statsFor, setStatsFor] = useState<Partner | null>(null);
   const [brandingFor, setBrandingFor] = useState<Partner | null>(null);
+  const [leadsFor, setLeadsFor] = useState<Partner | null>(null);
   const [importOpen, setImportOpen] = useState(false);
   const [includeDescendants, setIncludeDescendants] = useState(false);
 
@@ -355,6 +357,14 @@ export default function AdminPartners() {
                         <Button
                           size="sm"
                           variant="ghost"
+                          onClick={() => setLeadsFor(p)}
+                          title="View leads"
+                        >
+                          <Inbox className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
                           onClick={() => setBrandingFor(p)}
                           title="Branding"
                         >
@@ -573,6 +583,23 @@ export default function AdminPartners() {
         onOpenChange={setImportOpen}
         onDone={() => void load()}
       />
+
+      <Sheet open={!!leadsFor} onOpenChange={(o) => !o && setLeadsFor(null)}>
+        <SheetContent className="w-full sm:max-w-3xl overflow-y-auto">
+          {leadsFor && (
+            <>
+              <SheetHeader>
+                <SheetTitle>
+                  {leadsFor.display_name} — Leads & submissions
+                </SheetTitle>
+              </SheetHeader>
+              <div className="mt-4">
+                <AdminPartnerLeadsPanel slug={leadsFor.slug} />
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
     </>
   );
 }
