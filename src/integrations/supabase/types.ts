@@ -1493,6 +1493,84 @@ export type Database = {
         Args: { p_email: string; p_referrer_id: string }
         Returns: string
       }
+      admin_list_partner_form_submissions: {
+        Args: { p_slug: string }
+        Returns: {
+          advisor: string | null
+          advisor_slug: string | null
+          created_at: string | null
+          email: string | null
+          email_sent: boolean | null
+          error_message: string | null
+          first_name: string | null
+          form_data: Json
+          form_type: string
+          id: string
+          last_name: string | null
+          name: string | null
+          notes: string | null
+          partner: string | null
+          partner_slug: string | null
+          phone: string | null
+          pipedrive_lead_id: string | null
+          pipedrive_org_id: number | null
+          pipedrive_owner_id: number | null
+          pipedrive_person_id: number | null
+          preferred_language: string | null
+          routing_result: string | null
+          source: string | null
+          source_url: string | null
+          state_location: string | null
+          status: string | null
+          updated_at: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "form_submissions"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      admin_list_partner_leads: {
+        Args: { p_slug: string }
+        Returns: {
+          admin_notes: string | null
+          consent_at: string | null
+          consent_text: string | null
+          created_at: string
+          email: string | null
+          first_name: string | null
+          funnel: string
+          id: string
+          is_complete: boolean
+          landing_page: string | null
+          last_name: string | null
+          last_step: number | null
+          partner_slug: string | null
+          payload: Json
+          phone: string | null
+          referral_source: string | null
+          resume_token: string
+          state: string | null
+          status: string
+          updated_at: string
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "leads"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       admin_list_referrers_with_owner: {
         Args: never
         Returns: {
