@@ -583,6 +583,23 @@ export default function AdminPartners() {
         onOpenChange={setImportOpen}
         onDone={() => void load()}
       />
+
+      <Sheet open={!!leadsFor} onOpenChange={(o) => !o && setLeadsFor(null)}>
+        <SheetContent className="w-full sm:max-w-3xl overflow-y-auto">
+          {leadsFor && (
+            <>
+              <SheetHeader>
+                <SheetTitle>
+                  {leadsFor.display_name} — Leads & submissions
+                </SheetTitle>
+              </SheetHeader>
+              <div className="mt-4">
+                <AdminPartnerLeadsPanel slug={leadsFor.slug} />
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
     </>
   );
 }
