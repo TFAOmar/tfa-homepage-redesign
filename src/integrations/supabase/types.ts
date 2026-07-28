@@ -1619,6 +1619,13 @@ export type Database = {
         }
         Returns: string
       }
+      create_agent_onboarding_draft: {
+        Args: never
+        Returns: {
+          id: string
+          resume_token: string
+        }[]
+      }
       generate_advisor_slug: { Args: { advisor_name: string }; Returns: string }
       get_advisor_by_slug: {
         Args: { advisor_slug: string }
