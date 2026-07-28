@@ -105,13 +105,13 @@ function StartInner() {
     }
   };
 
+  const isMinh = refSlug === "minh" || referrer?.slug === "minh";
+  const ctaHref = isMinh ? "/book/minh" : "/book-consultation";
+
   return (
     <>
       <SEOHead title="Start — The Financial Architects" description="Two minutes. No spam. A real person follows up." />
-      <LandingHeader />
-      <div className="fixed top-3 right-3 z-[60]">
-        <LangToggle />
-      </div>
+      <LandingHeader ctaHref={ctaHref} rightSlot={<LangToggle />} />
       <main className="min-h-screen bg-gradient-to-b from-white via-gray-50/50 to-white py-10 px-4">
         <div className="container mx-auto max-w-4xl">
           {stage !== "done" && (
