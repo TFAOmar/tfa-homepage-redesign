@@ -602,13 +602,6 @@ export type Database = {
             referencedRelation: "intake_referrers"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "intake_leads_routing_team_key_fkey"
-            columns: ["routing_team_key"]
-            isOneToOne: false
-            referencedRelation: "intake_teams"
-            referencedColumns: ["key"]
-          },
         ]
       }
       intake_referrers: {
