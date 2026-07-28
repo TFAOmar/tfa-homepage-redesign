@@ -1,0 +1,1 @@
+ALTER TABLE public.intake_leads DROP CONSTRAINT IF EXISTS intake_leads_routing_team_key_fkey;
