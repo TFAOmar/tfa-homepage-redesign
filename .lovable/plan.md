@@ -1,30 +1,52 @@
-## Fix: admin can't see Minh's past referrals
+## Goals
 
-Two separate issues to resolve.
+1. Fix mobile layout collision on `/start` between the sticky "Book Consultation" header button and the floating EN/ES language toggle.
+2. Create a Minh-specific booking page that is tracked as a Minh partner lead — used by the `/start` header CTA (and any other Minh-associated surfaces).
 
-### 1. Admin view is empty because the panel is owner-scoped
+## Changes
 
-`PartnerLegacyLeadsPanel` calls `partner_list_my_leads` / `partner_list_my_form_submissions`, both of which filter by `owner_user_id = auth.uid()`. When you (admin) open `/concierge`, you aren't Minh's owner, so both RPCs return zero rows — even though 5 rows are correctly tagged in the DB.
+### 1. Fix `/start` mobile header/toggle collision
 
-**Fix:** add an admin-scoped drill-down.
+In `src/pages/Start.tsx`, the `LangToggle` is `fixed top-3 right-3` and overlaps the sticky `LandingHeader` CTA button on mobile.
 
-- New RPC `admin_list_partner_leads(p_slug text)` and `admin_list_partner_form_submissions(p_slug text)` — both `SECURITY DEFINER`, both gated by `has_role(auth.uid(), 'admin')`, returning rows where `partner_slug = p_slug` (or where the partner is anywhere in `attribution_path` for `intake_leads`).
-- On `/admin/partners`, add a "View leads" action on each row that opens a drawer/page showing that partner's tagged `leads` + `form_submissions` using the new RPCs. Reuse the same table layout as `PartnerLegacyLeadsPanel`.
+Move the language toggle **into** the `LandingHeader` (left of the CTA) instead of floating it. Approach:
+- Add an optional `rightSlot?: React.ReactNode` prop to `LandingHeader` rendered before the CTA button (with a small gap).
+- In `Start.tsx`, remove the `fixed` `LangToggle` wrapper and pass `<LangToggle />` as `rightSlot` to `LandingHeader`.
 
-This gives admins a per-partner view without changing what partners themselves see.
+This eliminates the overlap on every viewport without any absolute positioning hacks.
 
-### 2. Backfill missed historical attributions
+### 2. New Minh-branded booking page `/book/minh`
 
-Currently only funnel-matched rows and `Homeowner Protection Squeeze` are tagged. Per your answers, also tag:
+Create `src/pages/BookConsultationMinh.tsx` — a trimmed variant of `BookConsultation.tsx` styled with `LandingHeader` (no global header/footer, matching the `/start` and `/protect` landing pattern). It will:
+- Use the same booking form fields as `BookConsultation`.
+- Hardcode `partner_slug: "minh"` on the submission.
+- Tag the lead/form submission `source` as `book-minh` and include `utm_source=minh`, `utm_campaign=book-minh` fallbacks so it shows in Minh's partner dashboards (the existing `admin_list_partner_leads` / `PartnerLegacyLeadsPanel` already keys off `partner_slug` and utm/notes containing "minh").
+- Show a subtle "Referred through Minh" badge in the hero, mirroring the `/start` referrer badge treatment.
+- Include Minh-appropriate SEO (`noindex` to keep it off the sitemap since it's a referral page).
 
-- **UTM matches:** any `leads` or `form_submissions` where `utm_source ILIKE '%minh%'` OR `utm_campaign ILIKE '%minh%'` OR (for `form_submissions`) `utm_content ILIKE '%minh%'`.
-- **Notes/free-text mentions:** any `form_submissions` where `form_type IN ('Book Consultation','book-consultation','Contact Form','contact','Schedule Request','schedule-inquiry')` AND the `form_data` JSON contains the substring `minh` (case-insensitive, e.g. in `notes`, `message`, `referred_by`, `how_did_you_hear`).
+Register the route in `src/App.tsx` and add `/book/minh` to the `standalonePages` array so the global header/footer/FloatingCTA are suppressed.
 
-Set `partner_slug = 'minh'` on all matches that don't already have one. Report count of newly-tagged rows so we can spot-check.
+### 3. Wire `/start` header CTA to the new page when the visitor is Minh's
 
-### Technical notes
+Update `src/pages/Start.tsx` so the `LandingHeader` `ctaHref` is:
+- `/book/minh` when `refSlug === "minh"` OR when the loaded `referrer.slug === "minh"`.
+- `/book-consultation` (unchanged) otherwise.
 
-- RPCs live alongside existing `partner_list_*` / `admin_*` functions; grants: `EXECUTE TO authenticated`, admin-guard inside the body.
-- Backfill runs as a data-only statement via the insert tool (not a migration), scoped with a `WHERE partner_slug IS NULL` guard so it's idempotent.
-- No changes to partner-facing UI or existing RPCs — Minh's own view stays as-is.
-- After running, I'll query counts and share what was newly attributed before you sign off.
+This keeps the CTA generic for other partners/direct traffic and Minh-specific for Minh's referral links.
+
+### 4. Tracking
+
+No schema changes required — `leads.partner_slug` and `form_submissions.partner_slug` already exist and are surfaced in the admin/partner dashboards. Every submission from `/book/minh` will:
+- Persist `partner_slug = "minh"`.
+- Appear under Minh in `/admin/partners` → "View leads" and in Minh's `/concierge` partner dashboard via `PartnerLegacyLeadsPanel`.
+
+## Technical notes
+
+- `LangToggle` currently lives in `src/lib/i18n/LanguageContext.tsx` and requires `LanguageProvider` context, which already wraps `StartInner` — safe to render inside `LandingHeader` from `Start.tsx`.
+- `standalonePages` list is in `src/App.tsx`; add `/book/minh` there.
+- The Minh partner record and edge-function notification CC logic already exist from prior work, so no edge function changes are needed.
+
+## Out of scope
+
+- Redesigning `/book-consultation` for other partners (can be generalized to `/book/:partnerSlug` later if more partners want branded booking pages).
+- Changing GHL forwarding logic.
