@@ -121,15 +121,15 @@ export const AgentOnboardingForm = () => {
             return;
           }
         }
-        // Create new draft
-        const { data: insert, error } = await supabase
-          .from("agent_onboarding_applications")
-          .insert({ status: "draft", form_data: {} })
-          .select("id, resume_token")
-          .single();
+        // Create new draft (SECURITY DEFINER RPC returns id + resume_token
+        // without exposing SELECT access to the underlying table)
+        const { data: draft, error } = await supabase
+          .rpc("create_agent_onboarding_draft");
         if (error) throw error;
-        setApplicationId(insert.id);
-        setResumeToken(insert.resume_token);
+        const row = Array.isArray(draft) ? draft[0] : draft;
+        if (!row) throw new Error("Failed to create draft");
+        setApplicationId(row.id);
+        setResumeToken(row.resume_token);
       } catch (err: any) {
         toast({
           title: "Couldn't start application",
