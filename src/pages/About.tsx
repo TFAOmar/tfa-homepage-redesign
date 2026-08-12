@@ -19,8 +19,8 @@ const About = () => {
   return (
     <>
       <SEOHead
-        title="About Us - Our Story & Mission"
-        description="Learn about The Financial Architects' 20+ year history of helping families build financial security. Meet our leadership team and discover our mission to empower communities."
+        title="About Us"
+        description="Our 20+ year history of helping families build financial security. Meet the leadership team behind The Financial Architects."
         canonical={`${siteConfig.url}/about`}
         keywords="about TFA, financial planning company, financial advisors history, Manuel Soto, wealth management firm, financial planning mission"
       />
