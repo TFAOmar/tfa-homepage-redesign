@@ -6,7 +6,7 @@ const SubmitEvent = () => {
   return (
     <>
       <SEOHead
-        title="Submit Your Event | TFA Insurance"
+        title="Submit Your Event"
         description="Submit your event details for inclusion on the TFA community calendar. Share workshops, webinars, and community events with our network."
         canonical="/submit-event"
       />

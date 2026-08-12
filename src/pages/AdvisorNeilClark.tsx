@@ -101,7 +101,7 @@ const AdvisorNeilClark = () => {
   return (
     <>
       <SEOHead
-        title="Cornelius 'Neil' Clark - Insurance Agent & Protection Strategist | The Financial Architects"
+        title="Cornelius 'Neil' Clark - Insurance Agent & Protection Strategist"
         description="Work with Neil Clark, a 12-year insurance veteran and protection strategist in Rancho Cucamonga, CA. Specializing in life insurance, estate planning, and executive retention packages."
         canonical={`${siteConfig.url}/advisors/neil-clark`}
         ogType="profile"

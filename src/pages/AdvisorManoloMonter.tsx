@@ -100,7 +100,7 @@ const AdvisorManoloMonter = () => {
   return (
     <>
       <SEOHead
-        title="Manolo Monter - Life Insurance Agent & Pre-Need Specialist | The Financial Architects"
+        title="Manolo Monter - Life Insurance Agent & Pre-Need Specialist"
         description="Work with Manolo Monter, an award-winning life insurance agent and pre-need funeral planning specialist in Chino Hills, CA. Over a decade of compassionate service."
         canonical={`${siteConfig.url}/advisors/manolo-monter`}
         ogType="profile"

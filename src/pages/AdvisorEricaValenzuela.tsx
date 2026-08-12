@@ -123,7 +123,7 @@ const AdvisorEricaValenzuela = () => {
   return (
     <>
       <SEOHead
-        title="Erica Valenzuela | Financial Strategist | The Financial Architects"
+        title="Erica Valenzuela | Financial Strategist"
         description="Meet Erica Valenzuela, a bilingual Financial Strategist specializing in Living Trust planning, life insurance, and estate planning for families in high-stress professions."
         keywords="Erica Valenzuela, financial strategist, living trust, estate planning, life insurance, bilingual, Riverside CA, corrections, first responders"
         canonical={`${siteConfig.url}/advisors/erica-valenzuela`}

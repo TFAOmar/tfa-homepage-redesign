@@ -254,7 +254,7 @@ const OmarConnect = () => {
   return (
     <>
       <SEOHead
-        title="Apply to Connect with Omar Sanchez | The Financial Architects"
+        title="Apply to Connect with Omar Sanchez"
         description="Connect with Omar Sanchez, COO of The Financial Architects, and learn about leadership, sales, training, and growth opportunities in financial services."
         canonical={`${siteConfig.url}/connect-with-omar`}
         ogType="website"

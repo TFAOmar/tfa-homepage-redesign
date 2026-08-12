@@ -35,7 +35,7 @@ const EstateGuruSuccess = () => {
   return (
     <>
       <SEOHead
-        title="Welcome to Estate Guru | The Financial Architects"
+        title="Welcome to Estate Guru"
         description="Your subscription is confirmed. Complete your agent profile to get started."
         canonical="/estate-guru/success"
       />

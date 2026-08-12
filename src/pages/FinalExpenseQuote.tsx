@@ -73,7 +73,7 @@ const FinalExpenseQuote = () => {
   return (
     <>
       <SEOHead
-        title="Final Expense Quote Tool | TFA Financial Advisors"
+        title="Final Expense Quote Tool"
         description="Get instant Final Expense insurance quotes for your clients. Simple, fast quoting tool for TFA agents."
         keywords="final expense insurance, burial insurance, funeral insurance, life insurance quote, agent tools"
       />

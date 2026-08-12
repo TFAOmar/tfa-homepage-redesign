@@ -33,7 +33,7 @@ const EventSponsorship = () => {
   return (
     <>
       <SEOHead
-        title="Sponsor a TFA Event | The Financial Architects"
+        title="Sponsor a TFA Event"
         description="Sponsor TFA events and get on-stage exposure, booth traffic, and VIP access. 5 annual events, limited sponsor spots. Inquire today."
         canonical="/events/sponsorship"
         keywords="TFA event sponsorship, financial services sponsorship, insurance industry events, sponsor booth, brand exposure"

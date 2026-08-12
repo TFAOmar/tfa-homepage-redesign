@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
   return (
     <>
       <SEOHead
-        title="Privacy Policy | The Financial Architects"
+        title="Privacy Policy"
         description="Privacy Policy for The Financial Architects. Learn how we collect, use, and protect your personal information."
         canonical={`${siteConfig.url}/privacy-policy`}
       />

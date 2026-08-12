@@ -209,7 +209,7 @@ const HomeownerProtection = () => {
   return (
     <>
       <SEOHead
-        title="A Quick Financial Checkup for Homeowners | The Financial Architects"
+        title="A Quick Financial Checkup for Homeowners"
         description="A short, no-cost review with a licensed TFA advisor — trust, mortgage protection, and retirement planning for homeowners."
         noIndex
       />

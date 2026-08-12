@@ -91,7 +91,7 @@ const AdvisorAnitaVega = () => {
   return (
     <>
       <SEOHead
-        title="Anita Vega | Financial Strategist | The Financial Architects"
+        title="Anita Vega | Financial Strategist"
         description="Meet Anita Vega, Financial Strategist at The Financial Architects — 25+ years helping families and business owners with retirement, life insurance, estate planning, and legacy strategies in Long Beach, CA."
         keywords="Anita Vega, financial strategist, retirement planning, life insurance, estate planning, Long Beach, The Financial Architects"
         canonical={`${siteConfig.url}/advisors/anita-vega`}
