@@ -28,8 +28,8 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <SEOHead
-        title="Expert Financial Planning & Wealth Management"
-        description="Trusted financial advisors providing retirement planning, life insurance, estate planning, and wealth management. 300+ licensed advisors across 32 locations in California, Arizona, and Oregon."
+        title="Wealth Planning & Advisory"
+        description="Retirement, life insurance, and estate planning from 300+ licensed advisors across 33 offices in California, Arizona, and Oregon."
         canonical={siteConfig.url}
         keywords="financial planning, retirement planning, life insurance, estate planning, wealth management, financial advisors, Chino Hills, California, Arizona, Oregon"
       />
