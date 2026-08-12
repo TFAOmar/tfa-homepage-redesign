@@ -124,7 +124,7 @@ const AdvisorFabianSerrano = () => {
   return (
     <>
       <SEOHead
-        title="Fabian Serrano | Financial Strategist | The Financial Architects"
+        title="Fabian Serrano"
         description="Meet Fabian Serrano, a 20-year insurance industry veteran specializing in life insurance, annuities, retirement planning, and estate planning in Rancho Cucamonga, CA."
         keywords="Fabian Serrano, financial strategist, life insurance, annuities, retirement planning, estate planning, Rancho Cucamonga CA"
         canonical={`${siteConfig.url}/advisors/fabian-serrano`}

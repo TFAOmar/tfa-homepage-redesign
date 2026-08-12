@@ -66,7 +66,7 @@ const AdvisorBraihyraMedellin = () => {
   return (
     <>
       <SEOHead
-        title="Braihyra Medellin - Financial Strategist & Licensed Realtor"
+        title="Braihyra Medellin"
         description="Work with Braihyra Medellin, a Financial Strategist and Licensed Realtor in Whittier, CA. Expert guidance in living trusts, asset protection, real estate solutions, and wealth preservation."
         canonical={`${siteConfig.url}/advisors/braihyra-medellin`}
         ogType="profile"

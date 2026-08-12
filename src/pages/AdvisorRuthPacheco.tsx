@@ -102,7 +102,7 @@ const AdvisorRuthPacheco = () => {
   return (
     <>
       <SEOHead
-        title="Ruth Pacheco - Reverse Mortgage Specialist"
+        title="Ruth Pacheco"
         description="Work with Ruth Pacheco, Reverse Mortgage Certified specialist in Upland, CA. 36+ years of lending experience helping seniors access home equity."
         canonical={`${siteConfig.url}/advisors/ruth-pacheco`}
         ogType="profile"

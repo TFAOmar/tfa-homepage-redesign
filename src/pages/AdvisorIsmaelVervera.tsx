@@ -99,7 +99,7 @@ const AdvisorIsmaelVervera = () => {
   return (
     <>
       <SEOHead
-        title="Ismael Ververa - Financial Strategist"
+        title="Ismael Ververa"
         description="Work with Ismael Ververa, a Financial Strategist in Claremont, CA. 30 years in law enforcement and 25 years as a licensed realtor. Expert in real estate and retirement planning."
         canonical={`${siteConfig.url}/advisors/ismael-ververa`}
         ogType="profile"

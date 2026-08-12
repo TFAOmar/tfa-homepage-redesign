@@ -57,7 +57,7 @@ export default function VanessaCardenasAndCompany() {
   return (
     <>
       <SEOHead
-        title="Living Trust Services with Vanessa Sanchez | Cardenas & Company"
+        title="Living Trust Services with Vanessa Sanchez"
         description="Protect your family's future with a Living Trust. Cardenas & Company Real Estate Group and The Financial Architects have partnered to bring you expert estate planning with Vanessa Sanchez."
         canonical={`${siteConfig.url}/advisors/vanessa-sanchez/cardenas-and-company`}
         keywords="living trust, estate planning, avoid probate, Vanessa Sanchez, Cardenas and Company, real estate, asset protection"

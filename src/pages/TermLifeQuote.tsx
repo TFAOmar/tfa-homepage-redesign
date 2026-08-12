@@ -72,7 +72,7 @@ const TermLifeQuote = () => {
   return (
     <>
       <SEOHead
-        title="Term Life Quote Tool | TFA Financial Advisors"
+        title="Term Life Quote Tool"
         description="Get instant Term Life insurance quotes for your clients. Simple, fast quoting tool for TFA agents."
         keywords="term life insurance, life insurance quote, term life quote, agent tools"
       />

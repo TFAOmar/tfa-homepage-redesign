@@ -69,7 +69,7 @@ const AdvisorVanessaSanchez = () => {
   return (
     <>
       <SEOHead
-        title="Vanessa Sanchez - Financial Strategist"
+        title="Vanessa Sanchez"
         description="Work with Vanessa Sanchez, a Financial Strategist in Chino Hills, CA. Expert guidance in retirement planning, estate planning, tax strategies, and living trusts."
         canonical={`${siteConfig.url}/advisors/vanessa-sanchez`}
         ogType="profile"

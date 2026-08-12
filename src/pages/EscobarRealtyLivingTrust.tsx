@@ -75,7 +75,7 @@ export default function EscobarRealtyLivingTrust() {
   return (
     <>
       <SEOHead
-        title="Living Trust Services | Escobar Realty Group × The Financial Architects"
+        title="Living Trust Services with Escobar Realty"
         description="Protect your home and legacy with a Living Trust. Escobar Realty Group and The Financial Architects have partnered to bring you expert estate planning services."
         canonical={`${siteConfig.url}/advisors/manuel-soto/escobar-realty`}
         keywords="living trust, estate planning, avoid probate, Escobar Realty Group, real estate, asset protection, Upland CA"

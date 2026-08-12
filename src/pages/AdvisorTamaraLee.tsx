@@ -100,7 +100,7 @@ const AdvisorTamaraLee = () => {
   return (
     <>
       <SEOHead
-        title="Tamara Lee - Finance and Business Strategist"
+        title="Tamara Lee"
         description="Work with Tamara Lee, Finance and Business Strategist in Claremont, CA. Over 11 years of experience helping individuals and businesses with retirement strategies, financial planning, and healthcare solutions."
         canonical={`${siteConfig.url}/advisors/tamara-lee`}
         ogType="profile"

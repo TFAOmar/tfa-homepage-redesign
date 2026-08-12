@@ -100,7 +100,7 @@ const AdvisorConradOlvera = () => {
   return (
     <>
       <SEOHead
-        title="Conrad Olvera - Mortgage and Financial Specialist | The Financial Architects"
+        title="Conrad Olvera"
         description="Work with Conrad Olvera, Mortgage and Financial Specialist in Chino Hills, CA. Exceptional mortgage and financial services with personalized solutions since 2014."
         canonical={`${siteConfig.url}/advisors/conrad-olvera`}
         ogType="profile"

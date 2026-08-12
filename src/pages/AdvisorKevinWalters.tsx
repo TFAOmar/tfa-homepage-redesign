@@ -101,7 +101,7 @@ const AdvisorKevinWalters = () => {
   return (
     <>
       <SEOHead
-        title="Kevin B. Walters Sr. - Insurance Agent & LEAP Practitioner | The Financial Architects"
+        title="Kevin B. Walters Sr."
         description="Work with Kevin B. Walters Sr., a 30-year insurance veteran and LEAP practitioner in Troy, OH. Specializing in life insurance, retirement planning, estate planning, and the Lifetime Economic Acceleration Process."
         canonical={`${siteConfig.url}/advisors/kevin-walters`}
         ogType="profile"

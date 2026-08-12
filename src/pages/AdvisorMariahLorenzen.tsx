@@ -81,7 +81,7 @@ const AdvisorMariahLorenzen = () => {
   return (
     <>
       <SEOHead
-        title="Mariah Lorenzen - Kai-Zen Retirement Specialist"
+        title="Mariah Lorenzen"
         description="Work with Mariah Lorenzen, Head of Franchise Operations and Kai-Zen specialist in Chino Hills, CA. Expert in leveraged retirement strategies and mortgage financing."
         canonical={`${siteConfig.url}/advisors/mariah-lorenzen`}
         ogType="profile"

@@ -49,7 +49,7 @@ function Content() {
 export default function SmsTerms() {
   return (
     <LanguageProvider>
-      <SEOHead title="SMS Terms — The Financial Architects" description="SMS messaging terms and opt-in/opt-out information." />
+      <SEOHead title="SMS Terms" description="SMS messaging terms and opt-in/opt-out information." />
       <LandingHeader />
       <div className="fixed top-3 right-3 z-[60]">
         <LangToggle />

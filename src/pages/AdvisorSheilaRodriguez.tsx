@@ -120,7 +120,7 @@ const AdvisorSheilaRodriguez = () => {
   return (
     <>
       <SEOHead
-        title="Sheila Rodriguez | Financial Strategist | The Financial Architects"
+        title="Sheila Rodriguez"
         description="Meet Sheila Rodriguez, a seasoned financial strategist with 25+ years of experience in investment management, retirement planning, tax optimization, and estate planning in Overland Park, KS."
         keywords="Sheila Rodriguez, financial strategist, investment management, retirement planning, tax optimization, estate planning, Overland Park KS, Kansas financial advisor"
         canonical={`${siteConfig.url}/advisors/sheila-rodriguez`}

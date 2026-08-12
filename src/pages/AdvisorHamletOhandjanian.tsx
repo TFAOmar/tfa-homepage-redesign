@@ -98,7 +98,7 @@ const AdvisorHamletOhandjanian = () => {
   return (
     <>
       <SEOHead
-        title="Hamlet Ohandjanian - Managing Partner"
+        title="Hamlet Ohandjanian"
         description="Work with Hamlet Ohandjanian, Managing Partner at TFA in Chatsworth, CA. 28 years of leadership experience, committed to integrity and transparent financial planning."
         canonical={`${siteConfig.url}/advisors/hamlet-ohandjanian`}
         ogType="profile"

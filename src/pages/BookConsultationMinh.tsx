@@ -101,7 +101,7 @@ const BookConsultationMinh = () => {
   return (
     <>
       <SEOHead
-        title="Book Your Consultation — Referred by Minh"
+        title="Book Your Consultation"
         description="Schedule your complimentary 30-minute financial consultation. Referred through Minh at The Financial Architects."
         noIndex
       />

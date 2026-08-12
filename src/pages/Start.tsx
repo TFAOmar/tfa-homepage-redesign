@@ -110,7 +110,7 @@ function StartInner() {
 
   return (
     <>
-      <SEOHead title="Start — The Financial Architects" description="Two minutes. No spam. A real person follows up." />
+      <SEOHead title="Start" description="Two minutes. No spam. A real person follows up." />
       <LandingHeader ctaHref={ctaHref} rightSlot={<LangToggle />} />
       <main className="min-h-screen bg-gradient-to-b from-white via-gray-50/50 to-white py-10 px-4">
         <div className="container mx-auto max-w-4xl">

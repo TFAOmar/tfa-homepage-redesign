@@ -47,8 +47,8 @@ export const siteConfig = {
 };
 
 export const defaultMeta = {
-  title: "The Financial Architects | Expert Financial Planning & Wealth Management",
-  description: "Trusted financial advisors providing retirement planning, life insurance, estate planning, and wealth management services. Serving families across California, Arizona, and Oregon.",
+  title: "The Financial Architects | Wealth Planning",
+  description: "Trusted advisors for retirement, life insurance, estate planning, and wealth management across California, Arizona, and Oregon.",
   keywords: "financial planning, retirement planning, life insurance, estate planning, wealth management, financial advisors, Chino Hills, California",
   ogImage: "https://tfawealthplanning.com/og-image.jpg",
   twitterHandle: "@tfainsurance",

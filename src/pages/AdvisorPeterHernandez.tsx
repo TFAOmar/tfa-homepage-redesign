@@ -99,7 +99,7 @@ const AdvisorPeterHernandez = () => {
   return (
     <>
       <SEOHead 
-        title="Peter Hernandez - Financial Strategist"
+        title="Peter Hernandez"
         description="Work with Peter Hernandez, a Financial Strategist with 25+ years of experience at Wells Fargo, Ford Motor Credit, and Sun West Mortgage. Expert in tax strategies, retirement planning, and life insurance."
         keywords="Peter Hernandez, financial strategist, tax strategies, retirement planning, life insurance, Whittier California"
         canonical="https://tfainsuranceadvisors.com/advisors/peter-hernandez"

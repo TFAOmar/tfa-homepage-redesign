@@ -23,6 +23,7 @@ const blogPosts: Record<string, any> = {
   "complete-guide-retirement-planning": {
     title: "The Complete Guide to Retirement Planning",
     date: "March 15, 2025",
+    isoDate: "2025-03-15",
     category: "Retirement",
     readTime: "8 min read",
     bannerImage: retirementImage,
@@ -30,6 +31,7 @@ const blogPosts: Record<string, any> = {
   "estate-planning-essentials": {
     title: "Estate Planning Essentials: Protecting Your Legacy",
     date: "March 10, 2025",
+    isoDate: "2025-03-10",
     category: "Estate Planning",
     readTime: "6 min read",
     bannerImage: estateImage,
@@ -37,6 +39,7 @@ const blogPosts: Record<string, any> = {
   "smart-tax-strategies": {
     title: "Smart Tax Strategies for Wealth Preservation",
     date: "March 5, 2025",
+    isoDate: "2025-03-05",
     category: "Tax Planning",
     readTime: "7 min read",
     bannerImage: taxImage,
@@ -44,6 +47,7 @@ const blogPosts: Record<string, any> = {
   "investment-fundamentals": {
     title: "Investment Fundamentals: Building a Solid Portfolio",
     date: "February 28, 2025",
+    isoDate: "2025-02-28",
     category: "Investing",
     readTime: "10 min read",
     bannerImage: investmentImage,
@@ -77,8 +81,8 @@ const BlogPost = () => {
             post.title,
             `Expert insights on ${post.category.toLowerCase()} from The Financial Architects.`,
             `${siteConfig.url}/blog/${slug}`,
-            post.date,
-            post.date,
+            post.isoDate,
+            post.isoDate,
             post.bannerImage
           ),
           generateBreadcrumbSchema([

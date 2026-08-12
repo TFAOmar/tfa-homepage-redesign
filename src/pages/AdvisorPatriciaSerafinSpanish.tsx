@@ -106,7 +106,7 @@ const AdvisorPatriciaSerafinSpanish = () => {
   return (
     <>
       <SEOHead
-        title="Patricia Serafin - Estratega Financiera | Asesora Financiera Bilingüe en Chino Hills"
+        title="Patricia Serafin"
         description="Patricia Serafin es una estratega financiera bilingüe en Chino Hills, CA. Especializada en planificación de retiro, planificación patrimonial y seguros de vida para familias hispanas. Agende su consulta gratuita."
         keywords="asesora financiera bilingüe, planificación financiera en español, seguros de vida hispanos, planificación retiro español, asesora financiera Chino Hills, Patricia Serafin"
         canonical={`${siteConfig.url}/advisors/patricia-serafin/es`}

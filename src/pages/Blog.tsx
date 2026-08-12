@@ -14,7 +14,7 @@ const Blog = () => {
     <>
       <SEOHead
         title="Financial Planning Blog"
-        description="Expert insights on retirement planning, investment strategies, tax optimization, and wealth management. Stay informed with The Financial Architects' latest articles."
+        description="Expert insights on retirement planning, investment strategies, tax optimization, and wealth management."
         canonical={`${siteConfig.url}/blog`}
         keywords="financial planning blog, retirement planning articles, investment advice, tax planning tips, wealth management insights, financial education"
       />

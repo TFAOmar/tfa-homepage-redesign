@@ -53,7 +53,7 @@ const SalesContest = () => {
   return (
     <>
       <SEOHead
-        title="Architect Your Best Month | April 2026 Sales Contest"
+        title="Architect Your Best Month"
         description="TFA April 2026 Sales Competition — Top producers earn an exclusive dinner and mastermind session with TFA leadership."
         noIndex={true}
       />

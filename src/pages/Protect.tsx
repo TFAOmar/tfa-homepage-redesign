@@ -124,7 +124,7 @@ const Protect = () => {
   return (
     <>
       <SEOHead
-        title="Mortgage Protection — Straight Answers | The Financial Architects"
+        title="Mortgage Protection"
         description="Referred here for straight answers on protecting your mortgage? Get an instant quote and speak with a licensed advisor at The Financial Architects."
         canonical="/protect"
       />

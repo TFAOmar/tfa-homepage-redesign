@@ -5,7 +5,7 @@ const TermsOfService = () => {
   return (
     <>
       <SEOHead
-        title="Terms of Service | The Financial Architects"
+        title="Terms of Service"
         description="Terms and Conditions for The Financial Architects, including SMS program details, opt-out instructions, and service terms."
         canonical={`${siteConfig.url}/terms-of-service`}
       />

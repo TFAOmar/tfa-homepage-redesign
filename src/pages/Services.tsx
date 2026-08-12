@@ -14,8 +14,8 @@ const Services = () => {
   return (
     <>
       <SEOHead
-        title="Financial Services Overview"
-        description="Explore The Financial Architects' comprehensive financial services including retirement planning, life insurance, estate planning, tax strategies, and investment management."
+        title="Financial Services"
+        description="Explore our services: retirement planning, life insurance, estate planning, tax strategies, and investment management."
         canonical={`${siteConfig.url}/services`}
         keywords="financial services, retirement planning services, life insurance, estate planning, tax planning, investment management, annuities, 401k rollover"
       />

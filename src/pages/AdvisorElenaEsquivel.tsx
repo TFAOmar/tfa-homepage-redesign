@@ -125,7 +125,7 @@ const AdvisorElenaEsquivel = () => {
   return (
     <>
       <SEOHead
-        title="Elena Esquivel | Financial Strategist & Estate Planning Consultant | The Financial Architects"
+        title="Elena Esquivel"
         description="Meet Elena Esquivel, a bilingual Financial Strategist with 15+ years of experience specializing in Medicare planning, retirement strategies, 401(k) guidance, and estate planning."
         keywords="Elena Esquivel, financial strategist, Medicare planning, retirement planning, 401k rollover, estate planning, bilingual, Chino Hills CA"
         canonical={`${siteConfig.url}/advisors/elena-esquivel`}

@@ -10,7 +10,7 @@ import AdminTopBar from "@/components/admin/AdminTopBar";
 export default function AdminIntakeTemplates() {
   return (
     <>
-      <SEOHead title="Messaging — Managed in GoHighLevel" description="Messaging automation is owned by GHL." noIndex />
+      <SEOHead title="Messaging" description="Messaging automation is owned by GHL." noIndex />
       <AdminTopBar />
       <main className="min-h-screen bg-gray-50 py-10 px-4">
         <div className="container mx-auto max-w-3xl">
