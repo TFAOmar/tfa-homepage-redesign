@@ -41,6 +41,7 @@ const ADVISOR_EMAIL_ALLOWLIST = new Set<string>([
   "info@tfainsuranceadvisors.com",
   "omar@tfainsuranceadvisors.com",
   "clients@tfainsuranceadvisors.com",
+  "manuel@tfainsuranceadvisors.com",
 ]);
 const DEFAULT_ADVISOR_EMAIL = "info@tfainsuranceadvisors.com";
 
@@ -466,12 +467,19 @@ ul{margin:4px 0 0 18px;padding:0;font-size:13px;}
       console.error("Confirmation email error (non-blocking):", confirmErr);
     }
 
-    // Send notification to advisor + admin
-    console.log("Sending notification to:", advisorEmail, "CC: clients@tfainsuranceadvisors.com");
+    // Send notification to advisor + admin/leads inbox
+    const ccList = Array.from(
+      new Set(
+        ["clients@tfainsuranceadvisors.com", "leads@tfainsuranceadvisors.com"].filter(
+          (e) => e !== advisorEmail,
+        ),
+      ),
+    );
+    console.log("Sending notification to:", advisorEmail, "CC:", ccList);
     const { error: emailError } = await resend.emails.send({
       from: "TFA Life Insurance <noreply@tfainsuranceadvisors.com>",
       to: [advisorEmail],
-      cc: ["clients@tfainsuranceadvisors.com"],
+      cc: ccList,
       subject: `New Pre-Qualification - ${rawApplicantName} (Advisor: ${advisorName})`,
       html: emailHtml,
     });
