@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Phone, MapPin, Clock, ShieldCheck, Globe, Trophy, ClipboardList, PenTool, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/seo/SEOHead";
+import JsonLd from "@/components/seo/JsonLd";
+import { generateLocalBusinessSchema } from "@/lib/seo/schemas";
 import BreaContactForm from "@/components/brea/BreaContactForm";
 
 // REPLACE: Update phone number if different for Brea office
@@ -37,10 +39,17 @@ const Brea = () => {
   return (
     <>
       <SEOHead
-        title="Free Financial Consultation in Brea, CA"
+        title="Financial Advisors in Brea, CA"
         description="Book a free 30-minute strategy session with a licensed financial architect at our Brea, CA office. Protect your family and build real wealth."
-        canonical="https://tfawealthplanning.lovable.app/brea"
+        canonical="https://tfawealthplanning.com/brea"
         noIndex
+      />
+      <JsonLd
+        data={generateLocalBusinessSchema(
+          "Brea Office",
+          { street: "200 W Imperial Hwy", city: "Brea", state: "CA", zip: "92821" },
+          PHONE_NUMBER
+        )}
       />
 
       {/* Sticky Header */}
