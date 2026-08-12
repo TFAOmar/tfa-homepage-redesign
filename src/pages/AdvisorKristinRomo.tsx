@@ -126,7 +126,7 @@ const AdvisorKristinRomo = () => {
   return (
     <>
       <SEOHead
-        title="Kristin Romo | Director of Agent Development & Operations"
+        title="Kristin Romo"
         description="Meet Kristin Romo, Director of Agent Development & Operations at The Financial Architects — leading agent training, leadership development, and operational excellence across California."
         keywords="Kristin Romo, agent development, operations, leadership development, agent training, The Financial Architects"
         canonical={`${siteConfig.url}/advisors/kristin-romo`}

@@ -101,7 +101,7 @@ const AdvisorMichelleMartinez = () => {
   return (
     <>
       <SEOHead
-        title="Michelle Martinez - Lead Agent | Mortgage Protection & Legacy Planning"
+        title="Michelle Martinez - Lead Agent"
         description="Work with Michelle Martinez, a bilingual Lead Agent with 13+ years of experience in insurance and financial protection in Los Angeles, CA. Specializing in mortgage protection, whole life insurance, tax-free retirement strategies, and living benefits."
         canonical={`${siteConfig.url}/advisors/michelle-martinez`}
         ogType="profile"

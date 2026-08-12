@@ -107,7 +107,7 @@ const AdvisorAileenGutierrez = () => {
   return (
     <>
       <SEOHead
-        title="Aileen Gutierrez — Bilingual Financial Strategist | Mortgage Protection & Living Trusts"
+        title="Aileen Gutierrez"
         description="Work with Aileen Gutierrez, a bilingual financial strategist in Covina, CA, helping California families protect their home and legacy with mortgage protection, living trusts, and life insurance."
         canonical={`${siteConfig.url}/advisors/aileen-gutierrez`}
         ogType="profile"

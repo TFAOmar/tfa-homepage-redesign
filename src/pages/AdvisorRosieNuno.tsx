@@ -125,7 +125,7 @@ const AdvisorRosieNuno = () => {
   return (
     <>
       <SEOHead
-        title="Rosie Nuño | Financial & Estate Planning Strategist"
+        title="Rosie Nuño"
         description="Meet Rosie Nuño, a Financial & Estate Planning Strategist specializing in living trusts, asset protection, legacy planning, and integrated financial strategies in Brea, CA."
         keywords="Rosie Nuño, estate planning strategist, living trusts, asset protection, legacy planning, financial planning, Brea CA"
         canonical={`${siteConfig.url}/advisors/rosie-nuno`}

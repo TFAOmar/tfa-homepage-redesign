@@ -100,7 +100,7 @@ const AdvisorIsraelCastaneda = () => {
   return (
     <>
       <SEOHead
-        title="Israel Castaneda - Partner at The Financial Architects"
+        title="Israel Castaneda, Partner"
         description="Work with Israel Castaneda, bilingual Financial Partner serving Fresno and Central California. Expert in life insurance, retirement planning, and estate protection."
         canonical={`${siteConfig.url}/advisors/israel-castaneda`}
         ogType="profile"

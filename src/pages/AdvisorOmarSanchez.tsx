@@ -111,7 +111,7 @@ const AdvisorOmarSanchez = () => {
   return (
     <>
       <SEOHead
-        title="Omar Sanchez - COO & Managing Partner of The Financial Architects"
+        title="Omar Sanchez, COO & Managing Partner"
         description="Work with Omar Sanchez, Chief Operating Officer & Managing Partner of The Financial Architects in Chino Hills, CA. Leading national expansion and advisor development."
         canonical={`${siteConfig.url}/advisors/omar-sanchez`}
         ogType="profile"

@@ -85,7 +85,7 @@ const AdvisorAnthonyBottley = () => {
   return (
     <>
       <SEOHead
-        title="Anthony Bottley - Health Insurance Specialist"
+        title="Anthony Bottley"
         description="Work with Anthony Bottley, founder of American Way Health in West Palm Beach, FL. Expert guidance in health insurance, Medicare, and business health solutions."
         canonical={`${siteConfig.url}/advisors/anthony-bottley`}
         ogType="profile"

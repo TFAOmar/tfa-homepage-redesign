@@ -123,7 +123,7 @@ const AdvisorCaylaDeePorter = () => {
   return (
     <>
       <SEOHead
-        title="Cayla Dee Porter | Certified Financial Fiduciary®"
+        title="Cayla Dee Porter"
         description="Meet Cayla Dee Porter, a Certified Financial Fiduciary® specializing in Indexed Strategies, Retirement Planning, Tax Strategies, Financial Literacy, Estate Planning, and Business Planning in Brea, CA."
         keywords="Cayla Dee Porter, certified financial fiduciary, indexed strategies, retirement planning, tax strategies, financial literacy, estate planning, business planning, Brea CA"
         canonical={`${siteConfig.url}/advisors/cayla-dee-porter`}

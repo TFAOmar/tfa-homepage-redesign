@@ -88,7 +88,7 @@ const AdvisorPatriciaSerafin = () => {
   return (
     <>
       <SEOHead
-        title="Patricia Serafin - Financial Strategist | Bilingual Financial Advisor"
+        title="Patricia Serafin"
         description="Work with Patricia Serafin, a bilingual Financial Strategist in Chino Hills, CA. Expert guidance in retirement planning, estate planning, and family financial security. Se habla español."
         canonical={`${siteConfig.url}/advisors/patricia-serafin`}
         ogType="profile"

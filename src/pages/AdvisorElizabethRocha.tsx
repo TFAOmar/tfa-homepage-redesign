@@ -135,7 +135,7 @@ const AdvisorElizabethRocha = () => {
   return (
     <>
       <SEOHead
-        title="Elizabeth Rocha | Financial Strategist"
+        title="Elizabeth Rocha"
         description="Meet Elizabeth Rocha, a licensed Financial Strategist serving Southern California families with family financial planning, income protection, mortgage protection, retirement strategies, and life insurance."
         keywords="Elizabeth Rocha, financial strategist, life insurance, mortgage protection, income protection, retirement planning, Southern California, The Financial Architects"
         canonical={`${siteConfig.url}/advisors/elizabeth-rocha`}

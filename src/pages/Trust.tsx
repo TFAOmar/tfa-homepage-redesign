@@ -119,7 +119,7 @@ const Trust = () => {
   return (
     <>
       <SEOHead
-        title="Living Trust — Skip Probate, Keep It Simple"
+        title="Living Trust"
         description="Referred here for straight answers on setting up a living trust? Talk with a specialist at The Financial Architects and protect your family without the court."
         canonical="/trust"
       />

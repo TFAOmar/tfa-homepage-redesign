@@ -80,7 +80,7 @@ const GeneralSponsorshipSuccess = () => {
   return (
     <>
       <SEOHead
-        title="Thank You - TFA Sponsorship Inquiry Received"
+        title="Thank You"
         description="Your sponsorship inquiry has been received. Our team will contact you within 24 hours."
         noIndex={true}
       />

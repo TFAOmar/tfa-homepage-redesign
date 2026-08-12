@@ -127,7 +127,7 @@ const MinhNewsletter = () => {
   return (
     <>
       <SEOHead
-        title="Newsletter Readers — Straight Answers"
+        title="Newsletter Readers"
         description="Referred by our newsletter partner? Get straight answers on living trusts, term life insurance, and retirement planning from a licensed advisor at The Financial Architects."
         canonical="/whatsamortgage-newsletter"
       />

@@ -22,7 +22,7 @@ const Annuities = () => {
   return (
     <>
       <SEOHead
-        title="Annuities - Guaranteed Lifetime Income"
+        title="Annuities"
         description="Discover annuities for guaranteed lifetime income, principal protection, and peace of mind in retirement. Fixed, indexed, and income annuities available."
         canonical={`${siteConfig.url}/services/annuities`}
         keywords="annuities, guaranteed income, fixed annuity, indexed annuity, retirement income, lifetime income"

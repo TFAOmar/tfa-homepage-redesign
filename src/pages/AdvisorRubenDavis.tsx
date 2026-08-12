@@ -101,7 +101,7 @@ const AdvisorRubenDavis = () => {
   return (
     <>
       <SEOHead
-        title="Ruben Davis - Franchise Owner | Income Protection & Retirement Planning"
+        title="Ruben Davis - Franchise Owner"
         description="Work with Ruben Davis, a U.S. Air Force Reservist and 17-year veteran of real estate & mortgage financing in Los Angeles, CA. Specializing in retirement planning, mortgage protection, life insurance with living benefits, and annuities."
         canonical={`${siteConfig.url}/advisors/ruben-davis`}
         ogType="profile"

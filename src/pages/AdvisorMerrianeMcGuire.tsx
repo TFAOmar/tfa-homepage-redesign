@@ -108,7 +108,7 @@ const AdvisorMerrianeMcGuire = () => {
   return (
     <>
       <SEOHead
-        title="Merriane McGuire | Financial Strategist"
+        title="Merriane McGuire"
         description="Meet Merriane McGuire, a Financial Strategist specializing in retirement planning, life insurance, and estate planning. Serving Riverside and Chino Hills, CA."
         keywords="Merriane McGuire, financial strategist, retirement planning, life insurance, estate planning, living trusts, Riverside CA, Chino Hills CA"
         canonical={`${siteConfig.url}/advisors/merriane-mcguire`}

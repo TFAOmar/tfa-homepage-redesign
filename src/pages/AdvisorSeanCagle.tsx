@@ -100,7 +100,7 @@ const AdvisorSeanCagle = () => {
   return (
     <>
       <SEOHead
-        title="Sean Cagle - Senior Estate Planning Partner"
+        title="Sean Cagle"
         description="Work with Sean Cagle, Senior Estate Planning Partner at TFA in Arizona. Expert in living trusts, estate planning, and legacy preservation strategies."
         canonical={`${siteConfig.url}/advisors/sean-cagle`}
         ogType="profile"

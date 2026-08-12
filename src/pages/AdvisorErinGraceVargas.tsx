@@ -87,7 +87,7 @@ const AdvisorErinGraceVargas = () => {
   return (
     <>
       <SEOHead
-        title="Erin Grace Vargas - Real Estate Professional & Financial Strategist"
+        title="Erin Grace Vargas"
         description="Work with Erin Grace Vargas, a Real Estate Professional and Financial Strategist with 19 years of experience. Expert guidance in real estate, asset protection, living trusts, and wealth preservation in Southern California."
         canonical={`${siteConfig.url}/advisors/erin-grace-vargas`}
         ogType="profile"

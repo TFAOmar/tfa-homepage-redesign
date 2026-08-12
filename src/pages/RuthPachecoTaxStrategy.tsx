@@ -125,7 +125,7 @@ const RuthPachecoTaxStrategy = () => {
   return (
     <>
       <SEOHead
-        title="Tax-Advantaged Financial Solutions | Ruth Pacheco & Luis Pacheco CPA"
+        title="Tax-Advantaged Financial Solutions"
         description="Reduce your tax burden with coordinated financial planning. Ruth Pacheco (Financial Strategist) and Luis Pacheco (CPA) offer living trusts, tax-deferred retirement, and wealth preservation strategies."
         canonical={`${siteConfig.url}/advisors/ruth-pacheco/tax-strategy`}
         ogType="website"

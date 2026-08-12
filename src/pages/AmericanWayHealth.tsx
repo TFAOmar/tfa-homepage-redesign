@@ -106,7 +106,7 @@ const AmericanWayHealth = () => {
   return (
     <>
       <SEOHead
-        title="American Way Health - Health Insurance Solutions"
+        title="American Way Health"
         description="Affordable health coverage for individuals, families, and businesses. Expert guidance on individual, group, and Medicare health insurance options. Call 888-669-7553 for a free quote."
         canonical={`${siteConfig.url}/american-way-health`}
         keywords="health insurance, individual health plans, family health insurance, group health, Medicare, ACA marketplace"

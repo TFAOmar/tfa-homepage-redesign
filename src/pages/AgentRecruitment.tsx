@@ -85,7 +85,7 @@ const AgentRecruitment = () => {
   return (
     <>
       <SEOHead
-        title="Agent Recruitment - Become a Licensed Financial Advisor"
+        title="Agent Recruitment"
         description="Build a career helping families achieve financial security. No experience required. Comprehensive training and unlimited income potential."
         canonical={`${siteConfig.url}/agent-recruitment`}
         keywords="financial advisor jobs, insurance agent career, TFA agent recruitment"

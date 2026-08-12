@@ -179,7 +179,7 @@ const KaiZen = () => {
   return (
     <>
       <SEOHead
-        title="Kai-Zen Strategy - Leveraged Retirement Planning"
+        title="Kai-Zen Strategy"
         description="Kai-Zen uses smart leverage to help you accumulate significantly more for retirement with life insurance protection. No credit check, no personal guarantee."
         canonical={`${siteConfig.url}/services/kai-zen`}
         keywords="Kai-Zen, leveraged life insurance, retirement strategy, tax-free retirement, indexed life insurance"

@@ -109,7 +109,7 @@ const AdvisorJosephGuzman = () => {
   return (
     <>
       <SEOHead
-        title="Joseph Guzman | Financial Strategist"
+        title="Joseph Guzman"
         description="Meet Joseph Guzman, a Financial Strategist with 8 years of experience specializing in Real Estate, Living Trusts, and Mortgage Protection in Chino Hills, CA."
         keywords="Joseph Guzman, financial strategist, real estate, living trusts, mortgage protection, life insurance, Chino Hills CA"
         canonical={`${siteConfig.url}/advisors/joseph-guzman`}

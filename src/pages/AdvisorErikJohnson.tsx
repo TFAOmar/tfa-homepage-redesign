@@ -102,7 +102,7 @@ const AdvisorErikJohnson = () => {
   return (
     <>
       <SEOHead 
-        title="Erik Johnson - Licensed Fiduciary & Independent Financial Advisor"
+        title="Erik Johnson"
         description="Work with Erik Johnson, a licensed fiduciary specializing in investment risk management, retirement income planning, and tax minimization. Based in La Mirada, CA."
         keywords="Erik Johnson, fiduciary, financial advisor, investment management, retirement planning, tax minimization, federal employee benefits, La Mirada California"
         canonical="https://tfawealthplanning.com/advisors/erik-johnson"

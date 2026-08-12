@@ -101,7 +101,7 @@ const AdvisorManuelSoto = () => {
   return (
     <>
       <SEOHead
-        title="Manuel Soto - Founder & CEO of The Financial Architects"
+        title="Manuel Soto, Founder & CEO"
         description="Work with Manuel Soto, Founder & CEO of The Financial Architects in Chino Hills, CA. Needs-based planning that rejects one-size-fits-all approaches."
         canonical={`${siteConfig.url}/advisors/manuel-soto`}
         ogType="profile"
