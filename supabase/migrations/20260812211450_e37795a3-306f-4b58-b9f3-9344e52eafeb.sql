@@ -1,0 +1,1 @@
+DELETE FROM public.prequalification_applications WHERE applicant_email = 'qa-test@example.com';
