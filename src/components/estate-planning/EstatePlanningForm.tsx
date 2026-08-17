@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 type Lang = "en" | "es";
 
@@ -80,6 +81,7 @@ interface EstatePlanningFormProps {
 
 export const EstatePlanningForm = ({ lang = "en" }: EstatePlanningFormProps) => {
   const t = COPY[lang];
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
@@ -130,6 +132,8 @@ export const EstatePlanningForm = ({ lang = "en" }: EstatePlanningFormProps) => 
 
       const response = await submitForm({
         form_name: lang === "es" ? "Estate Planning Inquiry (Spanish)" : "Estate Planning Inquiry",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -319,6 +323,8 @@ export const EstatePlanningForm = ({ lang = "en" }: EstatePlanningFormProps) => 
           placeholder={t.additionalPh}
         />
       </div>
+
+      <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} lang={lang} variant="dark" />
 
       <Button
         type="submit"
