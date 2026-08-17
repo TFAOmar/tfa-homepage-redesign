@@ -63,6 +63,8 @@ const BusinessContactForm = () => {
             ...formData,
             firstName: formData.fullName.split(" ")[0],
             advisorName: "The Recinos Team",
+            smsConsent,
+            smsConsentTextVersion: smsConsent ? SMS_CONSENT_TEXT_VERSION : null,
           },
           additionalRecipients: [
             "rrecinos@tfainsuranceadvisors.com",
