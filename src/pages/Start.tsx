@@ -52,6 +52,8 @@ function StartInner() {
           services,
           primary_service: services[0],
           answers,
+          sms_consent: c.sms_consent,
+          sms_consent_text_version: c.sms_consent_text_version,
           first_name: c.first_name,
           last_name: c.last_name,
           phone_e164: c.phone_e164,
@@ -65,6 +67,7 @@ function StartInner() {
           consent: {
             tcpa: c.consent_tcpa,
             referrer_inclusion: c.consent_referrer,
+            sms: c.sms_consent,
             version: CONSENT_VERSION,
           },
           page_url: window.location.href,
