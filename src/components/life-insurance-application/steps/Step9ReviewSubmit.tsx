@@ -1,3 +1,4 @@
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 import { UseFormReturn } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -357,6 +358,14 @@ const Step9ReviewSubmit = ({ form, formData, onEditStep, completedSteps }: Step9
                 </div>
               </FormItem>
             )}
+          />
+
+          <SmsConsentCheckbox
+            checked={form.watch("smsConsent") === true}
+            onChange={(v) => {
+              form.setValue("smsConsent", v);
+              form.setValue("smsConsentTextVersion", v ? SMS_CONSENT_TEXT_VERSION : "");
+            }}
           />
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">

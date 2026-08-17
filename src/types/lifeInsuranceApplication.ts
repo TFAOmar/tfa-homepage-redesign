@@ -464,6 +464,8 @@ export const step9Schema = z.object({
   }),
   electronicSignature: z.string().min(2, "Electronic signature is required"),
   signatureDate: z.string().min(1, "Signature date is required"),
+  smsConsent: z.boolean().optional(),
+  smsConsentTextVersion: z.string().optional(),
 });
 
 export type Step9Data = z.infer<typeof step9Schema>;
