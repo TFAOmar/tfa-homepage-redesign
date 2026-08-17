@@ -79,6 +79,8 @@ const formSubmitSchema = z.object({
   honeypot: z.string().optional(), // Bot trap - should be empty
   interest_category: z.string().max(100).optional(), // For Pipedrive lead labels
   partner_slug: z.string().max(100).optional(), // Referral partner slug for attribution
+  sms_consent: z.boolean().optional(), // Optional TCPA/10DLC SMS opt-in
+  sms_consent_text_version: z.string().max(100).optional(),
 });
 
 type FormSubmitData = z.infer<typeof formSubmitSchema>;
@@ -1148,6 +1150,9 @@ serve(async (req) => {
         advisor_slug: formData.advisor_slug || advisor?.slug,
         advisor: advisor?.name || null,
         partner_slug: formData.partner_slug || null,
+        sms_consent: formData.sms_consent === true,
+        sms_consent_at: formData.sms_consent === true ? new Date().toISOString() : null,
+        sms_consent_text_version: formData.sms_consent === true ? (formData.sms_consent_text_version || null) : null,
         routing_result: routingResult,
         pipedrive_owner_id: ownerId,
         notes: formData.notes,
