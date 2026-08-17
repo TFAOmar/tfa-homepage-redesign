@@ -121,6 +121,8 @@ export interface AgentOnboardingFormData {
 
   // 15. Certification
   certifyTrue: boolean;
+  smsConsent?: boolean;
+  smsConsentTextVersion?: string;
   signature: string;
   printedName: string;
   signNpn: string;
@@ -209,6 +211,8 @@ export const initialFormData: AgentOnboardingFormData = {
   ein: "",
   authConsent: false,
   certifyTrue: false,
+  smsConsent: false,
+  smsConsentTextVersion: "",
   signature: "",
   printedName: "",
   signNpn: "",
