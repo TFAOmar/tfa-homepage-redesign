@@ -1370,6 +1370,8 @@ serve(async (req) => {
     
     console.log(`[Success] Form: ${formData.form_name}, Email: ${formData.email}, Routed: ${routedToName}, Emails: team=${emailResult.teamSent} advisor=${emailResult.advisorSent} partner=${emailResult.partnerSent}, Pipedrive: ${isAdvisorSpecificForm ? "skipped" : (leadId ? "created" : "failed")}`);
     
+    if (isFormPost) return redirectResponse("/thank-you");
+
     return new Response(
       JSON.stringify({
         ok: true,
