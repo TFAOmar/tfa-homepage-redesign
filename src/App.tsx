@@ -250,6 +250,9 @@ const AppLayout = () => {
           <Route path="/tools/final-expense-quote" element={<FinalExpenseQuote />} />
           <Route path="/tools/term-life-quote" element={<TermLifeQuote />} />
           <Route path="/business-insurance" element={<BusinessInsurance />} />
+          {/* /book-consultation is served as static, crawler-readable HTML from
+              public/book-consultation/index.html. The rich React page lives at /schedule. */}
+          <Route path="/schedule" element={<BookConsultation />} />
           <Route path="/book-consultation" element={<BookConsultation />} />
           <Route path="/book/minh" element={<BookConsultationMinh />} />
           <Route path="/thank-you" element={<ThankYou />} />
