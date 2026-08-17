@@ -1,3 +1,4 @@
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Check, Loader2, Plus, Trash2 } from "lucide-react";
@@ -15,7 +16,6 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { generateUUID } from "@/lib/uuid";
 import ConditionalYesNo from "./ConditionalYesNo";
 import {
-import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
   OmarReferralFormData,
   defaultOmarReferralData,
   OMAR_REFERRAL_STEPS,
