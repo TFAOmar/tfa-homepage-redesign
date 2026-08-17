@@ -35,7 +35,6 @@ function Content() {
             ? "Responde ALTO o STOP en cualquier momento para dejar de recibir mensajes. Responde AYUDA o HELP para ayuda."
             : "Reply STOP or ALTO at any time to unsubscribe. Reply HELP for help."}
         </p>
-        <h2>{es ? "Descargo" : "Disclaimer"}</h2>
         <h2>{es ? "Compartir Datos" : "Data Sharing"}</h2>
         <p>
           {es
