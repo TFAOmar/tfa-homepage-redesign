@@ -32,7 +32,6 @@ import { cn } from "@/lib/utils";
 import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const useShakeOnError = (form: ReturnType<typeof useForm<EricaLivingTrustFormData>>) => {
-  const [smsConsent, setSmsConsent] = useState(false);
   const [shakingFields, setShakingFields] = useState<Set<string>>(new Set());
 
   const triggerShake = useCallback((fieldName: string) => {
@@ -105,6 +104,7 @@ const getSelectClasses = (hasError: boolean, hasSuccess: boolean, isShaking: boo
 
 export default function EricaValenzuelaLivingTrustForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
   const { fireConfetti } = useConfetti();

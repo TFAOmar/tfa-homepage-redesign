@@ -33,7 +33,6 @@ import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms
 
 // Custom hook for shake animation on validation errors
 const useShakeOnError = (form: ReturnType<typeof useForm<LivingTrustFormData>>) => {
-  const [smsConsent, setSmsConsent] = useState(false);
   const [shakingFields, setShakingFields] = useState<Set<string>>(new Set());
 
   const triggerShake = useCallback((fieldName: string) => {
@@ -107,6 +106,7 @@ const getSelectClasses = (hasError: boolean, hasSuccess: boolean, isShaking: boo
 
 export default function LivingTrustForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
   const { fireConfetti } = useConfetti();
