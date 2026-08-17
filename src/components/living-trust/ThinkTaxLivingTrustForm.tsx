@@ -450,7 +450,7 @@ export default function ThinkTaxLivingTrustForm() {
             </FormItem>
           )} />
 
-          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
           <Button
             type="submit"

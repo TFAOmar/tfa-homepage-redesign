@@ -425,7 +425,7 @@ export default function EscobarLivingTrustForm() {
             </FormItem>
           )} />
 
-          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
           <Button
             type="submit"
