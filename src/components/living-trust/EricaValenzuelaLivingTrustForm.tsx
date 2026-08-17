@@ -29,8 +29,10 @@ import { Loader2, CheckCircle, CheckCircle2 } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { cn } from "@/lib/utils";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const useShakeOnError = (form: ReturnType<typeof useForm<EricaLivingTrustFormData>>) => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [shakingFields, setShakingFields] = useState<Set<string>>(new Set());
 
   const triggerShake = useCallback((fieldName: string) => {
@@ -142,6 +144,8 @@ export default function EricaValenzuelaLivingTrustForm() {
 
       const response = await submitForm({
         form_name: "Living Trust Inquiry - Erica Valenzuela",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -494,6 +498,8 @@ export default function EricaValenzuelaLivingTrustForm() {
               </FormItem>
             )}
           />
+
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
           <Button
             type="submit"

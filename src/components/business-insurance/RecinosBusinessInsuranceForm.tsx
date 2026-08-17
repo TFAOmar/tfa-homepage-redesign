@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useHoneypot } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const formSchema = z.object({
   businessName: z.string().min(1, "Business name is required").max(100),
@@ -50,6 +51,7 @@ const coverageOptions = [
 ];
 
 const RecinosBusinessInsuranceForm = () => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
@@ -104,6 +106,8 @@ const RecinosBusinessInsuranceForm = () => {
 
       const response = await submitForm({
         form_name: "Business Insurance Inquiry",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: firstName,
         last_name: lastName,
         email: data.email,
@@ -270,6 +274,8 @@ const RecinosBusinessInsuranceForm = () => {
           className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-accent focus:ring-accent/20"
         />
       </div>
+
+      <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
       <Button
         type="submit"

@@ -26,6 +26,7 @@ import {
 import { Send, Building2, Phone, Mail } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const franchiseFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -96,6 +97,7 @@ const timelineLabels: Record<string, string> = {
 };
 
 const FranchiseApplicationForm = () => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
@@ -153,6 +155,8 @@ const FranchiseApplicationForm = () => {
 
       const response = await submitForm({
         form_name: "Franchise Application",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -584,6 +588,8 @@ const FranchiseApplicationForm = () => {
 
                 {/* Submit Button */}
                 <div className="pt-4">
+                  <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
+
                   <Button
                     type="submit"
                     disabled={isSubmitting}

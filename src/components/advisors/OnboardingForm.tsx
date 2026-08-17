@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { uploadAdvisorPhoto, validateImageFile, StorageError } from "@/lib/storage";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const licenseOptions = ["Life", "Health", "Series 6", "Series 7", "Series 63", "Series 65", "Series 66"];
 const specialtyOptions = [
@@ -85,6 +86,7 @@ const OnboardingForm = () => {
   const submitAdvisor = useSubmitAdvisor();
   const { data: settings } = useAdminSettings();
   const adminApprovalEnabled = settings?.admin_approval_enabled ?? false;
+  const [smsConsent, setSmsConsent] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -178,6 +180,8 @@ const OnboardingForm = () => {
 
       await submitForm({
         form_name: "Advisor Onboarding",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: firstName,
         last_name: lastName,
         email: data.email,
@@ -610,6 +614,8 @@ const OnboardingForm = () => {
 
             {/* Submit Button */}
             <div className="flex justify-center">
+              <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
+
               <Button
                 type="submit"
                 disabled={submitAdvisor.isPending || isUploading}

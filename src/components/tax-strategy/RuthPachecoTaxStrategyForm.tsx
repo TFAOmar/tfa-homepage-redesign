@@ -9,6 +9,7 @@ import { Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { submitForm } from "@/lib/formSubmit";
 import { useHoneypot } from "@/hooks/useHoneypot";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const interestOptions = [
   { id: "living-trust", label: "Living Trust / Estate Planning" },
@@ -19,6 +20,7 @@ const interestOptions = [
 ];
 
 const RuthPachecoTaxStrategyForm = () => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -69,6 +71,8 @@ const RuthPachecoTaxStrategyForm = () => {
 
       const result = await submitForm({
         form_name: "Tax Strategy Inquiry",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
@@ -200,6 +204,8 @@ const RuthPachecoTaxStrategyForm = () => {
               rows={4}
             />
           </div>
+
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
           <Button 
             type="submit" 

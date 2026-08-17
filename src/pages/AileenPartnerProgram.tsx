@@ -17,6 +17,7 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import aileenImg from "@/assets/advisors/aileen-gutierrez.jpg";
 import tfaLogo from "@/assets/tfa-logo.png";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const P = {
   navy: "#1B2A4A",
@@ -61,6 +62,7 @@ const AileenPartnerProgram = () => {
   const { honeypotProps, isBot } = useHoneypot();
   const formRef = useRef<HTMLDivElement>(null);
 
+  const [smsConsent, setSmsConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
@@ -94,6 +96,8 @@ const AileenPartnerProgram = () => {
       const last = rest.join(" ") || "—";
       const result = await submitForm({
         form_name: "aileen-partner-program",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: first,
         last_name: last,
         email: parsed.data.email,
@@ -487,6 +491,8 @@ const AileenPartnerProgram = () => {
                       <Input id="heardFrom" value={form.heardFrom}
                         onChange={(e) => setForm({ ...form, heardFrom: e.target.value })} />
                     </div>
+
+                    <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
                     <Button
                       type="submit"

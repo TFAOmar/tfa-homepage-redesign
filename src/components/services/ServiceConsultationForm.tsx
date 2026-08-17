@@ -24,6 +24,7 @@ import { toast } from "@/hooks/use-toast";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { Loader2 } from "lucide-react";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(50),
@@ -49,6 +50,7 @@ export const ServiceConsultationForm = ({
   serviceName,
   ctaText = "Get Your Free Consultation",
 }: ServiceConsultationFormProps) => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
@@ -88,6 +90,8 @@ export const ServiceConsultationForm = ({
 
       const response = await submitForm({
         form_name: serviceName,
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -299,6 +303,8 @@ export const ServiceConsultationForm = ({
             </FormItem>
           )}
         />
+
+        <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
         <Button
           type="submit"

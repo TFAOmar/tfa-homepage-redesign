@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { Phone } from "lucide-react";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const PHONE_NUMBER = "321-356-3450";
 const PHONE_TEL = "tel:+13213563450";
@@ -84,6 +85,7 @@ const months = [
 ];
 
 const AmericanWayHealthForm = () => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
@@ -132,6 +134,8 @@ const AmericanWayHealthForm = () => {
 
       const response = await submitForm({
         form_name: "Health Insurance Inquiry",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -465,6 +469,8 @@ const AmericanWayHealthForm = () => {
             </FormItem>
           )}
         />
+
+        <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
         <Button
           type="submit"

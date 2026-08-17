@@ -8,6 +8,7 @@ import { Calendar, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 interface ScheduleModalProps {
   open: boolean;
@@ -30,6 +31,7 @@ const ScheduleModal = ({
   advisorSlug,
   skipPipedrive,
 }: ScheduleModalProps) => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -92,6 +94,8 @@ const ScheduleModal = ({
       } else {
         const response = await submitForm({
           form_name: "Schedule Request",
+          sms_consent: smsConsent,
+          sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
           first_name: formData.firstName,
           last_name: formData.lastName,
           email: formData.email,
@@ -228,6 +232,8 @@ const ScheduleModal = ({
               className="resize-none"
             />
           </div>
+
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
           <Button
             type="submit" 

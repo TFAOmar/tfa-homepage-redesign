@@ -12,6 +12,7 @@ import { SEOHead } from "@/components/seo";
 import { submitForm } from "@/lib/formSubmit";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import LandingHeader from "@/components/LandingHeader";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const PARTNER_SLUG = "minh";
 const PARTNER_DISPLAY = "Minh";
@@ -42,6 +43,7 @@ type FormData = z.infer<typeof schema>;
 const BookConsultationMinh = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { honeypotProps, honeypotValue, isBot } = useHoneypot();
 
@@ -69,6 +71,8 @@ const BookConsultationMinh = () => {
 
       const result = await submitForm({
         form_name: "Book Consultation — Minh",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -221,6 +225,8 @@ const BookConsultationMinh = () => {
                           />
                           {errors.interestCategories && <p className="text-red-500 text-sm mt-2 text-left">{errors.interestCategories.message}</p>}
                         </div>
+
+                        <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
                         <Button
                           type="submit"

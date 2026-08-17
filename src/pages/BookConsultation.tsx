@@ -21,6 +21,7 @@ import lincolnLogo from "@/assets/carriers/lincoln.png";
 import massmutualLogo from "@/assets/carriers/massmutual.png";
 import principalLogo from "@/assets/carriers/principal.png";
 import nationalLifeLogo from "@/assets/carriers/national-life.png";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const interestOptions = [
   { value: "retirement", label: "Retirement Planning" },
@@ -53,6 +54,7 @@ type ConsultationFormData = z.infer<typeof consultationSchema>;
 const BookConsultation = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { honeypotProps, honeypotValue, isBot } = useHoneypot();
 
@@ -92,6 +94,8 @@ const BookConsultation = () => {
       
       const result = await submitForm({
         form_name: "Book Consultation",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -334,6 +338,8 @@ const BookConsultation = () => {
                           />
                           {errors.interestCategories && <p className="text-red-500 text-sm mt-2 text-left">{errors.interestCategories.message}</p>}
                         </div>
+
+                        <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
                         <Button 
                           type="submit"

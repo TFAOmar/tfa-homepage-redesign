@@ -4,6 +4,7 @@ import { toast } from "@/hooks/use-toast";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import KaiZenFormFields, { KaiZenFormData } from "./KaiZenFormFields";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const ageRangeLabels: Record<string, string> = {
   "30-40": "30-40",
@@ -20,6 +21,7 @@ const incomeLabels: Record<string, string> = {
 };
 
 const MariahKaiZenForm = () => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<KaiZenFormData>({
     firstName: "",
@@ -61,6 +63,8 @@ const MariahKaiZenForm = () => {
 
       const response = await submitForm({
         form_name: "Kai-Zen Inquiry - Mariah",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
@@ -114,6 +118,8 @@ const MariahKaiZenForm = () => {
         onInputChange={handleInputChange}
         onSelectChange={handleSelectChange}
       />
+
+      <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
       <Button
         type="submit"
