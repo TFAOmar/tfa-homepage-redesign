@@ -35,8 +35,14 @@ const SmsConsentCheckbox = ({
   className = "",
 }: SmsConsentCheckboxProps) => {
   const es = lang === "es";
-  const textClass = variant === "dark" ? "text-white/70" : "text-muted-foreground";
-  const linkClass = variant === "dark" ? "text-white underline" : "text-primary underline";
+  const isDark = variant === "dark";
+  const textClass = isDark ? "text-white/90" : "text-foreground/80";
+  const linkClass = isDark
+    ? "text-white font-medium underline underline-offset-2"
+    : "text-primary font-medium underline underline-offset-2";
+  const boxClass = isDark
+    ? "border-white/50 bg-transparent accent-accent"
+    : "border-input bg-background accent-primary";
 
   return (
     <div className={`flex items-start gap-3 ${className}`}>
@@ -46,9 +52,9 @@ const SmsConsentCheckbox = ({
         name="sms_consent"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-1 h-4 w-4 shrink-0 rounded border-input accent-current cursor-pointer"
+        className={`mt-1 h-4 w-4 shrink-0 rounded border cursor-pointer ${boxClass}`}
       />
-      <label htmlFor={id} className={`text-xs leading-relaxed cursor-pointer ${textClass}`}>
+      <label htmlFor={id} className={`text-sm leading-relaxed cursor-pointer ${textClass}`}>
         {es ? SMS_CONSENT_TEXT_ES : SMS_CONSENT_TEXT_EN}{" "}
         <Link to="/privacy-policy" className={linkClass}>
           {es ? "Política de Privacidad" : "Privacy Policy"}
@@ -58,7 +64,7 @@ const SmsConsentCheckbox = ({
           {es ? "Términos SMS" : "SMS Terms"}
         </Link>
         {". "}
-        <span className="opacity-80">
+        <span className="opacity-90">
           {es ? "(Opcional)" : "(Optional — not required to submit.)"}
         </span>
       </label>
