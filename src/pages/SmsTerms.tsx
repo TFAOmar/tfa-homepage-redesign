@@ -36,6 +36,13 @@ function Content() {
             : "Reply STOP or ALTO at any time to unsubscribe. Reply HELP for help."}
         </p>
         <h2>{es ? "Descargo" : "Disclaimer"}</h2>
+        <h2>{es ? "Compartir Datos" : "Data Sharing"}</h2>
+        <p>
+          {es
+            ? "No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. All information-sharing categories above exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties."
+            : "No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. All information-sharing categories above exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties."}
+        </p>
+        <h2>{es ? "Descargo" : "Disclaimer"}</h2>
         <p>
           {es
             ? "Los operadores no son responsables por mensajes retrasados o no entregados."
