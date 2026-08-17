@@ -185,7 +185,7 @@ const BookConsultation = () => {
       <SEOHead
         title="Book a Free Consultation"
         description="Schedule your complimentary 30-minute financial consultation with The Financial Architects. Get expert guidance on retirement, insurance, investments, and tax strategies."
-        canonical={`${siteConfig.url}/book-consultation`}
+        canonical={`${siteConfig.url}/schedule`}
         keywords="free financial consultation, financial advisor appointment, retirement planning consultation, schedule financial advisor, complimentary consultation"
       />
       <JsonLd
@@ -193,11 +193,11 @@ const BookConsultation = () => {
           generateWebPageSchema(
             "Book a Consultation | The Financial Architects",
             "Schedule your free 30-minute financial planning consultation.",
-            `${siteConfig.url}/book-consultation`
+            `${siteConfig.url}/schedule`
           ),
           generateBreadcrumbSchema([
             { name: "Home", url: siteConfig.url },
-            { name: "Book Consultation", url: `${siteConfig.url}/book-consultation` },
+            { name: "Book Consultation", url: `${siteConfig.url}/schedule` },
           ]),
         ]}
       />

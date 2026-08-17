@@ -71,6 +71,12 @@ const PrivacyPolicy = () => {
             </section>
 
             <section>
+              <p className="border-l-4 border-accent pl-4 font-semibold text-foreground leading-relaxed">
+                No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. All information-sharing categories above exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.
+              </p>
+            </section>
+
+            <section>
               <h2 className="text-2xl font-bold text-foreground">5. SMS/Text Messaging</h2>
               <p className="text-muted-foreground leading-relaxed">
                 If you opt in to receive SMS communications from The Financial Architects, we may send you appointment reminders, service updates, and responses to your inquiries. Message and data rates may apply. You may opt out at any time by texting <strong>STOP</strong> to any message. Text <strong>HELP</strong> for assistance. Your phone number and SMS consent will not be shared with third parties for marketing purposes.

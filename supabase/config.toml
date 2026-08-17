@@ -20,3 +20,8 @@ verify_jwt = false
 
 [functions.send-test-email]
 verify_jwt = false
+
+# Public: receives the no-JavaScript form POST from the static /book-consultation page.
+# Protected by honeypot + IP rate limiting inside the function.
+[functions.pipedrive-submit]
+verify_jwt = false

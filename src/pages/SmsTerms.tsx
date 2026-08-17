@@ -35,6 +35,12 @@ function Content() {
             ? "Responde ALTO o STOP en cualquier momento para dejar de recibir mensajes. Responde AYUDA o HELP para ayuda."
             : "Reply STOP or ALTO at any time to unsubscribe. Reply HELP for help."}
         </p>
+        <h2>{es ? "Compartir Datos" : "Data Sharing"}</h2>
+        <p>
+          {es
+            ? "No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. All information-sharing categories above exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties."
+            : "No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. All information-sharing categories above exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties."}
+        </p>
         <h2>{es ? "Descargo" : "Disclaimer"}</h2>
         <p>
           {es

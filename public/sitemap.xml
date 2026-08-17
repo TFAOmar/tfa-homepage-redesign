@@ -34,6 +34,12 @@
 
   <!-- Book Consultation -->
   <url>
+    <loc>https://tfawealthplanning.com/schedule</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://tfawealthplanning.com/book-consultation</loc>
     <lastmod>2025-01-01</lastmod>
     <changefreq>monthly</changefreq>

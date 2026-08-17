@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Book a Free Consultation | The Financial Architects</title>
+<meta name="description" content="Schedule your complimentary 30-minute financial consultation with The Financial Architects. Retirement, life insurance, investments, tax and estate strategies." />
+<link rel="canonical" href="https://tfawealthplanning.com/book-consultation" />
+<meta property="og:title" content="Book a Free Consultation | The Financial Architects" />
+<meta property="og:description" content="Schedule your complimentary 30-minute financial consultation with The Financial Architects." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<style>
+  :root { --navy:#1E3A5F; --gold:#C9A84C; --bg:#030406; --text:#e8eaf0; --muted:#98a1b5; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family: Inter, system-ui, -apple-system, sans-serif; line-height:1.65; }
+  a { color: var(--gold); }
+  header.site { border-bottom:1px solid var(--navy); padding:16px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+  header.site a.brand { text-decoration:none; font-weight:700; color:#fff; }
+  main { max-width: 860px; margin:0 auto; padding: 40px 20px 72px; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color:#fff; margin:0 0 8px; }
+  h2 { font-size:1.25rem; color:var(--gold); margin-top:2.25rem; }
+  p.lead { color:var(--muted); font-size:1.05rem; margin-top:0; }
+  form { background:#0a0f18; border:1px solid var(--navy); border-radius:14px; padding:24px; margin-top:28px; }
+  .row { display:flex; gap:16px; flex-wrap:wrap; }
+  .field { flex:1 1 240px; margin-bottom:16px; }
+  label { display:block; font-weight:600; font-size:.92rem; margin-bottom:6px; color:#fff; }
+  input[type=text], input[type=email], input[type=tel], textarea {
+    width:100%; padding:11px 12px; border-radius:8px; border:1px solid #2a3550;
+    background:#050a12; color:#fff; font-size:1rem; font-family:inherit;
+  }
+  input:focus, textarea:focus { outline:2px solid var(--gold); outline-offset:1px; }
+  fieldset { border:1px solid #2a3550; border-radius:10px; padding:14px 16px; margin:0 0 18px; }
+  legend { font-weight:600; color:#fff; padding:0 6px; }
+  .interests { display:flex; flex-wrap:wrap; gap:10px 22px; }
+  .interests label { font-weight:400; color:var(--text); display:flex; align-items:center; gap:8px; margin:0; }
+  .consent { display:flex; gap:12px; align-items:flex-start; border-top:1px solid #2a3550; padding-top:16px; margin-top:4px; }
+  .consent label { font-weight:400; color:#dfe4ee; font-size:.92rem; line-height:1.6; }
+  button { margin-top:20px; width:100%; background:var(--gold); color:#1a1405; border:0; border-radius:10px; padding:15px 20px; font-size:1.05rem; font-weight:700; cursor:pointer; }
+  .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  .steps { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); padding:0; list-style:none; }
+  .steps li { border:1px solid var(--navy); border-radius:12px; padding:16px; }
+  .steps strong { color:var(--gold); display:block; }
+  footer { border-top:1px solid var(--navy); padding:24px 20px; text-align:center; color:var(--muted); font-size:.9rem; }
+  small.note { color:var(--muted); display:block; margin-top:12px; }
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebPage","name":"Book a Consultation | The Financial Architects","description":"Schedule your free 30-minute financial planning consultation.","url":"https://tfawealthplanning.com/book-consultation"},
+{"@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Home","item":"https://tfawealthplanning.com"},
+{"@type":"ListItem","position":2,"name":"Book Consultation","item":"https://tfawealthplanning.com/book-consultation"}]}]}
+</script>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="/">The Financial Architects</a>
+  <a href="tel:+18883505396">(888) 350-5396</a>
+</header>
+<main>
+  <h1>Book a Free Consultation</h1>
+  <p class="lead">Complimentary 30-minute conversation with a licensed advisor. No cost, no obligation.</p>
+
+  <form id="consultation-form" method="POST" action="https://cstkeblqqyjwlrbppucu.supabase.co/functions/v1/pipedrive-submit" accept-charset="UTF-8">
+    <input type="hidden" name="form_name" value="Book Consultation" />
+    <input type="hidden" name="sms_consent_text_version" value="sms-consent-v1-2026-08" />
+    <input type="hidden" name="source_url" value="https://tfawealthplanning.com/book-consultation" />
+    <div class="hp" aria-hidden="true">
+      <label for="company_website">Company website</label>
+      <input type="text" id="company_website" name="honeypot" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="first_name">First name</label>
+        <input type="text" id="first_name" name="first_name" required maxlength="50" autocomplete="given-name" />
+      </div>
+      <div class="field">
+        <label for="last_name">Last name</label>
+        <input type="text" id="last_name" name="last_name" required maxlength="50" autocomplete="family-name" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" required maxlength="255" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" name="phone" required maxlength="20" autocomplete="tel" placeholder="(888) 350-5396" />
+      </div>
+    </div>
+
+    <fieldset>
+      <legend>What would you like to discuss?</legend>
+      <div class="interests">
+        <label><input type="checkbox" name="interest" value="Retirement Planning" /> Retirement Planning</label>
+        <label><input type="checkbox" name="interest" value="Life Insurance" /> Life Insurance</label>
+        <label><input type="checkbox" name="interest" value="Investment Management" /> Investment Management</label>
+        <label><input type="checkbox" name="interest" value="Tax Strategy" /> Tax Strategy</label>
+        <label><input type="checkbox" name="interest" value="Estate Planning" /> Estate Planning</label>
+        <label><input type="checkbox" name="interest" value="Business Insurance" /> Business Insurance</label>
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="notes">Anything we should know? (optional)</label>
+      <textarea id="notes" name="notes" rows="3" maxlength="1000"></textarea>
+    </div>
+
+    <div class="consent">
+      <input type="checkbox" id="sms_consent" name="sms_consent" value="yes" />
+      <label for="sms_consent">By checking this box, you agree to receive SMS text messages from The Financial Architects at the number provided, including appointment reminders and service updates. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help. <a href="/privacy-policy">Privacy Policy</a> &middot; <a href="/sms-terms">SMS Terms</a>. (Optional &mdash; not required to submit.)</label>
+    </div>
+
+    <button type="submit">Request My Free Consultation</button>
+    <small class="note">Submitting this form does not create an advisory relationship. We&rsquo;ll reach out within one business day.</small>
+  </form>
+
+  <h2>What happens next</h2>
+  <ol class="steps">
+    <li><strong>01 Discovery Call</strong> Share your goals and current situation in a confidential 30-minute conversation.</li>
+    <li><strong>02 Custom Analysis</strong> We analyze your situation and build strategies tailored to you.</li>
+    <li><strong>03 Action Plan</strong> You receive a clear roadmap with specific recommendations.</li>
+  </ol>
+
+  <p style="margin-top:28px;"><a href="/schedule">See how our consultation process works</a> &middot; <a href="tel:+18883505396">Or call (888) 350-5396</a></p>
+</main>
+<footer>
+  <p>&copy; 2026 The Financial Architects. <a href="/privacy-policy">Privacy Policy</a> &middot; <a href="/sms-terms">SMS Terms</a> &middot; <a href="/terms-of-service">Terms</a></p>
+</footer>
+<script>
+// Progressive enhancement only: the plain form POST above works without JavaScript.
+(function () {
+  var form = document.getElementById('consultation-form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = form.querySelector('button[type=submit]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
+    var fd = new FormData(form);
+    var interests = fd.getAll('interest');
+    var payload = {
+      form_name: 'Book Consultation',
+      first_name: (fd.get('first_name') || '').trim(),
+      last_name: (fd.get('last_name') || '').trim(),
+      email: (fd.get('email') || '').trim(),
+      phone: (fd.get('phone') || '').trim(),
+      notes: (interests.length ? 'Interests: ' + interests.join(', ') + '\n' : '') + ((fd.get('notes') || '').trim() ? (fd.get('notes') + '\n') : '') + 'Source: book-consultation-static',
+      tags: interests.concat(['Consultation Request']),
+      interest_category: interests.join(','),
+      honeypot: (fd.get('honeypot') || ''),
+      sms_consent: !!fd.get('sms_consent'),
+      sms_consent_text_version: fd.get('sms_consent_text_version') || '',
+      source_url: window.location.href
+    };
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (res) {
+        if (res && res.ok) { window.location.href = '/thank-you'; return; }
+        throw new Error('failed');
+      })
+      .catch(function () {
+        // Fall back to the non-JS path
+        form.submit();
+      });
+  });
+})();
+</script>
+</body>
+</html>
