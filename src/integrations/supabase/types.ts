@@ -317,6 +317,9 @@ export type Database = {
           pipedrive_person_id: number | null
           preferred_language: string | null
           routing_result: string | null
+          sms_consent: boolean
+          sms_consent_at: string | null
+          sms_consent_text_version: string | null
           source: string | null
           source_url: string | null
           state_location: string | null
@@ -351,6 +354,9 @@ export type Database = {
           pipedrive_person_id?: number | null
           preferred_language?: string | null
           routing_result?: string | null
+          sms_consent?: boolean
+          sms_consent_at?: string | null
+          sms_consent_text_version?: string | null
           source?: string | null
           source_url?: string | null
           state_location?: string | null
@@ -385,6 +391,9 @@ export type Database = {
           pipedrive_person_id?: number | null
           preferred_language?: string | null
           routing_result?: string | null
+          sms_consent?: boolean
+          sms_consent_at?: string | null
+          sms_consent_text_version?: string | null
           source?: string | null
           source_url?: string | null
           state_location?: string | null
@@ -890,6 +899,9 @@ export type Database = {
           phone: string | null
           referral_source: string | null
           resume_token: string
+          sms_consent: boolean
+          sms_consent_at: string | null
+          sms_consent_text_version: string | null
           state: string | null
           status: string
           updated_at: string
@@ -916,6 +928,9 @@ export type Database = {
           phone?: string | null
           referral_source?: string | null
           resume_token?: string
+          sms_consent?: boolean
+          sms_consent_at?: string | null
+          sms_consent_text_version?: string | null
           state?: string | null
           status?: string
           updated_at?: string
@@ -942,6 +957,9 @@ export type Database = {
           phone?: string | null
           referral_source?: string | null
           resume_token?: string
+          sms_consent?: boolean
+          sms_consent_at?: string | null
+          sms_consent_text_version?: string | null
           state?: string | null
           status?: string
           updated_at?: string
@@ -1511,6 +1529,9 @@ export type Database = {
           pipedrive_person_id: number | null
           preferred_language: string | null
           routing_result: string | null
+          sms_consent: boolean
+          sms_consent_at: string | null
+          sms_consent_text_version: string | null
           source: string | null
           source_url: string | null
           state_location: string | null
@@ -1549,6 +1570,9 @@ export type Database = {
           phone: string | null
           referral_source: string | null
           resume_token: string
+          sms_consent: boolean
+          sms_consent_at: string | null
+          sms_consent_text_version: string | null
           state: string | null
           status: string
           updated_at: string
@@ -1800,6 +1824,9 @@ export type Database = {
           pipedrive_person_id: number | null
           preferred_language: string | null
           routing_result: string | null
+          sms_consent: boolean
+          sms_consent_at: string | null
+          sms_consent_text_version: string | null
           source: string | null
           source_url: string | null
           state_location: string | null
@@ -1838,6 +1865,9 @@ export type Database = {
           phone: string | null
           referral_source: string | null
           resume_token: string
+          sms_consent: boolean
+          sms_consent_at: string | null
+          sms_consent_text_version: string | null
           state: string | null
           status: string
           updated_at: string
