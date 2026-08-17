@@ -1006,12 +1006,59 @@ serve(async (req) => {
   }
   
   try {
-    const body = await req.json();
+    // Support both JSON (app forms) and urlencoded/multipart posts from the
+    // static, no-JavaScript consultation page at /book-consultation.
+    const contentType = req.headers.get("content-type") || "";
+    const isFormPost =
+      contentType.includes("application/x-www-form-urlencoded") ||
+      contentType.includes("multipart/form-data");
+
+    const originHeader = req.headers.get("origin") || req.headers.get("referer") || "https://tfawealthplanning.com";
+    let siteOrigin = "https://tfawealthplanning.com";
+    try {
+      siteOrigin = new URL(originHeader).origin;
+    } catch (_e) { /* keep default */ }
+
+    const redirectResponse = (path: string) =>
+      new Response(null, { status: 303, headers: { ...corsHeaders, Location: `${siteOrigin}${path}` } });
+
+    let body: unknown;
+    if (isFormPost) {
+      const fd = await req.formData();
+      const str = (k: string) => {
+        const v = fd.get(k);
+        return typeof v === "string" ? v.trim() : "";
+      };
+      const interests = fd.getAll("interest").filter((v) => typeof v === "string") as string[];
+      const notesLines = [
+        interests.length > 0 ? `Interests: ${interests.join(", ")}` : null,
+        str("notes") || null,
+        "Source: book-consultation-static",
+      ].filter(Boolean);
+
+      body = {
+        form_name: str("form_name") || "Book Consultation",
+        first_name: str("first_name"),
+        last_name: str("last_name"),
+        email: str("email"),
+        phone: str("phone") || undefined,
+        notes: notesLines.join("\n"),
+        tags: [...interests, "Consultation Request"].slice(0, 20),
+        interest_category: interests.join(",") || undefined,
+        honeypot: str("honeypot") || undefined,
+        sms_consent: str("sms_consent") !== "",
+        sms_consent_text_version: str("sms_consent_text_version") || undefined,
+        source_url: str("source_url") || `${siteOrigin}/book-consultation`,
+      };
+    } else {
+      body = await req.json();
+    }
     
     // Validate input
     const parseResult = formSubmitSchema.safeParse(body);
     if (!parseResult.success) {
       console.warn("[Validation Error]", parseResult.error.flatten());
+      if (isFormPost) return redirectResponse("/book-consultation?error=invalid");
       return new Response(
         JSON.stringify({ ok: false, error: "Invalid form data", details: parseResult.error.flatten() }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -1023,6 +1070,7 @@ serve(async (req) => {
     // Bot detection - honeypot field
     if (formData.honeypot && formData.honeypot.length > 0) {
       console.warn(`[Bot Detected] Honeypot filled by IP: ${clientIP}`);
+      if (isFormPost) return redirectResponse("/thank-you");
       // Return success to not alert bots
       return new Response(
         JSON.stringify({ ok: true, routed_to: "Manny Soto", pipedrive_ids: {} }),
@@ -1047,6 +1095,7 @@ serve(async (req) => {
     
     if (recentSubmission?.id) {
       console.log(`[Idempotency] Duplicate detected for ${formData.email}, returning existing`);
+      if (isFormPost) return redirectResponse("/thank-you");
       return new Response(
         JSON.stringify({
           ok: true,
