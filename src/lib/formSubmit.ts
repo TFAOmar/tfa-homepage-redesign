@@ -23,6 +23,8 @@ export interface FormSubmitPayload {
   honeypot?: string; // Bot trap field - should always be empty
   interest_category?: string; // For Pipedrive lead labels
   partner_slug?: string; // Attributes the submission to a referral partner account
+  sms_consent?: boolean; // Optional TCPA/10DLC SMS opt-in
+  sms_consent_text_version?: string; // Version of the disclosure wording shown
 }
 
 export interface FormSubmitResponse {

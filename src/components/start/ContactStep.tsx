@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLang } from "@/lib/i18n/LanguageContext";
 import type { Lang } from "@/lib/i18n/dictionary";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 export interface ContactData {
   first_name: string;
@@ -15,6 +16,8 @@ export interface ContactData {
   language: Lang;
   consent_tcpa: boolean;
   consent_referrer: boolean;
+  sms_consent: boolean;
+  sms_consent_text_version?: string;
 }
 
 interface Props {
@@ -42,6 +45,7 @@ export default function ContactStep({ referrerName, onSubmit, onPartial, submitt
   const [prefLang, setPrefLang] = useState<Lang>(lang);
   const [consentTcpa, setConsentTcpa] = useState(false);
   const [consentReferrer, setConsentReferrer] = useState(false);
+  const [smsConsent, setSmsConsent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   // honeypot
   const [hp, setHp] = useState("");
@@ -73,6 +77,8 @@ export default function ContactStep({ referrerName, onSubmit, onPartial, submitt
       language: prefLang,
       consent_tcpa: consentTcpa,
       consent_referrer: consentReferrer,
+      sms_consent: smsConsent,
+      sms_consent_text_version: smsConsent ? SMS_CONSENT_TEXT_VERSION : undefined,
     });
   };
 
@@ -183,6 +189,7 @@ export default function ContactStep({ referrerName, onSubmit, onPartial, submitt
             </label>
           )}
           {errors.consent && <p className="text-xs text-destructive">{errors.consent}</p>}
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} lang={prefLang} />
         </div>
 
         <Button className="btn-primary-cta w-full py-6 text-base" onClick={submit} disabled={submitting}>

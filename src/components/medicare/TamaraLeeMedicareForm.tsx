@@ -15,6 +15,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -53,6 +54,7 @@ const interestOptions = [
 ];
 
 export function TamaraLeeMedicareForm() {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
@@ -91,6 +93,8 @@ export function TamaraLeeMedicareForm() {
 
       const response = await submitForm({
         form_name: "Medicare Inquiry - Tamara",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -270,6 +274,8 @@ export function TamaraLeeMedicareForm() {
           <p className="text-red-400 text-sm">{errors.interest.message}</p>
         )}
       </div>
+
+      <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
 
       <Button
         type="submit"

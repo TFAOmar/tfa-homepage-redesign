@@ -37,6 +37,7 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { useToast } from "@/hooks/use-toast";
 import omarImage from "@/assets/advisors/omar-sanchez.jpg";
 import tfaLogo from "@/assets/tfa-logo.png";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const OMAR_SCHEDULER =
   "https://tfa.pipedrive.com/scheduler/M93alkfo/strategic-call-with-omar-sanchez-the-financial-architects";
@@ -155,6 +156,7 @@ const scrollToApply = () => {
 };
 
 const OmarConnect = () => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [form, setForm] = useState(initialState);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -215,6 +217,8 @@ const OmarConnect = () => {
 
     const response = await submitForm({
       form_name: "omar_connect_recruitment",
+      sms_consent: smsConsent,
+      sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
       first_name: data.first_name,
       last_name: data.last_name,
       email: data.email,
@@ -621,6 +625,8 @@ const OmarConnect = () => {
                           <p className="mt-2 text-sm text-destructive">{errors.consent}</p>
                         )}
                       </div>
+
+                      <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
                       <Button
                         type="submit"

@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const SERVICE_OPTIONS = [
   "Retirement Planning",
@@ -51,6 +52,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const BreaContactForm = () => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -87,6 +89,8 @@ const BreaContactForm = () => {
 
       const result = await submitForm({
         form_name: "Brea Office Consultation",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.first_name,
         last_name: data.last_name,
         email: data.email,
@@ -330,6 +334,8 @@ const BreaContactForm = () => {
               </FormItem>
             )}
           />
+
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
           <Button
             type="submit"

@@ -7,6 +7,7 @@ const ConsentSchema = z.object({
   verbal: z.boolean().optional(),
   verbal_script: z.string().optional(),
   referrer_inclusion: z.boolean().optional(),
+  sms: z.boolean().optional(),
   senior_trust: z.boolean().optional(),
   version: z.string().min(1),
 });
@@ -18,6 +19,8 @@ const BodySchema = z.object({
   services: z.array(z.string()).default([]),
   primary_service: z.string().nullish(),
   answers: z.record(z.unknown()).default({}),
+  sms_consent: z.boolean().optional(),
+  sms_consent_text_version: z.string().max(80).optional(),
   first_name: z.string().max(80).optional(),
   last_name: z.string().max(80).optional(),
   phone_e164: z.string().max(20).optional(),
@@ -117,7 +120,11 @@ Deno.serve(async (req) => {
         status,
         services: b.services,
         primary_service: b.primary_service ?? null,
-        answers: b.answers,
+        answers: {
+          ...b.answers,
+          sms_consent: !!b.sms_consent,
+          sms_consent_text_version: b.sms_consent ? b.sms_consent_text_version ?? null : null,
+        },
         first_name: b.first_name,
         last_name: b.last_name,
         phone_e164: b.phone_e164,
@@ -174,6 +181,14 @@ Deno.serve(async (req) => {
           ...base,
           consent_type: "referrer_inclusion",
           consent_text_snapshot: "Referrer inclusion agreed",
+        });
+      }
+      if (b.consent.sms || b.sms_consent) {
+        logs.push({
+          ...base,
+          consent_type: "sms_marketing",
+          consent_text_snapshot: "Optional SMS consent agreed (10DLC disclosure)",
+          consent_text_version: b.sms_consent_text_version || b.consent.version,
         });
       }
       if (b.consent.senior_trust) {

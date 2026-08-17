@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { SEOHead } from "@/components/seo";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 type InterestKey = "trust" | "mortgage" | "retirement";
 
@@ -81,6 +82,7 @@ const HomeownerProtection = () => {
   const { toast } = useToast();
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
 
+  const [smsConsent, setSmsConsent] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -175,6 +177,8 @@ const HomeownerProtection = () => {
 
       const response = await submitForm({
         form_name: "Homeowner Protection Squeeze",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: firstName,
         last_name: lastName,
         email: email.trim(),
@@ -759,6 +763,8 @@ const HomeownerProtection = () => {
                       </span>
                     )}
                   </div>
+
+                  <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
                   <button
                     type="submit"

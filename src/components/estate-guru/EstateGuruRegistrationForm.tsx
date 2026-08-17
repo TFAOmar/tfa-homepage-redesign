@@ -22,6 +22,7 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { estateGuruContent } from "@/pages/EstateGuru";
 import { useConfetti } from "@/hooks/useConfetti";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(100),
@@ -38,6 +39,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const EstateGuruRegistrationForm = () => {
   const { registration } = estateGuruContent;
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { honeypotProps, isBot } = useHoneypot();
@@ -71,6 +73,8 @@ const EstateGuruRegistrationForm = () => {
       // Submit to Pipedrive
       await submitForm({
         form_name: "Estate Guru Registration",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -308,6 +312,8 @@ const EstateGuruRegistrationForm = () => {
                 />
 
                 {/* Submit Button */}
+                <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
+
                 <Button
                   type="submit"
                   size="lg"

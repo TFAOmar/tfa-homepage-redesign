@@ -12,6 +12,7 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import aileenImg from "@/assets/advisors/aileen-gutierrez.jpg";
 import tfaLogo from "@/assets/tfa-logo.png";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 type Interest = "Mortgage Protection" | "Living Trust" | null;
 
@@ -39,6 +40,7 @@ const AileenGutierrezReferral = () => {
   const { toast } = useToast();
   const { honeypotProps, isBot } = useHoneypot();
 
+  const [smsConsent, setSmsConsent] = useState(false);
   const [interest, setInterest] = useState<Interest>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -82,6 +84,8 @@ const AileenGutierrezReferral = () => {
     try {
       const result = await submitForm({
         form_name: "aileen-referral-landing",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: parsed.data.firstName,
         last_name: parsed.data.lastName,
         email: parsed.data.email,
@@ -344,6 +348,8 @@ const AileenGutierrezReferral = () => {
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                     />
                   </div>
+
+                  <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
                   <Button
                     type="submit"

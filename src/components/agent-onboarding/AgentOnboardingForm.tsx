@@ -1,3 +1,4 @@
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -779,6 +780,15 @@ export const AgentOnboardingForm = () => {
               <input type="checkbox" className="mt-0.5" checked={data.certifyTrue} onChange={(e) => set("certifyTrue", e.target.checked)} />
               <span><b>I certify</b> the information provided is true and accurate. <span style={{ color: GOLD }}>*</span></span>
             </label>
+            <div className="mt-5">
+              <SmsConsentCheckbox
+                checked={!!data.smsConsent}
+                onChange={(v) => {
+                  set("smsConsent", v);
+                  set("smsConsentTextVersion", v ? SMS_CONSENT_TEXT_VERSION : "");
+                }}
+              />
+            </div>
             <div className="grid sm:grid-cols-2 gap-5 mt-6">
               <div>
                 <Label required>Typed signature</Label>

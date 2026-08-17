@@ -1,3 +1,4 @@
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Check, Loader2, Plus, Trash2 } from "lucide-react";
@@ -861,6 +862,10 @@ function Step7Review({
             I confirm the information provided is accurate to the best of my knowledge.
           </span>
         </label>
+        <SmsConsentCheckbox
+          checked={c.smsConsent || false}
+          onChange={(v) => setC({ smsConsent: v, smsConsentTextVersion: v ? SMS_CONSENT_TEXT_VERSION : undefined })}
+        />
         <TextField label="Electronic signature (type full name)" value={c.signature} onChange={(v) => setC({ signature: v, signedDate: new Date().toISOString() })} required />
       </div>
 

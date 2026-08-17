@@ -8,6 +8,7 @@ import { Mail, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 interface ContactModalProps {
   open: boolean;
@@ -28,6 +29,7 @@ const ContactModal = ({
   advisorSlug,
   skipPipedrive,
 }: ContactModalProps) => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -86,6 +88,8 @@ const ContactModal = ({
       } else {
         const response = await submitForm({
           form_name: "Advisor Contact",
+          sms_consent: smsConsent,
+          sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
           first_name: formData.firstName,
           last_name: formData.lastName,
           email: formData.email,
@@ -239,6 +243,8 @@ const ContactModal = ({
               className="resize-none"
             />
           </div>
+
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
           <Button
             type="submit" 

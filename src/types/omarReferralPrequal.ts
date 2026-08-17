@@ -197,6 +197,8 @@ export interface Lifestyle {
 
 export interface Consent {
   consent?: boolean;
+  smsConsent?: boolean;
+  smsConsentTextVersion?: string;
   signature?: string;
   signedDate?: string;
 }

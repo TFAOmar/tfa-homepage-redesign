@@ -1,3 +1,4 @@
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -444,6 +445,14 @@ const Step8ReviewSubmit = ({
           {errors.acknowledgeAccuracy && (
             <p className="text-sm text-destructive">{errors.acknowledgeAccuracy.message}</p>
           )}
+
+          <SmsConsentCheckbox
+            checked={watch("smsConsent") === true}
+            onChange={(v) => {
+              setValue("smsConsent", v);
+              setValue("smsConsentTextVersion", v ? SMS_CONSENT_TEXT_VERSION : "");
+            }}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>

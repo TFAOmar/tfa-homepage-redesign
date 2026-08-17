@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const BusinessContactForm = () => {
   const { toast } = useToast();
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { honeypotProps, isBot } = useHoneypot();
   const [formData, setFormData] = useState({
@@ -61,6 +63,8 @@ const BusinessContactForm = () => {
             ...formData,
             firstName: formData.fullName.split(" ")[0],
             advisorName: "The Recinos Team",
+            smsConsent,
+            smsConsentTextVersion: smsConsent ? SMS_CONSENT_TEXT_VERSION : null,
           },
           additionalRecipients: [
             "rrecinos@tfainsuranceadvisors.com",
@@ -406,6 +410,8 @@ const BusinessContactForm = () => {
           />
         </div>
       </div>
+
+      <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
       <button
         type="submit"

@@ -24,6 +24,7 @@ import {
 import { Send, UserPlus, Building2 } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const careersFormSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50, "First name must be less than 50 characters"),
@@ -56,6 +57,7 @@ const experienceLabels: Record<string, string> = {
 };
 
 const CareersInquiryForm = () => {
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
@@ -97,6 +99,8 @@ const CareersInquiryForm = () => {
 
       const response = await submitForm({
         form_name: "Careers Inquiry",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -312,6 +316,8 @@ const CareersInquiryForm = () => {
 
                 {/* Submit Button */}
                 <div className="pt-4">
+                  <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
+
                   <Button
                     type="submit"
                     disabled={isSubmitting}

@@ -112,6 +112,8 @@ function buildPayload(lead: any, consent: any | null): Record<string, unknown> {
     referrer_in_thread: yn(lead.referrer_in_thread),
 
     consent_tcpa: leadStatus === "submitted" && consent ? "yes" : "no",
+    sms_consent: yn(answers.sms_consent),
+    sms_consent_text_version: s(answers.sms_consent_text_version),
     consent_type: consentType,
     consent_text_version: s(consent?.consent_text_version),
     consent_snapshot: s(consent?.consent_text_snapshot),

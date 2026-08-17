@@ -12,6 +12,7 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { useAttribution, notifyLead } from "@/hooks/useLeads";
 import { SEOHead } from "@/components/seo";
 import LandingHeader from "@/components/LandingHeader";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
 
@@ -32,6 +33,7 @@ const CONSENT_TEXT =
 const Protect = () => {
   const attr = useAttribution();
   const { honeypotProps, isBot } = useHoneypot();
+  const [smsConsent, setSmsConsent] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -97,6 +99,9 @@ const Protect = () => {
           last_step: 1,
           consent_text: CONSENT_TEXT,
           consent_at: new Date().toISOString(),
+          sms_consent: smsConsent,
+          sms_consent_at: smsConsent ? new Date().toISOString() : null,
+          sms_consent_text_version: smsConsent ? SMS_CONSENT_TEXT_VERSION : null,
           referral_source: attr.referral_source ?? "minh",
           partner_slug: "minh",
           utm_source: attr.utm_source,
@@ -319,6 +324,8 @@ const Protect = () => {
                   {CONSENT_TEXT}
                 </Label>
               </div>
+
+              <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
               <Button
                 type="submit"

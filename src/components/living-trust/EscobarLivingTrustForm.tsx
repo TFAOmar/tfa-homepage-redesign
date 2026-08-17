@@ -29,6 +29,7 @@ import { Loader2, CheckCircle, CheckCircle2 } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { submitForm } from "@/lib/formSubmit";
 import { cn } from "@/lib/utils";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 const useShakeOnError = (form: ReturnType<typeof useForm<EscobarFormData>>) => {
   const [shakingFields, setShakingFields] = useState<Set<string>>(new Set());
@@ -103,6 +104,7 @@ const getSelectClasses = (hasError: boolean, hasSuccess: boolean, isShaking: boo
 
 export default function EscobarLivingTrustForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [smsConsent, setSmsConsent] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
   const { fireConfetti } = useConfetti();
@@ -142,6 +144,8 @@ export default function EscobarLivingTrustForm() {
 
       const response = await submitForm({
         form_name: "Living Trust Inquiry - Escobar Realty Group",
+        sms_consent: smsConsent,
+        sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
@@ -420,6 +424,8 @@ export default function EscobarLivingTrustForm() {
               </div>
             </FormItem>
           )} />
+
+          <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
           <Button
             type="submit"

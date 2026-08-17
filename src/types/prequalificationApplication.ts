@@ -57,6 +57,8 @@ export const step4Schema = z.object({
   consentChecked: z.literal(true, {
     errorMap: () => ({ message: "You must agree to proceed" }),
   }),
+  smsConsent: z.boolean().optional(),
+  smsConsentTextVersion: z.string().optional(),
 });
 
 export type Step4Data = z.infer<typeof step4Schema>;

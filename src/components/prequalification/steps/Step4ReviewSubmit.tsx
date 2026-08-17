@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { step4Schema, Step4Data, PrequalificationApplicationData, Step1Data, Step2Data, Step3Data, CONDITION_FOLLOWUPS } from "@/types/prequalificationApplication";
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
 
 interface Step4Props {
   data: Step4Data | Record<string, unknown>;
@@ -133,6 +134,13 @@ const Step4ReviewSubmit = ({ data, allData, onNext, onBack, onGoToStep }: Step4P
           </span>
         </label>
         {errors.consentChecked && <p className="text-sm text-destructive">{errors.consentChecked.message}</p>}
+        <SmsConsentCheckbox
+          checked={watch("smsConsent") === true}
+          onChange={(v) => {
+            setValue("smsConsent", v as never);
+            setValue("smsConsentTextVersion", (v ? SMS_CONSENT_TEXT_VERSION : "") as never);
+          }}
+        />
       </div>
 
       <div className="flex justify-between pt-4">

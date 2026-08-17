@@ -230,6 +230,8 @@ export const step8Schema = z.object({
   }),
   electronicSignature: z.string().min(1, "Electronic signature is required"),
   signatureDate: z.string().min(1, "Date is required"),
+  smsConsent: z.boolean().optional(),
+  smsConsentTextVersion: z.string().optional(),
 });
 
 export type Step8Data = z.infer<typeof step8Schema>;
