@@ -339,7 +339,7 @@ const BookConsultation = () => {
                           {errors.interestCategories && <p className="text-red-500 text-sm mt-2 text-left">{errors.interestCategories.message}</p>}
                         </div>
 
-                        <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} variant="dark" />
+                        <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
 
                         <Button 
                           type="submit"
