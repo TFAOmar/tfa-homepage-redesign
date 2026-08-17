@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import {
+import SmsConsentCheckbox, { SMS_CONSENT_TEXT_VERSION } from "@/components/forms/SmsConsentCheckbox";
   step8Schema,
   Step8Data,
   EstatePlanningApplicationData,
@@ -444,6 +445,14 @@ const Step8ReviewSubmit = ({
           {errors.acknowledgeAccuracy && (
             <p className="text-sm text-destructive">{errors.acknowledgeAccuracy.message}</p>
           )}
+
+          <SmsConsentCheckbox
+            checked={watch("smsConsent") === true}
+            onChange={(v) => {
+              setValue("smsConsent", v);
+              setValue("smsConsentTextVersion", v ? SMS_CONSENT_TEXT_VERSION : "");
+            }}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
