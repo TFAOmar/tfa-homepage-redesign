@@ -137,6 +137,7 @@ const LivingTrustQuestionnaire = () => {
             advisorId={advisor?.id}
             advisorName={advisor?.name}
             advisorEmail={advisorEmail}
+            advisorSlug={advisorSlug}
           />
         </div>
       </main>
