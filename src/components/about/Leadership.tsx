@@ -3,7 +3,7 @@ import { Linkedin, Mail, Facebook, Instagram, Youtube, Quote, CheckCircle } from
 import mannySotoAsset from "@/assets/leadership/manny-soto.jpg.asset.json";
 import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
 import ravvenMurphyImg from "@/assets/leadership/ravven-murphy.jpg";
-import kristinRomoImg from "@/assets/leadership/kristin-romo.jpg";
+import kristinMartinImg from "@/assets/leadership/kristin-martin.jpg";
 import { Button } from "@/components/ui/button";
 
 interface Leader {
@@ -107,11 +107,11 @@ const leaders: Leader[] = [
     closing: `As Executive Assistant, Ravven plays a critical role in managing the day-to-day operations of the CEO, ensuring efficiency, discretion, and seamless execution. Her ability to balance high-pressure demands with strategic problem-solving makes her an integral part of The Financial Architects leadership ecosystem — bringing structure, clarity, and momentum to fast-moving environments.`,
   },
   {
-    name: "Kristin Romo",
+    name: "Kristin Martin",
     title: "Director of Agent Development & Operations",
     subtitle: "Leadership • Training • Operations",
-    image: kristinRomoImg,
-    intro: `Kristin Romo is the Director of Agent Development & Operations at The Financial Architects, where she leads agent growth, training, and operational excellence across Los Angeles, Orange County, the Inland Empire, and broader California. With over seven years of industry experience, Kristin combines strategic vision with people-focused leadership to develop high-performing professionals and strengthen the organization's long-term mission.`,
+    image: kristinMartinImg,
+    intro: `Kristin Martin is the Director of Agent Development & Operations at The Financial Architects, where she leads agent growth, training, and operational excellence across Los Angeles, Orange County, the Inland Empire, and broader California. With over seven years of industry experience, Kristin combines strategic vision with people-focused leadership to develop high-performing professionals and strengthen the organization's long-term mission.`,
     highlights: [
       "Leads agent development, training, and mentorship programs across California",
       "Drives operational excellence and scalable systems supporting advisor growth",
@@ -156,7 +156,7 @@ const Leadership = () => {
                   <img
                     src={leader.image}
                     alt={leader.name}
-                    className={`w-full h-full object-cover ${leader.name === "Kristin Romo" ? "object-top lg:object-center" : ""}`}
+                    className={`w-full h-full object-cover ${leader.name === "Kristin Martin" ? "object-top lg:object-center" : ""}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent" />
                   

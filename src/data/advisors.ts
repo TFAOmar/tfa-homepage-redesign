@@ -40,7 +40,7 @@ import merrianeMcGuireImg from "@/assets/advisors/merriane-mcguire.jpg";
 import elizabethRochaImg from "@/assets/advisors/elizabeth-rocha.jpg";
 import rosieNunoImg from "@/assets/advisors/rosie-nuno.jpg";
 import aileenGutierrezImg from "@/assets/advisors/aileen-gutierrez.jpg";
-import kristinRomoImg from "@/assets/advisors/kristin-romo.jpg";
+import kristinMartinImg from "@/assets/advisors/kristin-martin.jpg";
 import anitaVegaAsset from "@/assets/advisors/anita-vega.jpg.asset.json";
 
 export interface Advisor {
@@ -720,7 +720,7 @@ export const advisors: Advisor[] = [
   },
   {
     id: "kristin-romo",
-    name: "Kristin Romo",
+    name: "Kristin Martin",
     title: "Director of Agent Development & Operations",
     type: "Advisor",
     state: "California",
@@ -729,9 +729,9 @@ export const advisors: Advisor[] = [
     bio: "Director of Agent Development & Operations leading agent growth, training, and operational excellence across LA, OC, and the Inland Empire.",
     specialties: ["Leadership Development", "Agent Training & Mentorship", "Business Development", "Operations"],
     licenses: ["CA Lic# 4334059"],
-    image: kristinRomoImg,
+    image: kristinMartinImg,
     yearsOfExperience: 7,
-    landingPage: "/advisors/kristin-romo"
+    landingPage: "/advisors/kristin-martin"
   },
   {
     id: "anita-vega",
