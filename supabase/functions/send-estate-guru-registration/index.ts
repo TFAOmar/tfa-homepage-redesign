@@ -79,7 +79,7 @@ const handler = async (req: Request): Promise<Response> => {
     const data = parsed.data;
     console.log("Received Estate Guru registration for:", data.email);
 
-    const fullName = esc(`${esc(data.firstName)} ${esc(data.lastName)}`);
+    const fullName = `${data.firstName} ${data.lastName}`;
     const submittedAt = new Date().toLocaleString("en-US", {
       timeZone: "America/Los_Angeles",
       dateStyle: "full",
@@ -120,7 +120,7 @@ const handler = async (req: Request): Promise<Response> => {
               <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px; width: 140px;">Name:</td>
-                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px; font-weight: 600;">${fullName}</td>
+                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px; font-weight: 600;">${esc(fullName)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px;">Email:</td>
