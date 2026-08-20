@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { generateEstatePlanningPdf } from "../_shared/estatePlanningPdf.ts";
+import { resolveAdvisorRecipient } from "../_shared/advisorRouting.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -33,6 +35,7 @@ const schema = z.object({
   formData: z.record(z.unknown()),
   advisorEmail: z.string().trim().email().max(255).optional(),
   advisorName: z.string().trim().max(200).optional(),
+  advisorSlug: z.string().trim().max(120).optional(),
   sourceUrl: z.string().trim().max(2000).optional(),
 });
 
@@ -71,8 +74,9 @@ const handler = async (req: Request): Promise<Response> => {
       applicantPhone,
       spouseName,
       formData,
-      advisorEmail = "info@tfainsuranceadvisors.com",
+      advisorEmail,
       advisorName = "TFA Advisor",
+      advisorSlug,
       sourceUrl,
     } = requestData;
 
@@ -81,6 +85,19 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Resolve the advisor slug (explicit, or from the questionnaire URL).
+    const slugFromUrl = sourceUrl?.match(/\/advisors\/([^/?#]+)/)?.[1];
+    const resolvedSlug = advisorSlug || slugFromUrl || null;
+
+    // Server-side recipient guard: approved business email only.
+    const routing = await resolveAdvisorRecipient(supabase, resolvedSlug, advisorEmail);
+    const recipient = routing.recipient;
+    if (routing.rejected) {
+      console.warn(
+        `Blocked/overrode advisor recipient for slug "${resolvedSlug}": ${routing.rejected} -> ${recipient} (${routing.reason})`,
+      );
+    }
 
     // Save to database
     console.log("Saving application to database...");
@@ -93,7 +110,8 @@ const handler = async (req: Request): Promise<Response> => {
         spouse_name: spouseName,
         form_data: formData,
         advisor_name: advisorName,
-        advisor_email: advisorEmail,
+        advisor_email: recipient,
+        advisor_id: resolvedSlug,
         source_url: sourceUrl,
         status: "submitted",
         current_step: 8,
@@ -292,22 +310,96 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send email to advisor with CC to clients inbox
-    console.log("Sending email notification to:", advisorEmail, "CC: clients@tfainsuranceadvisors.com");
-    const { error: emailError } = await resend.emails.send({
-      from: "TFA Estate Planning <noreply@tfainsuranceadvisors.com>",
-      to: [advisorEmail],
-      cc: ["clients@tfainsuranceadvisors.com"],
-      subject: `New Estate Planning Intake - ${applicantName} (Advisor: ${advisorName})`,
-      html: emailHtml,
+    // Generate the complete questionnaire PDF for the advisor.
+    const submittedAtLabel = new Date().toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+      dateStyle: "full",
+      timeStyle: "short",
     });
+    let pdfBase64: string | null = null;
+    let pdfStatus = "generated";
+    let pdfError: string | null = null;
+    try {
+      pdfBase64 = generateEstatePlanningPdf(
+        {
+          submissionId: savedApp.id,
+          submittedAt: submittedAtLabel,
+          advisorName,
+          advisorSlug: resolvedSlug ?? "",
+          advisorEmail: recipient,
+          applicantName,
+          applicantEmail,
+          applicantPhone,
+          spouseName,
+          sourceUrl,
+        },
+        formData as Record<string, unknown>,
+      );
+    } catch (e) {
+      pdfStatus = "failed";
+      pdfError = e instanceof Error ? e.message : String(e);
+      console.error("PDF generation failed:", pdfError);
+    }
+
+    // Advisor-only delivery: no CC, no BCC — client details stay with the advisor.
+    const toRecipients = [recipient];
+    console.log("Sending estate planning notification to:", toRecipients.join(", "), "(no CC/BCC)");
+
+    const emailPayload: {
+      from: string;
+      to: string[];
+      subject: string;
+      html: string;
+      attachments?: { filename: string; content: string }[];
+    } = {
+      from: "TFA Estate Planning <noreply@tfainsuranceadvisors.com>",
+      to: toRecipients,
+      subject: `New Living Trust Questionnaire - ${applicantName} (Advisor: ${advisorName})`,
+      html: emailHtml,
+    };
+    if (pdfBase64) {
+      emailPayload.attachments = [
+        {
+          filename: `TFA_Living_Trust_Questionnaire_${savedApp.id.slice(0, 8).toUpperCase()}.pdf`,
+          content: pdfBase64,
+        },
+      ];
+    }
+
+    const { data: emailData, error: emailError } = await resend.emails.send(emailPayload);
 
     if (emailError) {
       console.error("Email error:", emailError);
       // Don't throw - application was saved, just log the email failure
     } else {
-      console.log("Email sent successfully");
+      console.log("Email sent successfully", emailData?.id);
     }
+
+    // Audit trail
+    const { error: auditError } = await supabase.from("notification_audit_log").insert({
+      submission_id: savedApp.id,
+      submission_type: "estate_planning",
+      advisor_slug: resolvedSlug,
+      advisor_name: advisorName,
+      requested_email: advisorEmail ?? null,
+      resolved_recipient: recipient,
+      to_recipients: toRecipients,
+      cc_recipients: [],
+      bcc_recipients: [],
+      provider_message_id: emailData?.id ?? null,
+      pdf_status: pdfStatus,
+      delivery_status: emailError ? "failed" : "sent",
+      is_resend: false,
+      error_details:
+        [
+          emailError ? `email: ${JSON.stringify(emailError)}` : null,
+          pdfError ? `pdf: ${pdfError}` : null,
+          routing.rejected ? `routing: rejected ${routing.rejected} (${routing.reason})` : null,
+        ]
+          .filter(Boolean)
+          .join(" | ") || null,
+    });
+    if (auditError) console.error("Audit log error:", auditError);
 
     return new Response(
       JSON.stringify({

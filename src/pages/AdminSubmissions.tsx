@@ -310,6 +310,7 @@ const AdminSubmissions = () => {
                 open={!!selectedEstate}
                 onClose={() => setSelectedEstate(null)}
                 statusOptions={estateStatusOptions.filter((o) => o.value !== "all")}
+                enableAdvisorPdfResend
                 onUpdateStatus={(id, status) => updateEstateStatus.mutate({ id, status: status as EstateStatus }, {
                   onSuccess: () => toast.success("Status updated"),
                   onError: () => toast.error("Failed to update"),
