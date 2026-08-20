@@ -86,6 +86,19 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Resolve the advisor slug (explicit, or from the questionnaire URL).
+    const slugFromUrl = sourceUrl?.match(/\/advisors\/([^/?#]+)/)?.[1];
+    const resolvedSlug = advisorSlug || slugFromUrl || null;
+
+    // Server-side recipient guard: approved business email only.
+    const routing = await resolveAdvisorRecipient(supabase, resolvedSlug, advisorEmail);
+    const recipient = routing.recipient;
+    if (routing.rejected) {
+      console.warn(
+        `Blocked/overrode advisor recipient for slug "${resolvedSlug}": ${routing.rejected} -> ${recipient} (${routing.reason})`,
+      );
+    }
+
     // Save to database
     console.log("Saving application to database...");
     const { data: savedApp, error: dbError } = await supabase
@@ -97,7 +110,8 @@ const handler = async (req: Request): Promise<Response> => {
         spouse_name: spouseName,
         form_data: formData,
         advisor_name: advisorName,
-        advisor_email: advisorEmail,
+        advisor_email: recipient,
+        advisor_id: resolvedSlug,
         source_url: sourceUrl,
         status: "submitted",
         current_step: 8,
