@@ -22,7 +22,7 @@ import { generatePersonSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
 import ScheduleModal from "@/components/advisors/ScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
-import kristinRomoImg from "@/assets/advisors/kristin-romo.jpg";
+import kristinMartinImg from "@/assets/advisors/kristin-martin.jpg";
 
 const specialties = [
   "Leadership Development",
@@ -106,7 +106,7 @@ const achievements = [
   "Provides ongoing coaching, leadership development, and accountability to help agents increase revenue, strengthen client relationships, and achieve professional growth",
 ];
 
-const AdvisorKristinRomo = () => {
+const AdvisorKristinMartin = () => {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
 
@@ -115,21 +115,21 @@ const AdvisorKristinRomo = () => {
   }, []);
 
   const personSchema = generatePersonSchema(
-    "Kristin Romo",
+    "Kristin Martin",
     "Director of Agent Development & Operations",
     "Director of Agent Development & Operations at The Financial Architects, leading agent growth, training, and operational excellence across LA, OC, and the Inland Empire.",
-    kristinRomoImg,
-    `${siteConfig.url}/advisors/kristin-romo`,
+    kristinMartinImg,
+    `${siteConfig.url}/advisors/kristin-martin`,
     specialties
   );
 
   return (
     <>
       <SEOHead
-        title="Kristin Romo"
-        description="Meet Kristin Romo, Director of Agent Development & Operations at The Financial Architects — leading agent training, leadership development, and operational excellence across California."
-        keywords="Kristin Romo, agent development, operations, leadership development, agent training, The Financial Architects"
-        canonical={`${siteConfig.url}/advisors/kristin-romo`}
+        title="Kristin Martin"
+        description="Meet Kristin Martin, Director of Agent Development & Operations at The Financial Architects — leading agent training, leadership development, and operational excellence across California."
+        keywords="Kristin Martin, agent development, operations, leadership development, agent training, The Financial Architects"
+        canonical={`${siteConfig.url}/advisors/kristin-martin`}
       />
       <JsonLd data={[personSchema]} />
 
@@ -143,7 +143,7 @@ const AdvisorKristinRomo = () => {
                 Director of Agent Development & Operations
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
-                Kristin Romo
+                Kristin Martin
               </h1>
               <p className="text-xl md:text-2xl text-white/90 mb-2">
                 Leadership Development • Operations • Agent Growth
@@ -185,8 +185,8 @@ const AdvisorKristinRomo = () => {
               <div className="relative">
                 <div className="absolute -inset-4 bg-accent/20 rounded-full blur-2xl" />
                 <img
-                  src={kristinRomoImg}
-                  alt="Kristin Romo - Director of Agent Development & Operations"
+                  src={kristinMartinImg}
+                  alt="Kristin Martin - Director of Agent Development & Operations"
                   className="relative w-80 h-80 rounded-full object-cover border-4 border-white/20 shadow-2xl"
                 />
               </div>
@@ -207,7 +207,7 @@ const AdvisorKristinRomo = () => {
             </div>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="mb-6">
-                Kristin Romo serves as the Director of Agent Development & Operations at The Financial Architects, where she leads initiatives focused on agent growth, operational excellence, and leadership development. Having started her career with the organization as a Senior Advisor, Kristin's progression into leadership reflects her commitment to developing people, improving systems, and driving results.
+                Kristin Martin serves as the Director of Agent Development & Operations at The Financial Architects, where she leads initiatives focused on agent growth, operational excellence, and leadership development. Having started her career with the organization as a Senior Advisor, Kristin's progression into leadership reflects her commitment to developing people, improving systems, and driving results.
               </p>
               <p className="mb-6">
                 With a background in entrepreneurship, law enforcement, and financial services, she brings a unique combination of discipline, strategic thinking, operational expertise, and relationship-building skills to her role. Her experience spans agent training, business development, operations management, marketing, client relations, and revenue growth strategies.
@@ -356,19 +356,19 @@ const AdvisorKristinRomo = () => {
       <ScheduleModal
         open={scheduleModalOpen}
         onOpenChange={setScheduleModalOpen}
-        advisorName="Kristin Romo"
-        advisorImage={kristinRomoImg}
-        advisorSlug="kristin-romo"
+        advisorName="Kristin Martin"
+        advisorImage={kristinMartinImg}
+        advisorSlug="kristin-martin"
       />
       <ContactModal
         open={contactModalOpen}
         onOpenChange={setContactModalOpen}
-        advisorName="Kristin Romo"
-        advisorImage={kristinRomoImg}
-        advisorSlug="kristin-romo"
+        advisorName="Kristin Martin"
+        advisorImage={kristinMartinImg}
+        advisorSlug="kristin-martin"
       />
     </>
   );
 };
 
-export default AdvisorKristinRomo;
+export default AdvisorKristinMartin;
