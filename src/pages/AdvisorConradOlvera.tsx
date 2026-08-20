@@ -417,14 +417,14 @@ const AdvisorConradOlvera = () => {
         open={scheduleModalOpen}
         onOpenChange={setScheduleModalOpen}
         advisorName="Conrad Olvera"
-        advisorEmail="conradolvera21@gmail.com"
+        advisorEmail="colvera@tfainsuranceadvisors.com"
         advisorImage={conradImage}
       />
       <ContactModal
         open={contactModalOpen}
         onOpenChange={setContactModalOpen}
         advisorName="Conrad Olvera"
-        advisorEmail="conradolvera21@gmail.com"
+        advisorEmail="colvera@tfainsuranceadvisors.com"
         advisorImage={conradImage}
       />
     </div>
