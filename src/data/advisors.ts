@@ -719,7 +719,7 @@ export const advisors: Advisor[] = [
     landingPage: "/advisors/aileen-gutierrez"
   },
   {
-    id: "kristin-romo",
+    id: "kristin-martin",
     name: "Kristin Martin",
     title: "Director of Agent Development & Operations",
     type: "Advisor",
