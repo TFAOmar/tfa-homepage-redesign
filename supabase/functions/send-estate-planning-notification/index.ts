@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { generateEstatePlanningPdf } from "../_shared/estatePlanningPdf.ts";
+import { resolveAdvisorRecipient } from "../_shared/advisorRouting.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -33,6 +35,7 @@ const schema = z.object({
   formData: z.record(z.unknown()),
   advisorEmail: z.string().trim().email().max(255).optional(),
   advisorName: z.string().trim().max(200).optional(),
+  advisorSlug: z.string().trim().max(120).optional(),
   sourceUrl: z.string().trim().max(2000).optional(),
 });
 
@@ -71,8 +74,9 @@ const handler = async (req: Request): Promise<Response> => {
       applicantPhone,
       spouseName,
       formData,
-      advisorEmail = "info@tfainsuranceadvisors.com",
+      advisorEmail,
       advisorName = "TFA Advisor",
+      advisorSlug,
       sourceUrl,
     } = requestData;
 
