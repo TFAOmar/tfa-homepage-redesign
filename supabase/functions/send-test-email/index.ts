@@ -1,4 +1,5 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 
@@ -42,6 +43,29 @@ const html = `<!DOCTYPE html>
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+
+  // Admin-only debug utility: verify the caller's JWT and admin role.
+  const authHeader = req.headers.get('Authorization') ?? '';
+  const token = authHeader.replace(/^Bearer\s+/i, '');
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+  );
+  const { data: userData } = token
+    ? await supabase.auth.getUser(token)
+    : { data: { user: null } as any };
+  const user = userData?.user;
+  let allowed = false;
+  if (user) {
+    const { data: isAdmin } = await supabase.rpc('has_role', { _user_id: user.id, _role: 'admin' });
+    allowed = isAdmin === true;
+  }
+  if (!allowed) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
 
   if (!RESEND_API_KEY) {
     return new Response(JSON.stringify({ error: 'RESEND_API_KEY not configured' }), {
