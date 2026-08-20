@@ -310,22 +310,96 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send email to advisor with CC to clients inbox
-    console.log("Sending email notification to:", advisorEmail, "CC: clients@tfainsuranceadvisors.com");
-    const { error: emailError } = await resend.emails.send({
-      from: "TFA Estate Planning <noreply@tfainsuranceadvisors.com>",
-      to: [advisorEmail],
-      cc: ["clients@tfainsuranceadvisors.com"],
-      subject: `New Estate Planning Intake - ${applicantName} (Advisor: ${advisorName})`,
-      html: emailHtml,
+    // Generate the complete questionnaire PDF for the advisor.
+    const submittedAtLabel = new Date().toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+      dateStyle: "full",
+      timeStyle: "short",
     });
+    let pdfBase64: string | null = null;
+    let pdfStatus = "generated";
+    let pdfError: string | null = null;
+    try {
+      pdfBase64 = generateEstatePlanningPdf(
+        {
+          submissionId: savedApp.id,
+          submittedAt: submittedAtLabel,
+          advisorName,
+          advisorSlug: resolvedSlug ?? "",
+          advisorEmail: recipient,
+          applicantName,
+          applicantEmail,
+          applicantPhone,
+          spouseName,
+          sourceUrl,
+        },
+        formData as Record<string, unknown>,
+      );
+    } catch (e) {
+      pdfStatus = "failed";
+      pdfError = e instanceof Error ? e.message : String(e);
+      console.error("PDF generation failed:", pdfError);
+    }
+
+    // Advisor-only delivery: no CC, no BCC — client details stay with the advisor.
+    const toRecipients = [recipient];
+    console.log("Sending estate planning notification to:", toRecipients.join(", "), "(no CC/BCC)");
+
+    const emailPayload: {
+      from: string;
+      to: string[];
+      subject: string;
+      html: string;
+      attachments?: { filename: string; content: string }[];
+    } = {
+      from: "TFA Estate Planning <noreply@tfainsuranceadvisors.com>",
+      to: toRecipients,
+      subject: `New Living Trust Questionnaire - ${applicantName} (Advisor: ${advisorName})`,
+      html: emailHtml,
+    };
+    if (pdfBase64) {
+      emailPayload.attachments = [
+        {
+          filename: `TFA_Living_Trust_Questionnaire_${savedApp.id.slice(0, 8).toUpperCase()}.pdf`,
+          content: pdfBase64,
+        },
+      ];
+    }
+
+    const { data: emailData, error: emailError } = await resend.emails.send(emailPayload);
 
     if (emailError) {
       console.error("Email error:", emailError);
       // Don't throw - application was saved, just log the email failure
     } else {
-      console.log("Email sent successfully");
+      console.log("Email sent successfully", emailData?.id);
     }
+
+    // Audit trail
+    const { error: auditError } = await supabase.from("notification_audit_log").insert({
+      submission_id: savedApp.id,
+      submission_type: "estate_planning",
+      advisor_slug: resolvedSlug,
+      advisor_name: advisorName,
+      requested_email: advisorEmail ?? null,
+      resolved_recipient: recipient,
+      to_recipients: toRecipients,
+      cc_recipients: [],
+      bcc_recipients: [],
+      provider_message_id: emailData?.id ?? null,
+      pdf_status: pdfStatus,
+      delivery_status: emailError ? "failed" : "sent",
+      is_resend: false,
+      error_details:
+        [
+          emailError ? `email: ${JSON.stringify(emailError)}` : null,
+          pdfError ? `pdf: ${pdfError}` : null,
+          routing.rejected ? `routing: rejected ${routing.rejected} (${routing.reason})` : null,
+        ]
+          .filter(Boolean)
+          .join(" | ") || null,
+    });
+    if (auditError) console.error("Audit log error:", auditError);
 
     return new Response(
       JSON.stringify({
