@@ -35,6 +35,39 @@ export type Database = {
         }
         Relationships: []
       }
+      advisor_email_routing: {
+        Row: {
+          active: boolean
+          advisor_name: string | null
+          advisor_slug: string
+          approved_email: string
+          created_at: string
+          id: string
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          advisor_name?: string | null
+          advisor_slug: string
+          approved_email: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          advisor_name?: string | null
+          advisor_slug?: string
+          approved_email?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       agent_onboarding_applications: {
         Row: {
           advisor_notification_sent_at: string | null
@@ -1033,6 +1066,66 @@ export type Database = {
           resume_token?: string | null
           status?: Database["public"]["Enums"]["application_status"]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      notification_audit_log: {
+        Row: {
+          advisor_name: string | null
+          advisor_slug: string | null
+          bcc_recipients: string[]
+          cc_recipients: string[]
+          created_at: string
+          delivery_status: string
+          error_details: string | null
+          id: string
+          is_resend: boolean
+          pdf_status: string
+          provider_message_id: string | null
+          requested_email: string | null
+          resolved_recipient: string | null
+          submission_id: string | null
+          submission_type: string
+          to_recipients: string[]
+          triggered_by: string | null
+        }
+        Insert: {
+          advisor_name?: string | null
+          advisor_slug?: string | null
+          bcc_recipients?: string[]
+          cc_recipients?: string[]
+          created_at?: string
+          delivery_status?: string
+          error_details?: string | null
+          id?: string
+          is_resend?: boolean
+          pdf_status?: string
+          provider_message_id?: string | null
+          requested_email?: string | null
+          resolved_recipient?: string | null
+          submission_id?: string | null
+          submission_type?: string
+          to_recipients?: string[]
+          triggered_by?: string | null
+        }
+        Update: {
+          advisor_name?: string | null
+          advisor_slug?: string | null
+          bcc_recipients?: string[]
+          cc_recipients?: string[]
+          created_at?: string
+          delivery_status?: string
+          error_details?: string | null
+          id?: string
+          is_resend?: boolean
+          pdf_status?: string
+          provider_message_id?: string | null
+          requested_email?: string | null
+          resolved_recipient?: string | null
+          submission_id?: string | null
+          submission_type?: string
+          to_recipients?: string[]
+          triggered_by?: string | null
         }
         Relationships: []
       }
