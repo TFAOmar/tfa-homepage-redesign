@@ -30,9 +30,10 @@ interface EstatePlanningWizardProps {
   advisorId?: string;
   advisorName?: string;
   advisorEmail?: string;
+  advisorSlug?: string;
 }
 
-const EstatePlanningWizard = ({ onComplete, advisorId, advisorName, advisorEmail }: EstatePlanningWizardProps) => {
+const EstatePlanningWizard = ({ onComplete, advisorId, advisorName, advisorEmail, advisorSlug }: EstatePlanningWizardProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [formData, setFormData] = useState<EstatePlanningApplicationData>(defaultApplicationData);
@@ -129,6 +130,7 @@ const EstatePlanningWizard = ({ onComplete, advisorId, advisorName, advisorEmail
           advisorId: advisorId,
           advisorName: advisorName || "TFA Advisor",
           advisorEmail: advisorEmail || "info@tfainsuranceadvisors.com",
+          advisorSlug: advisorSlug,
           sourceUrl: window.location.href,
         },
       });
