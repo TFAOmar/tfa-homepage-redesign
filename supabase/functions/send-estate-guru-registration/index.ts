@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -7,15 +8,44 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface RegistrationData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  currentlyWithTFA: string;
-  referredBy?: string;
-  notes?: string;
-}
+// Escape user input before interpolating into HTML emails.
+const esc = (v: unknown): string =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const registrationSchema = z.object({
+  firstName: z.string().trim().min(1).max(100),
+  lastName: z.string().trim().min(1).max(100),
+  email: z.string().trim().email().max(255),
+  phone: z.string().trim().min(7).max(30),
+  currentlyWithTFA: z.enum(["yes", "no"]),
+  referredBy: z.string().trim().max(200).optional(),
+  notes: z.string().trim().max(2000).optional(),
+});
+
+// Rate limiting: max 3 registrations per 10 minutes per IP.
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const MAX_PER_WINDOW = 3;
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+const checkRateLimit = (key: string): boolean => {
+  const now = Date.now();
+  for (const [k, v] of rateLimitStore.entries()) {
+    if (now > v.resetTime) rateLimitStore.delete(k);
+  }
+  const rec = rateLimitStore.get(key);
+  if (!rec || now > rec.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (rec.count >= MAX_PER_WINDOW) return false;
+  rec.count++;
+  return true;
+};
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -28,10 +58,28 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("RESEND_API_KEY is not configured");
     }
 
-    const data: RegistrationData = await req.json();
-    console.log("Received Estate Guru registration:", data);
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+      req.headers.get("cf-connecting-ip") ||
+      "unknown";
+    if (!checkRateLimit(ip)) {
+      return new Response(
+        JSON.stringify({ error: "Too many registrations. Please try again later." }),
+        { status: 429, headers: { "Content-Type": "application/json", ...corsHeaders } },
+      );
+    }
 
-    const fullName = `${data.firstName} ${data.lastName}`;
+    const parsed = registrationSchema.safeParse(await req.json().catch(() => ({})));
+    if (!parsed.success) {
+      return new Response(
+        JSON.stringify({ error: parsed.error.flatten().fieldErrors }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
+      );
+    }
+    const data = parsed.data;
+    console.log("Received Estate Guru registration for:", data.email);
+
+    const fullName = esc(`${data.firstName} ${data.lastName}`);
     const submittedAt = new Date().toLocaleString("en-US", {
       timeZone: "America/Los_Angeles",
       dateStyle: "full",
