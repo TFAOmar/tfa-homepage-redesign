@@ -79,7 +79,7 @@ const handler = async (req: Request): Promise<Response> => {
     const data = parsed.data;
     console.log("Received Estate Guru registration for:", data.email);
 
-    const fullName = esc(`${data.firstName} ${data.lastName}`);
+    const fullName = esc(`${esc(data.firstName)} ${esc(data.lastName)}`);
     const submittedAt = new Date().toLocaleString("en-US", {
       timeZone: "America/Los_Angeles",
       dateStyle: "full",
@@ -125,13 +125,13 @@ const handler = async (req: Request): Promise<Response> => {
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px;">Email:</td>
                   <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">
-                    <a href="mailto:${data.email}" style="color: #0B1F3B;">${data.email}</a>
+                    <a href="mailto:${esc(data.email)}" style="color: #0B1F3B;">${esc(data.email)}</a>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px;">Phone:</td>
                   <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">
-                    <a href="tel:${data.phone}" style="color: #0B1F3B;">${data.phone}</a>
+                    <a href="tel:${esc(data.phone)}" style="color: #0B1F3B;">${esc(data.phone)}</a>
                   </td>
                 </tr>
                 <tr>
@@ -145,7 +145,7 @@ const handler = async (req: Request): Promise<Response> => {
                 ${data.referredBy ? `
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px;">Referred By:</td>
-                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">${data.referredBy}</td>
+                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">${esc(data.referredBy)}</td>
                 </tr>
                 ` : ''}
               </table>
@@ -155,7 +155,7 @@ const handler = async (req: Request): Promise<Response> => {
             <!-- Additional Notes -->
             <div style="background-color: #fff8e6; border-left: 4px solid #D4AF37; padding: 15px 20px; margin-bottom: 25px;">
               <h4 style="color: #0B1F3B; margin: 0 0 10px 0; font-size: 14px; font-weight: 600;">Additional Notes:</h4>
-              <p style="color: #555; font-size: 14px; line-height: 1.6; margin: 0;">${data.notes}</p>
+              <p style="color: #555; font-size: 14px; line-height: 1.6; margin: 0;">${esc(data.notes)}</p>
             </div>
             ` : ''}
             
@@ -223,7 +223,7 @@ const handler = async (req: Request): Promise<Response> => {
           <!-- Content -->
           <div style="padding: 40px;">
             <h2 style="color: #0B1F3B; margin: 0 0 20px 0; font-size: 22px;">
-              Welcome, ${data.firstName}! 🎉
+              Welcome, ${esc(data.firstName)}! 🎉
             </h2>
             
             <p style="color: #555; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
