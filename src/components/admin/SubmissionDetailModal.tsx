@@ -1,8 +1,13 @@
+import { useState } from "react";
 import { format } from "date-fns";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Send } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Submission {
   id: string;
@@ -26,6 +31,8 @@ interface Props {
   onClose: () => void;
   statusOptions: { value: string; label: string }[];
   onUpdateStatus: (id: string, status: string) => void;
+  /** Enables the admin-only "Resend PDF to advisor" action (estate planning). */
+  enableAdvisorPdfResend?: boolean;
 }
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -54,9 +61,25 @@ const renderObject = (obj: Record<string, unknown>) =>
   Object.entries(obj).map(([k, v]) => <Row key={k} label={k} value={v} />);
 
 export const SubmissionDetailModal = ({
-  title, submission, open, onClose, statusOptions, onUpdateStatus,
+  title, submission, open, onClose, statusOptions, onUpdateStatus, enableAdvisorPdfResend,
 }: Props) => {
+  const [resending, setResending] = useState(false);
   if (!submission) return null;
+
+  const handleResend = async () => {
+    setResending(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("resend-estate-planning-pdf", {
+        body: { submissionId: submission.id },
+      });
+      if (error) throw error;
+      toast.success(`Questionnaire PDF sent to ${(data as { recipient?: string })?.recipient ?? "the advisor"}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to resend PDF");
+    } finally {
+      setResending(false);
+    }
+  };
 
   const fd = submission.form_data || {};
   const sectionEntries = Object.entries(fd).filter(([, v]) => v && typeof v === "object" && !Array.isArray(v));
@@ -99,6 +122,16 @@ export const SubmissionDetailModal = ({
                   </Select>
                 </div>
               </div>
+              {enableAdvisorPdfResend && (
+                <div className="pt-3">
+                  <Button size="sm" variant="outline" onClick={handleResend} disabled={resending}>
+                    {resending
+                      ? <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      : <Send className="h-4 w-4 mr-2" />}
+                    Resend questionnaire PDF to advisor
+                  </Button>
+                </div>
+              )}
             </Section>
 
             {flatEntries.length > 0 && (
