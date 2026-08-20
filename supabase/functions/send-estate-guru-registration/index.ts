@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -7,15 +8,44 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface RegistrationData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  currentlyWithTFA: string;
-  referredBy?: string;
-  notes?: string;
-}
+// Escape user input before interpolating into HTML emails.
+const esc = (v: unknown): string =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const registrationSchema = z.object({
+  firstName: z.string().trim().min(1).max(100),
+  lastName: z.string().trim().min(1).max(100),
+  email: z.string().trim().email().max(255),
+  phone: z.string().trim().min(7).max(30),
+  currentlyWithTFA: z.enum(["yes", "no"]),
+  referredBy: z.string().trim().max(200).optional(),
+  notes: z.string().trim().max(2000).optional(),
+});
+
+// Rate limiting: max 3 registrations per 10 minutes per IP.
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const MAX_PER_WINDOW = 3;
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+const checkRateLimit = (key: string): boolean => {
+  const now = Date.now();
+  for (const [k, v] of rateLimitStore.entries()) {
+    if (now > v.resetTime) rateLimitStore.delete(k);
+  }
+  const rec = rateLimitStore.get(key);
+  if (!rec || now > rec.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (rec.count >= MAX_PER_WINDOW) return false;
+  rec.count++;
+  return true;
+};
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -28,8 +58,26 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("RESEND_API_KEY is not configured");
     }
 
-    const data: RegistrationData = await req.json();
-    console.log("Received Estate Guru registration:", data);
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+      req.headers.get("cf-connecting-ip") ||
+      "unknown";
+    if (!checkRateLimit(ip)) {
+      return new Response(
+        JSON.stringify({ error: "Too many registrations. Please try again later." }),
+        { status: 429, headers: { "Content-Type": "application/json", ...corsHeaders } },
+      );
+    }
+
+    const parsed = registrationSchema.safeParse(await req.json().catch(() => ({})));
+    if (!parsed.success) {
+      return new Response(
+        JSON.stringify({ error: parsed.error.flatten().fieldErrors }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
+      );
+    }
+    const data = parsed.data;
+    console.log("Received Estate Guru registration for:", data.email);
 
     const fullName = `${data.firstName} ${data.lastName}`;
     const submittedAt = new Date().toLocaleString("en-US", {
@@ -72,18 +120,18 @@ const handler = async (req: Request): Promise<Response> => {
               <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px; width: 140px;">Name:</td>
-                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px; font-weight: 600;">${fullName}</td>
+                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px; font-weight: 600;">${esc(fullName)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px;">Email:</td>
                   <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">
-                    <a href="mailto:${data.email}" style="color: #0B1F3B;">${data.email}</a>
+                    <a href="mailto:${esc(data.email)}" style="color: #0B1F3B;">${esc(data.email)}</a>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px;">Phone:</td>
                   <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">
-                    <a href="tel:${data.phone}" style="color: #0B1F3B;">${data.phone}</a>
+                    <a href="tel:${esc(data.phone)}" style="color: #0B1F3B;">${esc(data.phone)}</a>
                   </td>
                 </tr>
                 <tr>
@@ -97,7 +145,7 @@ const handler = async (req: Request): Promise<Response> => {
                 ${data.referredBy ? `
                 <tr>
                   <td style="padding: 8px 0; color: #666; font-size: 14px;">Referred By:</td>
-                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">${data.referredBy}</td>
+                  <td style="padding: 8px 0; color: #0B1F3B; font-size: 14px;">${esc(data.referredBy)}</td>
                 </tr>
                 ` : ''}
               </table>
@@ -107,7 +155,7 @@ const handler = async (req: Request): Promise<Response> => {
             <!-- Additional Notes -->
             <div style="background-color: #fff8e6; border-left: 4px solid #D4AF37; padding: 15px 20px; margin-bottom: 25px;">
               <h4 style="color: #0B1F3B; margin: 0 0 10px 0; font-size: 14px; font-weight: 600;">Additional Notes:</h4>
-              <p style="color: #555; font-size: 14px; line-height: 1.6; margin: 0;">${data.notes}</p>
+              <p style="color: #555; font-size: 14px; line-height: 1.6; margin: 0;">${esc(data.notes)}</p>
             </div>
             ` : ''}
             
@@ -175,7 +223,7 @@ const handler = async (req: Request): Promise<Response> => {
           <!-- Content -->
           <div style="padding: 40px;">
             <h2 style="color: #0B1F3B; margin: 0 0 20px 0; font-size: 22px;">
-              Welcome, ${data.firstName}! 🎉
+              Welcome, ${esc(data.firstName)}! 🎉
             </h2>
             
             <p style="color: #555; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">

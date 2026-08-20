@@ -3,7 +3,39 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 const GHL_WEBHOOK_URL = Deno.env.get("GHL_WEBHOOK_URL") || "";
 const GHL_SHARED_SECRET = Deno.env.get("GHL_SHARED_SECRET") || "";
+const GHL_TRIGGER_SECRET = Deno.env.get("GHL_TRIGGER_SECRET") || "";
 const SCHEMA_VERSION = "2026-07.ghl.v1";
+
+// Constant-time-ish comparison for shared secrets.
+function secretsMatch(a: string, b: string): boolean {
+  if (!a || !b || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+/**
+ * Authorize the caller: either the internal DB trigger (shared secret header)
+ * or a signed-in admin/staff user retrying a failed forward from the dashboard.
+ */
+async function isAuthorized(req: Request, supabase: any): Promise<boolean> {
+  const provided = req.headers.get("x-internal-secret") ?? "";
+  if (secretsMatch(provided, GHL_TRIGGER_SECRET)) return true;
+
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const token = authHeader.replace(/^Bearer\s+/i, "");
+  if (!token) return false;
+
+  const { data: userData, error } = await supabase.auth.getUser(token);
+  const user = userData?.user;
+  if (error || !user) return false;
+
+  const [{ data: isAdmin }, { data: isStaff }] = await Promise.all([
+    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+    supabase.rpc("has_role", { _user_id: user.id, _role: "staff" }),
+  ]);
+  return isAdmin === true || isStaff === true;
+}
 
 const yn = (v: unknown): "yes" | "no" => (v === true || v === "yes" || v === "true" ? "yes" : "no");
 const s = (v: unknown): string => (v === null || v === undefined ? "" : String(v));
@@ -153,6 +185,13 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
+
+  if (!(await isAuthorized(req, supabase))) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     const body = await req.json().catch(() => ({}));
