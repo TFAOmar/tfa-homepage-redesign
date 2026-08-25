@@ -1,27 +1,25 @@
 # Refresh sponsorship page events
 
-The sponsorship page currently lists five events stored in the database, four of which are already in the past (Kick Off Jan 10, Crash Courses Apr 14, Leadership Summit Apr 23, Summer Sizzler Jun 27 — all 2026). Only the Christmas Party is still upcoming.
+Keep the existing event history on the sponsorship page and add the upcoming calendar events, starting September 8. Past events stay visible as greyed-out "Past Event" cards (current behavior); every upcoming event is sponsorable.
 
-The public Events page pulls from the external Event Calendar App widget, so its listings are not connected to the sponsorship data. The sponsorship list will be updated to match the upcoming calendar events, starting with September 8.
-
-## New sponsorship event list
+## Events added
 
 | Date | Event | Location | Attendees |
 |---|---|---|---|
 | Sep 8, 2026 | Buy. Rent. Or Wait? | Irvine | 50+ |
 | Sep 17, 2026 | TFA Brea Soft Opening | Brea | 100+ |
 | Oct 15, 2026 | Q3 Leadership Summit 2026 | Avenue of the Arts | 50+ |
-| Dec 12, 2026 | TFA Christmas Party 2026 | TBA | 250+ |
 | Jul 10, 2027 | Summer Sizzler 2027 (Yacht Party) | Newport Beach | 200+ |
 
-Existing Christmas Party and Summer Sizzler rows are reused/updated rather than duplicated; the four outdated rows are deactivated.
+The existing Christmas Party (Dec 12, 2026) already covers that date and stays as-is. The existing Summer Sizzler row is dated June 2026 (past) — a new 2027 row is added rather than overwriting history. Kick Off, Crash Courses, Leadership Summit and Summer Sizzler 2026 remain in the list as past events.
 
-## Keeping it from going stale
+## Sponsorship availability
 
-Add a filter so the sponsorship showcase only loads events whose date is today or later — past events drop off automatically instead of lingering as greyed-out "Past Event" cards.
+- New upcoming events get status `available` so the "Sponsor This Event" button is active and pre-selects the event in the inquiry form.
+- Ordering keeps upcoming events first (sorted by date) with past events pushed to the end, which the showcase already does.
 
 ## Technical notes
 
-- Database migration on `sponsorship_events`: set `is_active = false` for `kickoff`, `crash-courses`, `leadership-summit`; update `summer-sizzler` (2027-07-10) and `christmas-party` (2026-12-12); insert new rows for `buy-rent-or-wait` and `brea-soft-opening`, plus `q3-leadership-summit-2026`. Set `display_order` by date, keep existing `icon`/`gradient` token conventions.
-- `src/hooks/useSponsorshipData.ts`: in `useSponsorshipEvents`, add `.or('event_date.is.null,event_date.gte.<today>')` so past-dated events are excluded from the public page. Admin hook stays unfiltered.
-- No change needed in `EventsShowcase.tsx` beyond what the data drives (the "past" badge logic stays as a safety net).
+- Data insert into `sponsorship_events` for the four new rows: slugs `buy-rent-or-wait`, `brea-soft-opening`, `q3-leadership-summit-2026`, `summer-sizzler-2027`; `is_active = true`, `status = 'available'`, `event_date` set, and `display_order` renumbered so all events order chronologically.
+- Reuse existing `icon` names (Rocket, GraduationCap, Crown, Sun, PartyPopper) and the same gradient style values already used by existing rows so cards render consistently.
+- No frontend changes required — `EventsShowcase.tsx` already sorts past events last, badges them "Past Event", and disables their buttons; `GeneralSponsorshipForm` picks up new events by slug automatically.
