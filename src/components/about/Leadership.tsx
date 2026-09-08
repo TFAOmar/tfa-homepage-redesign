@@ -4,7 +4,7 @@ import mannySotoAsset from "@/assets/leadership/manny-soto.jpg.asset.json";
 import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
 import ravvenMurphyImg from "@/assets/leadership/ravven-murphy.jpg";
 import kristinMartinImg from "@/assets/leadership/kristin-martin.jpg";
-import miguelinaAlvarezAsset from "@/assets/leadership/miguelina-alvarez.jpg.asset.json";
+import miguelinaAlvarezAsset from "@/assets/leadership/miguelina-alvarez-full.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 
 interface Leader {
@@ -190,7 +190,7 @@ const Leadership = () => {
                   <img
                     src={leader.image}
                     alt={leader.name}
-                    className={`w-full h-full object-cover ${leader.name === "Kristin Martin" ? "object-top lg:object-center" : ""}`}
+                    className={`w-full h-full object-cover ${leader.name === "Kristin Martin" ? "object-top lg:object-center" : ""} ${leader.name === "Miguelina Alvarez" ? "object-top" : ""}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent" />
                   
