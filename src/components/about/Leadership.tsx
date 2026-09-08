@@ -4,6 +4,7 @@ import mannySotoAsset from "@/assets/leadership/manny-soto.jpg.asset.json";
 import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
 import ravvenMurphyImg from "@/assets/leadership/ravven-murphy.jpg";
 import kristinMartinImg from "@/assets/leadership/kristin-martin.jpg";
+import miguelinaAlvarezAsset from "@/assets/leadership/miguelina-alvarez.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 
 interface Leader {
@@ -128,6 +129,39 @@ const leaders: Leader[] = [
       "Business Growth",
     ],
     closing: `Strategic, relationship-focused, and growth-minded, Kristin brings a results-driven, operationally focused approach to everything she does. Through mentorship, innovation, and a passion for growth, she continues to make a meaningful impact on both the agents she serves and the future of The Financial Architects.`,
+  },
+  {
+    name: "Miguelina Alvarez",
+    title: "Operations Administrator",
+    subtitle: "Insurance Operations • Agent Support • Licensing & Contracting",
+    image: miguelinaAlvarezAsset.url,
+    intro: `Miguelina Alvarez is an Operations Administrator at The Financial Architects, where she supports the organization's advisors, leadership, and day-to-day operations across licensing, contracting, onboarding, carrier coordination, and agent support. She is also actively involved with Insurance Latino as a licensed life insurance professional, supporting the full insurance process from client intake and quoting through application submission, underwriting, approval, and policy servicing.`,
+    highlights: [
+      "Supports agent licensing, contracting, appointments, and onboarding across multiple states",
+      "Coordinates with insurance carriers and contracting partners to resolve requirements and move business forward",
+      "Licensed life insurance professional actively involved in preparing and submitting life insurance applications",
+      "Manages CRM and internal platforms supporting client, agent, and policy operations",
+      "Coordinates underwriting requirements, medical information, carrier follow-up, and application status",
+      "Supports clients and advisors throughout the life insurance application and policy process",
+      "Helps develop and organize internal systems, workflows, and resources that improve operational efficiency",
+      "Serves as a key resource for advisors navigating carrier, licensing, contracting, application, and policy requirements",
+    ],
+    expertise: [
+      "Life Insurance",
+      "Insurance Operations",
+      "CRM & Platform Management",
+      "Agent Contracting",
+      "Licensing & Appointments",
+      "Agent Onboarding",
+      "Carrier Relations",
+      "Application Processing",
+      "Underwriting Coordination",
+      "Policy Administration",
+      "Client Service",
+      "Advisor Support",
+      "Process Improvement",
+    ],
+    closing: `Detail-oriented, resourceful, and solutions-focused, Miguelina brings a hands-on approach to the insurance business, bridging the gap between insurance production and the operational infrastructure that supports it. Whether helping an advisor navigate licensing and contracting, submitting a life insurance application, coordinating underwriting requirements, or ensuring client and policy information is properly organized, she is focused on creating a smooth, efficient experience from start to finish.`,
   },
 ];
 
