@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Calendar } from "lucide-react";
+import { Calendar, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-financial.jpg";
 
@@ -31,15 +31,29 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col items-center gap-3 mb-4 md:mb-5">
-            <Link to="/book-consultation">
-              <Button 
-                size="lg" 
-                className="w-full sm:w-auto max-w-[320px] btn-primary-cta px-8 py-6 md:py-7 text-base md:text-lg hover:scale-[1.05] border-2 border-[#E4B548] hover:border-[#1a2744]"
-              >
-                Book Consultation
-                <Calendar className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+              <Link to="/book-consultation" className="w-full sm:w-auto">
+                <Button 
+                  size="lg" 
+                  className="w-full sm:w-auto max-w-[320px] btn-primary-cta px-8 py-6 md:py-7 text-base md:text-lg hover:scale-[1.05] border-2 border-[#E4B548] hover:border-[#1a2744]"
+                >
+                  Book Consultation
+                  <Calendar className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+
+              <Link to="/preferred-partners" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto max-w-[320px] px-8 py-6 md:py-7 text-base md:text-lg bg-transparent text-white border-2 border-white/40 hover:bg-white/10 hover:text-white hover:border-white"
+                >
+                  Partner Spotlight
+                  <Users className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+
             
             {/* Conversion micro-copy */}
             <p className="text-sm text-white/60 font-light">

@@ -36,7 +36,7 @@ const PreferredPartnersPreview = () => {
 
           <Button asChild size="lg">
             <Link to="/preferred-partners">
-              Meet Our Preferred Partners
+              Partner Spotlight
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
