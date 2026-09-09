@@ -3,6 +3,7 @@ import TrustStrip from "@/components/TrustStrip";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import AdvisorPreview from "@/components/AdvisorPreview";
+import PreferredPartnersPreview from "@/components/PreferredPartnersPreview";
 import Testimonials from "@/components/Testimonials";
 import FinalCTA from "@/components/FinalCTA";
 import FloatingCTA from "@/components/FloatingCTA";
