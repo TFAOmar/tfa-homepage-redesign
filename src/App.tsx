@@ -177,6 +177,7 @@ const AppLayout = () => {
           <Route path="/events/tfa-2026-kickoff-sponsorship/success" element={<SponsorshipSuccess />} />
           <Route path="/locations" element={<Locations />} />
           <Route path="/partners" element={<Partners />} />
+          <Route path="/preferred-partners" element={<PreferredPartners />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/shop/:handle" element={<ProductDetail />} />
