@@ -62,6 +62,7 @@ const resourcesMenu = [
   { name: "Blog", icon: BookOpen, href: "/blog", description: "Financial insights & education" },
   { name: "Events", icon: Calendar, href: "/events", description: "Upcoming workshops & seminars" },
   { name: "Partners", icon: Award, href: "/partners", description: "Our insurance carriers" },
+  { name: "Preferred Partners", icon: Handshake, href: "/preferred-partners", description: "Lenders, realtors, CPAs & brokers we work with" },
   { name: "Advisor Directory", icon: Users, href: "/advisors", description: "Meet our team" },
   { name: "Shop", icon: ShoppingBag, href: "/shop", description: "Financial resources" },
   { name: "Careers", icon: Briefcase, href: "/careers", description: "Join our team" },

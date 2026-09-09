@@ -23,6 +23,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Advisors from "./pages/Advisors";
 import Partners from "./pages/Partners";
+import PreferredPartners from "./pages/PreferredPartners";
 import AdvisorOnboarding from "./pages/AdvisorOnboarding";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminFormSubmissions from "./pages/AdminFormSubmissions";

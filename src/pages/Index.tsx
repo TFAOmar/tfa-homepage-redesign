@@ -40,6 +40,7 @@ const Index = () => {
       <Services />
       <Process />
       <AdvisorPreview />
+      <PreferredPartnersPreview />
       <Testimonials />
       <FinalCTA />
       <FloatingCTA />
